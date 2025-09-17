@@ -1,0 +1,18 @@
+export const API_ROUTES = {
+  REGISTER: '/api/register',
+  LOGIN: '/api/login',
+  USER: '/api/user',
+  FINDUSER: '/api/finduser',
+  PROFILE: '/api/profile',
+  LOGOUT: '/api/logout',
+  PRODUCT_ADD: '/api/addProducts',
+  PRODUCT_LIST: '/api/products',
+  PRODUCT_DETAIL: (id) => `/api/products/edit/${id}`,
+  PRODUCT_UPDATE: (id) => `/api/updateProducts/${id}`,
+  PRODUCT_MANAGE_LIST: `/api/products/list`,
+  PRODUCT_DELETE: (id) => `/api/deleteProduct/${id}`,
+  OPTIONS_LIST: `/options/list`,
+  OPTIONS_ADD: `/options/add`,
+  OPTIONS_UPDATE: (id) => `/options/update/${id}`,
+  OPTIONS_DELETE: (id) => `/options/delete/${id}`,
+  OPTIONS_BY_LISTNAME: () => `/options/getByListName`,}
