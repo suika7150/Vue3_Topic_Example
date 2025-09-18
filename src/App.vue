@@ -50,6 +50,8 @@ const navMenu = computed(() => {
 
 /* 主內容區 */
 .content {
+  margin-left: 240px;
+  padding-top: 100px;
   flex: 1;
   padding: 32px;
   background-color: #f5f7fa;

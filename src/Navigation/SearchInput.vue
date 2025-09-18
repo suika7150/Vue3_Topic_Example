@@ -1,36 +1,21 @@
 <template>
-  <header class="search-input">
-    <el-input :type="text" placeholder="搜尋商品" prefix-icon="el-icon-search" :width="'50px'">
-      <template #append>
-        <el-button class="search-button" :is-loading="false" icon="Search">
-          <div class="search-button-font">搜尋</div>
-        </el-button>
-      </template>
-    </el-input>
-  </header>
+  <el-input type="text" placeholder="搜尋商品" prefix-icon="el-icon-search" class="search-input">
+    <template #append>
+      <el-button class="search-button">搜尋</el-button>
+    </template>
+  </el-input>
 </template>
 
-<script>
-// const props = defineProps({
-//   modelValue: {
-//     type: String,
-//     default: '',
-//   },
-// })
+<script setup>
+// 可以加 props 或 v-model
 </script>
 
 <style scoped>
 .search-input {
-  height: 40px;
-  width: 15%;
-  color: #000;
+  width: 100%;
+  max-width: 500px;
 }
 .search-button {
-  width: 30;
-}
-
-.search-button-font {
-  font-size: 16px;
-  color: black;
+  height: 40px;
 }
 </style>

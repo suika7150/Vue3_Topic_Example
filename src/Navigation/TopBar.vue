@@ -3,13 +3,17 @@
   <header class="top-bar">
     <div class="logo">我的商城</div>
     <TopBarAdBanner :show="bannerOn" :width="'300px'" :interval="2000" />
-    <div class="auth">
+
+    <!-- 搜尋欄置中 -->
+    <div class="center">
+      <SearchInput />
+    </div>
+
+    <!-- 登入選單 -->
+    <div class="right">
       <LoginMenu />
     </div>
   </header>
-  <body>
-    <SearchInput />
-  </body>
 </template>
 
 <script setup>
@@ -21,6 +25,11 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
 
 <style scoped>
 .top-bar {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 98%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -35,7 +44,7 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
   font-weight: bold;
 }
 
-.auth {
+.right {
   display: flex;
   align-items: center;
 }
