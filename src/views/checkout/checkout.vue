@@ -49,12 +49,7 @@
               <el-form-item label="配送地址" prop="address">
                 <div class="address-fields">
                   <div class="address-selects">
-                    <el-select
-                      v-model="shippingForm.city"
-                      placeholder="請選擇縣市"
-                      class="flex-1"
-                      width="200px"
-                    >
+                    <el-select v-model="shippingForm.city" placeholder="請選擇縣市" class="flex-1">
                       <el-option
                         v-for="city in cities"
                         :key="city.value"
@@ -331,7 +326,15 @@ const cities = ref([
   { label: '台南市', value: 'tainan' },
 ])
 
-const districts = ref([])
+const districts = ref([
+  { label: '新莊區', value: 'xinzhuang' },
+  { label: '樹林區', value: 'shulin' },
+  { label: '板橋區', value: 'banqiao' },
+  { label: '中和區', value: 'zhonghe' },
+  { label: '永和區', value: 'yonghe' },
+  { label: '土城區', value: 'tucheng' },
+  { label: '樹林區', value: 'shulin' },
+])
 
 const handleShippingChange = ({ value, option, additionalCost }) => {
   console.log('配送方式:', option.name)

@@ -11,6 +11,8 @@
           <el-option label="電子產品" value="電子產品" />
           <el-option label="生活用品" value="生活用品" />
           <el-option label="服飾配件" value="服飾配件" />
+          <el-option label="汽車用品" value="汽車用品" />
+          <el-option label="廚房清潔" value="廚房清潔" />
         </el-select>
       </el-form-item>
 
