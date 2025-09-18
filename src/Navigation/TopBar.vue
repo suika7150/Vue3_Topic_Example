@@ -2,14 +2,18 @@
 <template>
   <header class="top-bar">
     <div class="logo">我的商城</div>
-    <TopBarAdBanner :show="bannerOn" :width="'400px'" :interval="2000" />
+    <TopBarAdBanner :show="bannerOn" :width="'300px'" :interval="2000" />
     <div class="auth">
       <LoginMenu />
     </div>
   </header>
+  <body>
+    <SearchInput />
+  </body>
 </template>
 
 <script setup>
+import SearchInput from './SearchInput.vue'
 import TopBarAdBanner from '@/navigation/TopBarAdBanner.vue'
 import LoginMenu from './LoginMenu.vue'
 defineProps({ bannerOn: { type: Boolean, default: false } })
@@ -20,10 +24,10 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #409eff;
+  background-color: #40bffffb;
   color: #fff;
   padding: 0 20px;
-  height: 56px;
+  height: 100px;
 }
 
 .logo {

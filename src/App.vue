@@ -34,7 +34,7 @@ const navMenu = computed(() => {
 .layout {
   display: flex;
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: #f0f2f5;
   /* 整體背景 */
 }
 
