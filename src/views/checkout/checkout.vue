@@ -37,12 +37,7 @@
 
           <div v-if="currentStep === 1" class="checkout-step">
             <h2 class="step-title">配送資訊</h2>
-            <el-form
-              :model="shippingForm"
-              :rules="shippingRules"
-              ref="shippingFormRef"
-              label-width="100px"
-            >
+            <el-form :model="shippingForm" :rules="shippingRules" ref="shippingFormRef">
               <el-form-item label="收件人" prop="name">
                 <el-input v-model="shippingForm.name" placeholder="請輸入收件人姓名" />
               </el-form-item>
@@ -54,7 +49,12 @@
               <el-form-item label="配送地址" prop="address">
                 <div class="address-fields">
                   <div class="address-selects">
-                    <el-select v-model="shippingForm.city" placeholder="選擇縣市" class="flex-1">
+                    <el-select
+                      v-model="shippingForm.city"
+                      placeholder="請選擇縣市"
+                      class="flex-1"
+                      width="200px"
+                    >
                       <el-option
                         v-for="city in cities"
                         :key="city.value"
@@ -64,7 +64,7 @@
                     </el-select>
                     <el-select
                       v-model="shippingForm.district"
-                      placeholder="選擇區域"
+                      placeholder="請選擇區域"
                       class="flex-1"
                     >
                       <el-option
@@ -316,8 +316,19 @@ const creditCardRules = {
 const cities = ref([
   { label: '台北市', value: 'taipei' },
   { label: '新北市', value: 'new_taipei' },
+  { label: '桃園市', value: 'taoyuan' },
+  { label: '基隆市', value: 'keelung' },
+  { label: '新竹市', value: 'hsinchu' },
+  { label: '新竹縣', value: 'hsinchu_county' },
+  { label: '苗栗縣', value: 'miaoli' },
+  { label: '彰化縣', value: 'changhua' },
+  { label: '南投縣', value: 'nantou' },
+  { label: '雲林縣', value: 'yunlin' },
+  { label: '嘉義市', value: 'chiayi' },
+  { label: '嘉義縣', value: 'chiayi_county' },
   { label: '台中市', value: 'taichung' },
-  // ... 更多城市
+  { label: '高雄市', value: 'kaohsiung' },
+  { label: '台南市', value: 'tainan' },
 ])
 
 const districts = ref([])
@@ -571,6 +582,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 40%;
 }
 
 .address-selects {
