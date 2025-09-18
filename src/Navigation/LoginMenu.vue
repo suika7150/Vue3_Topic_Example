@@ -1,5 +1,8 @@
 <template>
   <div class="user-menu-container">
+    <!--關於我們-->
+    <el-button type="primary" @click="goAbout">關於我們</el-button>
+    <!-- 回首頁按鈕 -->
     <el-button type="primary" @click="goHome">回首頁</el-button>
     <!-- 未登入時顯示登入按鈕 -->
     <el-button v-if="!isLogin" type="primary" @click="goLogin">登入</el-button>
@@ -21,6 +24,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="goProfile">個人資料維護</el-dropdown-item>
+            <el-dropdown-item @click="goSetting">設定</el-dropdown-item>
             <el-dropdown-item divided @click="logout">登出</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -31,7 +35,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { More, MoreFilled } from '@element-plus/icons-vue'
+import { More, MoreFilled, Setting } from '@element-plus/icons-vue'
 import { useUserStore } from '@/store/userStore'
 import { storeToRefs } from 'pinia'
 import { useNavigation } from '@/composables/useNavigation'
@@ -43,8 +47,10 @@ const { remainingTime: remaining } = storeToRefs(userStore)
 
 const { goTo, goHome } = useNavigation()
 
+const goSetting = () => goTo('Setting')
 const goLogin = () => goTo('Login')
 const goProfile = () => goTo('Profile')
+const goAbout = () => goTo('About')
 const logout = () => {
   userStore.logout()
   goHome()
