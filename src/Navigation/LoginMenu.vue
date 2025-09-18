@@ -1,5 +1,6 @@
 <template>
   <div class="user-menu-container">
+    <el-button type="primary" @click="goHome">回首頁</el-button>
     <!-- 未登入時顯示登入按鈕 -->
     <el-button v-if="!isLogin" type="primary" @click="goLogin">登入</el-button>
 
@@ -12,11 +13,10 @@
           Token 將於 <strong>{{ $formatSecondsToHHMMSS(remaining) }}</strong> 後過期
         </span>
       </div>
-
       <!-- 漢堡下拉選單 -->
       <el-dropdown>
         <el-button type="link" class="hamburger-btn">
-          <el-icon><More /></el-icon>
+          <el-icon><MoreFilled /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
@@ -31,7 +31,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { More } from '@element-plus/icons-vue'
+import { More, MoreFilled } from '@element-plus/icons-vue'
 import { useUserStore } from '@/store/userStore'
 import { storeToRefs } from 'pinia'
 import { useNavigation } from '@/composables/useNavigation'

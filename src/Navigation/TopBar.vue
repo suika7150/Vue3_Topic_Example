@@ -1,7 +1,7 @@
 <!-- src/components/TopBar.vue -->
 <template>
   <header class="top-bar">
-    <div class="logo">🛒 我的商城</div>
+    <div class="logo">我的商城</div>
     <TopBarAdBanner :show="bannerOn" :width="'400px'" :interval="2000" />
     <div class="auth">
       <LoginMenu />

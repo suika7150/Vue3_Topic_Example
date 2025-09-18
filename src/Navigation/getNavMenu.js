@@ -1,4 +1,4 @@
-import { Coffee, Cpu, Flag, Monitor, Odometer, Suitcase } from '@element-plus/icons-vue'
+import { Bicycle, Coffee, Cpu, Flag, Food, IceDrink, LocationFilled, Mic, Monitor, Odometer, Smoking, Suitcase, Van, VideoCameraFilled } from '@element-plus/icons-vue'
 
 /**
  * 根據使用者角色動態產生導覽選單
@@ -26,15 +26,14 @@ export function getNavMenu(userRole) {
     },
     {
       name: 'life',
-      label: '生活類',
+      label: '生活',
       icon: Coffee,
       clickable: false,
       subs: [
-        { name: 'food', label: '美食', icon: Coffee },
         {
           name: 'travel',
           label: '旅遊',
-          icon: Suitcase,
+          icon: LocationFilled,
           clickable: false,
           subs: [
             { name: 'usa', label: '美國', icon: Flag },
@@ -43,7 +42,40 @@ export function getNavMenu(userRole) {
         },
       ],
     },
+    { 
+      name: 'food',
+      label: '美食', 
+      icon: Food,
+      clickable: false,
+      subs: [
+        { name: 'drinks', label: '飲品', icon: IceDrink },
+        { name: 'snacks', label: '零食', icon: Suitcase },
+        { name: 'smoking', label: '香菸', icon: Smoking }
+      ],
+    },
+    {
+      name: 'Vehicles',
+      label: '汽車',
+      icon: Van,
+      clickable: false,
+      subs: [
+        { name: 'cars', label: '轎車', icon: Odometer },
+        { name: 'motorcycles', label: '摩托車', icon: Bicycle },
+      ],
+    },
+    {
+      name: 'entertainment',
+      label: '娛樂',
+      icon: Odometer,
+      clickable: false,
+      subs: [
+        { name: 'movies', label: '電影', icon: VideoCameraFilled },
+        { name: 'music', label: '音樂', icon: Mic }
+      ],
+    },
   ]
+
+
 
   // 如果使用者不是 ADMIN，則移除 'settings' 類別
   if (userRole !== 'ADMIN') {
