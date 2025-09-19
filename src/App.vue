@@ -1,4 +1,5 @@
 <script setup>
+import BottomFooter from './navigation/BottomFooter.vue'
 import Breadcrumb from './navigation/Breadcrumb.vue'
 import CategorySidebar from './navigation/CategorySidebar.vue'
 import TopBar from './navigation/TopBar.vue'
@@ -28,6 +29,7 @@ const navMenu = computed(() => {
       </div>
     </div>
   </main>
+  <BottomFooter />
 </template>
 
 <style scoped>

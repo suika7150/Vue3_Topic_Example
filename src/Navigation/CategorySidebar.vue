@@ -103,12 +103,13 @@ const toggleCollapse = () => {
   top: 100px; /* 從 TopBar 下方開始 */
   left: 0;
   width: 240px;
-  height: calc(100vh - 100px); /* 扣掉 TopBar 高度 */
+  height: calc(100vh - var); /* 扣掉 TopBar 高度 */
   min-height: 100vh;
   background-color: #f9f9f9;
   border-right: 1px solid #ddd;
   transition: width 0.3s;
   overflow-y: auto;
+  z-index: 1000;
 }
 
 .sidebar-menu {
