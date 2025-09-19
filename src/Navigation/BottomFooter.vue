@@ -8,9 +8,13 @@
       </div>
       <div class="footer-right">
         <p>追蹤我們：</p>
-        <el-button type="text" icon="el-icon-facebook"></el-button>
-        <el-button type="text" icon="el-icon-twitter"></el-button>
-        <el-button type="text" icon="el-icon-linkedin"></el-button>
+        <el-button type="text"><Icon icon="logos:facebook" /></el-button>
+        <el-button type="text">
+          <Icon icon="streamline-logos:line-app-logo-block" color="#00c300" />
+        </el-button>
+        <el-button type="text"><Icon icon="skill-icons:instagram" /></el-button>
+        <el-button type="text"><Icon icon="skill-icons:twitter" /></el-button>
+        <el-button type="text"><Icon icon="logos:youtube-icon" /></el-button>
       </div>
     </div>
   </footer>
