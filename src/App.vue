@@ -24,10 +24,10 @@ const navMenu = computed(() => {
       <CategorySidebar :categories="navMenu" />
 
       <div class="content">
-        <Breadcrumb :categories="navMenu" />
         <router-view />
       </div>
     </div>
+    <router-view />
   </main>
   <BottomFooter />
 </template>

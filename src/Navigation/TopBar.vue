@@ -1,8 +1,9 @@
 <!-- src/components/TopBar.vue -->
 <template>
   <header class="top-bar">
-    <div class="logo">我的商城</div>
-    <TopBarAdBanner :show="bannerOn" :width="'300px'" :interval="2000" />
+    <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
+
+    <!-- <TopBarAdBanner :show="bannerOn" :width="'300px'" :interval="2000" /> -->
 
     <!-- 搜尋欄置中 -->
     <div class="center">
@@ -27,21 +28,23 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
 .top-bar {
   z-index: 1000;
   position: fixed;
-  top: 0;
+  top: 0px;
   left: 0;
   width: 98%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #40bffffb;
+  background-color: #000000fb;
   color: #fff;
-  padding: 0 20px;
+  padding: 20px;
   height: 80px;
 }
 
 .logo {
-  font-size: 20px;
+  font-size: 60px;
   font-weight: bold;
+  color: #fff;
+  text-decoration: none; /* 移除底線 */
 }
 
 .right {

@@ -1,4 +1,5 @@
 <template>
+  <TopBarAdBanner :show="bannerOn" :width="'300px'" :interval="2000" />
   <div>
     <AdCarousel :ads="adBanners" />
   </div>
@@ -6,6 +7,7 @@
 <script setup>
 import { ref } from 'vue'
 import AdCarousel from '@/views/AdCarousel.vue'
+import TopBarAdBanner from '@/navigation/TopBarAdBanner.vue'
 
 const adBanners = [
   {

@@ -8,13 +8,23 @@
       </div>
       <div class="footer-right">
         <p>追蹤我們：</p>
-        <el-button type="text"><Icon icon="logos:facebook" /></el-button>
-        <el-button type="text">
-          <Icon icon="streamline-logos:line-app-logo-block" color="#00c300" />
-        </el-button>
-        <el-button type="text"><Icon icon="skill-icons:instagram" /></el-button>
-        <el-button type="text"><Icon icon="skill-icons:twitter" /></el-button>
-        <el-button type="text"><Icon icon="logos:youtube-icon" /></el-button>
+        <a href="https://www.facebook.com/?locale=zh_TW" target="_blank" rel="noopener">
+          <el-button type="text"><Icon icon="logos:facebook" /></el-button>
+        </a>
+        <a href="https://www.line.me/tw/" targer="_blank">
+          <el-button type="text">
+            <Icon icon="streamline-logos:line-app-logo-block" color="#00c300" />
+          </el-button>
+        </a>
+        <a href="https://www.instagram.com/" target="_blank">
+          <el-button type="text"><Icon icon="skill-icons:instagram" /></el-button>
+        </a>
+        <a href="https://x.com/" target="_blank">
+          <el-button type="text"><Icon icon="skill-icons:twitter" /></el-button>
+        </a>
+        <a href="https://www.youtube.com/" target="_blank">
+          <el-button type="text"><Icon icon="logos:youtube-icon" /></el-button>
+        </a>
       </div>
     </div>
   </footer>

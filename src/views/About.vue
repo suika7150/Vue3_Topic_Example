@@ -3,14 +3,16 @@
     <canvas ref="canvas"></canvas>
 
     <!-- 模式切換按鈕 -->
-    <div class="controls">
-      <button @click="mode = 'particles'">粒子模式</button>
-      <button @click="mode = 'waves'">波浪模式</button>
-      <button @click="mode = 'geometry'">幾何模式</button>
-      <button @click="mode = 'starfield'">星空模式</button>
-      <button @click="mode = 'matrix'">矩陣數字雨</button>
-      <button @click="mode = 'gradient'">流動漸層</button>
-    </div>
+    <body>
+      <div class="controls">
+        <button @click="mode = 'particles'">粒子模式</button>
+        <button @click="mode = 'waves'">波浪模式</button>
+        <button @click="mode = 'geometry'">幾何模式</button>
+        <button @click="mode = 'starfield'">星空模式</button>
+        <button @click="mode = 'matrix'">矩陣數字雨</button>
+        <button @click="mode = 'gradient'">流動漸層</button>
+      </div>
+    </body>
   </div>
 </template>
 

@@ -100,7 +100,7 @@ const toggleCollapse = () => {
 <style scoped>
 .sidebar-wrapper {
   position: fixed;
-  top: 100px; /* 從 TopBar 下方開始 */
+  top: 140px; /* 從 TopBar 下方開始 */
   left: 0;
   width: 240px;
   height: calc(100vh - var); /* 扣掉 TopBar 高度 */

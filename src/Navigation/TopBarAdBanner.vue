@@ -6,11 +6,13 @@
     @mouseenter="pauseRotation"
     @mouseleave="startRotation"
   >
-    <a :href="ads[currentAdIndex].link" target="_self" class="ad-text" :key="currentAdIndex">
-      <transition name="fade" mode="out-in">
-        <span>{{ ads[currentAdIndex].text }}</span>
-      </transition>
-    </a>
+    <div class="marquee">
+      <a :href="ads[currentAdIndex].link" target="_self" class="ad-text" :key="currentAdIndex">
+        <transition name="fade" mode="out-in">
+          <span>{{ ads[currentAdIndex].text }}</span>
+        </transition>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -69,8 +71,8 @@ watch(
 <style scoped>
 .topbar-ad-banner {
   padding: 4px 12px;
-  background-color: #ffd04b;
-  color: #333;
+  background-color: #1c1a1ac3;
+  color: #141612af;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
@@ -83,10 +85,30 @@ watch(
   justify-content: center;
 }
 
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
 .ad-text {
   display: block;
   color: inherit;
   text-decoration: none;
+  position: fixed;
+  top: 0;
+  z-index: 2000;
+  animation: scroll 5s linear infinite; /* 設定動畫持續時間 */
+  white-space: nowrap; /* 禁用換行 */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .fade-enter-active,
