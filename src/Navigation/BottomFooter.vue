@@ -36,14 +36,15 @@
 
 <style scoped>
 .bottom-footer {
-  position: relative;
+  position: fixed;
+  left: 0;
+  bottom: 0;
   width: 100%;
   background-color: #001529;
   color: #fff;
   padding: 24px 32px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  margin-top: auto; /* 讓內容少時貼底 */
-  z-index: 9999; /* 確保在最上層 */
+  z-index: 9999;
 }
 
 .footer-content {
