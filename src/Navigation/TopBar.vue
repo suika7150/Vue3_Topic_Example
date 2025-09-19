@@ -3,8 +3,6 @@
   <header class="top-bar">
     <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
 
-    <!-- <TopBarAdBanner :show="bannerOn" :width="'300px'" :interval="2000" /> -->
-
     <!-- 搜尋欄置中 -->
     <div class="center">
       <SearchInput />
@@ -19,7 +17,6 @@
 
 <script setup>
 import SearchInput from './SearchInput.vue'
-import TopBarAdBanner from '@/navigation/TopBarAdBanner.vue'
 import LoginMenu from './LoginMenu.vue'
 defineProps({ bannerOn: { type: Boolean, default: false } })
 </script>
@@ -45,6 +42,7 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
   font-weight: bold;
   color: #fff;
   text-decoration: none; /* 移除底線 */
+  margin-top: 20px; /* 調整上方距離 */
 }
 
 .right {

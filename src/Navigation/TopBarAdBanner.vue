@@ -7,11 +7,11 @@
     @mouseleave="startRotation"
   >
     <div class="marquee">
-      <a :href="ads[currentAdIndex].link" target="_self" class="ad-text" :key="currentAdIndex">
-        <transition name="fade" mode="out-in">
-          <span>{{ ads[currentAdIndex].text }}</span>
-        </transition>
-      </a>
+      <span class="ad-text">
+        <span v-for="(ad, i) in ads" :key="i">
+          {{ ad.text }}<span v-if="i < ads.length - 1"></span>
+        </span>
+      </span>
     </div>
   </div>
 </template>
@@ -26,9 +26,9 @@ const props = defineProps({
   ads: {
     type: Array,
     default: () => [
-      { text: '🔥 限時 7 折搶購！', link: '/category/life/food' },
-      { text: '🚀 加入會員送紅利！', link: '/category/tech/frontend' },
-      { text: '🎉 新品上架快來逛！', link: '/category/life/travel' },
+      { text: ' 限時 7 折搶購！', link: '/category/life/food' },
+      { text: ' 加入會員送紅利！', link: '/category/tech/frontend' },
+      { text: ' 新品上架快來逛！', link: '/category/life/travel' },
     ],
   },
 })
@@ -88,17 +88,22 @@ watch(
 .marquee {
   width: 100%;
   overflow: hidden;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  padding: 5px 0;
+  /* animation: scroll 10s linear infinite; */
 }
 
 .ad-text {
+  color: #fff;
   display: block;
-  color: inherit;
   text-decoration: none;
-  position: fixed;
+  /* position: fixed; */
   top: 0;
-  z-index: 2000;
-  animation: scroll 5s linear infinite; /* 設定動畫持續時間 */
+  /* z-index: 2000; */
+  animation: scroll 10s linear infinite; /*設定動畫持續時間*?
   white-space: nowrap; /* 禁用換行 */
 }
 
@@ -107,7 +112,7 @@ watch(
     transform: translateX(100%);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-100vw);
   }
 }
 
