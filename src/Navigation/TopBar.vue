@@ -36,7 +36,7 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
   background-color: #40bffffb;
   color: #fff;
   padding: 0 20px;
-  height: 100px;
+  height: 80px;
 }
 
 .logo {

@@ -9,7 +9,27 @@ import AdCarousel from '@/views/AdCarousel.vue'
 
 const adBanners = [
   {
-    title: '暑期特賣 50% OFF',
+    title: 'Kawasaki車系大特賣',
+    image: './Banner/Kawasaki.jpg',
+    link: '/category/life/travel',
+  },
+  {
+    title: 'Kawasaki Z H2',
+    image: './Banner/Kawasaki Z H2.jpg',
+    link: '/category/life/travel',
+  },
+  {
+    title: 'Kawasaki Z900 RS',
+    image: './Banner/Kwasaki Z900 RS.jpg',
+    link: '/category/life/travel',
+  },
+  {
+    title: 'Kawasaki Ninja 400RR',
+    image: './Banner/Kawasaki Ninja 400RR.jpg',
+    link: '/category/life/food',
+  },
+  {
+    title: '飲食大放送',
     image: './Banner/food.jpg',
     link: '/category/life/food',
   },
