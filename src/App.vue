@@ -27,7 +27,6 @@ const navMenu = computed(() => {
         <router-view />
       </div>
     </div>
-    <router-view />
   </main>
   <BottomFooter />
 </template>

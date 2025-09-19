@@ -69,7 +69,7 @@ const logout = () => {
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 14px;
-  color: #303133;
+  color: #e6eaf2;
   display: flex;
   flex-direction: column;
   gap: 4px;
