@@ -39,12 +39,13 @@
   position: fixed;
   left: 0;
   bottom: 0;
-  width: 100%;
+  width: 95%;
   background-color: #001529;
   color: #fff;
   padding: 24px 32px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 9999;
+  height: 50px;
 }
 
 .footer-content {
@@ -55,10 +56,12 @@
 
 .footer-left p {
   margin: 4px 0;
+  height: 18px;
 }
 
 .footer-right p {
   margin-bottom: 8px;
+  height: 5px;
 }
 
 .footer-right .el-button {
