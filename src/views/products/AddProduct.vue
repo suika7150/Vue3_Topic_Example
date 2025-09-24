@@ -1,69 +1,71 @@
 <template>
-  <div class="max-w-2xl mx-auto mt-10 p-6 border rounded bg-white shadow">
-    <h2 class="text-2xl font-bold mb-4">新增商品</h2>
+  <div class="page-content" style="padding-top: 100px">
+    <div class="max-w-2xl mx-auto mt-10 p-6 border rounded bg-white shadow">
+      <h2 class="text-2xl font-bold mb-4">新增商品</h2>
 
-    <el-form :model="form" label-width="100px" :rules="rules" ref="formRef">
-      <el-form-item label="商品名稱" prop="name">
-        <el-input v-model="form.name" placeholder="請輸入商品名稱" />
-      </el-form-item>
+      <el-form :model="form" label-width="100px" :rules="rules" ref="formRef">
+        <el-form-item label="商品名稱" prop="name">
+          <el-input v-model="form.name" placeholder="請輸入商品名稱" />
+        </el-form-item>
 
-      <el-form-item label="分類" prop="category">
-        <el-select v-model="form.category" placeholder="請選擇分類">
-          <el-option label="電子產品" value="電子產品" />
-          <el-option label="生活用品" value="生活用品" />
-          <el-option label="服飾配件" value="服飾配件" />
-        </el-select>
-      </el-form-item>
+        <el-form-item label="分類" prop="category">
+          <el-select v-model="form.category" placeholder="請選擇分類">
+            <el-option label="電子產品" value="電子產品" />
+            <el-option label="生活用品" value="生活用品" />
+            <el-option label="服飾配件" value="服飾配件" />
+          </el-select>
+        </el-form-item>
 
-      <el-form-item label="價格" prop="price">
-        <el-input-number v-model="form.price" :min="0" :step="100" />
-      </el-form-item>
+        <el-form-item label="價格" prop="price">
+          <el-input-number v-model="form.price" :min="0" :step="100" />
+        </el-form-item>
 
-      <el-form-item label="庫存數量" prop="stock">
-        <el-input-number v-model="form.stock" :min="0" :step="1" placeholder="請輸入庫存數量" />
-      </el-form-item>
+        <el-form-item label="庫存數量" prop="stock">
+          <el-input-number v-model="form.stock" :min="0" :step="1" placeholder="請輸入庫存數量" />
+        </el-form-item>
 
-      <el-form-item label="商品狀態" prop="states">
-        <el-select v-model="form.states" placeholder="請選擇狀態">
-          <el-option
-            v-for="(state, index) in states"
-            :key="index"
-            :label="state.label"
-            :value="state.value"
+        <el-form-item label="商品狀態" prop="states">
+          <el-select v-model="form.states" placeholder="請選擇狀態">
+            <el-option
+              v-for="(state, index) in states"
+              :key="index"
+              :label="state.label"
+              :value="state.value"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="描述">
+          <el-input
+            v-model="form.description"
+            type="textarea"
+            :rows="3"
+            placeholder="簡要描述商品..."
           />
-        </el-select>
-      </el-form-item>
+        </el-form-item>
 
-      <el-form-item label="描述">
-        <el-input
-          v-model="form.description"
-          type="textarea"
-          :rows="3"
-          placeholder="簡要描述商品..."
-        />
-      </el-form-item>
+        <el-form-item label="上傳圖片" prop="imageBase64">
+          <input type="file" accept="image/*" @change="handleFileChange" />
+          <div v-if="imagePreview" class="mt-2">
+            <img :src="imagePreview" class="h-32 rounded border" />
+            <el-button type="danger" @click="removeImage" text>刪除圖片</el-button>
+          </div>
+        </el-form-item>
 
-      <el-form-item label="上傳圖片" prop="imageBase64">
-        <input type="file" accept="image/*" @change="handleFileChange" />
-        <div v-if="imagePreview" class="mt-2">
-          <img :src="imagePreview" class="h-32 rounded border" />
-          <el-button type="danger" @click="removeImage" text>刪除圖片</el-button>
-        </div>
-      </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm">新增商品</el-button>
+          <el-button type="default" @click="resetForm">重設</el-button>
+          <el-button type="success" @click="back">返回</el-button>
+        </el-form-item>
+      </el-form>
 
-      <el-form-item>
-        <el-button type="primary" @click="submitForm">新增商品</el-button>
-        <el-button type="default" @click="resetForm">重設</el-button>
-        <el-button type="success" @click="back">返回</el-button>
-      </el-form-item>
-    </el-form>
-
-    <ConfirmationDialog
-      v-model="successDialogVisible"
-      title="新增成功"
-      message="商品已成功新增。請問您要繼續新增商品嗎？"
-      :buttons="successButtons"
-    />
+      <ConfirmationDialog
+        v-model="successDialogVisible"
+        title="新增成功"
+        message="商品已成功新增。請問您要繼續新增商品嗎？"
+        :buttons="successButtons"
+      />
+    </div>
   </div>
 </template>
 
