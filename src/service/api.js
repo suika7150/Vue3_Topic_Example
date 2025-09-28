@@ -6,7 +6,7 @@ const api = {
   // 註冊
   register: (data) => apiService.post(API_ROUTES.REGISTER, data),
   // 登入
-  login:  (data) =>apiService.post(API_ROUTES.LOGIN, data),
+  login: (data) => apiService.post(API_ROUTES.LOGIN, data),
   // 用戶資料
   user: () => apiService.get(API_ROUTES.USER),
   // 查詢個人資料
@@ -34,7 +34,7 @@ const api = {
 
   // 取得選項列表
   getOptions: () => apiService.get(API_ROUTES.OPTIONS_LIST),
-  
+
   // 新增選項
   addOption: (data) => apiService.post(API_ROUTES.OPTIONS_ADD, data),
 
@@ -44,7 +44,7 @@ const api = {
   // 刪除選項
   deleteOption: (id) => apiService.delete(API_ROUTES.OPTIONS_DELETE(id)),
 
-    // 取得選項列表
+  // 取得選項列表
   getOptionsByListName: (listName) =>
     apiService.get(API_ROUTES.OPTIONS_BY_LISTNAME(), { params: { listName: listName } }),
 }
