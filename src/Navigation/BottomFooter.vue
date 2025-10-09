@@ -36,16 +36,12 @@
 
 <style scoped>
 .bottom-footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 95%;
+  position: relative; /* 改成 relative，自然在內容下方 */
+  width: 100%;
   background-color: #001529;
   color: #fff;
   padding: 24px 32px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 9999;
-  height: 50px;
 }
 
 .footer-content {

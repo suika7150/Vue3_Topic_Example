@@ -15,11 +15,11 @@ const navMenu = computed(() => {
 </script>
 
 <template>
-  <header>
-    <TopBar bannerOn />
-  </header>
+  <div class="app-wrapper">
+    <header>
+      <TopBar bannerOn />
+    </header>
 
-  <main>
     <div class="layout">
       <CategorySidebar :categories="navMenu" />
 
@@ -27,16 +27,21 @@ const navMenu = computed(() => {
         <router-view />
       </div>
     </div>
-  </main>
-  <BottomFooter />
+
+    <BottomFooter />
+  </div>
 </template>
 
 <style scoped>
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .layout {
   display: flex;
   min-height: 100vh;
-  background-color: #f0f2f5;
-  /* 整體背景 */
 }
 
 /* 側邊欄 */
@@ -45,15 +50,14 @@ const navMenu = computed(() => {
   min-height: 100vh;
   background-color: #ffffff;
   border-right: 1px solid #e0e0e0;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 0 5px rgba(245, 240, 240, 0.05);
   transition: all 0.3s;
 }
 
 /* 主內容區 */
 .content {
-  margin-left: 240px;
-  padding-top: 100px;
   flex: 1;
+  margin-top: 80px; /* 避開 TopBar */
   padding: 32px;
   background-color: #f5f7fa;
   overflow: auto;

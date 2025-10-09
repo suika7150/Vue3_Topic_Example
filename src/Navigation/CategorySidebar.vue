@@ -99,23 +99,22 @@ const toggleCollapse = () => {
 </script>
 <style scoped>
 .sidebar-wrapper {
-  position: fixed;
-  top: 120px; /* 從 TopBar 下方開始 */
-  left: 0;
+  margin-top: 120px; /* 或 padding-top: 100px */
   width: 240px;
-  height: calc(vh - var); /* 扣掉 TopBar 高度 */
-  min-height: 120vh;
   background-color: #f9f9f9;
   border-right: 1px solid #ddd;
-  transition: width 0.3s;
+  display: flex; /* 高度隨內容延伸 */
+  flex-direction: column;
   overflow-y: auto;
-  z-index: 1000;
+
+  /* position: fixed; */
+  /* top: 120px; */
 }
 
 .sidebar-menu {
-  height: 100%;
   border-right: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  flex: 1; /* 填滿 Sidebar 容器 */
 }
 
 .sidebar-menu .el-menu-item,

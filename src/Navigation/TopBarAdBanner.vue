@@ -71,7 +71,7 @@ watch(
 <style scoped>
 .topbar-ad-banner {
   padding: 4px 12px;
-  background-color: #1c1a1ac3;
+  background-color: #faf5f5c3;
   color: #141612af;
   border-radius: 6px;
   font-size: 14px;
