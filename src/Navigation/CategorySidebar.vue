@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar-wrapper">
+  <div class="sidebar-wrapper" :class="{ collapsed: isCollapsed }">
     <el-menu
       class="sidebar-menu"
       :default-active="active"
@@ -99,22 +99,29 @@ const toggleCollapse = () => {
 </script>
 <style scoped>
 .sidebar-wrapper {
-  margin-top: 120px; /* 或 padding-top: 100px */
+  margin-top: 100px; /* 或 padding-top: 100px */
   width: 240px;
+  min-height: 100%;
   background-color: #f9f9f9;
   border-right: 1px solid #ddd;
   display: flex; /* 高度隨內容延伸 */
   flex-direction: column;
   overflow-y: auto;
+  box-sizing: border-box;
+  position: relative;
+  transition: width 0.3s ease;
+}
 
-  /* position: fixed; */
-  /* top: 120px; */
+/* 收合狀態 */
+.sidebar-wrapper.collapsed {
+  width: 64px; /* 收合寬度 */
 }
 
 .sidebar-menu {
   border-right: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   flex: 1; /* 填滿 Sidebar 容器 */
+  width: 100%;
 }
 
 .sidebar-menu .el-menu-item,
@@ -145,21 +152,23 @@ const toggleCollapse = () => {
 .collapse-btn {
   position: absolute;
   bottom: 20px;
-  right: 12px;
+  right: -14px;
+  transform: translateX(-50%); /* 精準置中 */
   width: 36px;
   height: 36px;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
+  z-index: 10; /* 防止被 Menu 蓋住 */
 }
 
 .collapse-btn:hover {
   background-color: #f2f2f2;
-  transform: scale(1.1);
+  transform: translateX(-50%) scale(1.1);
 }
 </style>

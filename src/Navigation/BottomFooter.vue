@@ -40,8 +40,9 @@
   width: 100%;
   background-color: #001529;
   color: #fff;
-  padding: 24px 32px;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  padding: 30px 15px;
+  /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); */
+  box-sizing: border-box; /* 避免 padding 推寬度 */
 }
 
 .footer-content {

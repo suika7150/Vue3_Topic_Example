@@ -27,9 +27,8 @@ const navMenu = computed(() => {
         <router-view />
       </div>
     </div>
-
-    <BottomFooter />
   </div>
+  <BottomFooter />
 </template>
 
 <style scoped>
@@ -37,11 +36,18 @@ const navMenu = computed(() => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%; /* 填滿整個瀏覽器寬度 */
+  margin: 0; /* 自動置中 */
+  padding: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .layout {
   display: flex;
-  min-height: 100vh;
+  width: 100%;
+  min-height: calc(100vh - 80px - 50px); /* 減掉 TopBar 與 Footer 高度 */
+  box-sizing: border-box;
 }
 
 /* 側邊欄 */
@@ -57,18 +63,17 @@ const navMenu = computed(() => {
 /* 主內容區 */
 .content {
   flex: 1;
-  margin-top: 80px; /* 避開 TopBar */
-  padding: 32px;
+  padding: 80px;
   background-color: #f5f7fa;
   overflow: auto;
+  box-sizing: border-box; /* 避免 padding 推寬度 */
 }
 
 /* 響應式：小於 768px 隱藏側邊欄 */
 @media (max-width: 768px) {
-  .el-menu-vertical-demo {
-    display: none;
+  .layout {
+    flex-direction: column;
   }
-
   .content {
     padding: 16px;
   }

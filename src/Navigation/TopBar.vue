@@ -23,18 +23,18 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
 
 <style scoped>
 .top-bar {
-  z-index: 1000;
   position: fixed;
-  top: 0px;
+  top: 0;
   left: 0;
-  width: 98%;
+  width: 100%; /* 填滿整個瀏覽器寬度 */
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100px;
   background-color: #000000fb;
-  color: #fff;
   padding: 20px;
-  height: 80px;
+  box-sizing: border-box;
 }
 
 .logo {

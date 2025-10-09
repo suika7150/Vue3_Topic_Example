@@ -180,7 +180,7 @@ const removeItem = (productId) => {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding: 24px 16px;
+  padding: 100px 24px 16px;
 }
 
 .product-col {
@@ -196,7 +196,7 @@ const removeItem = (productId) => {
 }
 
 .header-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
 }
 
