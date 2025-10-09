@@ -18,13 +18,12 @@ export default defineConfig({
   //   hmr: false
   // },
 
-
-// server: {
-//     host: "0.0.0.0", // 允許用 127.0.0.1 或 IP 連
-//     port: 5173,
-//     hmr: {
-//       host:'192.168.100.29',
-//       protocol:'ws',
-//     },
-//   },
+  // server: {
+  //     host: "0.0.0.0", // 允許用 127.0.0.1 或 IP 連
+  //     port: 5173,
+  //     hmr: {
+  //       host:'192.168.100.29',
+  //       protocol:'ws',
+  //     },
+  //   },
 })

@@ -1,4 +1,4 @@
-import Storage, { CART_KEY, TOKEN_KEY,USER_ROLE_KEY } from '@/utils/storageUtil'
+import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { defineStore } from 'pinia'
 
 function parseJwt(token) {
@@ -21,10 +21,10 @@ export const useUserStore = defineStore('userStore', {
     },
     remainingTime: 0, // 剩餘秒數
     timer: null, // 計時器
-    role:'GUEST',
+    role: 'GUEST',
   }),
-  getters:{
-userRole: (state) => state.role,
+  getters: {
+    userRole: (state) => state.role,
     isLoggedIn: (state) => state.user.isLogin,
   },
   actions: {
@@ -37,11 +37,11 @@ userRole: (state) => state.role,
      * 啟動 Token 倒數
      * 將用戶資料儲存到狀態中
      * */
-    login(user,{token,role}) {
+    login(user, { token, role }) {
       this.user = user
       this.role = role
       Storage.set(USER_ROLE_KEY, role)
-      Storage.set(TOKEN_KEY,token)
+      Storage.set(TOKEN_KEY, token)
       this.startTokenCountdown(token)
     },
     /**

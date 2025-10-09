@@ -15,4 +15,5 @@ export const API_ROUTES = {
   OPTIONS_ADD: `/options/add`,
   OPTIONS_UPDATE: (id) => `/options/update/${id}`,
   OPTIONS_DELETE: (id) => `/options/delete/${id}`,
-  OPTIONS_BY_LISTNAME: () => `/options/getByListName`,}
+  OPTIONS_BY_LISTNAME: () => `/options/getByListName`,
+}
