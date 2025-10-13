@@ -51,8 +51,8 @@ export function getNavMenu(userRole) {
           icon: LocationFilled,
           clickable: false,
           subs: [
-            { name: 'usa', label: '美國', icon: Flag },
-            { name: 'canada', label: '加拿大', icon: Flag },
+            { name: 'usa', label: '美國', icon: Flag, route: '/life/travel/usa' },
+            { name: 'canada', label: '加拿大', icon: Flag, route: '/life/travel/canada' },
           ],
         },
       ],
@@ -63,19 +63,19 @@ export function getNavMenu(userRole) {
       icon: Food,
       clickable: false,
       subs: [
-        { name: 'drinks', label: '飲品', icon: IceDrink },
-        { name: 'snacks', label: '零食', icon: Suitcase },
-        { name: 'smoking', label: '香菸', icon: Smoking },
+        { name: 'drinks', label: '飲品', icon: IceDrink, route: '/food/drinks' },
+        { name: 'snacks', label: '零食', icon: Suitcase, route: '/food/snacks' },
+        { name: 'smoking', label: '香菸', icon: Smoking, route: 'food/smoking' },
       ],
     },
     {
-      name: 'Vehicles',
+      name: 'vehicles',
       label: '汽車',
       icon: Van,
       clickable: false,
       subs: [
-        { name: 'cars', label: '轎車', icon: Odometer },
-        { name: 'motorcycles', label: '摩托車', icon: Bicycle },
+        { name: 'cars', label: '轎車', icon: Odometer, route: '/vehicles/cars' },
+        { name: 'motorcycles', label: '摩托車', icon: Bicycle, route: '/vehicles/motorcycles' },
       ],
     },
     {
@@ -84,8 +84,8 @@ export function getNavMenu(userRole) {
       icon: Odometer,
       clickable: false,
       subs: [
-        { name: 'movies', label: '電影', icon: VideoCameraFilled },
-        { name: 'music', label: '音樂', icon: Mic },
+        { name: 'movies', label: '電影', icon: VideoCameraFilled, route: '/entertainment/movies' },
+        { name: 'music', label: '音樂', icon: Mic, route: '/entertainment/music' },
       ],
     },
   ]

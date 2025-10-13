@@ -56,6 +56,51 @@ const routes = [
     },
   },
   {
+    path: '/life/travel/usa',
+    name: 'TravelUSA',
+    component: () => import('@/views/life/travel/USA.vue'),
+  },
+  {
+    path: '/life/travel/canada',
+    name: 'TravelCanada',
+    component: () => import('@/views/life/travel/Canada.vue'),
+  },
+  {
+    path: '/food/drinks',
+    name: 'FoodDrinks',
+    component: () => import('@/views/food/Drinks.vue'),
+  },
+  {
+    path: '/food/snacks',
+    name: 'FoodSnacks',
+    component: () => import('@/views/food/Snacks.vue'),
+  },
+  {
+    path: '/food/Smoking',
+    name: 'FoodSmoking',
+    component: () => import('@/views/food/Smoking.vue'),
+  },
+  {
+    path: '/vehicles/cars',
+    name: 'VehiclesCars',
+    component: () => import('@/views/vehicles/Cars.vue'),
+  },
+  {
+    path: '/vehicles/motorcycles',
+    name: 'VehiclesMotorcycles',
+    component: () => import('@/views/vehicles/Motorcycles.vue'),
+  },
+  {
+    path: '/entertainment/movies',
+    name: 'EntertainmentMovies',
+    component: () => import('@/views/entertainment/Movies.vue'),
+  },
+  {
+    path: '/entertainment/music',
+    name: 'EntertainmentMusic',
+    component: () => import('@/views/entertainment/Music.vue'),
+  },
+  {
     path: '/accessDenied',
     name: 'AccessDenied',
     component: () => import('@/views/users/AccessDenied.vue'),

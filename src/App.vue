@@ -6,6 +6,7 @@ import TopBar from './navigation/TopBar.vue'
 import { computed } from 'vue'
 import { getNavMenu } from './Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
+import TopBarAdBanner from './navigation/TopBarAdBanner.vue'
 
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userRole)
