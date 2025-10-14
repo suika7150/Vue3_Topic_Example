@@ -13,17 +13,8 @@ export default defineConfig({
     },
   },
   // server: {
-  //   host: "0.0.0.0", // 允許用 127.0.0.1 或 IP 連
-  //   port: 5173,
-  //   hmr: false
+  //   host: 'my-vue-app.local', // 將 localhost 改成自訂域名
+  //   port: 5173, // 可保留原本 port，也可以改
+  //   strictPort: true, // 如果 port 被占用就直接報錯，不自動換 port
   // },
-
-  // server: {
-  //     host: "0.0.0.0", // 允許用 127.0.0.1 或 IP 連
-  //     port: 5173,
-  //     hmr: {
-  //       host:'192.168.100.29',
-  //       protocol:'ws',
-  //     },
-  //   },
 })

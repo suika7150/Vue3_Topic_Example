@@ -23,7 +23,7 @@
     </div>
 
     <div class="product-table-container">
-      <el-table v-loading="isLoading" :data="filteredProducts" style="width: 100%" stripe border>
+      <el-table :data="filteredProducts" style="width: 100%" stripe border>
         <el-table-column label="圖片" width="100" align="center">
           <template #default="{ row }">
             <el-image
