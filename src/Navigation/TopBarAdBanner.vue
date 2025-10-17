@@ -103,7 +103,7 @@ watch(
   /* position: fixed; */
   top: 0;
   /* z-index: 2000; */
-  animation: scroll 15s linear infinite; /*設定動畫持續時間*?
+  animation: scroll 15s linear infinite; /*設定動畫持續時間*/
   white-space: nowrap; /* 禁用換行 */
 }
 
