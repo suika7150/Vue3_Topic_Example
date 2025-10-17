@@ -66,6 +66,11 @@ const routes = [
     component: () => import('@/views/life/travel/Canada.vue'),
   },
   {
+    path: '/life/clean',
+    name: 'Clean',
+    component: () => import('@/views/life/clean/clean.vue'),
+  },
+  {
     path: '/food/drinks',
     name: 'FoodDrinks',
     component: () => import('@/views/food/Drinks.vue'),

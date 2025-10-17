@@ -5,6 +5,7 @@ import {
   Flag,
   Food,
   IceDrink,
+  Loading,
   LocationFilled,
   Mic,
   Monitor,
@@ -55,6 +56,7 @@ export function getNavMenu(userRole) {
             { name: 'canada', label: '加拿大', icon: Flag, route: '/life/travel/canada' },
           ],
         },
+        { name: 'Clean', label: '清潔', icon: Loading, route: '/life/clean' },
       ],
     },
     {
@@ -65,7 +67,7 @@ export function getNavMenu(userRole) {
       subs: [
         { name: 'drinks', label: '飲品', icon: IceDrink, route: '/food/drinks' },
         { name: 'snacks', label: '零食', icon: Suitcase, route: '/food/snacks' },
-        { name: 'smoking', label: '香菸', icon: Smoking, route: 'food/smoking' },
+        { name: 'smoking', label: '香菸', icon: Smoking, route: '/food/smoking' },
       ],
     },
     {

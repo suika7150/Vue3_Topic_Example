@@ -15,7 +15,8 @@
             <el-option label="服飾配件" value="服飾配件" />
             <el-option label="加工食品" value="加工食品" />
             <el-option label="交通工具" value="交通工具" />
-            <el-option label="廚房清潔" value="廚房清潔" />
+            <el-option label="清潔用品" value="清潔用品" />
+            <el-option label="影音娛樂" value="影音娛樂" />
           </el-select>
         </el-form-item>
 
