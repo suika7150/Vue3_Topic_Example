@@ -23,6 +23,7 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
+            <el-dropdown-item @click="goCheckout">購物車</el-dropdown-item>
             <el-dropdown-item @click="goProfile">個人資料維護</el-dropdown-item>
             <el-dropdown-item @click="goSetting">設定</el-dropdown-item>
             <el-dropdown-item divided @click="logout">登出</el-dropdown-item>
@@ -47,6 +48,7 @@ const { remainingTime: remaining } = storeToRefs(userStore)
 
 const { goTo, goHome } = useNavigation()
 
+const goCheckout = () => goTo('Checkout')
 const goSetting = () => goTo('Setting')
 const goLogin = () => goTo('Login')
 const goProfile = () => goTo('Profile')
