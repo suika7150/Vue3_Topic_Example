@@ -407,7 +407,7 @@ const submitOrder = async () => {
     Storage.remove(CART_KEY)
 
     // 跳轉到成功頁面
-    goTo('CheckoutSuccess', { orderId: response.data.id })
+    goTo('CheckoutSuccess')
 
     ElMessage.success('訂單建立成功！')
   } catch (error) {

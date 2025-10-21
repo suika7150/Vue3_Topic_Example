@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/checkout',
     name: 'Checkout',
-    component: () => import('@/views/checkout/checkout.vue'),
+    component: () => import('@/views/checkout/Checkout.vue'),
     meta: { requiresAuth: true, role: ['USER'] },
     beforeEach: (to, from, next) => {
       // 檢查是否已登入
@@ -54,6 +54,11 @@ const routes = [
       }
       next()
     },
+  },
+  {
+    path: '/checkout/success',
+    name: 'CheckoutSuccess',
+    component: () => import('@/views/checkout/CheckoutSuccess.vue'),
   },
   {
     path: '/life/travel/usa',
@@ -68,7 +73,7 @@ const routes = [
   {
     path: '/life/clean',
     name: 'Clean',
-    component: () => import('@/views/life/clean/clean.vue'),
+    component: () => import('@/views/life/clean/Clean.vue'),
   },
   {
     path: '/food/drinks',
