@@ -387,20 +387,21 @@ const submitOrder = async () => {
     submitting.value = true
 
     const orderData = {
-      items: cartItems.value,
-      shipping: shippingForm.value,
-      payment: {
-        method: paymentMethod.value,
-        ...(paymentMethod.value === 'credit_card' && {
-          creditCard: creditCardForm.value,
-        }),
-      },
-      subtotal: subtotal.value,
-      shippingFee: shippingFee.value,
+      name: shippingForm.value.name,
+      phone: shippingForm.value.phone,
+      address: `${shippingForm.value.city} ${shippingForm.value.district} ${shippingForm.value.address}`,
+      shippingMethod: shippingForm.value.shippingMethod,
+      notes: shippingForm.value.notes,
+      paymentMethod: paymentMethod.value,
       total: total.value,
+      ...(paymentMethod.value === 'credit_card' && {
+        cardLast4: creditCardForm.value.cardNumber.slice(-4),
+        paymentStatus: 'paid',
+      }),
+      items: cartItems.value,
     }
 
-    const response = await api.order.create(orderData)
+    const response = await api.createOrder(orderData)
 
     // 清空購物車
     Storage.remove(CART_KEY)
