@@ -127,6 +127,13 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
 })
 // ✅ 加入全域導航守衛：權限驗證
 router.beforeEach((to, from, next) => {
