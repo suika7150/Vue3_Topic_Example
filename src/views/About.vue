@@ -3,16 +3,14 @@
     <canvas ref="canvas"></canvas>
 
     <!-- 模式切換按鈕 -->
-    <body>
-      <div class="controls">
-        <button @click="mode = 'particles'">粒子模式</button>
-        <button @click="mode = 'waves'">波浪模式</button>
-        <button @click="mode = 'geometry'">幾何模式</button>
-        <button @click="mode = 'starfield'">星空模式</button>
-        <button @click="mode = 'matrix'">矩陣數字雨</button>
-        <button @click="mode = 'gradient'">流動漸層</button>
-      </div>
-    </body>
+    <div class="button">
+      <button @click="mode = 'particles'">粒子模式</button>
+      <button @click="mode = 'waves'">波浪模式</button>
+      <button @click="mode = 'geometry'">幾何模式</button>
+      <button @click="mode = 'starfield'">星空模式</button>
+      <button @click="mode = 'matrix'">矩陣數字雨</button>
+      <button @click="mode = 'gradient'">流動漸層</button>
+    </div>
   </div>
 </template>
 
@@ -88,8 +86,8 @@ function animate() {
       let dy = mouse.y - p.y
       let distance = Math.sqrt(dx * dx + dy * dy)
       if (distance < 80) {
-        p.x -= dx * 0.05
-        p.y -= dy * 0.05
+        p.x -= dx * 0.01
+        p.y -= dy * 0.01
       }
     })
 
@@ -199,12 +197,12 @@ onMounted(() => {
 
 <style scoped>
 .canvas-container {
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: black;
+  background: rgb(0, 0, 0);
 }
 canvas {
   display: block;
@@ -214,11 +212,12 @@ canvas {
   top: 20px;
   left: 20px;
 }
-button {
+.button {
   margin: 5px;
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  color: white;
 }
 </style>
