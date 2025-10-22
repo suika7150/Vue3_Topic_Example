@@ -85,6 +85,10 @@ watch(
   justify-content: center;
 }
 
+.topbar-ad-banner:hover .ad-text {
+  animation-play-state: paused;
+}
+
 .marquee {
   width: 100%;
   overflow: hidden;
@@ -100,10 +104,8 @@ watch(
   color: #fff;
   display: block;
   text-decoration: none;
-  /* position: fixed; */
   top: 0;
-  /* z-index: 2000; */
-  animation: scroll 15s linear infinite; /*設定動畫持續時間*/
+  animation: scroll 25s linear infinite; /*設定動畫持續時間*/
   white-space: nowrap; /* 禁用換行 */
 }
 
@@ -118,7 +120,7 @@ watch(
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.4s;
+  transition: opacity 0.3s;
 }
 .fade-enter-from,
 .fade-leave-to {

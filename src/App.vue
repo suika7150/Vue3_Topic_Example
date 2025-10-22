@@ -20,7 +20,6 @@ const navMenu = computed(() => {
     <header>
       <TopBar bannerOn />
     </header>
-
     <div class="layout">
       <CategorySidebar :categories="navMenu" />
 

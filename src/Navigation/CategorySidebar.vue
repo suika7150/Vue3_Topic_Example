@@ -1,5 +1,10 @@
 <template>
-  <div class="sidebar-wrapper" :class="{ collapsed: isCollapsed }">
+  <div
+    class="sidebar-wrapper"
+    :class="{ collapsed: isCollapsed }"
+    @mouseenter="isCollapsed = false"
+    @mouseleave="isCollapsed = true"
+  >
     <el-menu
       class="sidebar-menu"
       :default-active="active"
@@ -17,11 +22,11 @@
     </el-menu>
 
     <!-- 右下小按鈕 -->
-    <div class="collapse-btn" @click="toggleCollapse">
+    <!-- <div class="collapse-btn" @click="toggleCollapse">
       <el-icon>
         <component :is="isCollapsed ? DArrowRight : DArrowLeft" />
       </el-icon>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -117,11 +122,20 @@ const toggleCollapse = () => {
   width: 64px; /* 收合寬度 */
 }
 
+.sidebar-wrapper.collapsed .el-menu-item span {
+  opacity: 0;
+}
+
 .sidebar-menu {
   border-right: none;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   flex: 1; /* 填滿 Sidebar 容器 */
   width: 100%;
+}
+
+.sidebar-menu .el-menu-item span {
+  transition: opacity 0.3s;
+  opacity: 1;
 }
 
 .sidebar-menu .el-menu-item,
