@@ -27,12 +27,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="handleLogin" style="width: 100%"> 登入 </el-button>
+          <el-button class="login-btn" @click="handleLogin" style="width: 100%"> 登入 </el-button>
         </el-form-item>
 
         <div class="login-links">
-          <el-link type="primary" @click="handleForgotPassword">忘記密碼？</el-link>
-          <el-link type="primary" @click="handleRegister">註冊新帳號</el-link>
+          <el-link type="text" @click="handleForgotPassword">忘記密碼？</el-link>
+          <el-link type="text" @click="handleRegister">註冊新帳號</el-link>
         </div>
       </el-form>
     </el-card>
@@ -113,6 +113,14 @@ const handleRegister = () => {
 </script>
 
 <style scoped>
+.login-btn.el-button {
+  background-color: black; /* 跟 Topbar 融合 */
+  /* border: none; 去掉邊框 */
+  color: white;
+  box-shadow: none; /* 去掉陰影 */
+  padding: 8px 12px; /* 可依 Topbar 調整 */
+}
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -138,7 +146,7 @@ const handleRegister = () => {
   font-size: 28px;
   font-weight: 600;
   color: #333;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1bbfce 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
