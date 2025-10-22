@@ -175,24 +175,12 @@
           </div>
 
           <div class="navigation-buttons">
-            <el-button v-if="currentStep > 0" @click="previousStep" icon="ArrowLeft">
-              上一步
-            </el-button>
+            <el-button v-if="currentStep > 0" @click="previousStep"> 上一步 </el-button>
             <div v-else></div>
 
-            <el-button v-if="currentStep < 2" type="primary" @click="nextStep" icon="ArrowRight">
-              下一步
-            </el-button>
+            <el-button v-if="currentStep < 2" @click="nextStep"> 下一步 </el-button>
 
-            <el-button
-              v-else
-              type="primary"
-              @click="submitOrder"
-              :loading="submitting"
-              icon="Check"
-            >
-              確認訂單
-            </el-button>
+            <el-button v-else @click="submitOrder" :loading="submitting"> 確認訂單 </el-button>
           </div>
         </div>
 
