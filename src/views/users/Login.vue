@@ -133,14 +133,6 @@ const handleRegister = () => {
 </script>
 
 <style scoped>
-.login-btn.el-button {
-  background-color: black; /* 跟 Topbar 融合 */
-  /* border: none; 去掉邊框 */
-  color: white;
-  box-shadow: none; /* 去掉陰影 */
-  padding: 8px 12px; /* 可依 Topbar 調整 */
-}
-
 .login-container {
   display: flex;
   justify-content: center;
@@ -186,6 +178,11 @@ const handleRegister = () => {
   font-size: 16px;
   height: 44px;
   border-radius: 8px;
+  background-color: black; /* 跟 Topbar 融合 */
+  /* border: none; 去掉邊框 */
+  color: white;
+  box-shadow: none; /* 去掉陰影 */
+  padding: 8px 12px; /* 可依 Topbar 調整 */
 }
 
 .el-input :deep(.el-input__inner) {

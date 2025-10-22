@@ -52,7 +52,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="handleRegister" :loading="loading" style="width: 100%">
+          <el-button
+            clss="register-btn"
+            @click="handleRegister"
+            :loading="loading"
+            style="width: 100%"
+          >
             註冊
           </el-button>
         </el-form-item>
@@ -253,7 +258,7 @@ const login = () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, black 100%, #8183ad 100%);
   padding: 20px;
 }
 
@@ -273,7 +278,7 @@ const login = () => {
   font-size: 28px;
   font-weight: 600;
   color: #333;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1bbfce 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -296,6 +301,11 @@ const login = () => {
   font-size: 16px;
   height: 44px;
   border-radius: 8px;
+  background-color: black; /* 跟 Topbar 融合 */
+  /* border: none; 去掉邊框 */
+  color: white;
+  box-shadow: none; /* 去掉陰影 */
+  padding: 8px 12px; /* 可依 Topbar 調整 */
 }
 
 .el-input :deep(.el-input__inner) {
