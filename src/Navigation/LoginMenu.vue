@@ -1,11 +1,11 @@
 <template>
   <div class="user-menu-container">
     <!--關於我們-->
-    <el-button type="primary" @click="goAbout">關於我們</el-button>
+    <el-button class="topbar-btn" @click="goAbout">關於我們</el-button>
     <!-- 回首頁按鈕 -->
-    <el-button type="primary" @click="goHome">回首頁</el-button>
+    <el-button class="topbar-btn" @click="goHome">回首頁</el-button>
     <!-- 未登入時顯示登入按鈕 -->
-    <el-button v-if="!isLogin" type="primary" @click="goLogin">登入</el-button>
+    <el-button v-if="!isLogin" class="topbar-btn" @click="goLogin">登入</el-button>
 
     <!-- 已登入時 -->
     <template v-else>
@@ -19,7 +19,7 @@
       <!-- 漢堡下拉選單 -->
       <el-dropdown>
         <el-button type="link" class="hamburger-btn">
-          <el-icon><MoreFilled /></el-icon>
+          <el-icon><Setting /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
@@ -60,6 +60,22 @@ const logout = () => {
 </script>
 
 <style scoped>
+.topbar-btn.el-button {
+  background-color: transparent; /* 跟 Topbar 融合 */
+  border: none; /* 去掉邊框 */
+  color: white; /* 文字白色 */
+  box-shadow: none; /* 去掉陰影 */
+  padding: 8px 12px; /* 可依 Topbar 調整 */
+}
+
+.topbar-btn.el-button:hover,
+.topbar-btn.el-button:focus {
+  background-color: rgba(255, 255, 255, 0.1); /*輕微 hover 提示 */
+  color: white; /* 文字維持白色 */
+  outline: none;
+  box-shadow: none;
+}
+
 .user-menu-container {
   display: flex;
   align-items: center;
@@ -84,7 +100,7 @@ const logout = () => {
 }
 
 .hamburger-btn {
-  background-color: #409eff; /* Element Plus 主色 */
+  background-color: transparent; /* Element Plus 主色 */
   color: white;
   border-radius: 6px;
   padding: 8px 12px;
@@ -95,11 +111,11 @@ const logout = () => {
   border: none;
   transition: background-color 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgb(64 158 255 / 0.4);
+  box-shadow: none;
 }
 
 .hamburger-btn:hover {
-  background-color: #66b1ff;
-  box-shadow: 0 4px 12px rgb(102 177 255 / 0.6);
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
 }
 </style>
