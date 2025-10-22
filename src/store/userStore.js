@@ -91,5 +91,32 @@ export const useUserStore = defineStore('userStore', {
       Storage.remove(CART_KEY)
       this.remainingTime = 0
     },
+
+    initUser() {
+      const token = Storage.get(TOKEN_KEY)
+      const role = Storage.get(USER_ROLE_KEY)
+
+      if (token && role) {
+        this.user.isLogin = true
+        this.role = role || 'USER'
+        this.startTokenCountdown(token) //重整後重新啟動倒數
+      }
+    },
+  },
+  // // 手動新增啟動時自動從Storage載入登入資料
+  // initUser() {
+  //   const token = Storage.get(TOKEN_KEY)
+  //   const role = Storage.get(USER_ROLE_KEY)
+  //   if (token) {
+  //     this.user.isLogin = true
+  //     this.role = role || 'USER'
+  //   }
+  // },
+
+  //自動新增啟動時自動從Storage載入登入資料
+  persist: {
+    enabled: true,
+    storage: localStorage, //或sessionStorage(依照需求)
+    paths: ['user', 'role'], //持久化狀態
   },
 })

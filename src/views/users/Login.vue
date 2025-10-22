@@ -43,7 +43,7 @@
 import { useNavigation } from '@/composables/useNavigation'
 import api from '@/service/api'
 import { useUserStore } from '@/store/userStore'
-import Storage, { USER_KEY } from '@/utils/storageUtil'
+import Storage, { TOKEN_KEY, USER_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
 
@@ -72,6 +72,13 @@ const rules = {
 
 // 載入記住的帳號
 onMounted(() => {
+  //讀取token
+  const token = Storage.get(TOKEN_KEY)
+  if (token) {
+    userStore.login({ username: '' }, { token }) //回寫token
+    userStore.startTokenCountdown(token) //標記已登入
+  }
+
   const rememberedUsername = Storage.get(USER_KEY)
   if (rememberedUsername) {
     form.value.username = rememberedUsername
@@ -95,10 +102,23 @@ const handleLogin = async () => {
   const res = await api.login(loginData)
   if (res.code === '0000') {
     const { token } = res.result
+
+    //存入Pinia
     userStore.login(loginData, res.result)
     userStore.startTokenCountdown(token)
+
+    //存入 sessionStorage
+    Storage.set(TOKEN_KEY, token)
+    if (form.value.rememberMe) {
+      Storage.set(USER_KEY, form.value.username)
+    } else {
+      Storage.remove(USER_KEY)
+    }
+
     ElMessage.success('登入成功！')
     goHome()
+  } else {
+    ElMessage.error('請檢查帳號及密碼')
   }
 }
 
