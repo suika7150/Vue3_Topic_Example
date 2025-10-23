@@ -104,9 +104,7 @@ import api from '@/service/api'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
-import { computed, ref } from 'vue'
-import { onMounted, onBeforeUnmount } from 'vue'
-import throttle from 'lodash/throttle' // 引入 lodash 的 throttle 函數控制載入商品的頻率
+import { computed, onMounted, ref } from 'vue'
 
 const cartStore = useCartStore()
 const products = ref([])
@@ -134,11 +132,6 @@ onMounted(async () => {
   }
 
   Storage.get(CART_KEY)
-
-  //自動載入更多商品
-  window.addEventListener('scroll', handleScrollThrottled)
-
-  loadMore()
 })
 
 const handleImageError = (e) => {
@@ -148,25 +141,6 @@ const handleImageError = (e) => {
 const loadMore = () => {
   visibleCount.value += loadMoreCount
 }
-
-//自動載入更多商品
-function handleScroll() {
-  const scrolly = window.scrollY
-  const visibleHeight = window.innerHeight
-  const pageHeight = document.documentElement.scrollHeight
-
-  if (scrolly + visibleHeight >= pageHeight - 100) {
-    if (visibleCount.value < products.value.length) {
-      loadMore()
-    }
-  }
-}
-
-const handleScrollThrottled = throttle(handleScroll, 500)
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScrollThrottled)
-})
 
 const filteredProducts = computed(() => {
   const filtered = selectedCategory.value
