@@ -7,7 +7,6 @@ import { computed } from 'vue'
 import { getNavMenu } from './Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
 import TopBarAdBanner from './navigation/TopBarAdBanner.vue'
-// import ProductList from './views/products/ProductList.vue'
 
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userRole)

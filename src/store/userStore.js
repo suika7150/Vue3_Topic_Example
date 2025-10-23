@@ -1,4 +1,4 @@
-import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
+import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY, USER_KEY } from '@/utils/storageUtil'
 import { defineStore } from 'pinia'
 
 function parseJwt(token) {
@@ -37,11 +37,12 @@ export const useUserStore = defineStore('userStore', {
      * 啟動 Token 倒數
      * 將用戶資料儲存到狀態中
      * */
-    login(user, { token, role }) {
-      this.user = user
-      this.role = role
-      Storage.set(USER_ROLE_KEY, role)
+    login(user, { token, role, fullName }) {
+      this.user = { ...user, fullName, isLogin: true } // 將用戶資料儲存到狀態中user
+      this.role = role || 'USER'
+      Storage.set(USER_ROLE_KEY, this.role)
       Storage.set(TOKEN_KEY, token)
+      Storage.set(USER_KEY, this.user) //存取 user 物件
       this.startTokenCountdown(token)
     },
     /**
@@ -95,9 +96,10 @@ export const useUserStore = defineStore('userStore', {
     initUser() {
       const token = Storage.get(TOKEN_KEY)
       const role = Storage.get(USER_ROLE_KEY)
+      const user = Storage.get(USER_KEY) //讀取user
 
-      if (token && role) {
-        this.user.isLogin = true
+      if (token && role && user) {
+        this.user = { ...user, isLogin: true }
         this.role = role || 'USER'
         this.startTokenCountdown(token) //重整後重新啟動倒數
       }
