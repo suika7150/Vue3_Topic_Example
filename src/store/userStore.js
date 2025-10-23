@@ -105,6 +105,15 @@ export const useUserStore = defineStore('userStore', {
       }
     },
   },
+  // // 手動新增啟動時自動從Storage載入登入資料
+  // initUser() {
+  //   const token = Storage.get(TOKEN_KEY)
+  //   const role = Storage.get(USER_ROLE_KEY)
+  //   if (token) {
+  //     this.user.isLogin = true
+  //     this.role = role || 'USER'
+  //   }
+  // },
 
   //自動新增啟動時自動從Storage載入登入資料
   persist: {
