@@ -11,7 +11,7 @@
     <template v-else>
       <!-- 使用者資訊 -->
       <div class="user-info">
-        👤 {{ user.fullName || user.username }}
+        👤 {{ user.username }}
         <span v-if="remaining > 0" class="token-timer">
           Token 將於 <strong>{{ $formatSecondsToHHMMSS(remaining) }}</strong> 後過期
         </span>
