@@ -74,6 +74,8 @@ const rules = {
 onMounted(() => {
   //讀取token
   const token = Storage.get(TOKEN_KEY)
+  const storedUser = Storage.get(USER_KEY) //存取 usename,fullName,rememberMe
+  const role = Storage.get(USER_ROLE_KEY)
   if (token) {
     userStore.login({ username: '' }, { token }) //回寫token
     userStore.startTokenCountdown(token) //標記已登入
