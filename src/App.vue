@@ -7,6 +7,7 @@ import { computed } from 'vue'
 import { getNavMenu } from './Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
 import TopBarAdBanner from './navigation/TopBarAdBanner.vue'
+import BackToTop from './navigation/BackToTop.vue'
 
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userRole)
@@ -24,7 +25,9 @@ const navMenu = computed(() => {
       <CategorySidebar :categories="navMenu" />
 
       <div class="content">
+        <Breadcrumb />
         <router-view />
+        <BackToTop />
       </div>
     </div>
   </div>

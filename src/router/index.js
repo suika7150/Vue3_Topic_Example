@@ -7,6 +7,7 @@ const routes = [
   { path: '/login', name: 'Login', component: () => import('@/views/users/Login.vue') },
   { path: '/register', name: 'Register', component: () => import('@/views/users/Register.vue') },
   { path: '/about', name: 'About', component: () => import('@/views/About.vue') },
+  { path: '/News', name: 'News', component: () => import('@/views/News.vue') },
   { path: '/setting', name: 'Setting', component: () => import('@/views/Setting.vue') },
   {
     path: '/profile',
@@ -115,7 +116,6 @@ const routes = [
     name: 'AccessDenied',
     component: () => import('@/views/users/AccessDenied.vue'),
   },
-  { path: '/about', name: 'About', component: () => import('@/views/About.vue') },
   {
     path: '/:paths(.*)*',
     name: 'Category',

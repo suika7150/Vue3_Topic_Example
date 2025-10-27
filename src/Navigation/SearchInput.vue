@@ -1,21 +1,73 @@
 <template>
-  <el-input type="text" placeholder="搜尋商品" prefix-icon="el-icon-search" class="search-input">
-    <template #append>
-      <el-button class="search-button">搜尋</el-button>
-    </template>
-  </el-input>
+  <div class="search-wrapper">
+    <el-button type="primary" circle @click="toggleSearch" class="search-btn">
+      <el-icon><Search /></el-icon>
+    </el-button>
+
+    <transition name="expand">
+      <el-input
+        v-if="showSearch"
+        v-model="searchText"
+        placeholder="搜尋商品"
+        class="search-iput"
+        @blur="collapseSearch"
+      >
+        <template #append>
+          <el-button type="primary" @click="performSearch">搜尋</el-button>
+        </template>
+      </el-input>
+    </transition>
+  </div>
 </template>
 
 <script setup>
-// 可以加 props 或 v-model
+import { ref } from 'vue'
+import { Search } from '@element-plus/icons-vue'
+
+const showSearch = ref(false)
+const searchText = ref('')
+
+const toggleSearch = () => {
+  showSearch.value = !showSearch.value
+}
+
+const collapseSearch = () => {
+  setTimeout(() => {
+    showSearch.value = false
+  }, 200)
+}
 </script>
 
 <style scoped>
-.search-input {
-  width: 100%;
-  max-width: 500px;
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.search-button {
-  height: 40px;
+
+/* 展開動畫 */
+.expand-enter-active,
+.expand-leave-active {
+  transition: all 0.3s ease;
+}
+.expand-enter-from,
+.expand-leave-to {
+  opacity: 0;
+  width: 0;
+}
+.expand-enter-to,
+.expand-leave-from {
+  opacity: 1;
+  width: 300px;
+}
+
+.search-input {
+  max-width: 300px;
+  width: 300px;
+  overflow: hidden;
+}
+.search-btn {
+  background-color: black;
+  border: none;
 }
 </style>

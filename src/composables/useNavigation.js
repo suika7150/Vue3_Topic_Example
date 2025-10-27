@@ -18,6 +18,9 @@ export function useNavigation() {
   const goAbout = () => {
     router.push({ name: 'About' })
   }
+  const goNews = () => {
+    router.push({ name: 'News' })
+  }
 
   const goTo = (name, params = {}, query = {}) => {
     router.push({ name, params, query })
@@ -32,6 +35,7 @@ export function useNavigation() {
   }
 
   return {
+    goNews,
     goAbout,
     goHome,
     goLogin,

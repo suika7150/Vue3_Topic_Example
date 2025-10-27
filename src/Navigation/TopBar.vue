@@ -3,10 +3,10 @@
   <header class="top-bar">
     <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
 
-    <!-- 搜尋欄置中 -->
+    <!-- 搜尋欄置中
     <div class="center">
       <SearchInput />
-    </div>
+    </div> -->
 
     <!-- 登入選單 -->
     <div class="right">

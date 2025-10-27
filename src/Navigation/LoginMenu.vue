@@ -1,11 +1,13 @@
 <template>
+  <SearchInput />
   <div class="user-menu-container">
+    <el-button class="topbar-btn" @click="goNews">最新消息 </el-button>
     <!--關於我們-->
     <el-button class="topbar-btn" @click="goAbout">關於我們</el-button>
     <!-- 回首頁按鈕 -->
     <el-button class="topbar-btn" @click="goHome">回首頁</el-button>
     <!-- 未登入時顯示登入按鈕 -->
-    <el-button v-if="!isLogin" class="topbar-btn" @click="goLogin">登入</el-button>
+    <el-button v-if="!isLogin" class="topbar-btn" @click="goLogin">會員</el-button>
 
     <!-- 已登入時 -->
     <template v-else>
@@ -40,6 +42,7 @@ import { More, MoreFilled, Setting } from '@element-plus/icons-vue'
 import { useUserStore } from '@/store/userStore'
 import { storeToRefs } from 'pinia'
 import { useNavigation } from '@/composables/useNavigation'
+import SearchInput from './SearchInput.vue'
 
 const userStore = useUserStore()
 const isLogin = computed(() => !!userStore.user?.isLogin)
@@ -53,6 +56,7 @@ const goSetting = () => goTo('Setting')
 const goLogin = () => goTo('Login')
 const goProfile = () => goTo('Profile')
 const goAbout = () => goTo('About')
+const goNews = () => goTo('News')
 const logout = () => {
   userStore.logout()
   goHome()
