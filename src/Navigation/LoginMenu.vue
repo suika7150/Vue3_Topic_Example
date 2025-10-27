@@ -230,5 +230,6 @@ const onDropdownToggle = (visible) => {
 }
 .message {
   flex: 1;
+  color: white;
 }
 </style>
