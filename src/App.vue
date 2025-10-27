@@ -25,9 +25,9 @@ const navMenu = computed(() => {
       <CategorySidebar :categories="navMenu" />
 
       <div class="content">
-        <Breadcrumb />
+        <!-- <Breadcrumb /> -->
         <router-view />
-        <BackToTop />
+        <span><BackToTop /></span>
       </div>
     </div>
   </div>

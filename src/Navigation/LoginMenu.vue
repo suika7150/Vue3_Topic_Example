@@ -11,9 +11,44 @@
 
     <!-- 已登入時 -->
     <template v-else>
+      <!-- 通知鈴鐺 -->
+      <el-dropdown trigger="click" @visible-change="onDropdownToggle">
+        <el-badge :is-dot="hasUnread" class="notification-badge" style="margin-right: 10px">
+          <el-button type="link" class="notification-btn">
+            <el-icon>
+              <component :is="hasUnread ? BellFilled : Bell" />
+            </el-icon>
+          </el-button>
+        </el-badge>
+        <!-- 通知下拉選單 -->
+        <template #dropdown>
+          <el-dropdown-menu class="notification-menu">
+            <el-dropdown-item disabled><strong>通知中心</strong></el-dropdown-item>
+
+            <el-dropdown-item
+              v-for="(notice, index) in notifications"
+              :key="index"
+              @click="markAsRead(index)"
+              class="notice-item"
+            >
+              <span
+                class="unread-dot"
+                :style="{ visibility: notice.read ? 'hidden' : 'visible' }"
+              ></span>
+              <span>{{ notice.message }}</span>
+            </el-dropdown-item>
+            <el-dropdown-item v-if="notifications.length === 0" disabled
+              >暫無新通知</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
       <!-- 使用者資訊 -->
       <div class="user-info">
-        👤 {{ user.username }}
+        <div>
+          <el-icon><User /></el-icon> 歡迎 {{ user.username }}
+        </div>
         <span v-if="remaining > 0" class="token-timer">
           Token 將於 <strong>{{ $formatSecondsToHHMMSS(remaining) }}</strong> 後過期
         </span>
@@ -37,12 +72,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { More, MoreFilled, Setting } from '@element-plus/icons-vue'
+import { ref, computed, onDeactivated } from 'vue'
+import { Setting, Bell, BellFilled } from '@element-plus/icons-vue'
 import { useUserStore } from '@/store/userStore'
 import { storeToRefs } from 'pinia'
 import { useNavigation } from '@/composables/useNavigation'
 import SearchInput from './SearchInput.vue'
+import { User } from '@element-plus/icons-vue'
 
 const userStore = useUserStore()
 const isLogin = computed(() => !!userStore.user?.isLogin)
@@ -60,6 +96,30 @@ const goNews = () => goTo('News')
 const logout = () => {
   userStore.logout()
   goHome()
+}
+
+//模擬通知資料
+const notifications = ref([
+  { message: '您的訂單已出貨', read: false },
+  { message: '新活動上線，快來看看！', read: false },
+  { message: '系統維護通知', read: true },
+])
+
+// 標記通知為已讀
+const hasUnread = computed(() => notifications.value.some((notice) => !notice.read))
+
+// 標記通知為已讀
+const markAsRead = (index) => {
+  notifications.value[index].read = true
+}
+
+const onDropdownToggle = (visible) => {
+  if (visible) {
+    // 可以在這裡加入打開下拉選單時的邏輯
+    notifications.value.forEach((notice) => {
+      notice.read = true
+    })
+  }
 }
 </script>
 
@@ -117,9 +177,58 @@ const logout = () => {
   cursor: pointer;
   box-shadow: none;
 }
-
 .hamburger-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   box-shadow: none;
+}
+.notification-btn {
+  background-color: transparent; /* Element Plus 主色 */
+  color: white;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  box-shadow: none;
+}
+.notification-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+.notification-menu {
+  min-width: 200px;
+  padding: 4px;
+}
+.notification-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.unread-dot {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-block;
+  width: 2px;
+  height: 2px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.notice-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.message {
+  flex: 1;
 }
 </style>
