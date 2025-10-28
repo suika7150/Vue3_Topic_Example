@@ -52,9 +52,7 @@ onBeforeUnmount(() => {
   position: fixed;
   right: 30px; /* 右側距離 */
   bottom: 220px; /* 下方距離 */
-  z-index: 9999;
   font-size: 20px;
-  border: none;
   color: #000;
   border: none;
   background-color: white;
@@ -63,7 +61,6 @@ onBeforeUnmount(() => {
   position: fixed;
   right: 30px; /* 右側距離 */
   bottom: 160px; /* 下方距離 */
-  z-index: 9999;
   font-size: 20px;
   color: #000;
   border: none;
@@ -74,9 +71,6 @@ onBeforeUnmount(() => {
   position: fixed;
   right: 30px; /* 右側距離 */
   bottom: 100px; /* 下方距離 */
-  z-index: 9999;
-  /* width: 50px;
-  height: 50px; */
   font-size: 20px;
   color: #000;
   border: none;
