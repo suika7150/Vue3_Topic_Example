@@ -1,5 +1,6 @@
 import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { defineStore } from 'pinia'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 function parseJwt(token) {
   try {
@@ -56,8 +57,9 @@ export const useUserStore = defineStore('userStore', {
 
       const now = Math.floor(Date.now() / 1000)
       let remaining = payload.exp - now // 可測試設定剩餘秒數
-      if (remaining <= 0) return this.logout()
-
+      if (remaining <= 0) {
+        return this.logout()
+      }
       this.stopTokenCountdown()
       this.remainingTime = remaining
 
@@ -97,8 +99,6 @@ export const useUserStore = defineStore('userStore', {
         } else {
           this.logout()
         }
-      } else {
-        this.logout()
       }
     },
 
@@ -113,6 +113,7 @@ export const useUserStore = defineStore('userStore', {
       Storage.remove(TOKEN_KEY)
       Storage.remove(CART_KEY)
       this.remainingTime = 0
+      ElMessageBox.alert('您的登入已過期，請重新登入。')
     },
   },
   // // 手動新增啟動時自動從Storage載入登入資料
