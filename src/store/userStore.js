@@ -43,6 +43,7 @@ export const useUserStore = defineStore('userStore', {
       Storage.set(USER_ROLE_KEY, role)
       Storage.set(TOKEN_KEY, token)
       this.startTokenCountdown(token)
+      Storage.set('EXPIRY_TIME', parseJwt(token).exp)
     },
     /**
      * 啟動 Token 倒數
@@ -54,11 +55,11 @@ export const useUserStore = defineStore('userStore', {
       if (!payload?.exp) return
 
       const now = Math.floor(Date.now() / 1000)
-      let remaining = payload.exp - now
+      let remaining = payload.exp - now // 可測試設定剩餘秒數
       if (remaining <= 0) return this.logout()
 
       this.stopTokenCountdown()
-      this.remainingTime = 5 // 設定剩餘秒數
+      this.remainingTime = remaining
 
       this.timer = setInterval(() => {
         this.remainingTime--
@@ -81,19 +82,23 @@ export const useUserStore = defineStore('userStore', {
     initUser() {
       const token = Storage.get(TOKEN_KEY)
       const role = Storage.get(USER_ROLE_KEY)
+      const expiryTime = Storage.get('EXPIRY_TIME')
 
-      if (token) {
-        const payload = parseJwt(token)
+      if (token && expiryTime) {
+        // const payload = parseJwt(token)
         const now = Math.floor(Date.now() / 1000)
-        const remaining = payload?.exp ? payload.exp - now : 0
+        const remaining = expiryTime - now
 
         if (remaining > 0) {
           this.user.isLogin = true
           this.role = role || 'USER'
+          this.remainingTime = remaining
           this.startTokenCountdown(token)
         } else {
           this.logout()
         }
+      } else {
+        this.logout()
       }
     },
 
