@@ -1,4 +1,4 @@
-import { createApp, provide } from 'vue'
+import { createApp, nextTick, provide } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import { Icon } from '@iconify/vue'
@@ -17,13 +17,11 @@ const app = createApp(App)
 app.use(pinia)
 const userStore = useUserStore()
 userStore.initUser() //初始化登入狀態並啟動倒數
-
 const start = async () => {
   const res = await getAndCacheOptions()
   app.provide('allOptions', res)
   app.config.globalProperties.$formatSecondsToHHMMSS = formatSecondsToHHMMSS
   app.use(FormatPlugin) // 註冊插件
-
   app.use(router)
   app.use(ElementPlus)
   app.component('AlertBox', AlertBox)

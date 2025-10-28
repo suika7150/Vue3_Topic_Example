@@ -50,23 +50,22 @@ export const useUserStore = defineStore('userStore', {
      * @returns
      */
     startTokenCountdown(token) {
-      // 解析 token
       const payload = parseJwt(token)
       if (!payload?.exp) return
-      this.stopTokenCountdown() // 避免多個 interval 重複
 
-      const updateTime = () => {
-        const now = Math.floor(Date.now() / 1000)
-        const remaining = payload.exp - now
-        this.remainingTime = remaining
+      const now = Math.floor(Date.now() / 1000)
+      let remaining = payload.exp - now
+      if (remaining <= 0) return this.logout()
 
-        if (remaining <= 0) {
+      this.stopTokenCountdown()
+      this.remainingTime = remaining
+
+      this.timer = setInterval(() => {
+        this.remainingTime-- // 倒數--
+        if (this.remainingTime <= 0) {
           this.logout()
         }
-      }
-
-      updateTime()
-      this.timer = setInterval(updateTime, 1000)
+      }, 1000)
     },
 
     /**
@@ -76,6 +75,25 @@ export const useUserStore = defineStore('userStore', {
       if (this.timer) {
         clearInterval(this.timer)
         this.timer = null
+      }
+    },
+
+    initUser() {
+      const token = Storage.get(TOKEN_KEY)
+      const role = Storage.get(USER_ROLE_KEY)
+
+      if (token) {
+        const payload = parseJwt(token)
+        const now = Math.floor(Date.now() / 1000)
+        const remaining = payload?.exp ? payload.exp - now : 0
+
+        if (remaining > 0) {
+          this.user.isLogin = true
+          this.role = role || 'USER'
+          this.startTokenCountdown(token)
+        } else {
+          this.logout()
+        }
       }
     },
 
@@ -90,17 +108,6 @@ export const useUserStore = defineStore('userStore', {
       Storage.remove(TOKEN_KEY)
       Storage.remove(CART_KEY)
       this.remainingTime = 0
-    },
-
-    initUser() {
-      const token = Storage.get(TOKEN_KEY)
-      const role = Storage.get(USER_ROLE_KEY)
-
-      if (token && role) {
-        this.user.isLogin = true
-        this.role = role || 'USER'
-        this.startTokenCountdown(token) //重整後重新啟動倒數
-      }
     },
   },
   // // 手動新增啟動時自動從Storage載入登入資料

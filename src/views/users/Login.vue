@@ -108,7 +108,7 @@ const handleLogin = async () => {
     userStore.login(loginData, res.result)
     userStore.startTokenCountdown(token)
 
-    //存入 sessionStorage
+    //存入 localStorage
     Storage.set(TOKEN_KEY, token)
     if (form.value.rememberMe) {
       Storage.set(USER_KEY, form.value.username)
