@@ -1,14 +1,3 @@
-<!-- <AlertBox
-      v-model:visible="show"
-      title="刪除確認"
-      message="確定要刪除這筆資料嗎？"
-      :buttons="[
-        { text: '取消', color: 'secondary', onClick: () => console.log('取消') },
-        { text: '確認刪除', color: 'danger', onClick: () => console.log('刪除') },
-      ]"
-      size="small"
-      :autoClose="true"
-    /> -->
 <template>
   <div class="overlay" v-if="visible">
     <div :class="['alert-box', size]">
