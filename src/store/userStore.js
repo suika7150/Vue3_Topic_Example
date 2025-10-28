@@ -58,7 +58,7 @@ export const useUserStore = defineStore('userStore', {
       if (remaining <= 0) return this.logout()
 
       this.stopTokenCountdown()
-      this.remainingTime = remaining
+      this.remainingTime = remaining // 設定剩餘秒數
 
       this.timer = setInterval(() => {
         this.remainingTime-- // 倒數--
