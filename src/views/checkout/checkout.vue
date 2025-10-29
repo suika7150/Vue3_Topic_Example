@@ -386,7 +386,10 @@ const submitOrder = async () => {
         cardLast4: creditCardForm.value.cardNumber.slice(-4),
         paymentStatus: 'paid',
       }),
-      items: cartItems.value,
+      items: cartItems.value.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
     }
 
     const response = await api.createOrder(orderData)
