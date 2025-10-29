@@ -321,7 +321,6 @@ const districts = ref([
   { label: '中和區', value: 'zhonghe' },
   { label: '永和區', value: 'yonghe' },
   { label: '土城區', value: 'tucheng' },
-  { label: '樹林區', value: 'shulin' },
 ])
 
 const handleShippingChange = ({ value, option, additionalCost }) => {
@@ -371,9 +370,10 @@ const previousStep = () => {
 }
 
 const submitOrder = async () => {
-  try {
-    submitting.value = true
+  if (submitting.value) return // 防止重複提交
+  submitting.value = true
 
+  try {
     const orderData = {
       name: shippingForm.value.name,
       phone: shippingForm.value.phone,
@@ -392,6 +392,9 @@ const submitOrder = async () => {
       })),
     }
 
+    console.log('🚀 訂單資料', orderData)
+
+    //呼叫後端API
     const response = await api.createOrder(orderData)
 
     // 清空購物車
