@@ -251,6 +251,7 @@ const openCartDrawer = () => {
 
 .card-body {
   padding: 16px;
+  background-color: #fff;
 }
 
 .product-name {

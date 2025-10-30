@@ -132,6 +132,7 @@ const toggleCollapse = () => {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   flex: 1; /* 填滿 Sidebar 容器 */
   width: 100%;
+  background-color: #f5f7fa;
 }
 
 .sidebar-menu .el-menu-item span {
@@ -150,17 +151,17 @@ const toggleCollapse = () => {
 
 .sidebar-menu .el-menu-item:hover,
 .sidebar-menu .el-sub-menu__title:hover {
-  background-color: #e6f7ff;
+  background-color: #f5f7fa;
   color: #409eff;
 }
 
 .sidebar-menu .el-menu-item.is-active {
   background-color: #409eff;
-  color: white;
+  color: #f5f7fa;
 }
 
 .sidebar-menu .el-sub-menu.is-open > .el-sub-menu__title {
-  background-color: #e6f7ff;
+  background-color: #f5f7fa;
   color: #409eff;
 }
 

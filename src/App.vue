@@ -79,8 +79,8 @@ const navMenu = computed(() => {
 /* 主內容區 */
 .content {
   flex: 1;
-  padding: 80px;
-  background-color: #f5f7fa;
+  padding: 50px;
+  background-color: white;
   overflow: auto;
   box-sizing: border-box; /* 避免 padding 推寬度 */
 }
