@@ -60,7 +60,7 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="goCheckout">購物車</el-dropdown-item>
+            <el-dropdown-item @click="openCartDrawer">購物車</el-dropdown-item>
             <el-dropdown-item @click="goProfile">個人資料維護</el-dropdown-item>
             <el-dropdown-item @click="goSetting">設定</el-dropdown-item>
             <el-dropdown-item divided @click="logout">登出</el-dropdown-item>
@@ -69,6 +69,7 @@
       </el-dropdown>
     </template>
   </div>
+  <CartDrawer v-model:drawerVisible="showCartDrawer" />
 </template>
 
 <script setup>
@@ -79,7 +80,9 @@ import { storeToRefs } from 'pinia'
 import { useNavigation } from '@/composables/useNavigation'
 import SearchInput from './SearchInput.vue'
 import { User } from '@element-plus/icons-vue'
+import CartDrawer from '@/components/CartDrawer.vue'
 
+const showCartDrawer = ref(false)
 const userStore = useUserStore()
 const isLogin = computed(() => !!userStore.user?.isLogin)
 const user = computed(() => userStore.user || {})
@@ -87,7 +90,6 @@ const { remainingTime: remaining } = storeToRefs(userStore)
 
 const { goTo, goHome } = useNavigation()
 
-const goCheckout = () => goTo('Checkout')
 const goSetting = () => goTo('Setting')
 const goLogin = () => goTo('Login')
 const goProfile = () => goTo('Profile')
@@ -121,9 +123,14 @@ const onDropdownToggle = (visible) => {
     })
   }
 }
+
+// 打開購物車抽屜
+const openCartDrawer = () => {
+  showCartDrawer.value = true
+}
 </script>
 
-<style scoped>
+<style #scoped>
 .topbar-btn.el-button {
   background-color: transparent; /* 跟 Topbar 融合 */
   border: none; /* 去掉邊框 */

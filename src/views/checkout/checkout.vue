@@ -249,10 +249,11 @@ const { goTo } = useNavigation()
 
 // 響應式數據
 const currentStep = ref(0)
-const cartItems = ref([])
 const submitting = ref(false)
 const applyingCoupon = ref(false)
 const couponCode = ref('')
+
+const cartItems = computed(() => cartStore.cart)
 
 // 配送表單
 const shippingForm = ref({
@@ -399,6 +400,7 @@ const submitOrder = async () => {
 
     // 清空購物車
     Storage.remove(CART_KEY)
+    cartStore.clearCart()
 
     // 跳轉到成功頁面
     goTo('CheckoutSuccess')

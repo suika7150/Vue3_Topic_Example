@@ -17,8 +17,8 @@
             :value="category"
           />
         </el-select>
-        <el-button @click="drawerVisible = true" type="primary" plain>
-          🛒 購物車 ({{ cartStore.totalQuantity }})
+        <el-button @click="openCartDrawer" type="primary" class="openCartDrawer">
+          🛒 購物車
         </el-button>
       </div>
     </div>
@@ -92,10 +92,9 @@
         </div>
       </div>
     </el-dialog>
-
-    <CartDrawer v-model:drawerVisible="drawerVisible" @removeItem="removeItem" />
+    <CartDrawer v-model:drawerVisible="drawerVisible" />
   </div>
-  <div v-for="product in products" :key="product.id"></div>
+  <!-- <div v-for="product in products" :key="product.id"></div> -->
 </template>
 
 <script setup>
@@ -194,9 +193,8 @@ const addToCart = (product) => {
   drawerVisible.value = true
 }
 
-const removeItem = (productId) => {
-  cartStore.removeProduct(productId)
-  ElMessage.success('商品已從購物車移除')
+const openCartDrawer = () => {
+  drawerVisible.value = true
 }
 </script>
 
@@ -323,5 +321,9 @@ const removeItem = (productId) => {
 .detail-rating {
   margin-bottom: 8px;
   justify-content: center;
+}
+
+.openCartDrawer {
+  background-color: black;
 }
 </style>

@@ -8,6 +8,18 @@
   >
     <div v-if="cart.length" class="cart-content">
       <el-table :data="cart" style="width: 100%">
+        <el-table-column label="操作" width="60">
+          <template #default="scope">
+            <el-button
+              type="danger"
+              :icon="Delete"
+              circle
+              plain
+              size="small"
+              @click="removeItem(scope.row.id)"
+            />
+          </template>
+        </el-table-column>
         <el-table-column label="商品" width="80">
           <template #default="scope">
             <el-image
@@ -40,18 +52,6 @@
         <el-table-column label="小計" width="80">
           <template #default="scope">
             <span class="cart-price">${{ scope.row.price * scope.row.quantity }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="60">
-          <template #default="scope">
-            <el-button
-              type="danger"
-              :icon="Delete"
-              circle
-              plain
-              size="small"
-              @click="$emit('removeItem', scope.row.id)"
-            />
           </template>
         </el-table-column>
       </el-table>
@@ -156,6 +156,11 @@ const handleCheckout = async () => {
   } catch {
     ElMessage.info('已取消結帳')
   }
+}
+
+const removeItem = (productId) => {
+  cartStore.removeProduct(productId)
+  ElMessage.success('商品已從購物車移除')
 }
 </script>
 
