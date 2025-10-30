@@ -8,7 +8,7 @@
 <script setup>
 import { ref } from 'vue'
 import AdCarousel from '@/views/AdCarousel.vue'
-import TopBarAdBanner from '@/navigation/TopBarAdBanner.vue'
+// import TopBarAdBanner from '@/navigation/TopBarAdBanner.vue'
 import ProductList from '@/views/products/ProductList.vue'
 
 const adBanners = [

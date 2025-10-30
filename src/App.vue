@@ -22,8 +22,9 @@ const navMenu = computed(() => {
       <TopBar bannerOn />
     </header>
     <div class="layout">
-      <CategorySidebar :categories="navMenu" />
-
+      <div class="el-menu-vertical-demo">
+        <CategorySidebar :categories="navMenu" />
+      </div>
       <div class="content">
         <!-- <Breadcrumb /> -->
         <router-view />
@@ -40,27 +41,39 @@ const navMenu = computed(() => {
   flex-direction: column;
   min-height: 100vh;
   width: 100%; /* 填滿整個瀏覽器寬度 */
-  margin: 0; /* 自動置中 */
+  margin: 0; /*自動置中 */
   padding: 0;
   overflow-x: hidden;
   box-sizing: border-box;
 }
 
+.topbar-ad-banner {
+  position: fixed;
+  display: flex;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  background-color: #000;
+  padding: 20px 0;
+}
+
 .layout {
   display: flex;
   width: 100%;
-  min-height: calc(100vh - 80px - 50px); /* 減掉 TopBar 與 Footer 高度 */
+  /* min-height: calc(100vh - 80px - 50px); 減掉 TopBar 與 Footer 高度 */
   box-sizing: border-box;
+  margin-top: 100px;
 }
 
 /* 側邊欄 */
 .el-menu-vertical-demo {
   width: 240px;
   min-height: 100vh;
-  background-color: #ffffff;
-  border-right: 1px solid #e0e0e0;
+  background-color: #f5f7fa;
   box-shadow: 2px 0 5px rgba(245, 240, 240, 0.05);
   transition: all 0.3s;
+  /* box-sizing: border-box; */
+  /* border-right: 1px solid #e0e0e0; */
 }
 
 /* 主內容區 */

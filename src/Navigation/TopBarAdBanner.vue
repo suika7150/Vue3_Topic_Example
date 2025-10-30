@@ -21,7 +21,7 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps({
   show: { type: Boolean, default: true },
-  width: { type: String, default: '300px' },
+  width: { type: String, default: '2000px' },
   interval: { type: Number, default: 4000 },
   ads: {
     type: Array,

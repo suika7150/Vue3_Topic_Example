@@ -1,10 +1,11 @@
 <template>
-  <div
+  <div>
+    <!-- <div
     class="sidebar-wrapper"
     :class="{ collapsed: isCollapsed }"
     @mouseenter="isCollapsed = false"
     @mouseleave="isCollapsed = true"
-  >
+  > -->
     <el-menu
       class="sidebar-menu"
       :default-active="active"
