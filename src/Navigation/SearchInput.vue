@@ -76,6 +76,6 @@ const collapseSearch = () => {
   width: 32px;
   height: 32px;
   /* padding: 0; */
-  font-size: 15px;
+  font-size: 13px;
 }
 </style>

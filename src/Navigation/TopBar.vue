@@ -2,17 +2,25 @@
   <div class="top-bar">
     <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
 
-    <div></div>
     <!-- 下拉選單 -->
     <div class="right">
       <LoginMenu :small="true" />
+      <CenterDropdown class="dropdown-below" />
     </div>
   </div>
 </template>
 
 <script setup>
 import LoginMenu from './LoginMenu.vue'
+import CenterDropdown from './CenterDropdown.vue'
+import { useRouter } from 'vue-router'
+
 defineProps({ bannerOn: { type: Boolean, default: false } })
+const onDropdownSelect = (item) => {
+  if (item === '選項 1') goto('Option1Page')
+  else if (item === '選項 2') goto('Option2Page')
+  else if (item === '選項 3') goto('Option3Page')
+}
 </script>
 
 <style scoped>
@@ -43,5 +51,13 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
 .right {
   display: flex;
   align-items: center;
+}
+
+.dropdown-below {
+  position: absolute;
+  top: 100%; /* 正下方 */
+  right: 0; /* 右對齊 LoginMenu */
+  margin-top: 4px; /* 距離 LoginMenu 一點縫隙 */
+  z-index: 1001; /* 確保在 TopBar 之上 */
 }
 </style>
