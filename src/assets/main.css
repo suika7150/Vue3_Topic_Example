@@ -1,9 +1,31 @@
+/* 全域重製樣式:防止邊距與捲軸問題 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+header {
+  margin: 0;
+  padding: 0;
+}
+
+/* 基本樣式 */
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   font-weight: normal;
 }
 
@@ -26,11 +48,5 @@ a,
     /* 'flex' | 'inline-flex'| 'initial'| 'none'| 'revert'| 'revert-layer'| 'unset' */
     /* display: inline-flex; */
     place-items: center;
-  }
-
-  #app {
-    /* display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem; */
   }
 }

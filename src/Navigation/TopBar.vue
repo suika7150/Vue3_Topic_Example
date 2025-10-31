@@ -1,4 +1,3 @@
-<!-- src/components/TopBar.vue -->
 <template>
   <div class="top-bar">
     <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
@@ -20,14 +19,14 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* 填滿整個瀏覽器寬度 */
+  width: 100%; /* 背景滿版 */
   z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 100px;
   background-color: #000000fb;
-  padding: 20px;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -37,6 +36,7 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
   color: #fff;
   text-decoration: none; /* 移除底線 */
   margin-top: 20px; /* 調整上方距離 */
+  margin-left: 20px; /* 調整左方距離 */
 }
 
 .right {

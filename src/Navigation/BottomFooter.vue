@@ -2,16 +2,16 @@
   <footer class="bottom-footer">
     <div class="footer-content">
       <div class="footer-left">
-        <p>© 2025 公司名稱 All Rights Reserved.</p>
         <p>地址：台北市中正區XXX路123號</p>
         <p>電話：02-1234-5678 | Email: info@company.com</p>
+        <p>© 2025 公司名稱 All Rights Reserved.</p>
       </div>
       <div class="footer-right">
         <p>追蹤我們：</p>
         <a href="https://www.facebook.com/?locale=zh_TW" target="_blank" rel="noopener">
           <el-button type="text"><Icon icon="logos:facebook" /></el-button>
         </a>
-        <a href="https://www.line.me/tw/" targer="_blank">
+        <a href="https://www.line.me/tw/" target="_blank">
           <el-button type="text">
             <Icon icon="streamline-logos:line-app-logo-block" color="#00c300" />
           </el-button>
@@ -36,19 +36,23 @@
 
 <style scoped>
 .bottom-footer {
-  position: relative; /* 改成 relative，自然在內容下方 */
+  /* position: relative;  改成 relative，自然在內容下方 */
   width: 100%;
   background-color: #001529;
   color: #fff;
-  padding: 30px 15px;
-  /* box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); */
   box-sizing: border-box; /* 避免 padding 推寬度 */
+  margin: 0;
+  padding: 20px 0px;
 }
 
 .footer-content {
+  max-width: 1280px;
+  margin: auto;
+  padding: 0 15px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .footer-left p {
@@ -57,7 +61,7 @@
 }
 
 .footer-right p {
-  margin-bottom: 8px;
+  margin-bottom: 20px;
   height: 5px;
 }
 
@@ -65,6 +69,11 @@
   color: #fff;
   font-size: 18px;
   margin-right: 8px;
+}
+.footer-right .el-button:hover {
+  color: #00bfff;
+  transform: scale(1.1);
+  transition: all 0.2s ease;
 }
 
 @media (max-width: 768px) {
