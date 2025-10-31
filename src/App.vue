@@ -88,6 +88,7 @@ const navMenu = computed(() => {
 /* 主內容區 */
 .content {
   flex: 1;
+  margin-left: 1px;
   padding: 50px;
   background-color: white;
   overflow: auto;
