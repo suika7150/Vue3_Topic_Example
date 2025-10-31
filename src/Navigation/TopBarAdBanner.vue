@@ -71,15 +71,14 @@ watch(
 <style scoped>
 .topbar-ad-banner {
   padding: 4px 12px;
-  background-color: #faf5f5c3;
-  color: #141612af;
-  border-radius: 6px;
+  background-color: #000;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-align: center;
-  height: 30px;
+  height: 0px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,18 +91,15 @@ watch(
 .marquee {
   width: 100%;
   overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2000;
+  position: relative;
   padding: 5px 0;
-  /* animation: scroll 10s linear infinite; */
+  top: 0px;
+  left: 0;
 }
 
 .ad-text {
   color: #fff;
   display: block;
-  text-decoration: none;
   top: 0;
   animation: scroll 25s linear infinite; /*設定動畫持續時間*/
   white-space: nowrap; /* 禁用換行 */
@@ -114,7 +110,7 @@ watch(
     transform: translateX(100%);
   }
   100% {
-    transform: translateX(-100vw);
+    transform: translateX(-100%);
   }
 }
 

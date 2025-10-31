@@ -21,6 +21,9 @@ const navMenu = computed(() => {
     <header>
       <TopBar bannerOn />
     </header>
+    <div class="topbar-ad-banner">
+      <TopBarAdBanner />
+    </div>
     <div class="layout">
       <div class="el-menu-vertical-demo">
         <CategorySidebar :categories="navMenu" />
@@ -52,11 +55,12 @@ const navMenu = computed(() => {
 .topbar-ad-banner {
   position: fixed;
   display: flex;
-  top: 50px;
+  top: 100px;
   left: 0;
   width: 100%;
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.3); /* 黑色透明 */
   padding: 20px 0;
+  z-index: 1;
 }
 
 .layout {
@@ -78,6 +82,7 @@ const navMenu = computed(() => {
   transition: all 0.3s;
   display: flex;
   flex-direction: column;
+  margin-top: 35px;
 }
 
 /* 主內容區 */

@@ -6,10 +6,10 @@
 
     <transition name="expand">
       <el-input
-        v-if="showSearch"
+        v-show="showSearch"
         v-model="searchText"
         placeholder="搜尋商品"
-        class="search-iput"
+        class="search-input"
         @blur="collapseSearch"
       >
         <template #append>
@@ -48,26 +48,34 @@ const collapseSearch = () => {
 /* 展開動畫 */
 .expand-enter-active,
 .expand-leave-active {
-  transition: all 0.3s ease;
+  transition:
+    max-width 0.3s ease,
+    opacity 0.3s ease;
 }
 .expand-enter-from,
 .expand-leave-to {
   opacity: 0;
-  width: 0;
+  max-width: 0;
 }
 .expand-enter-to,
 .expand-leave-from {
   opacity: 1;
-  width: 300px;
+  max-width: 200px;
 }
 
 .search-input {
-  max-width: 300px;
-  width: 300px;
+  max-width: 200px;
+  width: 200px;
+  height: 20px;
+  font-size: 12px;
   overflow: hidden;
 }
 .search-btn {
   background-color: black;
   border: none;
+  width: 32px;
+  height: 32px;
+  /* padding: 0; */
+  font-size: 15px;
 }
 </style>

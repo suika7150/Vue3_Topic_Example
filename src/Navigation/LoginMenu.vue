@@ -1,6 +1,6 @@
 <template>
   <SearchInput />
-  <div class="user-menu-container">
+  <div :class="['user-menu-container', { small: props.small }]">
     <el-button class="topbar-btn" @click="goNews">最新消息 </el-button>
     <!--關於我們-->
     <el-button class="topbar-btn" @click="goAbout">關於我們</el-button>
@@ -128,6 +128,10 @@ const onDropdownToggle = (visible) => {
 const openCartDrawer = () => {
   showCartDrawer.value = true
 }
+
+const props = defineProps({
+  small: { type: Boolean, default: false },
+})
 </script>
 
 <style #scoped>
@@ -151,6 +155,26 @@ const openCartDrawer = () => {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.user-menu-container.small .topbar-btn.el-button {
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.user-menu-container.small .user-info {
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.user-menu-container.small .token-timer {
+  font-size: 10px;
+}
+
+.user-menu-container.small .hamburger-btn,
+.user-menu-container.small .notification-btn {
+  padding: 4px 6px;
+  font-size: 16px;
 }
 
 /* 使用者資訊樣式（更明顯） */

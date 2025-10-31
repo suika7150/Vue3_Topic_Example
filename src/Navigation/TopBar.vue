@@ -2,9 +2,10 @@
   <div class="top-bar">
     <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
 
-    <!-- 登入選單 -->
+    <div></div>
+    <!-- 下拉選單 -->
     <div class="right">
-      <LoginMenu />
+      <LoginMenu :small="true" />
     </div>
   </div>
 </template>
@@ -23,7 +24,7 @@ defineProps({ bannerOn: { type: Boolean, default: false } })
   z-index: 1000;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   height: 100px;
   background-color: #000000fb;
   padding: 0;
