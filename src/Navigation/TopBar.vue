@@ -2,7 +2,9 @@
   <div class="top-bar">
     <div class="topbar-left">
       <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
+    </div>
 
+    <div class="topbar-main">
       <!-- 主下拉選單 -->
       <CenterDropdown />
     </div>
@@ -19,28 +21,26 @@ import LoginMenu from './LoginMenu.vue'
 import CenterDropdown from './CenterDropdown.vue'
 import { useRouter } from 'vue-router'
 
-defineProps({ bannerOn: { type: Boolean, default: false } })
-const onDropdownSelect = (item) => {
-  if (item === '選項 1') goto('Option1Page')
-  else if (item === '選項 2') goto('Option2Page')
-  else if (item === '選項 3') goto('Option3Page')
-}
+// defineProps({ bannerOn: { type: Boolean, default: false } })
+// const onDropdownSelect = (item) => {
+//   if (item === '選項 1') goto('Option1Page')
+//   else if (item === '選項 2') goto('Option2Page')
+//   else if (item === '選項 3') goto('Option3Page')
+// }
 </script>
 
 <style scoped>
 .top-bar {
   position: fixed;
+  display: flex;
   top: 40px;
   left: 0;
-  width: 100%; /* 背景滿版 */
+  width: 100%;
   height: 100px;
   background-color: #000000fb;
-  display: flex;
   justify-content: space-between;
   align-items: center;
-  /* gap: 40px; */
-  padding: 0 20px;
-  /* box-sizing: border-box; */
+  padding: 20px 20px;
   z-index: 1002;
   overflow: visible;
 }
@@ -52,24 +52,25 @@ const onDropdownSelect = (item) => {
 }
 
 .logo {
-  font-size: 60px;
-  /* font-weight: bold; */
+  font-size: 90px;
   color: #fff;
   text-decoration: none; /* 移除底線 */
-  /* margin-top: 20px; 調整上方距離
-  margin-left: 20px; 調整左方距離 */
+}
+
+.topbar-main {
+  display: flex;
+  align-items: center;
+  gap: 30px; /* Logo 與下拉選單間距 */
 }
 
 .topbar-right {
   display: flex;
   justify-content: flex-end;
-  align-items: flex-start;
   white-space: nowrap;
   overflow: visible;
   margin-right: 30px;
-  padding-bottom: 40px;
-  /* position: relative; */
-  /* margin-top: 20px; 與 Logo 對齊 */
+  align-items: center;
+  padding-bottom: 100px;
 }
 
 .dropdown-below {

@@ -52,10 +52,8 @@ const navMenu = computed(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 30px;
   background-color: rgb(19, 204, 170);
-  /* padding: 20px 0; */
-  /* margin: auto; */
   z-index: 1001;
 }
 
@@ -99,7 +97,7 @@ const navMenu = computed(() => {
   transition: all 0.3s;
   display: flex;
   flex-direction: column;
-  margin-top: 35px;
+  margin-top: 70px;
 }
 
 /* 主內容區 */

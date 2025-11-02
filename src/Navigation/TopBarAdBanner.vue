@@ -26,9 +26,9 @@ const props = defineProps({
   ads: {
     type: Array,
     default: () => [
-      { text: ' 限時 7 折搶購！', link: '/category/life/food' },
-      { text: ' 加入會員送紅利！', link: '/category/tech/frontend' },
-      { text: ' 新品上架快來逛！', link: '/category/life/travel' },
+      { text: ' 限時 7 折快來搶購！', link: '/category/life/food' },
+      { text: ' 加入會員送紅利點數！', link: '/category/tech/frontend' },
+      { text: ' 新品上架快來逛，消費滿千免運！', link: '/category/life/travel' },
     ],
   },
 })
@@ -100,13 +100,14 @@ watch(
   color: #fff;
   display: block;
   margin-right: 400px;
+  font-size: 15px;
   white-space: nowrap; /* 禁用換行 */
 }
 
 /* 垂直滑動動畫 */
 .slide-enter-active,
 .slide-leave-active {
-  transition: all 1s ease;
+  transition: all 0.8s ease;
   /* position: absolute; */
   /* width: 100%; */
   /* top: 0; */
