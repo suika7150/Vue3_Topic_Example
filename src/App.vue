@@ -19,15 +19,20 @@ const navMenu = computed(() => {
 <template>
   <div class="app-wrapper">
     <header>
-      <TopBar bannerOn />
+      <div class="topbar-ad-banner">
+        <TopBarAdBanner />
+      </div>
+
+      <div class="topbar">
+        <TopBar bannerOn />
+      </div>
     </header>
-    <div class="topbar-ad-banner">
-      <TopBarAdBanner />
-    </div>
+
     <div class="layout">
       <div class="el-menu-vertical-demo">
         <CategorySidebar :categories="navMenu" />
       </div>
+
       <!-- <Breadcrumb /> -->
       <div class="content">
         <router-view />
@@ -41,26 +46,38 @@ const navMenu = computed(() => {
 </template>
 
 <style scoped>
+.topbar-ad-banner {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background-color: rgb(19, 204, 170);
+  /* padding: 20px 0; */
+  /* margin: auto; */
+  z-index: 1001;
+}
+
+.topbar {
+  position: fixed;
+  top: 100px; /* 根據 Banner 高度調整，避免被蓋住 */
+  left: 0;
+  width: 100%;
+  height: 70px;
+  z-index: 1002;
+  margin-top: 60px;
+}
+
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 40px;
   width: 100%; /* 填滿整個瀏覽器寬度 */
   margin: 0; /*自動置中 */
   padding: 0;
   overflow-x: hidden; /* 防止水平滾動條 */
   box-sizing: border-box;
-}
-
-.topbar-ad-banner {
-  position: fixed;
-  display: flex;
-  top: 100px;
-  left: 0;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.3); /* 黑色透明 */
-  padding: 20px 0;
-  z-index: 1;
 }
 
 .layout {

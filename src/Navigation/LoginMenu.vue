@@ -154,7 +154,8 @@ const props = defineProps({
 .user-menu-container {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
+  margin-left: auto;
 }
 
 .user-menu-container.small .topbar-btn.el-button {

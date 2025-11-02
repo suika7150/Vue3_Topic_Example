@@ -7,17 +7,17 @@
     @mouseleave="startRotation"
   >
     <div class="marquee">
-      <span class="ad-text">
-        <span v-for="(ad, i) in ads" :key="i">
-          {{ ad.text }}<span v-if="i < ads.length - 1"></span>
-        </span>
-      </span>
+      <transition-group name="slide">
+        <div class="ad-text" :key="currentAdIndex">
+          {{ currentAds[0].text }}
+        </div>
+      </transition-group>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch, computed } from 'vue'
 
 const props = defineProps({
   show: { type: Boolean, default: true },
@@ -34,8 +34,9 @@ const props = defineProps({
 })
 
 const currentAdIndex = ref(0)
-let timer = null
+const currentAds = computed(() => [props.ads[currentAdIndex.value]])
 
+let timer = null
 const startRotation = () => {
   stopRotation()
   if (props.ads.length > 1) {
@@ -70,7 +71,7 @@ watch(
 
 <style scoped>
 .topbar-ad-banner {
-  padding: 4px 12px;
+  padding: 5px 12px;
   background-color: #000;
   color: #fff;
   font-size: 14px;
@@ -79,47 +80,45 @@ watch(
   overflow: hidden;
   text-align: center;
   height: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
 }
 
-.topbar-ad-banner:hover .ad-text {
+/* .topbar-ad-banner:hover .ad-text {
   animation-play-state: paused;
-}
+} */
 
 .marquee {
   width: 100%;
   overflow: hidden;
   position: relative;
   padding: 5px 0;
-  top: 0px;
-  left: 0;
 }
 
 .ad-text {
   color: #fff;
   display: block;
-  top: 0;
-  animation: scroll 25s linear infinite; /*設定動畫持續時間*/
+  margin-right: 400px;
   white-space: nowrap; /* 禁用換行 */
 }
 
-@keyframes scroll {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+/* 垂直滑動動畫 */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 1s ease;
+  /* position: absolute; */
+  /* width: 100%; */
+  /* top: 0; */
+  /* left: 0; */
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
+.slide-enter-from {
+  transform: translateY(100%);
+  opacity: 0;
 }
-.fade-enter-from,
-.fade-leave-to {
+.slide-leave-to {
+  transform: translateY(-100%);
   opacity: 0;
 }
 </style>

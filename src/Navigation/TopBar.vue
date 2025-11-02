@@ -1,11 +1,15 @@
 <template>
   <div class="top-bar">
-    <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
+    <div class="topbar-left">
+      <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
 
-    <!-- 下拉選單 -->
-    <div class="right">
+      <!-- 主下拉選單 -->
+      <CenterDropdown />
+    </div>
+
+    <!-- 登入選單 -->
+    <div class="topbar-right">
       <LoginMenu :small="true" />
-      <CenterDropdown class="dropdown-below" />
     </div>
   </div>
 </template>
@@ -26,31 +30,46 @@ const onDropdownSelect = (item) => {
 <style scoped>
 .top-bar {
   position: fixed;
-  top: 0;
+  top: 40px;
   left: 0;
   width: 100%; /* 背景滿版 */
-  z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   height: 100px;
   background-color: #000000fb;
-  padding: 0;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* gap: 40px; */
+  padding: 0 20px;
+  /* box-sizing: border-box; */
+  z-index: 1002;
+  overflow: visible;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 30px; /* Logo 與下拉選單間距 */
 }
 
 .logo {
   font-size: 60px;
-  font-weight: bold;
+  /* font-weight: bold; */
   color: #fff;
   text-decoration: none; /* 移除底線 */
-  margin-top: 20px; /* 調整上方距離 */
-  margin-left: 20px; /* 調整左方距離 */
+  /* margin-top: 20px; 調整上方距離
+  margin-left: 20px; 調整左方距離 */
 }
 
-.right {
+.topbar-right {
   display: flex;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-start;
+  white-space: nowrap;
+  overflow: visible;
+  margin-right: 30px;
+  padding-bottom: 40px;
+  /* position: relative; */
+  /* margin-top: 20px; 與 Logo 對齊 */
 }
 
 .dropdown-below {
