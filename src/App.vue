@@ -105,7 +105,6 @@ const navMenu = computed(() => {
 .content {
   display: flex;
   flex: 1;
-  position: sticky;
   margin: 30px;
   padding: 50px 100px;
   background-color: white;
