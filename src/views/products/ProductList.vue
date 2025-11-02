@@ -202,9 +202,11 @@ const openCartDrawer = () => {
 /* Container & Layout */
 .product-list-container {
   max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 100px 24px 16px;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+  /* margin: 0 auto; */
+  padding: 16px;
+  /* z-index: 1005; */
 }
 
 .product-col {

@@ -41,7 +41,7 @@ import { useRouter } from 'vue-router'
   justify-content: space-between;
   align-items: center;
   padding: 20px 20px;
-  z-index: 1002;
+  /* z-index: 1002; */
   overflow: visible;
 }
 
@@ -78,6 +78,6 @@ import { useRouter } from 'vue-router'
   top: 100%; /* 正下方 */
   right: 0; /* 右對齊 LoginMenu */
   margin-top: 4px; /* 距離 LoginMenu 一點縫隙 */
-  z-index: 1001; /* 確保在 TopBar 之上 */
+  /* z-index: 1001; 確保在 TopBar 之上 */
 }
 </style>

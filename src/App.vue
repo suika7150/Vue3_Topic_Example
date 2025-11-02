@@ -90,6 +90,7 @@ const navMenu = computed(() => {
 
 /* 側邊欄 */
 .el-menu-vertical-demo {
+  position: sticky;
   width: 240px;
   height: auto;
   background-color: #f5f7fa;
@@ -97,18 +98,19 @@ const navMenu = computed(() => {
   transition: all 0.3s;
   display: flex;
   flex-direction: column;
-  margin-top: 70px;
+  padding: 100px 0px;
 }
 
 /* 主內容區 */
 .content {
+  display: flex;
   flex: 1;
-  margin-left: 1px;
-  padding: 50px;
+  position: sticky;
+  margin: 30px;
+  padding: 50px 100px;
   background-color: white;
   overflow: auto;
   box-sizing: border-box; /* 避免 padding 推寬度 */
-  display: flex;
   flex-direction: column;
   justify-content: stretch;
 }
