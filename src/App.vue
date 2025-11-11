@@ -59,7 +59,7 @@ const navMenu = computed(() => {
 
 .topbar {
   position: fixed;
-  top: 100px; /* 根據 Banner 高度調整，避免被蓋住 */
+  top: 30px; /* 根據 Banner 高度調整，避免被蓋住 */
   left: 0;
   width: 100%;
   height: 70px;
