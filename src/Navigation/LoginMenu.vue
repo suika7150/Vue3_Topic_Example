@@ -236,10 +236,20 @@ const props = defineProps({
   padding: 4px;
 }
 .notification-badge {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
+.notification-badge .el-badge__content {
+  width: 8px; /* 調整大小 */
+  height: 8px;
+  background-color: red; /* 顏色 */
+  top: 10px; /* 調整位置 */
+  left: 6px;
+  transition: none !important; /* 取消過渡 */
+}
+
 .unread-dot {
   position: absolute;
   right: 10px;
