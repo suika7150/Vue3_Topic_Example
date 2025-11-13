@@ -145,7 +145,7 @@ onMounted(async () => {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 100px 24px 16px;
+  padding: 100px 0 16px;
 }
 
 .header {
@@ -172,6 +172,7 @@ onMounted(async () => {
 
 .product-table-container {
   overflow-x: auto;
+  max-width: 100%;
 }
 
 .img-rounded {

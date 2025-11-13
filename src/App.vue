@@ -108,7 +108,7 @@ const navMenu = computed(() => {
   margin: 30px;
   padding: 50px 100px;
   background-color: white;
-  overflow: auto;
+  overflow: hidden;
   box-sizing: border-box; /* 避免 padding 推寬度 */
   flex-direction: column;
   justify-content: stretch;
