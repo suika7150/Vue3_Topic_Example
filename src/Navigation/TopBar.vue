@@ -4,14 +4,16 @@
       <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
     </div>
 
-    <div class="topbar-main">
-      <!-- 主下拉選單 -->
-      <CenterDropdown />
-    </div>
+    <div class="topbar-right-stack">
+      <!-- 登入選單 -->
+      <div class="topbar-right">
+        <LoginMenu :small="true" />
+      </div>
 
-    <!-- 登入選單 -->
-    <div class="topbar-right">
-      <LoginMenu :small="true" />
+      <div class="topbar-main">
+        <!-- 主下拉選單 -->
+        <CenterDropdown />
+      </div>
     </div>
   </div>
 </template>
@@ -41,7 +43,6 @@ import { useRouter } from 'vue-router'
   justify-content: space-between;
   align-items: center;
   padding: 20px 20px;
-  /* z-index: 1002; */
   overflow: visible;
 }
 
@@ -57,10 +58,15 @@ import { useRouter } from 'vue-router'
   text-decoration: none; /* 移除底線 */
 }
 
-.topbar-main {
+.topbar-right-stack {
   display: flex;
-  align-items: center;
-  gap: 30px; /* Logo 與下拉選單間距 */
+  flex-direction: column; /* 讓其子元素垂直堆疊 */
+  align-items: flex-end; /* 讓右側的 LoginMenu 和 CenterDropdown 對齊右邊 */
+  justify-content: center; /* 讓整個堆疊區塊在 TopBar 內垂直置中 */
+  height: 100%; /* 佔滿 TopBar 扣除 padding 後的垂直空間 */
+  padding-bottom: 30px;
+  gap: 5px; /* 給 LoginMenu 和 CenterDropdown 之間一點間距 */
+  margin-right: 30px;
 }
 
 .topbar-right {
@@ -68,9 +74,13 @@ import { useRouter } from 'vue-router'
   justify-content: flex-end;
   white-space: nowrap;
   overflow: visible;
-  margin-right: 30px;
+}
+
+.topbar-main {
+  display: flex;
   align-items: center;
-  padding-bottom: 100px;
+  padding-right: 150px;
+  margin-top: 20px;
 }
 
 .dropdown-below {
