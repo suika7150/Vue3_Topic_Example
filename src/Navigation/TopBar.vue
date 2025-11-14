@@ -52,6 +52,7 @@ import { useRouter } from 'vue-router'
   display: flex;
   align-items: center;
   gap: 30px; /* Logo 與下拉選單間距 */
+  flex-shrink: 0;
 }
 
 .logo {
@@ -75,6 +76,8 @@ import { useRouter } from 'vue-router'
   padding-bottom: 30px;
   gap: 5px; /* 給 LoginMenu 和 CenterDropdown 之間一點間距 */
   margin-right: 30px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .topbar-right {
@@ -82,6 +85,8 @@ import { useRouter } from 'vue-router'
   justify-content: flex-end;
   white-space: nowrap;
   overflow: visible;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .topbar-main {
@@ -89,6 +94,8 @@ import { useRouter } from 'vue-router'
   align-items: center;
   padding-right: 150px;
   margin-top: 20px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .dropdown-below {

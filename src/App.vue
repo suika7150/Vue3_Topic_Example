@@ -50,9 +50,9 @@ const navMenu = computed(() => {
   position: fixed;
   display: flex;
   top: 0;
-  left: -10%;
-  width: 100%;
-  height: 30px;
+  left: 0;
+  width: 100vw;
+  height: 160px;
   background-color: rgb(19, 204, 170);
   z-index: 1001;
 }
@@ -64,7 +64,7 @@ const navMenu = computed(() => {
   width: 100%;
   height: 70px;
   z-index: 1002;
-  margin-top: 60px;
+  /* margin-top: 60px; */
 }
 
 .app-wrapper {
@@ -82,7 +82,7 @@ const navMenu = computed(() => {
   display: flex;
   flex: 1; /* 讓 layout 撐滿剩餘高度 */
   width: 100%;
-  margin-top: 100px;
+  margin-top: 80px;
   align-items: stretch; /*Sidebar與Content高度一致貼齊 */
   justify-content: stretch; /* Sidebar與Content寬度撐滿 */
   box-sizing: border-box;
@@ -91,6 +91,7 @@ const navMenu = computed(() => {
 /* 側邊欄 */
 .el-menu-vertical-demo {
   position: sticky;
+  top: 100px;
   width: 240px;
   height: auto;
   background-color: #f5f7fa;
