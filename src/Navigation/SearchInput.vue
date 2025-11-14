@@ -42,16 +42,15 @@ const collapseSearch = () => {
 .search-wrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
 /* 展開動畫 */
 .expand-enter-active,
 .expand-leave-active {
   transition:
-    max-width 0.5s ease,
-    opacity 0.5s ease;
-  width: 200px;
+    max-width 0.7s ease,
+    opacity 0.7s ease;
+  max-width: 300px;
 }
 .expand-enter-from,
 .expand-leave-to {
@@ -61,11 +60,11 @@ const collapseSearch = () => {
 .expand-enter-to,
 .expand-leave-from {
   opacity: 1;
-  max-width: 200px;
+  max-width: 300px;
 }
 
 .search-input {
-  height: 20px;
+  height: 32px;
   font-size: 12px;
   overflow: hidden;
 }

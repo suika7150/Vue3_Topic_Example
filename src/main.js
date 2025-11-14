@@ -13,9 +13,11 @@ import { getAndCacheOptions } from './utils/optionService'
 import { useUserStore } from './store/userStore'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faBell as fasBell, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBell as farBell } from '@fortawesome/free-regular-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
-library.add(faMagnifyingGlass)
+library.add(faMagnifyingGlass, fasBell, farBell, faUser)
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

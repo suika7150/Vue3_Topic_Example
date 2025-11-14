@@ -15,9 +15,7 @@
       <el-dropdown trigger="click" @visible-change="onDropdownToggle">
         <el-badge :is-dot="hasUnread" class="notification-badge" style="margin-right: 10px">
           <el-button type="link" class="notification-btn">
-            <el-icon>
-              <component :is="hasUnread ? BellFilled : Bell" />
-            </el-icon>
+            <font-awesome-icon :icon="[bellIconPrefix, 'bell']" size="lg" />
           </el-button>
         </el-badge>
         <!-- 通知下拉選單 -->
@@ -46,9 +44,7 @@
 
       <!-- 使用者資訊 -->
       <div class="user-info">
-        <div>
-          <el-icon><User /></el-icon> 歡迎 {{ user.username }}
-        </div>
+        <div><font-awesome-icon :icon="['fas', 'user']" /> 歡迎 {{ user.username }}</div>
         <span v-if="remaining > 0" class="token-timer">
           Token 將於 <strong>{{ $formatSecondsToHHMMSS(remaining) }}</strong> 後過期
         </span>
@@ -74,12 +70,12 @@
 
 <script setup>
 import { ref, computed, onDeactivated } from 'vue'
-import { Setting, Bell, BellFilled } from '@element-plus/icons-vue'
+// import { Setting, Bell, BellFilled } from '@element-plus/icons-vue'
 import { useUserStore } from '@/store/userStore'
 import { storeToRefs } from 'pinia'
 import { useNavigation } from '@/composables/useNavigation'
 import SearchInput from './SearchInput.vue'
-import { User } from '@element-plus/icons-vue'
+import { Setting, User } from '@element-plus/icons-vue'
 import CartDrawer from '@/components/CartDrawer.vue'
 
 const showCartDrawer = ref(false)
@@ -107,8 +103,14 @@ const notifications = ref([
   { message: '系統維護通知', read: true },
 ])
 
+const props = defineProps({
+  small: { type: Boolean, default: false },
+})
+
 // 標記通知為已讀
 const hasUnread = computed(() => notifications.value.some((notice) => !notice.read))
+
+const bellIconPrefix = computed(() => (hasUnread.value ? 'fas' : 'far'))
 
 // 標記通知為已讀
 const markAsRead = (index) => {
@@ -128,10 +130,6 @@ const onDropdownToggle = (visible) => {
 const openCartDrawer = () => {
   showCartDrawer.value = true
 }
-
-const props = defineProps({
-  small: { type: Boolean, default: false },
-})
 </script>
 
 <style #scoped>
@@ -172,10 +170,14 @@ const props = defineProps({
   font-size: 10px;
 }
 
-.user-menu-container.small .hamburger-btn,
+.user-menu-container.small .hamburger-btn {
+  padding: 4px 6px;
+  font-size: 19px;
+}
+
 .user-menu-container.small .notification-btn {
   padding: 4px 6px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* 使用者資訊樣式（更明顯） */
@@ -246,7 +248,7 @@ const props = defineProps({
   height: 8px;
   background-color: red; /* 顏色 */
   top: 10px; /* 調整位置 */
-  left: 6px;
+  left: 10px;
   transition: none !important; /* 取消過渡 */
 }
 
