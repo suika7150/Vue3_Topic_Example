@@ -11,12 +11,22 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { formatSecondsToHHMMSS } from './utils/format'
 import { getAndCacheOptions } from './utils/optionService'
 import { useUserStore } from './store/userStore'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+
+library.add(faMagnifyingGlass)
+
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
 app.use(pinia)
+// 【新增】全域註冊 Font Awesome 元件
+app.component('font-awesome-icon', FontAwesomeIcon)
+
 const userStore = useUserStore()
 userStore.initUser() //初始化登入狀態並啟動倒數
+
 const start = async () => {
   const res = await getAndCacheOptions()
   app.provide('allOptions', res)

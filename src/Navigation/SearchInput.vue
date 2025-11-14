@@ -1,7 +1,7 @@
 <template>
   <div class="search-wrapper">
     <el-button type="primary" circle @click="toggleSearch" class="search-btn">
-      <el-icon><Search /></el-icon>
+      <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
     </el-button>
 
     <transition name="expand">
@@ -49,8 +49,9 @@ const collapseSearch = () => {
 .expand-enter-active,
 .expand-leave-active {
   transition:
-    max-width 0.3s ease,
-    opacity 0.3s ease;
+    max-width 0.5s ease,
+    opacity 0.5s ease;
+  width: 200px;
 }
 .expand-enter-from,
 .expand-leave-to {
@@ -64,8 +65,6 @@ const collapseSearch = () => {
 }
 
 .search-input {
-  max-width: 200px;
-  width: 200px;
   height: 20px;
   font-size: 12px;
   overflow: hidden;
@@ -75,7 +74,6 @@ const collapseSearch = () => {
   border: none;
   width: 32px;
   height: 32px;
-  /* padding: 0; */
   font-size: 13px;
 }
 </style>
