@@ -1,7 +1,9 @@
 <template>
   <div class="top-bar">
     <div class="topbar-left">
-      <router-link to="/" class="logo"><Icon icon="logos:treehouse-icon" /> </router-link>
+      <router-link to="/" class="logo"
+        ><img src="/Logo/Logo.png" alt="Logo" class="logo-img"
+      /></router-link>
     </div>
 
     <div class="topbar-right-stack">
@@ -56,6 +58,12 @@ import { useRouter } from 'vue-router'
   font-size: 90px;
   color: #fff;
   text-decoration: none; /* 移除底線 */
+}
+
+.logo-img {
+  display: block;
+  width: auto;
+  height: 140px;
 }
 
 .topbar-right-stack {
