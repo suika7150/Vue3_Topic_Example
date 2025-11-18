@@ -180,7 +180,7 @@ const openCartDrawer = () => {
   font-size: 14px;
 }
 
-/* 使用者資訊樣式（更明顯） */
+/* 使用者資訊樣式 */
 .user-info {
   border-radius: 6px;
   padding: 8px 12px;

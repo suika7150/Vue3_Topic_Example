@@ -79,14 +79,7 @@ watch(
   overflow: hidden;
   text-align: center;
   height: 0px;
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
 }
-
-/* .topbar-ad-banner:hover .ad-text {
-  animation-play-state: paused;
-} */
 
 .marquee {
   width: 100%;

@@ -8,6 +8,7 @@ import { getNavMenu } from './Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
 import TopBarAdBanner from './Navigation/TopBarAdBanner.vue'
 import BackToTop from './Navigation/BackToTop.vue'
+import AdCarousel from '@/views/AdCarousel.vue'
 
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userRole)
@@ -34,7 +35,14 @@ const navMenu = computed(() => {
       </div>
 
       <!-- <Breadcrumb /> -->
+      <!-- <div>
+        <AdCarousel :ads="adBanners" />
+      </div> -->
+
       <div class="content">
+        <duv>
+          <AdCarousel />
+        </duv>
         <router-view />
         <span class="back-to-top"><BackToTop /></span>
       </div>
@@ -107,6 +115,7 @@ const navMenu = computed(() => {
 
 /* 主內容區 */
 .content {
+  width: 100%;
   display: flex;
   flex: 1;
   margin: 30px;
