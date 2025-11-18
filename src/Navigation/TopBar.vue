@@ -49,6 +49,7 @@ import { useRouter } from 'vue-router'
 }
 
 .topbar-left {
+  height: 100%;
   display: flex;
   align-items: center;
   gap: 30px; /* Logo 與下拉選單間距 */
@@ -64,6 +65,7 @@ import { useRouter } from 'vue-router'
 .logo-img {
   display: block;
   width: auto;
+  max-height: 100%;
   height: 140px;
 }
 
@@ -74,7 +76,7 @@ import { useRouter } from 'vue-router'
   justify-content: center; /* 讓整個堆疊區塊在 TopBar 內垂直置中 */
   height: 100%; /* 佔滿 TopBar 扣除 padding 後的垂直空間 */
   padding-bottom: 30px;
-  gap: 5px; /* 給 LoginMenu 和 CenterDropdown 之間一點間距 */
+  gap: 0px; /* 給 LoginMenu 和 CenterDropdown 之間一點間距 */
   margin-right: 30px;
   flex-shrink: 1;
   min-width: 0;
@@ -84,18 +86,21 @@ import { useRouter } from 'vue-router'
   display: flex;
   justify-content: flex-end;
   white-space: nowrap;
-  overflow: visible;
+  overflow: hidden; /* 確保超出容器寬度的內容被裁切 */
   flex-shrink: 1;
   min-width: 0;
+  height: 100%;
 }
 
 .topbar-main {
+  height: 100%;
   display: flex;
   align-items: center;
   padding-right: 150px;
   margin-top: 20px;
   flex-shrink: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .dropdown-below {

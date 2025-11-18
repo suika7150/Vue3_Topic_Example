@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faBell as fasBell, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faBell as farBell } from '@fortawesome/free-regular-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
+import './assets/main.css'
 
 library.add(faMagnifyingGlass, fasBell, farBell, faUser)
 

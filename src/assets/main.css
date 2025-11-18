@@ -1,6 +1,6 @@
-/* 全域重製樣式:防止邊距與捲軸問題 */
+/* 全域重設樣式:防止邊距與捲軸問題 */
 * {
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   margin: 0;
   padding: 0;
 }
@@ -11,42 +11,51 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: hidden; /* 防止水平捲軸出現 */
 }
 header {
   margin: 0;
   padding: 0;
 }
 
-/* 基本樣式 */
-@import './base.css';
-
-#app {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 0;
-  font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+/* --- RWD 響應式設計：針對手機/小螢幕佈局 (小於 768px) --- */
+@media (max-width: 768px) {
+  /* 1. 調整整個 TopBar 容器 */
+  .top-bar {
+    flex-direction: column; /* 讓 Logo 區塊和 右側堆疊區塊 垂直排列 */
+    height: auto; /* 高度自適應內容 */
+    top: 0; /* 讓導覽列緊貼螢幕頂部 */
+    padding: 10px 15px; /* 調整內邊距 */
+    position: relative; /* 手機上可考慮使用 relative 或確保 top: 0 */
+    /* 移除 fixed 定位，或確保 top: 0, 並且不會被其他元素遮擋 */
   }
-}
 
-@media (min-width: 1024px) {
-  body {
-    /* 'flex' | 'inline-flex'| 'initial'| 'none'| 'revert'| 'revert-layer'| 'unset' */
-    /* display: inline-flex; */
-    place-items: center;
+  /* 2. 處理 Logo 尺寸和定位 */
+  .topbar-left {
+    width: 100%; /* 讓 Logo 區塊佔滿寬度 */
+    justify-content: center; /* 讓 Logo 在手機上置中 */
+    gap: 0;
+  }
+
+  .logo-img {
+    height: 80px; /* **大幅縮小 Logo 尺寸**，防止溢出 */
+  }
+
+  /* 3. 處理右側堆疊區塊 (包含 LoginMenu 和 CenterDropdown) */
+  .topbar-right-stack {
+    width: 100%; /* 佔滿寬度，確保子元素有空間 */
+    align-items: center; /* 讓子元素在堆疊區塊內置中 */
+    padding-bottom: 0;
+    margin-right: 0;
+    margin-top: 10px; /* Logo 和選單區塊的間距 */
+    flex-direction: column; /* 讓 LoginMenu 和 CenterDropdown 垂直堆疊 */
+  }
+
+  /* 4. 處理 LoginMenu 容器 */
+  .topbar-right {
+    /* 允許 LoginMenu 內部的文字換行 */
+    white-space: normal;
+    justify-content: center; /* 讓 LoginMenu 區塊置中 */
+    width: 100%; /* 確保其有足夠寬度 */
   }
 }
