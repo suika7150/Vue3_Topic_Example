@@ -36,7 +36,7 @@ const navMenu = computed(() => {
       <!-- <Breadcrumb /> -->
       <div class="content">
         <router-view />
-        <span><BackToTop /></span>
+        <span class="back-to-top"><BackToTop /></span>
       </div>
     </div>
     <footer class="footer">
@@ -46,6 +46,9 @@ const navMenu = computed(() => {
 </template>
 
 <style scoped>
+.back-to-top {
+  z-index: 9999;
+}
 .topbar-ad-banner {
   position: fixed;
   display: flex;

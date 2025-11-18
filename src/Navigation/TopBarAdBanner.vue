@@ -99,17 +99,15 @@ watch(
   color: #fff;
   display: block;
   font-size: 15px;
-  white-space: nowrap; /* 禁用換行 */
+  /* white-space: nowrap; 禁用換行 */
 }
 
 /* 垂直滑動動畫 */
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.8s ease;
-  /* position: absolute; */
-  /* width: 100%; */
-  /* top: 0; */
-  /* left: 0; */
+  position: absolute;
+  width: 100%;
 }
 
 .slide-enter-from {

@@ -154,6 +154,7 @@ function handleScroll() {
   const visibleHeight = window.innerHeight
   const pageHeight = document.documentElement.scrollHeight
 
+  // 檢查是否接近底部 (距離底部 < 100px)
   if (scrolly + visibleHeight >= pageHeight - 100) {
     if (visibleCount.value < products.value.length) {
       loadMore()

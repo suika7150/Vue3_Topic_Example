@@ -1,30 +1,32 @@
 <template>
-  <!-- 其他按鈕 -->
-  <el-button
-    type="primary"
-    circle
-    class="line"
-    a
-    href="http://line.me/ti/p/suika7150"
-    target="_blank"
-  >
-    <el-icon><ChatLineRound /></el-icon>
-  </el-button>
-  <!-- <div class="line">
+  <div class="fixed-buttons-stack">
+    <!-- 其他按鈕 -->
+    <el-button
+      type="primary"
+      circle
+      class="line"
+      a
+      href="http://line.me/ti/p/suika7150"
+      target="_blank"
+    >
+      <el-icon><ChatLineRound /></el-icon>
+    </el-button>
+    <!-- <div class="line">
     <el-button a href="http://line.me/ti/p/suika7150" target="_blank">
       <el-icon><ChatDotRound /></el-icon>
     </el-button>
   </div> -->
-  <el-button type="primary" circle class="share">
-    <el-icon><Share /></el-icon>
-  </el-button>
-
-  <!-- 至頂按鈕 -->
-  <transition name="fade">
-    <el-button v-if="showTop" type="primary" circle class="back-to-top" @click="scrollToTop">
-      <el-icon><Top /></el-icon>
+    <el-button type="primary" circle class="share">
+      <el-icon><Share /></el-icon>
     </el-button>
-  </transition>
+
+    <!-- 至頂按鈕 -->
+    <transition name="fade">
+      <el-button v-if="showTop" type="primary" circle class="back-to-top" @click="scrollToTop">
+        <el-icon><Top /></el-icon>
+      </el-button>
+    </transition>
+  </div>
 </template>
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'

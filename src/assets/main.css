@@ -7,9 +7,9 @@
 
 html,
 body {
-  height: 100%;
+  /* height: 100%; */
   width: 100%;
-  margin: 0;
+  margin-left: 0;
   padding: 0;
   overflow-x: hidden; /* 防止水平捲軸出現 */
 }
@@ -18,16 +18,15 @@ header {
   padding: 0;
 }
 
-/* --- RWD 響應式設計：針對手機/小螢幕佈局 (小於 768px) --- */
 @media (max-width: 768px) {
   /* 1. 調整整個 TopBar 容器 */
   .top-bar {
     flex-direction: column; /* 讓 Logo 區塊和 右側堆疊區塊 垂直排列 */
-    height: auto; /* 高度自適應內容 */
-    top: 0; /* 讓導覽列緊貼螢幕頂部 */
-    padding: 10px 15px; /* 調整內邊距 */
+    height: 100%;
+    margin-left: auto;
+    top: 10px; /* 讓導覽列緊貼螢幕頂部 */
+    padding: 35px 10px; /* 調整內邊距 */
     position: relative; /* 手機上可考慮使用 relative 或確保 top: 0 */
-    /* 移除 fixed 定位，或確保 top: 0, 並且不會被其他元素遮擋 */
   }
 
   /* 2. 處理 Logo 尺寸和定位 */
@@ -46,8 +45,8 @@ header {
     align-items: center; /* 讓子元素在堆疊區塊內置中 */
     padding-bottom: 0;
     margin-right: 0;
-    margin-top: 10px; /* Logo 和選單區塊的間距 */
     flex-direction: column; /* 讓 LoginMenu 和 CenterDropdown 垂直堆疊 */
+    /* overflow: hidden; */
   }
 
   /* 4. 處理 LoginMenu 容器 */
@@ -56,16 +55,21 @@ header {
     white-space: normal;
     justify-content: center; /* 讓 LoginMenu 區塊置中 */
     width: 100%; /* 確保其有足夠寬度 */
+    /* overflow: hidden; */
   }
 
   .topbar-main {
     height: 100%;
-    display: flex;
+    display: none !important; /* 手機上隱藏主要導覽列 */
     align-items: center;
-    padding-right: 150px;
-    /* margin-top: 20px; */
+    /* padding-right: 150px; */
+    margin-top: 20px;
     flex-shrink: 1;
     min-width: 0;
     overflow: hidden;
   }
+}
+
+.back-to-top {
+  display: none;
 }
