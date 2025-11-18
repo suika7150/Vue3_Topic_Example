@@ -34,7 +34,6 @@ header {
   .topbar-left {
     width: 100%; /* 讓 Logo 區塊佔滿寬度 */
     justify-content: center; /* 讓 Logo 在手機上置中 */
-    gap: 0;
   }
 
   .logo-img {
@@ -57,5 +56,16 @@ header {
     white-space: normal;
     justify-content: center; /* 讓 LoginMenu 區塊置中 */
     width: 100%; /* 確保其有足夠寬度 */
+  }
+
+  .topbar-main {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-right: 150px;
+    /* margin-top: 20px; */
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
   }
 }

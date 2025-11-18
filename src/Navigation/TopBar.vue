@@ -80,13 +80,14 @@ import { useRouter } from 'vue-router'
   margin-right: 30px;
   flex-shrink: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .topbar-right {
   display: flex;
   justify-content: flex-end;
-  white-space: nowrap;
-  overflow: hidden; /* 確保超出容器寬度的內容被裁切 */
+  /* white-space: nowrap; */
+  overflow: hidden; /*確保超出容器寬度的內容被裁切 */
   flex-shrink: 1;
   min-width: 0;
   height: 100%;
@@ -97,10 +98,10 @@ import { useRouter } from 'vue-router'
   display: flex;
   align-items: center;
   padding-right: 150px;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   flex-shrink: 1;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .dropdown-below {
@@ -109,5 +110,56 @@ import { useRouter } from 'vue-router'
   right: 0; /* 右對齊 LoginMenu */
   margin-top: 4px; /* 距離 LoginMenu 一點縫隙 */
   /* z-index: 1001; 確保在 TopBar 之上 */
+}
+/* --- RWD 響應式設計：針對手機/小螢幕佈局 (小於 768px) --- */
+@media (max-width: 768px) {
+  /* 1. 調整整個 TopBar 容器 */
+  .top-bar {
+    flex-direction: column; /* 讓 Logo 區塊和 右側堆疊區塊 垂直排列 */
+    height: 100%;
+    top: 10px; /* 讓導覽列緊貼螢幕頂部 */
+    padding: 35px 10px; /* 調整內邊距 */
+    position: relative; /* 手機上可考慮使用 relative 或確保 top: 0 */
+
+    /* 移除 fixed 定位，或確保 top: 0, 並且不會被其他元素遮擋 */
+  }
+
+  /* 2. 處理 Logo 尺寸和定位 */
+  .topbar-left {
+    width: 100%; /* 讓 Logo 區塊佔滿寬度 */
+    justify-content: center; /* 讓 Logo 在手機上置中 */
+  }
+
+  .logo-img {
+    height: 80px; /* **大幅縮小 Logo 尺寸**，防止溢出 */
+  }
+
+  /* 3. 處理右側堆疊區塊 (包含 LoginMenu 和 CenterDropdown) */
+  .topbar-right-stack {
+    width: 100%; /* 佔滿寬度，確保子元素有空間 */
+    align-items: center; /* 讓子元素在堆疊區塊內置中 */
+    padding-bottom: 0;
+    margin-right: 0;
+    flex-direction: column; /* 讓 LoginMenu 和 CenterDropdown 垂直堆疊 */
+  }
+
+  /* 4. 處理 LoginMenu 容器 */
+  .topbar-right {
+    /* 允許 LoginMenu 內部的文字換行 */
+    white-space: normal;
+    justify-content: center; /* 讓 LoginMenu 區塊置中 */
+    width: 100%; /* 確保其有足夠寬度 */
+  }
+
+  .topbar-main {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-right: 150px;
+    margin-top: 20px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
 }
 </style>
