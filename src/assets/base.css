@@ -34,6 +34,13 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  /* --- 覆蓋 Element Plus 全域主題色 --- */
+  --el-color-primary: black;
+  --el-color-primary-light-3: #48d1de; /* 用於 hover 效果 */
+  --el-color-primary-light-5: #70e0eb; /* 用於更淺的 hover 或 active 效果 */
+  --el-color-primary-light-7: #a5ecf2;
+  --el-color-primary-light-9: #e8f9fa; /* 用於背景或禁用狀態 */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,15 +60,15 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   margin: 0;
-  font-weight: normal;
+  /* font-weight: normal; */
 }
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
+  /* color: var(--color-text); */
+  /* background: var(--color-background); */
   transition:
     color 0.5s,
     background-color 0.5s;

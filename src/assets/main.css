@@ -1,8 +1,12 @@
+@import './base.css';
+
 /* 全域重設樣式:防止邊距與捲軸問題 */
 * {
   margin: 0;
   padding: 0;
 }
+/* 這裡可以保留專案特有的、不與 base.css 衝突的全域樣式 */
+/* 例如，您可以保留下面的 @media 響應式樣式和 .back-to-top */
 
 html,
 body {

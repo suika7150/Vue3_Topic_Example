@@ -40,9 +40,6 @@ const navMenu = computed(() => {
       </div> -->
 
       <div class="content">
-        <duv>
-          <AdCarousel />
-        </duv>
         <router-view />
         <span class="back-to-top"><BackToTop /></span>
       </div>
@@ -120,6 +117,7 @@ const navMenu = computed(() => {
   flex: 1;
   margin: 30px;
   padding: 50px 100px;
+  padding: 100px;
   background-color: white;
   overflow: hidden;
   box-sizing: border-box; /* 避免 padding 推寬度 */

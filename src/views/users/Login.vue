@@ -190,4 +190,14 @@ const handleRegister = () => {
   height: 44px;
   border-radius: 8px;
 }
+
+/* --- :deep() 選擇器，專門修改此頁面的 el-checkbox 樣式 --- */
+.login-container :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+  background-color: #1bbfce; /* 您想要的勾選後背景色 */
+  border-color: #1bbfce; /* 您想要的勾選後邊框色 */
+}
+
+.login-container :deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
+  color: #1bbfce; /* 您想要的勾選後文字顏色 */
+}
 </style>
