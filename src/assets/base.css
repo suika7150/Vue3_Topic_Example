@@ -36,7 +36,7 @@
   --section-gap: 160px;
 
   /* --- 覆蓋 Element Plus 全域主題色 --- */
-  --el-color-primary: black;
+  --el-color-primary: #1bbfce; /* Element Plus 的主要顏色，影響按鈕、載入動畫、焦點等 */
   --el-color-primary-light-3: #48d1de; /* 用於 hover 效果 */
   --el-color-primary-light-5: #70e0eb; /* 用於更淺的 hover 或 active 效果 */
   --el-color-primary-light-7: #a5ecf2;

@@ -18,7 +18,7 @@
           />
         </el-select>
         <el-button @click="openCartDrawer" type="primary" class="openCartDrawer">
-          🛒 購物車
+          購物車
         </el-button>
       </div>
     </div>
@@ -320,9 +320,5 @@ const openCartDrawer = () => {
 .detail-rating {
   margin-bottom: 8px;
   justify-content: center;
-}
-
-.openCartDrawer {
-  background-color: black;
 }
 </style>
