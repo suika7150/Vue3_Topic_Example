@@ -72,8 +72,18 @@
       </el-col>
     </el-row>
 
-    <div v-if="visibleCount < filteredProducts.length" class="load-more-container">
-      <el-button @click="loadMore" type="primary" plain>載入更多</el-button>
+    <!-- 載入更多指示器 -->
+    <div class="load-more-container">
+      <!-- 方案一：使用旋轉圖示 -->
+      <div v-if="isLoadMoreLoading" class="loading-indicator">
+        <el-icon class="is-loading"><Loading /></el-icon>
+        <span>載入中...</span>
+      </div>
+
+      <!-- 當還有更多商品且未在載入時，才顯示按鈕 -->
+      <el-button v-else-if="visibleCount < filteredProducts.length" @click="loadMore" plain>
+        載入更多
+      </el-button>
     </div>
 
     <el-dialog v-model="dialogVisible" :title="currentProduct.name" width="1000px">
@@ -99,7 +109,7 @@
 
 <script setup>
 import CartDrawer from '@/components/CartDrawer.vue'
-import api from '@/service/api'
+import api from '@/service/api' // 引入 Loading 圖示
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
@@ -108,12 +118,14 @@ import { onMounted, onBeforeUnmount } from 'vue'
 import throttle from 'lodash/throttle' // 引入 lodash 的 throttle 函數控制載入商品的頻率
 
 const cartStore = useCartStore()
+import { Loading } from '@element-plus/icons-vue'
 const products = ref([])
 const categories = ref([])
 const selectedCategory = ref('')
 const isLoading = ref(true)
 const loadMoreCount = 4
 const visibleCount = ref(loadMoreCount)
+const isLoadMoreLoading = ref(false) // 新增：追蹤載入更多的狀態
 const dialogVisible = ref(false)
 const drawerVisible = ref(false)
 const currentProduct = ref({})
@@ -145,7 +157,15 @@ const handleImageError = (e) => {
 }
 
 const loadMore = () => {
-  visibleCount.value += loadMoreCount
+  if (isLoadMoreLoading.value) return // 如果正在載入，則不執行
+
+  isLoadMoreLoading.value = true
+
+  // 模擬網路延遲，讓使用者能看到載入動畫
+  setTimeout(() => {
+    visibleCount.value += loadMoreCount
+    isLoadMoreLoading.value = false
+  }, 1500) // 延遲 1.5 秒
 }
 
 //自動載入更多商品
@@ -283,8 +303,16 @@ const openCartDrawer = () => {
 
 /* Load More Button */
 .load-more-container {
+  padding: 20px 0;
   text-align: center;
-  margin-top: 16px;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #909399;
+  font-size: 14px;
 }
 
 /* Product Detail Dialog */
