@@ -18,6 +18,9 @@ const navMenu = computed(() => {
 </script>
 
 <template>
+  <!-- 將 BackToTop 移到最外層，不受 overflow 影響 -->
+  <div class="back-to-top"><BackToTop /></div>
+
   <div class="app-wrapper">
     <header>
       <div class="topbar-ad-banner">
@@ -35,13 +38,9 @@ const navMenu = computed(() => {
       </div>
 
       <!-- <Breadcrumb /> -->
-      <!-- <div>
-        <AdCarousel :ads="adBanners" />
-      </div> -->
 
       <div class="content">
         <router-view />
-        <span class="back-to-top"><BackToTop /></span>
       </div>
     </div>
     <footer class="footer">

@@ -3,6 +3,7 @@
     <div class="carousel-section">
       <AdCarousel />
     </div>
+    <Breadcrumb />
     <div class="product-list-section">
       <ProductList />
     </div>
@@ -11,6 +12,7 @@
 <script setup>
 import AdCarousel from '@/views/AdCarousel.vue'
 import ProductList from '@/views/products/ProductList.vue'
+import Breadcrumb from '@/Navigation/Breadcrumb.vue'
 </script>
 <style scoped>
 .carousel-section {
