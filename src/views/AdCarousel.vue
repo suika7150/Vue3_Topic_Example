@@ -1,6 +1,14 @@
 <template>
   <div class="carousel-container">
-    <el-carousel height="500px" :indicator-position="outside" arrow="hover" :interval="5000">
+    <!-- 使用 Element Plus 的卡片式輪播 -->
+    <el-carousel
+      :interval="4000"
+      type="card"
+      height="400px"
+      width="100%"
+      indicator-position="outside"
+      arrow="hover"
+    >
       <el-carousel-item v-for="(ad, index) in adBanners" :key="index">
         <a :href="ad.link" target="_self" class="ad-link">
           <img :src="ad.image" :alt="ad.title" class="ad-image" />
@@ -48,39 +56,42 @@ const adBanners = [
     link: '/category/life/travel',
   },
 ]
-
-// const props = defineProps({
-//   ads: {
-//     type: Array,
-//     required: true,
-//     default: () => [],
-//   },
-// })
 </script>
 
 <style scoped>
+.carousel-container {
+  padding: 40px 0;
+}
+
 .ad-link {
   display: block;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  border-radius: 8px;
 }
 
 .ad-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition:
-    transform 0.3s ease,
-    filter 0.6s ease; /* 確保模糊切換平滑 */
+  object-fit: contain; /* 將 cover 改為 contain，確保圖片完整顯示不被裁切 */
+  transition: filter 0.3s ease; /* 讓模糊效果有過渡動畫 */
 }
 
-.ad-link:hover .ad-image {
-  transform: scale(1.02);
+/*
+  :deep() 選擇器可以穿透 scoped 的限制，
+  讓我們可以選取到 el-carousel 內部的 class
+*/
+.carousel-container :deep(.el-carousel__item) {
+  /* 讓卡片有圓角和陰影，看起來更立體 */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.carousel-container {
-  width: 100%;
+/*
+  選取「不是」當前啟用狀態的卡片，也就是左右兩側的預覽卡片
+*/
+.carousel-container :deep(.el-carousel__item:not(.is-active)) {
+  /* 為兩側的卡片加上模糊和變暗的效果 */
+  filter: blur(4px) brightness(0.7);
+  transform: scale(0.9); /* 讓兩側卡片稍微小一點 */
 }
 </style>
