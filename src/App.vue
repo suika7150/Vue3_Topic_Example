@@ -110,7 +110,7 @@ const navMenu = computed(() => {
 
 /* 主內容區 */
 .content {
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   flex: 1;
   /* margin: 30px; */
@@ -120,6 +120,8 @@ const navMenu = computed(() => {
   box-sizing: border-box; /* 避免 padding 推寬度 */
   flex-direction: column;
   justify-content: stretch;
+  max-width: 1200px; /* 限制最大寬度 (例如 1200px) */
+  margin: 0 auto; /* 設置水平自動邊距置中 */
 }
 
 /* Footer 固定在底部 */

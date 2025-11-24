@@ -80,6 +80,20 @@ header {
     min-width: 0;
     overflow: hidden;
   }
+
+  /* 主內容區 */
+  .content {
+    width: 100%;
+    display: flex;
+    flex: 1;
+    /* margin: 30px; */
+    padding: 150px;
+    background-color: white;
+    overflow: hidden;
+    box-sizing: border-box; /* 避免 padding 推寬度 */
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 
 .back-to-top {

@@ -37,12 +37,14 @@
 <style scoped>
 .bottom-footer {
   /* position: relative;  改成 relative，自然在內容下方 */
+  display: fiex;
   width: 100%;
   background-color: #001529;
   color: #fff;
   box-sizing: border-box; /* 避免 padding 推寬度 */
   margin: 0;
   padding: 20px 0px;
+  flex-shrink: 0;
 }
 
 .footer-content {
