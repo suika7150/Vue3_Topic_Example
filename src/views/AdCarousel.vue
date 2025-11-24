@@ -72,7 +72,7 @@ const adBanners = [
 .ad-image {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* 將 cover 改為 contain，確保圖片完整顯示不被裁切 */
+  object-fit: cover; /* 將 cover 改為 contain，確保圖片完整顯示不被裁切 */
   transition: filter 0.3s ease; /* 讓模糊效果有過渡動畫 */
 }
 

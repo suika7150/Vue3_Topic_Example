@@ -1,33 +1,34 @@
 <template>
   <div>
-    <!-- <div
-    class="sidebar-wrapper"
-    :class="{ collapsed: isCollapsed }"
-    @mouseenter="isCollapsed = false"
-    @mouseleave="isCollapsed = true"
-  > -->
-    <el-menu
-      class="sidebar-menu"
-      :default-active="active"
-      router
-      :collapse="isCollapsed"
-      :unique-opened="false"
-      :collapse-transition="false"
+    <div
+      class="sidebar-wrapper"
+      :class="{ collapsed: isCollapsed }"
+      @mouseenter="isCollapsed = false"
+      @mouseleave="isCollapsed = true"
     >
-      <MenuItem
-        v-for="item in categoriesWithPaths"
-        :key="item.path"
-        :item="item"
-        :basePath="basePath"
-      />
-    </el-menu>
+      <el-menu
+        class="sidebar-menu"
+        :default-active="active"
+        router
+        :collapse="isCollapsed"
+        :unique-opened="false"
+        :collapse-transition="false"
+      >
+        <MenuItem
+          v-for="item in categoriesWithPaths"
+          :key="item.path"
+          :item="item"
+          :basePath="basePath"
+        />
+      </el-menu>
 
-    <!-- 右下小按鈕 -->
-    <!-- <div class="collapse-btn" @click="toggleCollapse">
-      <el-icon>
-        <component :is="isCollapsed ? DArrowRight : DArrowLeft" />
-      </el-icon>
-    </div> -->
+      <!-- 右下小按鈕 -->
+      <!-- <div class="collapse-btn" @click="toggleCollapse">
+        <el-icon>
+          <component :is="isCollapsed ? DArrowRight : DArrowLeft" />
+        </el-icon>
+      </div> -->
+    </div>
   </div>
 </template>
 
@@ -105,9 +106,14 @@ const toggleCollapse = () => {
 </script>
 <style scoped>
 .sidebar-wrapper {
-  margin-top: 100px; /* 或 padding-top: 100px */
+  /* margin-top: 100px; */
   width: 240px;
-  min-height: 100%;
+  /* min-height: 100%; */
+  /* min-height: calc(500vh - 0px); 100vh - sticky top - padding top */
+  height: 100%; /* 填滿父容器 .el-menu-vertical-demo */
+  /* padding-top: 20px; 增加頂部間距 */
+  /* height: 100%; 移除，讓 flex 自動處理 */
+  /* padding-top: 20px; 增加頂部間距，讓選單內容不要貼頂 */
   background-color: #f9f9f9;
   border-right: 1px solid #ddd;
   display: flex; /* 高度隨內容延伸 */
@@ -132,7 +138,8 @@ const toggleCollapse = () => {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   flex: 1; /* 填滿 Sidebar 容器 */
   width: 100%;
-  background-color: #f5f7fa;
+  /* padding-bottom: 100%; */
+  background-color: #333;
 }
 
 .sidebar-menu .el-menu-item span {

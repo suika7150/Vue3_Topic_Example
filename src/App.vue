@@ -77,7 +77,8 @@ const navMenu = computed(() => {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 40px;
+  /* min-height: 40px; */
+  min-height: 100vh;
   width: 100%; /* 填滿整個瀏覽器寬度 */
   margin: 0; /*自動置中 */
   padding: 0;
@@ -98,10 +99,10 @@ const navMenu = computed(() => {
 /* 側邊欄 */
 .el-menu-vertical-demo {
   position: sticky;
-  top: 100px;
+  top: 80px; /* 配合 layout 的 margin-top */
   width: 240px;
-  height: auto;
-  background-color: #f5f7fa;
+  height: 100%; /* 填滿父容器 layout 的高度 */
+  background-color: white;
   box-shadow: 2px 0 5px rgba(245, 240, 240, 0.05);
   transition: all 0.3s;
   display: flex;
