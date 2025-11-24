@@ -97,15 +97,15 @@ const navMenu = computed(() => {
 /* 側邊欄 */
 .el-menu-vertical-demo {
   position: sticky;
-  top: 100px;
+  top: 0px;
   /* width: 240px; */
-  height: auto;
+  height: 70px;
   background-color: white;
   box-shadow: 2px 0 5px rgba(245, 240, 240, 0.05);
   transition: all 0.3s;
   display: flex;
   /* flex-direction: column; */
-  padding: 100px 0 0;
+  padding: 90px 0 0;
 }
 
 /* 主內容區 */
