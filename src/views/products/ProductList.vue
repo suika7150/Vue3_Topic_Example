@@ -261,7 +261,7 @@ const openCartDrawer = () => {
 .card-image-wrapper {
   position: relative;
   width: 100%;
-  height: 180px;
+  height: 210px;
   overflow: hidden;
   cursor: pointer;
 }

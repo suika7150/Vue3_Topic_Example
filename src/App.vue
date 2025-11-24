@@ -99,14 +99,14 @@ const navMenu = computed(() => {
 .el-menu-vertical-demo {
   position: sticky;
   top: 100px;
-  width: 240px;
+  /* width: 240px; */
   height: auto;
-  background-color: #f5f7fa;
+  background-color: white;
   box-shadow: 2px 0 5px rgba(245, 240, 240, 0.05);
   transition: all 0.3s;
   display: flex;
-  flex-direction: column;
-  padding: 100px 0px;
+  /* flex-direction: column; */
+  padding: 100px 0 0;
 }
 
 /* 主內容區 */
@@ -114,9 +114,8 @@ const navMenu = computed(() => {
   width: 100%;
   display: flex;
   flex: 1;
-  margin: 30px;
-  padding: 50px 100px;
-  padding: 100px;
+  /* margin: 30px; */
+  padding: 150px;
   background-color: white;
   overflow: hidden;
   box-sizing: border-box; /* 避免 padding 推寬度 */

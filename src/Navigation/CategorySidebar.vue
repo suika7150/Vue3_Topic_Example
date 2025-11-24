@@ -1,33 +1,34 @@
 <template>
   <div>
-    <!-- <div
-    class="sidebar-wrapper"
-    :class="{ collapsed: isCollapsed }"
-    @mouseenter="isCollapsed = false"
-    @mouseleave="isCollapsed = true"
-  > -->
-    <el-menu
-      class="sidebar-menu"
-      :default-active="active"
-      router
-      :collapse="isCollapsed"
-      :unique-opened="false"
-      :collapse-transition="false"
+    <div
+      class="sidebar-wrapper"
+      :class="{ collapsed: isCollapsed }"
+      @mouseenter="isCollapsed = false"
+      @mouseleave="isCollapsed = true"
     >
-      <MenuItem
-        v-for="item in categoriesWithPaths"
-        :key="item.path"
-        :item="item"
-        :basePath="basePath"
-      />
-    </el-menu>
+      <el-menu
+        class="sidebar-menu"
+        :default-active="active"
+        router
+        :collapse="isCollapsed"
+        :unique-opened="false"
+        :collapse-transition="false"
+      >
+        <MenuItem
+          v-for="item in categoriesWithPaths"
+          :key="item.path"
+          :item="item"
+          :basePath="basePath"
+        />
+      </el-menu>
 
-    <!-- 右下小按鈕 -->
-    <!-- <div class="collapse-btn" @click="toggleCollapse">
+      <!-- 右下小按鈕 -->
+      <!-- <div class="collapse-btn" @click="toggleCollapse">
       <el-icon>
         <component :is="isCollapsed ? DArrowRight : DArrowLeft" />
       </el-icon>
     </div> -->
+    </div>
   </div>
 </template>
 
@@ -105,11 +106,11 @@ const toggleCollapse = () => {
 </script>
 <style scoped>
 .sidebar-wrapper {
-  margin-top: 100px; /* 或 padding-top: 100px */
-  width: 240px;
+  /* margin-top: 100px; 或 padding-top: 100px */
+  width: 250px;
   min-height: 100%;
   background-color: #f9f9f9;
-  border-right: 1px solid #ddd;
+  /* border-right: 1px solid #ddd; */
   display: flex; /* 高度隨內容延伸 */
   flex-direction: column;
   overflow-y: auto;
@@ -132,7 +133,7 @@ const toggleCollapse = () => {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   flex: 1; /* 填滿 Sidebar 容器 */
   width: 100%;
-  background-color: #f5f7fa;
+  background-color: white;
 }
 
 .sidebar-menu .el-menu-item span {
