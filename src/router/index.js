@@ -40,6 +40,11 @@ const routes = [
     name: 'EditProduct',
     component: () => import('@/views/products/EditProduct.vue'),
   },
+  // {
+  //   path: '/product/:id',
+  //   name: 'ProductDetail',
+  //   component: () => import('@/views/products/ProductDetailView.vue'), // 請確認路徑正確
+  // },
   {
     path: '/settings/options',
     name: 'OptionsManage',
