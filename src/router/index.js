@@ -4,7 +4,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   { path: '/', name: 'Home', component: () => import('@/views/Home.vue') },
-  { path: '/login', name: 'Login', component: () => import('@/views/users/Login.vue') },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/users/Login.vue'),
+    meta: { CategorySidebar: true },
+  },
   { path: '/register', name: 'Register', component: () => import('@/views/users/Register.vue') },
   { path: '/about', name: 'About', component: () => import('@/views/About.vue') },
   { path: '/News', name: 'News', component: () => import('@/views/News.vue') },

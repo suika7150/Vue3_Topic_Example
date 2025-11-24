@@ -1,6 +1,5 @@
 <script setup>
 import BottomFooter from './Navigation/BottomFooter.vue'
-import Breadcrumb from './Navigation/Breadcrumb.vue'
 import CategorySidebar from './Navigation/CategorySidebar.vue'
 import TopBar from './Navigation/TopBar.vue'
 import { computed } from 'vue'
@@ -8,7 +7,7 @@ import { getNavMenu } from './Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
 import TopBarAdBanner from './Navigation/TopBarAdBanner.vue'
 import BackToTop from './Navigation/BackToTop.vue'
-import AdCarousel from '@/views/AdCarousel.vue'
+import { useRoute } from 'vue-router'
 
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userRole)
