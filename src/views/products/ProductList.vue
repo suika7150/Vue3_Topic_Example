@@ -40,7 +40,7 @@
         :lg="6"
         class="product-col"
       >
-        <el-card shadow="hover" class="product-card">
+        <el-card shadow="hover" body-style="padding: 0;">
           <div class="card-image-wrapper" @click="showProductDetail(product)">
             <el-tooltip :content="product.description" placement="top">
               <img
@@ -226,7 +226,7 @@ const openCartDrawer = () => {
 }
 
 .product-col {
-  margin-bottom: 50px;
+  margin-bottom: 24px;
 }
 
 /* Header */
@@ -252,16 +252,11 @@ const openCartDrawer = () => {
   margin-right: 16px;
 }
 
-/* 使用 :deep() 選擇器來修改 el-card 內部的 .el-card__body 樣式 */
-.product-card :deep(.el-card__body) {
-  padding: 0px;
-}
-
 /* Product Card */
 .card-image-wrapper {
   position: relative;
   width: 100%;
-  height: 180px;
+  height: 160px;
   overflow: hidden;
   cursor: pointer;
 }
