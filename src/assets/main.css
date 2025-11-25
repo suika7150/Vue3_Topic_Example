@@ -44,7 +44,17 @@ header {
     justify-content: center;
     align-items: center;
     padding: 20px 20px;
-    overflow: hidden;
+    /* overflow: hidden; */
+  }
+
+  .topbar-main {
+    height: 100%;
+    display: none !important; /* 手機上隱藏主要導覽列 */
+    align-items: center;
+    margin-top: 20px;
+    flex-shrink: 1;
+    min-width: 0;
+    /* overflow: hidden; */
   }
 
   /* 2. 處理 Logo 尺寸和定位 */
@@ -69,16 +79,6 @@ header {
     justify-content: center; /* 讓 LoginMenu 區塊置中 */
     width: 100%; /* 確保其有足夠寬度 */
     /* overflow: hidden; */
-  }
-
-  .topbar-main {
-    height: 100%;
-    display: none !important; /* 手機上隱藏主要導覽列 */
-    align-items: center;
-    margin-top: 20px;
-    flex-shrink: 1;
-    min-width: 0;
-    overflow: hidden;
   }
 
   .backtotop {

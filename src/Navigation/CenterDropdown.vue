@@ -31,7 +31,7 @@
         品牌專區 <el-icon><ArrowDown /></el-icon>
       </el-button>
       <template #dropdown>
-        <el-dropdown-menu>
+        <el-dropdown-menu class="center-menu-dropdown">
           <el-dropdown-item @click="goNews3">新聞</el-dropdown-item>
           <el-dropdown-item @click="goNews4">公告</el-dropdown-item>
         </el-dropdown-menu>

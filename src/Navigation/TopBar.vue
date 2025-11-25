@@ -55,6 +55,20 @@ import { useRouter } from 'vue-router'
   overflow: visible;
 }
 
+.topbar-main {
+  flex-direction: row;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-right: 0px;
+  margin-left: 50px;
+  /* margin-top: 20px; */
+  flex-shrink: 1;
+  min-width: 0;
+  /* overflow: ; */
+  justify-content: center;
+}
+
 .topbar-left {
   height: 100%;
   display: flex;
@@ -85,19 +99,6 @@ import { useRouter } from 'vue-router'
   flex-shrink: 1;
   min-width: 0;
   height: 100%;
-}
-
-.topbar-main {
-  flex-direction: row;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding-right: 150px;
-  /* margin-top: 20px; */
-  flex-shrink: 1;
-  min-width: 0;
-  overflow: visible;
-  justify-content: center;
 }
 
 .dropdown-below {
