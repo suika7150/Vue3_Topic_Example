@@ -156,7 +156,7 @@ const openCartDrawer = () => {
   margin-left: auto;
 }
 
-.topbar-member-btn {
+.topbar-member-btn.el-button {
   background-color: transparent; /* 跟 Topbar 融合 */
   border: none; /* 去掉邊框 */
   color: white; /* 文字白色 */

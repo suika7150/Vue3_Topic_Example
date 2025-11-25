@@ -109,8 +109,24 @@ header {
 
   .search-input {
     width: 180px;
-    /* height: 32px; */
-    /* font-size: 12px; */
-    /* overflow: hidden; */
+  }
+
+  .hamburger-btn {
+    background-color: transparent; /* Element Plus 主色 */
+    color: white;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    box-shadow: none;
+  }
+
+  .notification-badge {
+    padding-left: 20px;
   }
 }
