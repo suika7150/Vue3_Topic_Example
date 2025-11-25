@@ -7,7 +7,7 @@
     <!-- 回首頁按鈕 -->
     <el-button class="topbar-btn" @click="goHome">回首頁</el-button>
     <!-- 未登入時顯示登入按鈕 -->
-    <el-button v-if="!isLogin" class="topbar-btn" @click="goLogin">會員</el-button>
+    <el-button v-if="!isLogin" class="topbar-member-btn" @click="goLogin">會員</el-button>
 
     <!-- 已登入時 -->
     <template v-else>
@@ -154,6 +154,20 @@ const openCartDrawer = () => {
   align-items: center;
   gap: 5px;
   margin-left: auto;
+}
+
+.topbar-member-btn {
+  background-color: transparent; /* 跟 Topbar 融合 */
+  border: none; /* 去掉邊框 */
+  color: white; /* 文字白色 */
+  box-shadow: none; /* 去掉陰影 */
+  /* padding: 8px 12px; 可依 Topbar 調整 */
+  background-color: rgba(255, 255, 255, 0.1); /*輕微 hover 提示 */
+  color: white; /* 文字維持白色 */
+  outline: none;
+  box-shadow: none;
+  padding: 4px 6px;
+  font-size: 12px;
 }
 
 .user-menu-container.small .topbar-btn.el-button {

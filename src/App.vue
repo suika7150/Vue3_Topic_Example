@@ -38,7 +38,7 @@ const navMenu = computed(() => {
         <router-view />
       </div>
     </div>
-    <BackToTop />
+    <BackToTop class="backtotop" />
     <footer class="footer">
       <BottomFooter />
     </footer>
@@ -117,5 +117,13 @@ const navMenu = computed(() => {
 /* Footer 固定在底部 */
 .footer {
   overflow-x: hidden; /* 防止水平滾動條 */
+}
+
+@media (max-width: 900px) {
+  /* 主內容區 */
+  .content {
+    width: 100%;
+    padding: 20px;
+  }
 }
 </style>

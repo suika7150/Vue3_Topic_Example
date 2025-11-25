@@ -22,13 +22,6 @@
 import LoginMenu from './LoginMenu.vue'
 import CenterDropdown from './CenterDropdown.vue'
 import { useRouter } from 'vue-router'
-
-// defineProps({ bannerOn: { type: Boolean, default: false } })
-// const onDropdownSelect = (item) => {
-//   if (item === '選項 1') goto('Option1Page')
-//   else if (item === '選項 2') goto('Option2Page')
-//   else if (item === '選項 3') goto('Option3Page')
-// }
 </script>
 
 <style scoped>
