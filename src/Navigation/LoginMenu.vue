@@ -13,7 +13,7 @@
     <template v-else>
       <!-- 通知鈴鐺 -->
       <el-dropdown trigger="click" @visible-change="onDropdownToggle">
-        <el-badge :is-dot="hasUnread" class="notification-badge" style="margin-right: 10px">
+        <el-badge :is-dot="hasUnread" class="notification-badge">
           <el-button type="link" class="notification-btn">
             <font-awesome-icon :icon="[bellIconPrefix, 'bell']" size="lg" />
           </el-button>
@@ -256,6 +256,7 @@ const openCartDrawer = () => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* margin-right: 10px; */
 }
 .notification-badge .el-badge__content {
   width: 8px; /* 調整大小 */

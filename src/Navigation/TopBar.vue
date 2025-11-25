@@ -108,4 +108,27 @@ import { useRouter } from 'vue-router'
   margin-top: 4px; /* 距離 LoginMenu 一點縫隙 */
   /* z-index: 1001; 確保在 TopBar 之上 */
 }
+
+@media (max-width: 900px) {
+  .top-bar {
+    flex-direction: row;
+    position: fixed;
+    display: flex;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background-color: #000000fb;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    overflow: visible;
+    z-index: 1001;
+  }
+
+  .logo-img {
+    display: flex;
+    height: 100px;
+  }
+}
 </style>

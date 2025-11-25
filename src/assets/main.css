@@ -22,16 +22,6 @@ header {
 }
 
 @media (max-width: 900px) {
-  /* 1. 調整整個 TopBar 容器 */
-  .top-bar {
-    flex-direction: column; /* 讓 Logo 區塊和 右側堆疊區塊 垂直排列 */
-    height: 100%;
-    margin-left: auto;
-    top: 10px; /* 讓導覽列緊貼螢幕頂部 */
-    padding: 35px 10px; /* 調整內邊距 */
-    position: relative; /* 手機上可考慮使用 relative 或確保 top: 0 */
-  }
-
   .menu-bar {
     flex-direction: row;
     position: fixed;
@@ -60,16 +50,6 @@ header {
   /* 2. 處理 Logo 尺寸和定位 */
   .topbar-left {
     width: 100%; /* 讓 Logo 區塊佔滿寬度 */
-    /* justify-content: center; 讓 Logo 在手機上置中 */
-  }
-
-  .logo-img {
-    display: block;
-    width: auto;
-    max-height: 100%;
-    height: auto;
-    padding: 0px 30px;
-    margin-top: 30px;
   }
 
   /* 4. 處理 LoginMenu 容器 */
@@ -108,7 +88,8 @@ header {
   }
 
   .search-input {
-    width: 180px;
+    width: 130px;
+    margin: 0px;
   }
 
   .hamburger-btn {
@@ -127,6 +108,6 @@ header {
   }
 
   .notification-badge {
-    padding-left: 20px;
+    padding-left: 0px;
   }
 }
