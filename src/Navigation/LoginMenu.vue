@@ -149,25 +149,28 @@ const openCartDrawer = () => {
   box-shadow: none;
 }
 
-.user-menu-container {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-left: auto;
-}
-
 .topbar-member-btn.el-button {
   background-color: transparent; /* 跟 Topbar 融合 */
   border: none; /* 去掉邊框 */
   color: white; /* 文字白色 */
   box-shadow: none; /* 去掉陰影 */
-  /* padding: 8px 12px; 可依 Topbar 調整 */
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.topbar-member-btn.el-button:hover,
+.topbar-btn.el-button:focus {
   background-color: rgba(255, 255, 255, 0.1); /*輕微 hover 提示 */
   color: white; /* 文字維持白色 */
   outline: none;
   box-shadow: none;
-  padding: 4px 6px;
-  font-size: 12px;
+}
+
+.user-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
 }
 
 .user-menu-container.small .topbar-btn.el-button {

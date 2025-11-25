@@ -94,4 +94,41 @@ const adBanners = [
   filter: blur(4px) brightness(0.7);
   transform: scale(0.9); /* 讓兩側卡片稍微小一點 */
 }
+
+@media (max-width: 912px) {
+  /* 1. 調整輪播高度 (使用內聯樣式覆蓋 :height="400px") */
+  .carousel-container :deep(.el-carousel) {
+    height: 200px !important; /* 降低高度 */
+  }
+
+  /* 2. 讓每個卡片佔據 100% 寬度（模擬 default 模式） */
+  /* 這會覆蓋 type="card" 帶來的 width 限制 */
+  .carousel-container :deep(.el-carousel__container) {
+    height: 200px !important; /* 確保容器高度一致 */
+  }
+
+  .carousel-container :deep(.el-carousel__item) {
+    /* 由於 type="card" 預設將寬度設為 75%，我們將其覆蓋為 100% */
+    width: 100% !important;
+
+    /* 移除兩側卡片特效 */
+    filter: none !important;
+    transform: none !important;
+
+    /* 移除手機上的圓角和陰影，確保邊緣貼合 */
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* 3. 移除側邊卡片的模糊效果 (如果它們還在的話) */
+  .carousel-container :deep(.el-carousel__item:not(.is-active)) {
+    filter: none !important;
+    transform: none !important;
+  }
+
+  /* 4. 調整指示器位置 (可選) */
+  .carousel-container :deep(.el-carousel__indicators) {
+    bottom: 5px; /* 移到底部 */
+  }
+}
 </style>

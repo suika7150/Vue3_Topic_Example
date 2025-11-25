@@ -109,7 +109,7 @@ import { useRouter } from 'vue-router'
   /* z-index: 1001; 確保在 TopBar 之上 */
 }
 
-@media (max-width: 900px) {
+@media (max-width: 912px) {
   .top-bar {
     flex-direction: row;
     position: fixed;
@@ -126,9 +126,24 @@ import { useRouter } from 'vue-router'
     z-index: 1001;
   }
 
+  .menu-bar {
+    flex-direction: row;
+    position: fixed;
+    display: flex;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: 0px;
+    background-color: #000000fb;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px;
+    overflow: visible;
+  }
   .logo-img {
     display: flex;
-    height: 100px;
+    height: 90px;
+    padding-bottom: 20px;
   }
 }
 </style>

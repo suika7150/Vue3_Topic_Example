@@ -119,11 +119,22 @@ const navMenu = computed(() => {
   overflow-x: hidden; /* 防止水平滾動條 */
 }
 
-@media (max-width: 900px) {
+@media (max-width: 912px) {
   /* 主內容區 */
   .content {
     width: 100%;
     padding: 20px;
+  }
+
+  .topbar-ad-banner {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 50px;
+    background-color: rgb(19, 204, 170);
+    z-index: 1001;
   }
 }
 </style>
