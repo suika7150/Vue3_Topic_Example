@@ -52,7 +52,7 @@
       <!-- 漢堡下拉選單 -->
       <el-dropdown>
         <el-button type="link" class="hamburger-btn">
-          <el-icon><Setting /></el-icon>
+          <el-icon><Fold /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
@@ -75,7 +75,7 @@ import { useUserStore } from '@/store/userStore'
 import { storeToRefs } from 'pinia'
 import { useNavigation } from '@/composables/useNavigation'
 import SearchInput from './SearchInput.vue'
-import { Setting, User } from '@element-plus/icons-vue'
+import { Setting, User, Fold } from '@element-plus/icons-vue'
 import CartDrawer from '@/components/CartDrawer.vue'
 
 const showCartDrawer = ref(false)

@@ -15,7 +15,7 @@
     <el-button a href="http://line.me/ti/p/suika7150" target="_blank">
       <el-icon><ChatDotRound /></el-icon>
     </el-button>
-  </div> -->
+    </div> -->
     <el-button type="primary" circle class="share">
       <el-icon><Share /></el-icon>
     </el-button>
@@ -34,10 +34,6 @@ import { Top, Share, ChatDotRound, ChatLineRound } from '@element-plus/icons-vue
 
 const showTop = ref(false)
 
-const handleScroll = () => {
-  showTop.value = window.scrollY > 600 // 超過 200px 顯示按鈕
-}
-
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -48,6 +44,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
 })
+
+const handleScroll = () => {
+  showTop.value = window.scrollY > 1000 // 超過 200px 顯示按鈕
+}
 </script>
 <style scoped>
 .line {

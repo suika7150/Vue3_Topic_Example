@@ -17,9 +17,6 @@ const navMenu = computed(() => {
 </script>
 
 <template>
-  <!-- 將 BackToTop 移到最外層，不受 overflow 影響 -->
-  <div class="back-to-top"><BackToTop /></div>
-
   <div class="app-wrapper">
     <header>
       <div class="topbar-ad-banner">
@@ -30,18 +27,18 @@ const navMenu = computed(() => {
         <TopBar bannerOn />
       </div>
     </header>
-
     <div class="layout">
-      <div class="el-menu-vertical-demo">
-        <CategorySidebar :categories="navMenu" />
-      </div>
+      <!-- <div class="el-menu-vertical-demo">
+      <CategorySidebar :categories="navMenu" />
+    </div> -->
 
-      <!-- <Breadcrumb /> -->
+      <Breadcrumb />
 
       <div class="content">
         <router-view />
       </div>
     </div>
+    <BackToTop />
     <footer class="footer">
       <BottomFooter />
     </footer>
@@ -49,9 +46,6 @@ const navMenu = computed(() => {
 </template>
 
 <style scoped>
-.back-to-top {
-  z-index: 9999;
-}
 .topbar-ad-banner {
   position: fixed;
   display: flex;
@@ -70,13 +64,12 @@ const navMenu = computed(() => {
   width: 100%;
   height: 70px;
   z-index: 1002;
-  /* margin-top: 60px; */
 }
 
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 40px;
+  min-height: 100vh; /* 確保頁面至少和視窗一樣高 */
   width: 100%; /* 填滿整個瀏覽器寬度 */
   margin: 0; /*自動置中 */
   padding: 0;
@@ -86,56 +79,43 @@ const navMenu = computed(() => {
 
 .layout {
   display: flex;
-  flex: 1; /* 讓 layout 撐滿剩餘高度 */
+  flex: 1; /*移除此行，讓 layout 高度由內容決定，從而讓 window 滾動 */
   width: 100%;
   margin-top: 80px;
   align-items: stretch; /*Sidebar與Content高度一致貼齊 */
   justify-content: stretch; /* Sidebar與Content寬度撐滿 */
   box-sizing: border-box;
+  /* z-index: 1001; */
 }
 
 /* 側邊欄 */
 .el-menu-vertical-demo {
+  display: flex;
   position: sticky;
   top: 0px;
-  /* width: 240px; */
   height: 70px;
   background-color: white;
   box-shadow: 2px 0 5px rgba(245, 240, 240, 0.05);
   transition: all 0.3s;
-  display: flex;
-  /* flex-direction: column; */
   padding: 90px 0 0;
 }
 
 /* 主內容區 */
 .content {
-  /* width: 100%; */
   display: flex;
   flex: 1;
-  /* margin: 30px; */
   padding: 150px;
   background-color: white;
   overflow: hidden;
   box-sizing: border-box; /* 避免 padding 推寬度 */
   flex-direction: column;
   justify-content: stretch;
-  max-width: 1200px; /* 限制最大寬度 (例如 1200px) */
-  margin: 0 auto; /* 設置水平自動邊距置中 */
+  max-width: 1200px; /* 限制最大寬度 */
+  margin: 0 auto; /* 水平自動邊距置中 */
 }
 
 /* Footer 固定在底部 */
 .footer {
   overflow-x: hidden; /* 防止水平滾動條 */
-}
-
-/* 響應式：小於 768px 隱藏側邊欄 */
-@media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
-  }
-  .content {
-    padding: 16px;
-  }
 }
 </style>
