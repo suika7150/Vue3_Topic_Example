@@ -2,9 +2,10 @@
   <div class="carousel-container">
     <!-- 使用 Element Plus 的卡片式輪播 -->
     <el-carousel
+      :key="isMobile"
       :interval="4000"
-      type="card"
-      height="400px"
+      :type="carouselType"
+      :height="carouselHight"
       width="100%"
       indicator-position="outside"
       arrow="hover"
@@ -19,6 +20,8 @@
 </template>
 
 <script setup>
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+
 const adBanners = [
   {
     title: 'Kawasaki車系大特賣',
@@ -56,79 +59,99 @@ const adBanners = [
     link: '/category/life/travel',
   },
 ]
+
+const isMobile = ref(false)
+const MOBILE_WIDTH = 912 // 定義手機模式的臨界寬度
+
+// 檢查當前視窗寬度
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= MOBILE_WIDTH
+}
+// 手機為標準模式 ('')，PC 為卡片模式 ('card')
+const carouselType = computed(() => (isMobile.value ? '' : 'card'))
+
+// 手機 200px，PC 400px
+const carouselHight = computed(() => (isMobile.value ? '200px' : '400px'))
+
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile) //監聽視窗大小變化
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile) //組件銷毀時移除監聽
+})
 </script>
 
 <style scoped>
-.carousel-container {
-  padding: 40px 0;
-}
+/* ... (PC 模式下的通用和特效樣式保持不變) ... */
 
 .ad-link {
   display: block;
   width: 100%;
   height: 100%;
 }
-
 .ad-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 將 cover 改為 contain，確保圖片完整顯示不被裁切 */
-  transition: filter 0.3s ease; /* 讓模糊效果有過渡動畫 */
+  object-fit: cover;
+  transition: filter 0.3s ease;
 }
 
-/*
-  :deep() 選擇器可以穿透 scoped 的限制，
-  讓我們可以選取到 el-carousel 內部的 class
-*/
+/* PC 模式：為卡片加上圓角、陰影 */
 .carousel-container :deep(.el-carousel__item) {
-  /* 讓卡片有圓角和陰影，看起來更立體 */
-  border-radius: 12px;
+  /* border-radius: 12px; */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/*
-  選取「不是」當前啟用狀態的卡片，也就是左右兩側的預覽卡片
-*/
+/* PC 模式：為兩側卡片加上模糊和變暗 */
 .carousel-container :deep(.el-carousel__item:not(.is-active)) {
-  /* 為兩側的卡片加上模糊和變暗的效果 */
   filter: blur(4px) brightness(0.7);
-  transform: scale(0.9); /* 讓兩側卡片稍微小一點 */
+  transform: scale(0.9);
 }
 
+/* ⬇️ RWD 調整：只保留外觀調整，移除核心邏輯覆蓋 */
 @media (max-width: 912px) {
-  /* 1. 調整輪播高度 (使用內聯樣式覆蓋 :height="400px") */
-  .carousel-container :deep(.el-carousel) {
-    height: 200px !important; /* 降低高度 */
-  }
-
-  /* 2. 讓每個卡片佔據 100% 寬度（模擬 default 模式） */
-  /* 這會覆蓋 type="card" 帶來的 width 限制 */
+  /* 確保輪播容器本身沒有任何可能導致間隙的內邊距或外邊距 */
   .carousel-container :deep(.el-carousel__container) {
-    height: 200px !important; /* 確保容器高度一致 */
-  }
-
-  .carousel-container :deep(.el-carousel__item) {
-    /* 由於 type="card" 預設將寬度設為 75%，我們將其覆蓋為 100% */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    /* 確保寬度是 100% */
     width: 100% !important;
-
-    /* 移除兩側卡片特效 */
-    filter: none !important;
-    transform: none !important;
-
-    /* 移除手機上的圓角和陰影，確保邊緣貼合 */
-    border-radius: 0;
-    box-shadow: none;
   }
 
-  /* 3. 移除側邊卡片的模糊效果 (如果它們還在的話) */
-  .carousel-container :deep(.el-carousel__item:not(.is-active)) {
-    filter: none !important;
-    transform: none !important;
+  /* 確保輪播項目本身也沒有左右間距 */
+  .carousel-container :deep(.el-carousel__item) {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    /* 移除手機上的圓角和陰影 (上次的修改保留) */
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
-  /* 4. 調整指示器位置 (可選) */
-  .carousel-container :deep(.el-carousel__indicators) {
-    bottom: 5px; /* 移到底部 */
+  /* 確保輪播項目裡的圖片/連結 (ad-link, ad-image) 也填滿 100% */
+  .ad-link {
+    width: 100% !important;
+    height: 100% !important;
   }
+  .ad-image {
+    width: 100% !important;
+    height: 100% !important;
+    /* 使用 cover 是正確的，但如果看到邊框，也可以嘗試 contain
+           來確認是否是圖片比例問題造成的空隙 */
+    object-fit: cover !important;
+  }
+
+  .ad-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.3s ease;
+  }
+
+  /* ... 保持其他手機樣式不變 (如側邊卡片模糊移除) ... */
 }
 </style>

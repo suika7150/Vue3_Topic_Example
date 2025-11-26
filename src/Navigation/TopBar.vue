@@ -38,34 +38,31 @@ import { useRouter } from 'vue-router'
   align-items: center;
   padding: 10px 0;
   overflow: visible;
-  z-index: 1001;
+  z-index: 1002;
 }
 .menu-bar {
   flex-direction: row;
   position: fixed;
   display: flex;
-  top: 130px;
+  top: 150px;
   left: 0;
   width: 100%;
-  height: 0px;
+  height: 80px;
   background-color: #000000fb;
   justify-content: center;
   align-items: center;
-  padding: 20px 20px;
   overflow: visible;
+  z-index: 1001;
 }
 
 .topbar-main {
   flex-direction: row;
-  height: 100%;
   display: flex;
   align-items: center;
   padding-right: 0px;
   margin-left: 50px;
-  /* margin-top: 20px; */
   flex-shrink: 1;
   min-width: 0;
-  /* overflow: ; */
   justify-content: center;
 }
 
@@ -89,7 +86,6 @@ import { useRouter } from 'vue-router'
   max-height: 100%;
   height: 130px;
   padding: 0px 0px;
-  /* margin-top: 0px; */
 }
 
 .topbar-right {
@@ -99,6 +95,7 @@ import { useRouter } from 'vue-router'
   flex-shrink: 1;
   min-width: 0;
   height: 100%;
+  padding-bottom: 50px;
 }
 
 .dropdown-below {
@@ -123,23 +120,24 @@ import { useRouter } from 'vue-router'
     align-items: center;
     padding: 10px 0;
     overflow: visible;
-    z-index: 1001;
+    z-index: 1002;
   }
 
   .menu-bar {
     flex-direction: row;
     position: fixed;
     display: flex;
-    top: 100px;
+    top: 150px;
     left: 0;
     width: 100%;
     height: 0px;
     background-color: #000000fb;
     justify-content: center;
     align-items: center;
-    padding: 20px 20px;
     overflow: visible;
+    z-index: 1001;
   }
+
   .logo-img {
     display: flex;
     height: 90px;
