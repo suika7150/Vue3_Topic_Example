@@ -129,7 +129,7 @@ const goNews4 = () => goto('/news4')
   color: white;
   border: none;
   padding: 8px 12px; /* 放大按鈕 */
-  font-size: 15px;
+  font-size: 18px;
   cursor: pointer;
   /* gap: 50px; */
 }
