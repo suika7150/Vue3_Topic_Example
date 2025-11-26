@@ -23,7 +23,7 @@ const navMenu = computed(() => {
         <TopBarAdBanner />
       </div>
 
-      <div class="topbar">
+      <div>
         <TopBar bannerOn />
       </div>
     </header>
@@ -52,18 +52,9 @@ const navMenu = computed(() => {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 160px;
+  height: 30px;
   background-color: rgb(19, 204, 170);
   z-index: 1001;
-}
-
-.topbar {
-  position: fixed;
-  top: 30px; /* 根據 Banner 高度調整，避免被蓋住 */
-  left: 0;
-  width: 100%;
-  height: 70px;
-  z-index: 1002;
 }
 
 .app-wrapper {

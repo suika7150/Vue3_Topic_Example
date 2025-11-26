@@ -32,7 +32,7 @@ import { useRouter } from 'vue-router'
   top: 40px;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 110px;
   background-color: #000000fb;
   justify-content: space-between;
   align-items: center;
@@ -89,7 +89,7 @@ import { useRouter } from 'vue-router'
   max-height: 100%;
   height: 130px;
   padding: 0px 0px;
-  margin-top: 30px;
+  /* margin-top: 0px; */
 }
 
 .topbar-right {
@@ -143,7 +143,7 @@ import { useRouter } from 'vue-router'
   .logo-img {
     display: flex;
     height: 90px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
   }
 }
 </style>
