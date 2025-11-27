@@ -19,8 +19,8 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews3">新聞</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">公告</el-dropdown-item>
+          <el-dropdown-item @click="goNews3">動漫聯名</el-dropdown-item>
+          <el-dropdown-item @click="goNews4">電影聯名</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -32,8 +32,8 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu class="center-menu-dropdown">
-          <el-dropdown-item @click="goNews3">新聞</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">公告</el-dropdown-item>
+          <el-dropdown-item @click="goNews3">蘋果</el-dropdown-item>
+          <el-dropdown-item @click="goNews4">三星</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -45,7 +45,7 @@
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews2">新聞2</el-dropdown-item>
+          <el-dropdown-item @click="goNews2">冬季限定</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>

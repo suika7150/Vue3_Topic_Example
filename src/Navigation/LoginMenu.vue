@@ -19,13 +19,14 @@
         <el-menu-item index="1" @click="goNews">最新消息</el-menu-item>
         <el-menu-item index="2" @click="goAbout">關於我們</el-menu-item>
         <el-menu-item index="3" @click="goHome">回首頁</el-menu-item>
-        <el-divider />
+        <!-- <el-divider /> -->
         <el-menu-item index="4" @click="openCartDrawer">購物車</el-menu-item>
         <el-menu-item index="5" @click="goProfile">個人資料維護</el-menu-item>
         <el-menu-item index="6" @click="goSetting">設定</el-menu-item>
         <el-menu-item index="7" divided @click="goLogin">登入</el-menu-item>
         <el-menu-item index="8" divided @click="goRegister">註冊</el-menu-item>
       </el-menu>
+      <!-- <CategorySidebar /> -->
     </el-drawer>
     <CartDrawer v-model:drawerVisible="showCartDrawer" />
 
@@ -94,6 +95,7 @@ import { useNavigation } from '@/composables/useNavigation'
 import SearchInput from './SearchInput.vue'
 import { Setting, User, Fold, UserFilled } from '@element-plus/icons-vue'
 import CartDrawer from '@/components/CartDrawer.vue'
+// import CategorySidebar from './Navigation/CategorySidebar.vue'
 
 const sidebarStore = useSidebarStore()
 const showCartDrawer = ref(false)
@@ -185,7 +187,7 @@ const openCartDrawer = () => {
   border: none; /* 去掉邊框 */
   color: white; /* 文字白色 */
   box-shadow: none; /* 去掉陰影 */
-  padding: 8px 12px; /* 可依 Topbar 調整 */
+  padding: 8px 5px; /* 可依 Topbar 調整 */
 }
 
 .topbar-member-btn.el-button:hover,
@@ -211,7 +213,7 @@ const openCartDrawer = () => {
 }
 .userfilled-icon {
   font-size: 18px;
-  bottom: 2px;
+  /* bottom: 2px; */
 }
 
 .user-menu-container {
@@ -244,6 +246,10 @@ const openCartDrawer = () => {
 .user-menu-container.small .notification-btn {
   padding: 4px 6px;
   font-size: 14px;
+}
+
+.menu-in-drawer {
+  border-right: none;
 }
 
 /* 使用者資訊樣式 */
@@ -315,7 +321,7 @@ const openCartDrawer = () => {
   height: 8px;
   background-color: red; /* 顏色 */
   top: 10px; /* 調整位置 */
-  left: 10px;
+  left: 18px;
   transition: none !important; /* 取消過渡 */
 }
 

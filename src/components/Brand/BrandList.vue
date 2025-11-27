@@ -11,14 +11,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-// 1. 導入 BrandIcon：使用 `./`，因為在同一個 Brand 資料夾內
+//導入 BrandIcon：使用 `./`，因為在同一個 Brand 資料夾內
 import BrandIcon from './BrandIcon.vue'
-
-// 2. 導入 brands 數據：使用 `./`，因為 brands.js 在同一個 Brand 資料夾內
-// 注意：我們假設您是使用 'export const brands' 導出的，所以需要大括號 { brands }
 import { brands } from './brands.js'
 
-// 3. 數據狀態和載入邏輯
+//數據狀態和載入邏輯
 const brandsData = ref([])
 
 onMounted(() => {
