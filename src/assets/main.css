@@ -59,9 +59,6 @@ header {
     width: 180px;
     /* margin: 0px; */
   }
-  .member-text {
-    display: none;
-  }
 
   .hamburger-btn {
     background-color: transparent; /* Element Plus 主色 */

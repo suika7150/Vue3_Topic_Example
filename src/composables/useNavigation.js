@@ -1,9 +1,7 @@
 import { useRouter } from 'vue-router'
-import { useSidebarStore } from '@/store/sidebarStore'
 
 export function useNavigation() {
   const router = useRouter()
-  // const sidebarStore = useSidebarStore()
 
   const goSetting = () => {
     router.push({ name: 'Setting' })
@@ -15,6 +13,10 @@ export function useNavigation() {
 
   const goLogin = () => {
     router.push({ name: 'Login' })
+  }
+
+  const goRegister = () => {
+    router.push({ name: 'Register' })
   }
 
   const goAbout = () => {

@@ -24,15 +24,16 @@
         <el-menu-item index="5" @click="goProfile">個人資料維護</el-menu-item>
         <el-menu-item index="6" @click="goSetting">設定</el-menu-item>
         <el-menu-item index="7" divided @click="goLogin">登入</el-menu-item>
+        <el-menu-item index="8" divided @click="goRegister">註冊</el-menu-item>
       </el-menu>
     </el-drawer>
     <CartDrawer v-model:drawerVisible="showCartDrawer" />
 
     <!-- 未登入時顯示登入按鈕 -->
-    <el-button v-if="!isLogin" class="topbar-member-btn" @click="goLogin"
+    <el-button v-if="!isLogin" class="topbar-member-btn" @click="goLoginFromTopbar"
       ><el-icon class="userfilled-icon"><UserFilled /></el-icon>
 
-      <span class="member-text">會員</span>
+      <span class="member-text"></span>
     </el-button>
 
     <!-- 已登入時 -->
@@ -76,7 +77,7 @@
         </span>
       </div>
 
-      <el-button type="link" class="topbar-member-btn" @click="logout">
+      <el-button type="link" class="topbar-logout-btn" @click="logout">
         <span class="member-text">登出</span>
       </el-button>
     </template>
@@ -114,6 +115,15 @@ const goSetting = () => {
 }
 const goLogin = () => {
   goTo('Login')
+  sidebarStore.toggleCollapse()
+}
+
+const goRegister = () => {
+  goTo('Register')
+  sidebarStore.toggleCollapse()
+}
+const goLoginFromTopbar = () => {
+  goTo('Login')
 }
 const goProfile = () => {
   goTo('Profile')
@@ -129,7 +139,7 @@ const goNews = () => {
 }
 const logout = () => {
   userStore.logout()
-  goHome()
+  goTo('Home')
 }
 
 //模擬通知資料
@@ -185,7 +195,20 @@ const openCartDrawer = () => {
   outline: none;
   box-shadow: none;
 }
-
+.topbar-logout-btn {
+  background-color: transparent; /* 跟 Topbar 融合 */
+  border: none; /* 去掉邊框 */
+  color: white; /* 文字白色 */
+  box-shadow: none; /* 去掉陰影 */
+  padding: 8px 12px; /* 可依 Topbar 調整 */
+}
+.topbar-logout-btn.el-button:hover,
+.topbar-logout-btn.el-button:focus {
+  background-color: rgba(255, 255, 255, 0.1); /*輕微 hover 提示 */
+  color: white; /* 文字維持白色 */
+  outline: none;
+  box-shadow: none;
+}
 .userfilled-icon {
   font-size: 18px;
   bottom: 2px;
