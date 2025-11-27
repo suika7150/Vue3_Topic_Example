@@ -55,26 +55,12 @@ header {
     display: none !important;
   }
 
-  .topbar-member-btn.el-button {
-    background-color: transparent; /* 跟 Topbar 融合 */
-    border: none; /* 去掉邊框 */
-    color: white; /* 文字白色 */
-    box-shadow: none; /* 去掉陰影 */
-    padding: 4px 6px;
-    font-size: 12px;
-  }
-
-  .topbar-member-btn.el-button:hover,
-  .topbar-btn.el-button:focus {
-    background-color: rgba(255, 255, 255, 0.1); /*輕微 hover 提示 */
-    color: white; /* 文字維持白色 */
-    outline: none;
-    box-shadow: none;
-  }
-
   .search-input {
     width: 180px;
-    margin: 0px;
+    /* margin: 0px; */
+  }
+  .member-text {
+    display: none;
   }
 
   .hamburger-btn {

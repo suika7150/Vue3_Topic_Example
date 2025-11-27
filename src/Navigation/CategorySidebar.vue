@@ -1,16 +1,11 @@
 <template>
   <div>
-    <div
-      class="sidebar-wrapper"
-      :class="{ collapsed: isCollapsed }"
-      @mouseenter="isCollapsed = false"
-      @mouseleave="isCollapsed = true"
-    >
+    <div class="sidebar-wrapper" :class="{ collapsed: sidebarStore.isCollapsed }">
       <el-menu
         class="sidebar-menu"
         :default-active="active"
         router
-        :collapse="isCollapsed"
+        :collapse="sidebarStore.isCollapsed"
         :unique-opened="false"
         :collapse-transition="false"
       >
@@ -22,12 +17,11 @@
         />
       </el-menu>
 
-      <!-- 右下小按鈕 -->
-      <!-- <div class="collapse-btn" @click="toggleCollapse">
-      <el-icon>
-        <component :is="isCollapsed ? DArrowRight : DArrowLeft" />
-      </el-icon>
-    </div> -->
+      <div class="collapse-btn" @click="sidebarStore.toggleCollapse">
+        <el-icon>
+          <component :is="sidebarStore.isCollapsed ? DArrowRight : DArrowLeft" />
+        </el-icon>
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +31,9 @@ import { ref, computed } from 'vue'
 import MenuItem from './MenuItem.vue'
 import { useRoute } from 'vue-router'
 import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue' // ⬅️ 必要的 Icon
+import { useSidebarStore } from '@/store/sidebarStore'
+
+const sidebarStore = useSidebarStore()
 
 const props = defineProps({
   categories: {
@@ -97,11 +94,6 @@ const collectOpenKeys = (items) => {
     }
   })
   return keys
-}
-
-const isCollapsed = ref(false)
-const toggleCollapse = () => {
-  isCollapsed.value = !isCollapsed.value
 }
 </script>
 <style scoped>

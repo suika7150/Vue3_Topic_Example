@@ -3,7 +3,7 @@
     <!-- 秋季限定 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn"
-        >活動專區<el-icon><ArrowDown /></el-icon
+        >活動專區<el-icon><CaretBottom /></el-icon
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -15,7 +15,7 @@
     <!-- 更多活動 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn">
-        聯名專區 <el-icon><ArrowDown /></el-icon>
+        聯名專區 <el-icon><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -28,7 +28,7 @@
     <!-- 更多活動 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn">
-        品牌專區 <el-icon><ArrowDown /></el-icon>
+        品牌專區 <el-icon><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu class="center-menu-dropdown">
@@ -41,7 +41,7 @@
     <!-- 雙11大優惠 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn"
-        >季節限定<el-icon><ArrowDown /></el-icon
+        >季節限定<el-icon><CaretBottom /></el-icon
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -53,7 +53,7 @@
     <!-- 更多活動 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn">
-        雙11大優惠 <el-icon><ArrowDown /></el-icon>
+        雙11大優惠 <el-icon><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -66,7 +66,7 @@
     <!-- 更多活動 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn">
-        更多活動 <el-icon><ArrowDown /></el-icon>
+        更多活動 <el-icon><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -79,7 +79,7 @@
     <!-- 更多活動 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn">
-        購物須知 <el-icon><ArrowDown /></el-icon>
+        購物須知 <el-icon><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -92,7 +92,7 @@
     <!-- 更多活動 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn">
-        Q & A <el-icon><ArrowDown /></el-icon>
+        Q & A <el-icon><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -106,7 +106,7 @@
 
 <script setup>
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElIcon } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, CaretBottom } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'
 
 const { goto } = useNavigation()

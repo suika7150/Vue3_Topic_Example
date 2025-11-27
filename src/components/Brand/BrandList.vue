@@ -30,12 +30,10 @@ onMounted(() => {
 /* 樣式保持不變 */
 .brand-list-container {
   width: 100%;
-  padding: 20px;
-  /* background-color: black; */
-  border: 1px solid #eee;
+  /* border: 1px solid #eee; */
   border-radius: 8px;
   margin: 20px auto;
-  max-width: 900px;
+  max-width: 1000px;
 }
 
 h2 {
