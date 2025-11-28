@@ -32,6 +32,8 @@ export function getNavMenu(userRole) {
       subs: [
         { name: '', label: '商品總覽', icon: Cpu },
         { name: 'list', label: '商品管理', icon: Cpu },
+        { name: 'overview', label: '商品總覽', icon: Cpu, route: '/products/overview' },
+        { name: 'list', label: '商品管理', icon: Cpu, route: '/products/list' },
       ],
     },
     {
