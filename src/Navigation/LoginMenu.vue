@@ -1,8 +1,6 @@
 <template>
   <SearchInput />
   <div :class="['user-menu-container']">
-    <!-- 側邊欄 -->
-
     <el-button type="link" class="hamburger-btn" @click="sidebarStore.toggleCollapse">
       <el-icon><Fold /></el-icon>
     </el-button>
@@ -15,25 +13,18 @@
       width="250px"
       size="300px"
     >
-      <el-menu default-active="1" class="menu-in-drawer">
-        <el-menu-item index="1" @click="goNews">最新消息</el-menu-item>
-        <el-menu-item index="2" @click="goAbout">關於我們</el-menu-item>
-        <el-menu-item index="3" @click="goHome">回首頁</el-menu-item>
-        <!-- <el-divider /> -->
-        <el-menu-item index="4" @click="openCartDrawer">購物車</el-menu-item>
-        <el-menu-item index="5" @click="goProfile">個人資料維護</el-menu-item>
-        <el-menu-item index="6" @click="goSetting">設定</el-menu-item>
-        <el-menu-item index="7" divided @click="goLogin">登入</el-menu-item>
-        <el-menu-item index="8" divided @click="goRegister">註冊</el-menu-item>
-      </el-menu>
-      <!-- <CategorySidebar /> -->
+      <SidebarMenu
+        :is-login="isLogin"
+        @navigate="handleNavigate"
+        @navigate-route="handleNavigate"
+        @open-cart="openCartDrawer"
+      />
     </el-drawer>
     <CartDrawer v-model:drawerVisible="showCartDrawer" />
 
     <!-- 未登入時顯示登入按鈕 -->
     <el-button v-if="!isLogin" class="topbar-member-btn" @click="goLoginFromTopbar"
       ><el-icon class="userfilled-icon"><UserFilled /></el-icon>
-
       <span class="member-text"></span>
     </el-button>
 
@@ -95,7 +86,10 @@ import { useNavigation } from '@/composables/useNavigation'
 import SearchInput from './SearchInput.vue'
 import { Setting, User, Fold, UserFilled } from '@element-plus/icons-vue'
 import CartDrawer from '@/components/CartDrawer.vue'
-// import CategorySidebar from './Navigation/CategorySidebar.vue'
+import SidebarMenu from './SidebarMenu.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const sidebarStore = useSidebarStore()
 const showCartDrawer = ref(false)
@@ -106,39 +100,19 @@ const { remainingTime: remaining } = storeToRefs(userStore)
 
 const { goTo } = useNavigation()
 
-const goHome = () => {
-  goTo('Home')
+const handleNavigate = (target) => {
+  if (typeof target === 'string' && target.startsWith('/')) {
+    router.push(target)
+  } else if (typeof target === 'string') {
+    goTo(target)
+  }
   sidebarStore.toggleCollapse()
 }
 
-const goSetting = () => {
-  goTo('Setting')
-  sidebarStore.toggleCollapse()
-}
-const goLogin = () => {
-  goTo('Login')
-  sidebarStore.toggleCollapse()
-}
-
-const goRegister = () => {
-  goTo('Register')
-  sidebarStore.toggleCollapse()
-}
 const goLoginFromTopbar = () => {
   goTo('Login')
 }
-const goProfile = () => {
-  goTo('Profile')
-  sidebarStore.toggleCollapse()
-}
-const goAbout = () => {
-  goTo('About')
-  sidebarStore.toggleCollapse()
-}
-const goNews = () => {
-  goTo('News')
-  sidebarStore.toggleCollapse()
-}
+
 const logout = () => {
   userStore.logout()
   goTo('Home')
@@ -177,7 +151,6 @@ const onDropdownToggle = (visible) => {
 // 打開購物車抽屜
 const openCartDrawer = () => {
   showCartDrawer.value = true
-  sidebarStore.toggleCollapse()
 }
 </script>
 
