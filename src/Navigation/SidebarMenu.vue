@@ -27,26 +27,26 @@
         </template>
 
         <template v-for="sub in category.subs" :key="sub.name">
-          <div class="category-title">
-            <el-menu-item v-if="sub.route" :index="sub.route">
-              <el-icon><component :is="sub.icon" /></el-icon>
-              {{ sub.label }}
-            </el-menu-item>
+          <!-- <div class="category-title"> -->
+          <el-menu-item v-if="sub.route" :index="sub.route">
+            <el-icon><component :is="sub.icon" /></el-icon>
+            {{ sub.label }}
+          </el-menu-item>
 
-            <el-sub-menu
-              v-else-if="sub.subs && sub.subs.length > 0"
-              :index="`${category.name}-${sub.name}`"
-            >
-              <template #title>
-                <el-icon><component :is="sub.icon" /></el-icon>
-                <span>{{ sub.label }}</span>
-              </template>
-              <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.route">
-                <el-icon><component :is="subSub.icon" /></el-icon>
-                {{ subSub.label }}
-              </el-menu-item>
-            </el-sub-menu>
-          </div>
+          <el-sub-menu
+            v-else-if="sub.subs && sub.subs.length > 0"
+            :index="`${category.name}-${sub.name}`"
+          >
+            <template #title>
+              <el-icon><component :is="sub.icon" /></el-icon>
+              <span>{{ sub.label }}</span>
+            </template>
+            <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.route">
+              <el-icon><component :is="subSub.icon" /></el-icon>
+              {{ subSub.label }}
+            </el-menu-item>
+          </el-sub-menu>
+          <!-- </div> -->
         </template>
       </el-sub-menu>
     </template>
