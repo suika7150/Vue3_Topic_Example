@@ -134,7 +134,10 @@ const goNews4 = () => goto('/news4')
   /* gap: 50px; */
 }
 
-.topbar-btn:hover {
+.topbar-btn:hover,
+.topbar-btn:focus {
   background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  outline: none;
 }
 </style>
