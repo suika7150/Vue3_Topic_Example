@@ -1,5 +1,7 @@
 <template>
+  <!-- <div class="searchinput"> -->
   <SearchInput />
+  <!-- </div> -->
   <div :class="['user-menu-container']">
     <el-button type="link" class="hamburger-btn" @click="sidebarStore.toggleCollapse">
       <el-icon><Fold /></el-icon>
@@ -69,7 +71,7 @@
         </span>
       </div>
 
-      <el-button type="link" class="topbar-logout-btn" @click="logout">
+      <el-button class="topbar-logout-btn" @click="logout">
         <span class="member-text">登出</span>
       </el-button>
     </template>
@@ -156,19 +158,22 @@ const openCartDrawer = () => {
 
 <style #scoped>
 .topbar-member-btn.el-button {
-  background-color: transparent; /* 跟 Topbar 融合 */
-  border: none; /* 去掉邊框 */
-  color: white; /* 文字白色 */
-  box-shadow: none; /* 去掉陰影 */
-  padding: 8px 5px; /* 可依 Topbar 調整 */
-}
-
-.topbar-member-btn.el-button:hover,
-.topbar-member-btn.el-button:focus {
-  background-color: rgba(255, 255, 255, 0.1); /*輕微 hover 提示 */
-  color: white; /* 文字維持白色 */
-  outline: none;
+  background-color: transparent; /* Element Plus 主色 */
+  color: white;
+  border-radius: 6px;
+  padding: 8px 8px;
+  margin: 0px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
   box-shadow: none;
+}
+.topbar-member-btn.el-button:hover {
+  color: #70e0eb;
 }
 .topbar-logout-btn {
   background-color: transparent; /* 跟 Topbar 融合 */
@@ -177,12 +182,9 @@ const openCartDrawer = () => {
   box-shadow: none; /* 去掉陰影 */
   padding: 8px 12px; /* 可依 Topbar 調整 */
 }
-.topbar-logout-btn.el-button:hover,
-.topbar-logout-btn.el-button:focus {
-  background-color: rgba(255, 255, 255, 0.1); /*輕微 hover 提示 */
-  color: white; /* 文字維持白色 */
-  outline: none;
-  box-shadow: none;
+.topbar-logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #70e0eb;
 }
 .userfilled-icon {
   font-size: 18px;
@@ -274,7 +276,8 @@ const openCartDrawer = () => {
   cursor: pointer;
   box-shadow: none;
 }
-.notification-btn:hover {
+.notification-btn:hover,
+.notification-btn:focus {
   background-color: rgba(255, 255, 255, 0.1);
   box-shadow: none;
 }

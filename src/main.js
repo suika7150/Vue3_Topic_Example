@@ -12,18 +12,22 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { formatSecondsToHHMMSS } from './utils/format'
 import { getAndCacheOptions } from './utils/optionService'
 import { useUserStore } from './store/userStore'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faBell as fasBell, faUser } from '@fortawesome/free-solid-svg-icons'
+import {
+  faMagnifyingGlass,
+  faBell as fasBell,
+  faUser,
+  faShirt,
+} from '@fortawesome/free-solid-svg-icons'
 import { faBell as farBell } from '@fortawesome/free-regular-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
-
-library.add(faMagnifyingGlass, fasBell, farBell, faUser)
+library.add(faMagnifyingGlass, fasBell, farBell, faUser, faShirt)
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
 app.use(pinia)
+
 // 【新增】全域註冊 Font Awesome 元件
 app.component('font-awesome-icon', FontAwesomeIcon)
 

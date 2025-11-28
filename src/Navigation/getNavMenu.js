@@ -15,6 +15,7 @@ import {
   Van,
   VideoCameraFilled,
 } from '@element-plus/icons-vue'
+import { faShirt } from '@fortawesome/free-solid-svg-icons'
 
 /**
  * 根據使用者角色動態產生導覽選單
@@ -43,6 +44,25 @@ export function getNavMenu(userRole) {
     {
       name: 'life',
       label: '生活',
+      icon: Coffee,
+      clickable: false,
+      subs: [
+        {
+          name: 'travel',
+          label: '旅遊',
+          icon: LocationFilled,
+          clickable: false,
+          subs: [
+            { name: 'usa', label: '美國', icon: Flag, route: '/life/travel/usa' },
+            { name: 'canada', label: '加拿大', icon: Flag, route: '/life/travel/canada' },
+          ],
+        },
+        { name: 'Clean', label: '清潔', icon: Loading, route: '/life/clean' },
+      ],
+    },
+    {
+      name: 'clothing',
+      label: '服飾',
       icon: Coffee,
       clickable: false,
       subs: [

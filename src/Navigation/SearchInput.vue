@@ -71,8 +71,12 @@ const collapseSearch = () => {
 .search-btn {
   background-color: black;
   border: none;
+  padding: 25px;
   width: 32px;
   height: 32px;
   font-size: 16px;
+}
+.search-btn:hover {
+  color: #70e0eb;
 }
 </style>
