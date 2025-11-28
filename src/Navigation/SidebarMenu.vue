@@ -20,28 +20,33 @@
     <template v-for="category in menuData" :key="category.name">
       <el-sub-menu v-if="category.subs && category.subs.length > 0" :index="category.name">
         <template #title>
-          <el-icon><component :is="category.icon" /></el-icon>
-          <span>{{ category.label }}</span>
+          <div class="category-title">
+            <el-icon><component :is="category.icon" /></el-icon>
+            <span>{{ category.label }}</span>
+          </div>
         </template>
-        <template v-for="sub in category.subs" :key="sub.name">
-          <el-menu-item v-if="sub.route" :index="sub.route">
-            <el-icon><component :is="sub.icon" /></el-icon>
-            {{ sub.label }}
-          </el-menu-item>
 
-          <el-sub-menu
-            v-else-if="sub.subs && sub.subs.length > 0"
-            :index="`${category.name}-${sub.name}`"
-          >
-            <template #title>
+        <template v-for="sub in category.subs" :key="sub.name">
+          <div class="category-title">
+            <el-menu-item v-if="sub.route" :index="sub.route">
               <el-icon><component :is="sub.icon" /></el-icon>
-              <span>{{ sub.label }}</span>
-            </template>
-            <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.route">
-              <el-icon><component :is="subSub.icon" /></el-icon>
-              {{ subSub.label }}
+              {{ sub.label }}
             </el-menu-item>
-          </el-sub-menu>
+
+            <el-sub-menu
+              v-else-if="sub.subs && sub.subs.length > 0"
+              :index="`${category.name}-${sub.name}`"
+            >
+              <template #title>
+                <el-icon><component :is="sub.icon" /></el-icon>
+                <span>{{ sub.label }}</span>
+              </template>
+              <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.route">
+                <el-icon><component :is="subSub.icon" /></el-icon>
+                {{ subSub.label }}
+              </el-menu-item>
+            </el-sub-menu>
+          </div>
         </template>
       </el-sub-menu>
     </template>
@@ -108,6 +113,9 @@ const handleMenuSelect = (index) => {
   border-right: none;
 }
 .main-link {
+  font-weight: bold;
+}
+.category-title {
   font-weight: bold;
 }
 </style>
