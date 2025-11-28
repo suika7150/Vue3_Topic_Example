@@ -32,7 +32,3 @@ coverage
 # env
 .env.local
 .env.*.local
-
-# 忽略备份和原始文件
-*.bak
-*.orig
