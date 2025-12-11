@@ -23,7 +23,8 @@
         </el-form-item>
 
         <el-form-item>
-          <el-checkbox v-model="form.rememberMe">記住我</el-checkbox>
+          <el-checkbox v-model="form.rememberAccount">記住我</el-checkbox>
+          <el-checkbox v-model="form.autoLogin">自動登入</el-checkbox>
         </el-form-item>
 
         <el-form-item>
@@ -43,7 +44,7 @@
 import { useNavigation } from '@/composables/useNavigation'
 import api from '@/service/api'
 import { useUserStore } from '@/store/userStore'
-import Storage, { TOKEN_KEY, USER_KEY } from '@/utils/storageUtil'
+import Storage, { TOKEN_KEY, USER_KEY, AUTO_LOGIN_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
 
@@ -52,10 +53,12 @@ const { goTo, goHome } = useNavigation()
 const loginForm = ref()
 const userStore = useUserStore()
 
+// 將所有表單數據合併到一個 form 物件中，並給予更清晰的命名
 const form = ref({
-  username: 'Admin12',
-  password: 'A12345',
-  rememberMe: false,
+  username: '', //初始清空，等待OnMounted填入
+  password: '', //初始清空
+  rememberAccount: false, //記住帳號
+  autoLogin: false, //自動登入
 })
 
 // 改進的驗證規則
@@ -73,18 +76,30 @@ const rules = {
 // 載入記住的帳號
 onMounted(() => {
   //讀取token
-  const token = Storage.get(TOKEN_KEY)
+  let token = Storage.get(TOKEN_KEY)
+
+  if (!token) {
+    token = sessionStorage.getItem(TOKEN_KEY)
+  }
 
   if (token) {
     userStore.login({ username: '' }, { token }) //回寫token
     userStore.startTokenCountdown(token) //標記已登入
+
+    goHome()
+    return
   }
+
+  const isAutoLogin = Storage.get(AUTO_LOGIN_KEY) === 'true'
 
   const rememberedUsername = Storage.get(USER_KEY)
   if (rememberedUsername) {
     form.value.username = rememberedUsername
-    form.value.rememberMe = true
+    form.value.rememberAccount = false //自動勾選'記住帳號'
   }
+
+  //回寫 '自動登入'的勾選狀態
+  form.value.autoLogin = isAutoLogin
 })
 
 const handleLogin = async () => {
@@ -96,7 +111,8 @@ const handleLogin = async () => {
   const loginData = {
     username: form.value.username,
     password: form.value.password,
-    rememberMe: form.value.rememberMe,
+    rememberAccount: form.value.rememberAccount, //伺服器只看autoLogin，為了傳遞完整資訊，將兩個狀態都傳遞
+    autoLogin: form.value.autoLogin,
     isLogin: true,
   }
 
@@ -108,9 +124,27 @@ const handleLogin = async () => {
     userStore.login(loginData, res.result)
     userStore.startTokenCountdown(token)
 
+    //根據勾選狀態儲存本地數據
+
+    // 如果沒勾選，應該使用 sessionStorage 或在登出時移除 Token
+    // 為了保持長期登入和自動登入的區別，沒勾選就用 sessionStorage 存 Token (session級登入)
+    // 如果您的 Storage.set 預設是 localStorage，那這裡可能需要根據您的 Storage 工具調整
+    if (form.value.autoLogin) {
+      // 1. 自動登入 (長期 Token)
+      Storage.set(TOKEN_KEY, token) // 【修正】將 Token 存入 localStorage (長期)
+      sessionStorage.removeItem(TOKEN_KEY) // 確保 sessionStorage 中沒有
+      Storage.set(AUTO_LOGIN_KEY, 'true') // 標記下次需要自動登入
+    } else {
+      // 2. 僅登入 (會話 Token)
+      // 【修正】將 Token 存入 sessionStorage (會話)
+      sessionStorage.setItem(TOKEN_KEY, token)
+      Storage.remove(TOKEN_KEY) // 【修正】確保 localStorage 中的長期 Token 被移除
+      Storage.remove(AUTO_LOGIN_KEY) // 移除自動登入標記
+    }
+
     //存入 localStorage
-    Storage.set(TOKEN_KEY, token)
-    if (form.value.rememberMe) {
+    // Storage.set(TOKEN_KEY, token)
+    if (form.value.rememberAccount) {
       Storage.set(USER_KEY, form.value.username)
     } else {
       Storage.remove(USER_KEY)
