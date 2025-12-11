@@ -29,18 +29,11 @@ export function getNavMenu(userRole) {
       label: '商品相關',
       icon: Monitor,
       clickable: false,
-      roles: ['GUEST', 'USER', 'ADMIN'],
       subs: [
-        // { name: '', label: '商品總覽', icon: Cpu },
-        // { name: 'list', label: '商品管理', icon: Cpu },
+        { name: '', label: '商品總覽', icon: Cpu },
+        { name: 'list', label: '商品管理', icon: Cpu },
         { name: 'overview', label: '商品總覽', icon: Cpu, route: '/products' },
-        {
-          name: 'list',
-          label: '商品管理',
-          icon: Cpu,
-          route: '/products/list',
-          roles: ['ADMIN'],
-        },
+        { name: 'list', label: '商品管理', icon: Cpu, route: '/products/list' },
       ],
     },
     {
@@ -55,7 +48,6 @@ export function getNavMenu(userRole) {
       label: '生活',
       icon: Coffee,
       clickable: false,
-      roles: ['ADMIN'],
       subs: [
         {
           name: 'travel',
@@ -124,10 +116,7 @@ export function getNavMenu(userRole) {
 
   // 如果使用者不是 ADMIN，則移除 'settings' 類別
   if (userRole !== 'ADMIN') {
-    return (
-      categories.filter((category) => category.name !== 'settings'),
-      categories.filter((category) => category.name !== 'products')
-    )
+    return categories.filter((category) => category.name !== 'settings')
   }
   // 如果使用者是User，則僅顯示 'products' 類別
   if (userRole === 'USER') {
@@ -136,9 +125,4 @@ export function getNavMenu(userRole) {
 
   // 如果使用者是 ADMIN，則返回完整的選單
   return categories
-  // .filter((category) => !category.roles || category.roles.includes(userRole))
-  // .map((category) => ({
-  //   ...category,
-  //   subs: category.subs?.filter((sub) => !sub.roles || sub.roles.includes(userRole)),
-  // }))
 }
