@@ -23,7 +23,8 @@
         </el-form-item>
 
         <el-form-item>
-          <el-checkbox v-model="form.rememberMe">記住我</el-checkbox>
+          <el-checkbox v-model="form.rememberUsername">記住帳號</el-checkbox>
+          <el-checkbox v-model="form.rememberMe">保持登入</el-checkbox>
         </el-form-item>
 
         <el-form-item>
@@ -56,6 +57,7 @@ const form = ref({
   username: 'Admin12',
   password: 'A12345',
   rememberMe: false,
+  rememberUsername: false,
 })
 
 // 改進的驗證規則
@@ -81,9 +83,9 @@ onMounted(() => {
   }
 
   const rememberedUsername = Storage.get(USER_KEY)
-  if (rememberedUsername) {
+  if (rememberedUsername === true) {
     form.value.username = rememberedUsername
-    form.value.rememberMe = true
+    form.value.rememberMe = false
   }
 })
 
@@ -163,6 +165,11 @@ const handleRegister = () => {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.login-btn {
+  width: 100%;
+  margin-right: 50px;
 }
 
 .login-links {
