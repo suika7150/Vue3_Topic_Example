@@ -61,7 +61,7 @@ import { ElDivider } from 'element-plus' // 引入 ElDivider
 
 const userStore = useUserStore()
 const isLogin = computed(() => !!userStore.user?.isLogin)
-const userRole = computed(() => userStore.user?.role || 'GUEST') // 假設使用者角色存在
+const userRole = computed(() => userStore.role || 'GUEST') // 假設使用者角色存在
 
 // 獲取動態選單資料
 const menuData = computed(() => getNavMenu(userRole.value))
@@ -105,7 +105,9 @@ const handleMenuSelect = (index) => {
       }
       break
   }
+  console.log('現在的 userRole 是：', userRole.value)
 }
+console.log('現在的 userRole 是：', userRole.value)
 </script>
 
 <style scoped>

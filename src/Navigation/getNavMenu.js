@@ -30,8 +30,8 @@ export function getNavMenu(userRole) {
       icon: Monitor,
       clickable: false,
       subs: [
-        { name: '', label: '商品總覽', icon: Cpu },
-        { name: 'list', label: '商品管理', icon: Cpu },
+        // { name: '', label: '商品總覽', icon: Cpu },
+        // { name: 'list', label: '商品管理', icon: Cpu },
         { name: 'overview', label: '商品總覽', icon: Cpu, route: '/products' },
         { name: 'list', label: '商品管理', icon: Cpu, route: '/products/list' },
       ],
@@ -114,15 +114,26 @@ export function getNavMenu(userRole) {
     },
   ]
 
-  // 如果使用者不是 ADMIN，則移除 'settings' 類別
-  if (userRole !== 'ADMIN') {
-    return categories.filter((category) => category.name !== 'settings')
-  }
-  // 如果使用者是User，則僅顯示 'products' 類別
+  // 如果使用者是USER，則僅顯示 'products' 類別
   if (userRole === 'USER') {
     return categories.filter((category) => category.name === 'products')
   }
 
-  // 如果使用者是 ADMIN，則返回完整的選單
-  return categories
+  // 如果使用者是 GUEST ， 移除商品管理、管理相關
+  if (userRole === 'GUEST') {
+    return categories
+      .map((category) => {
+        if (category.name === 'products') {
+          return {
+            ...category,
+            subs: category.subs.filter((sub) => sub.name !== 'list'), //移除商品管理
+          }
+        }
+        if (category.name === 'settings') {
+          return null //移除管理相關
+        }
+        return category
+      })
+      .filter(Boolean)
+  }
 }
