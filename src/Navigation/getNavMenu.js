@@ -114,9 +114,9 @@ export function getNavMenu(userRole) {
     },
   ]
 
-  // 如果使用者是USER，則僅顯示 'products' 類別
+  // 如果使用者是USER，開放全部功能
   if (userRole === 'USER') {
-    return categories.filter((category) => category.name === 'products')
+    return categories
   }
 
   // 如果使用者是 GUEST ， 移除商品管理、管理相關
