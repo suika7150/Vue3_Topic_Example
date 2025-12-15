@@ -54,8 +54,8 @@ const loginForm = ref()
 const userStore = useUserStore()
 
 const form = ref({
-  username: 'Admin12',
-  password: 'A12345',
+  username: '',
+  password: '',
   rememberMe: false,
   rememberUsername: false,
 })
@@ -75,17 +75,17 @@ const rules = {
 // 載入記住的帳號
 onMounted(() => {
   //讀取token
-  const token = Storage.get(TOKEN_KEY)
-
-  if (token) {
-    userStore.login({ username: '' }, { token }) //回寫token
-    userStore.startTokenCountdown(token) //標記已登入
+  const rememberUsername = Storage.get(USER_KEY)
+  if (rememberUsername) {
+    form.value.username = rememberUsername
+    form.value.rememberUsername = true
   }
 
-  const rememberedUsername = Storage.get(USER_KEY)
-  if (rememberedUsername === true) {
-    form.value.username = rememberedUsername
-    form.value.rememberMe = false
+  const token = Storage.get(TOKEN_KEY)
+  if (token) {
+    userStore.login({ username: rememberUsername }, { token }) //回寫token
+    userStore.startTokenCountdown(token) //標記已登入
+    goHome()
   }
 })
 
@@ -112,7 +112,9 @@ const handleLogin = async () => {
 
     //存入 localStorage
     Storage.set(TOKEN_KEY, token)
-    if (form.value.rememberMe) {
+
+    //記住帳號
+    if (form.value.rememberUsername) {
       Storage.set(USER_KEY, form.value.username)
     } else {
       Storage.remove(USER_KEY)
