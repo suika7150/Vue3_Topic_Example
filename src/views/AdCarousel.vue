@@ -70,8 +70,8 @@ const checkMobile = () => {
 // 手機為標準模式 ('')，PC 為卡片模式 ('card')
 const carouselType = computed(() => (isMobile.value ? '' : 'card'))
 
-// 手機 200px，PC 400px
-const carouselHight = computed(() => (isMobile.value ? '200px' : '400px'))
+// 手機 & PC 高度
+const carouselHight = computed(() => (isMobile.value ? '215px' : '400px'))
 
 onMounted(() => {
   checkMobile()

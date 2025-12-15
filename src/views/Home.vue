@@ -25,7 +25,6 @@ import ProductList from '@/views/products/ProductList.vue'
   position: relative;
   left: 50%;
   transform: translateX(-50%); /* 2. 將其水平置中 */
-  margin-bottom: 50px; /* 3. 和下方商品列表的間距 */
 }
 
 brand-list {
@@ -40,7 +39,6 @@ brand-list {
     position: relative;
     left: 50%;
     transform: translateX(-50%); /* 2. 將其水平置中 */
-    margin-bottom: 50px; /* 3. 和下方商品列表的間距 */
   }
 }
 </style>
