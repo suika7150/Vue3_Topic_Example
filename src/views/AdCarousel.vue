@@ -45,7 +45,7 @@ const adBanners = [
   },
   {
     title: '飲食大放送',
-    image: './Banner/food.jpg',
+    image: './Banner/DoubleEleven.jpg',
     link: '/category/life/food',
   },
   {

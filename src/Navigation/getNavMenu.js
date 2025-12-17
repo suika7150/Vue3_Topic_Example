@@ -44,8 +44,8 @@ export function getNavMenu(userRole) {
       subs: [{ name: 'options', label: '選項管理', icon: Cpu }],
     },
     {
-      name: 'life',
-      label: '生活',
+      name: 'event',
+      label: '活動專區',
       icon: Coffee,
       clickable: false,
       subs: [
@@ -63,8 +63,8 @@ export function getNavMenu(userRole) {
       ],
     },
     {
-      name: 'clothing',
-      label: '服飾',
+      name: 'Crossover',
+      label: '聯名專區',
       icon: Coffee,
       clickable: false,
       subs: [
@@ -82,8 +82,8 @@ export function getNavMenu(userRole) {
       ],
     },
     {
-      name: 'food',
-      label: '美食',
+      name: 'Brand',
+      label: '品牌專區',
       icon: Food,
       clickable: false,
       subs: [
@@ -93,8 +93,8 @@ export function getNavMenu(userRole) {
       ],
     },
     {
-      name: 'vehicles',
-      label: '汽車',
+      name: 'Seasonal',
+      label: '季節限定',
       icon: Van,
       clickable: false,
       subs: [
@@ -103,8 +103,8 @@ export function getNavMenu(userRole) {
       ],
     },
     {
-      name: 'entertainment',
-      label: '娛樂',
+      name: 'DoubleEleven',
+      label: '雙11大優惠',
       icon: Odometer,
       clickable: false,
       subs: [
