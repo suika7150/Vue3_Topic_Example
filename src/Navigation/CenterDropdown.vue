@@ -77,17 +77,9 @@
     </el-dropdown>
 
     <!-- 更多活動 -->
-    <el-dropdown trigger="hover">
-      <el-button class="topbar-btn">
-        購物須知 <el-icon><CaretBottom /></el-icon>
-      </el-button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="goNews3">新聞</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">公告</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+    <div class="hover">
+      <el-button class="topbar-btn" @click="goShoppingGuide"> 購物須知 </el-button>
+    </div>
 
     <!-- 更多活動 -->
     <el-dropdown trigger="hover">
@@ -109,7 +101,7 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElIcon } from 'el
 import { ArrowDown, CaretBottom } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'
 
-const { goto } = useNavigation()
+const { goto, goShoppingGuide } = useNavigation()
 const goNews1 = () => goto('/news1')
 const goNews2 = () => goto('/news2')
 const goNews3 = () => goto('/news3')

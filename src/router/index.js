@@ -15,6 +15,11 @@ const routes = [
   { path: '/News', name: 'News', component: () => import('@/views/News.vue') },
   { path: '/setting', name: 'Setting', component: () => import('@/views/Setting.vue') },
   {
+    path: '/shoppingguide',
+    name: 'ShoppingGuide',
+    component: () => import('@/views/ShoppingGuide.vue'),
+  },
+  {
     path: '/profile',
     name: 'Profile',
     component: () => import('@/views/users/Profile.vue'),
