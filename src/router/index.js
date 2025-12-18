@@ -52,7 +52,7 @@ const routes = [
   // {
   //   path: '/product/:id',
   //   name: 'ProductDetail',
-  //   component: () => import('@/views/products/ProductDetailView.vue'), // 請確認路徑正確
+  //   component: () => import('@/views/products/ProductDetailView.vue'), // 開發中
   // },
   {
     path: '/settings/options',
@@ -154,7 +154,8 @@ const router = createRouter({
     }
   },
 })
-// ✅ 加入全域導航守衛：權限驗證
+
+// 權限驗證
 router.beforeEach((to, from, next) => {
   // 檢查是否已登入
   const isLoggedIn = !!Storage.get(TOKEN_KEY)

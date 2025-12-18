@@ -1,7 +1,5 @@
-<!-- src/views/Login.vue -->
+<!-- 帳號:Admin12 // 密碼:A12345 -->
 <template>
-  <!-- 帳號:Admin12 // 密碼:A12345 -->
-
   <div class="login-container">
     <el-card class="login-card">
       <h2 class="title">會員登入</h2>
@@ -60,7 +58,7 @@ const form = ref({
   rememberUsername: false,
 })
 
-// 改進的驗證規則
+// 驗證規則
 const rules = {
   username: [
     { required: true, message: '請輸入帳號或Email', trigger: 'blur' },
@@ -106,7 +104,7 @@ const handleLogin = async () => {
   if (res.code === '0000') {
     const { token } = res.result
 
-    //存入Pinia
+    //存入 Pinia
     userStore.login(loginData, res.result)
     userStore.startTokenCountdown(token)
 
@@ -145,7 +143,6 @@ const handleRegister = () => {
   min-height: 110vh;
   background: linear-gradient(135deg, #0c0c0c 100%, #8183ad 100%);
   padding: 20px;
-  /* margin-left: 50px; */
 }
 
 .login-card {
@@ -189,11 +186,10 @@ const handleRegister = () => {
   font-size: 16px;
   height: 44px;
   border-radius: 8px;
-  background-color: black; /* 跟 Topbar 融合 */
-  /* border: none; 去掉邊框 */
+  background-color: black;
   color: white;
-  box-shadow: none; /* 去掉陰影 */
-  padding: 8px 12px; /* 可依 Topbar 調整 */
+  box-shadow: none; /* 去陰影 */
+  padding: 8px 12px; /* 依 Topbar 調整 */
 }
 
 .el-input :deep(.el-input__inner) {
@@ -201,13 +197,13 @@ const handleRegister = () => {
   border-radius: 8px;
 }
 
-/* --- :deep() 選擇器，專門修改此頁面的 el-checkbox 樣式 --- */
+/* --- :deep() 選擇器，修改 el-checkbox 樣式 --- */
 .login-container :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
-  background-color: #1bbfce; /* 您想要的勾選後背景色 */
-  border-color: #1bbfce; /* 您想要的勾選後邊框色 */
+  background-color: #1bbfce;
+  border-color: #1bbfce;
 }
 
 .login-container :deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
-  color: #1bbfce; /* 您想要的勾選後文字顏色 */
+  color: #1bbfce;
 }
 </style>
