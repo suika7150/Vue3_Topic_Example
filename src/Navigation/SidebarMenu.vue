@@ -4,7 +4,7 @@
     <el-menu-item index="about" class="main-link">關於我們</el-menu-item>
     <el-menu-item index="home" class="main-link">回首頁</el-menu-item>
     <el-menu-item index="guide" class="main-link">購物須知</el-menu-item>
-    <el-menu-item index="home" class="main-link">Q & A</el-menu-item>
+    <el-menu-item index="home" class="main-link">常見問題 Q&A</el-menu-item>
 
     <el-divider />
 

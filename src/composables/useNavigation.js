@@ -29,6 +29,10 @@ export function useNavigation() {
     router.push({ name: 'ShoppingGuide' })
   }
 
+  const goQA = () => {
+    router.push({ name: 'QA' })
+  }
+
   const goTo = (name, params = {}, query = {}) => {
     router.push({ name, params, query })
   }
@@ -50,5 +54,6 @@ export function useNavigation() {
     replaceTo,
     goBack,
     goShoppingGuide,
+    goQA,
   }
 }

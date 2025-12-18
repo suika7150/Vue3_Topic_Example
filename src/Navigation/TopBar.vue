@@ -44,7 +44,7 @@ import { useRouter } from 'vue-router'
   flex-direction: row;
   position: fixed;
   display: flex;
-  top: 165px;
+  top: 140px;
   left: 0;
   width: 100%;
   height: 80px;
