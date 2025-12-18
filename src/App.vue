@@ -1,13 +1,11 @@
 <script setup>
 import BottomFooter from './Navigation/BottomFooter.vue'
-import CategorySidebar from './Navigation/CategorySidebar.vue'
 import TopBar from './Navigation/TopBar.vue'
 import { computed } from 'vue'
 import { getNavMenu } from './Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
 import TopBarAdBanner from './Navigation/TopBarAdBanner.vue'
 import BackToTop from './Navigation/BackToTop.vue'
-import { useRoute } from 'vue-router'
 
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userRole)
@@ -28,10 +26,6 @@ const navMenu = computed(() => {
       </div>
     </header>
     <div class="layout">
-      <!-- <div class="el-menu-vertical-demo">
-        <CategorySidebar :categories="navMenu" />
-      </div> -->
-
       <Breadcrumb />
 
       <div class="content">
@@ -60,11 +54,11 @@ const navMenu = computed(() => {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* 確保頁面至少和視窗一樣高 */
-  width: 100%; /* 填滿整個瀏覽器寬度 */
-  margin: 0; /*自動置中 */
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
   padding: 0;
-  overflow-x: hidden; /* 防止水平滾動條 */
+  overflow-x: hidden;
   box-sizing: border-box;
 }
 
@@ -100,11 +94,11 @@ const navMenu = computed(() => {
   box-sizing: border-box; /* 避免 padding 推寬度 */
   flex-direction: column;
   justify-content: stretch;
-  max-width: 1200px; /* 限制最大寬度 */
+  max-width: 1440px;
   margin: 0 auto; /* 水平自動邊距置中 */
 }
 
-/* Footer 固定在底部 */
+/* Footer */
 .footer {
   overflow-x: hidden; /* 防止水平滾動條 */
 }

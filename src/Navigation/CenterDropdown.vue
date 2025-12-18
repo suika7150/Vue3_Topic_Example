@@ -78,7 +78,7 @@
 
     <!-- 更多活動 -->
     <div class="hover">
-      <el-button class="topbar-btn" @click="goShoppingGuide"> 購物須知 </el-button>
+      <el-button class="topbar-btn" @click="goShoppingGuide"> 購買須知 </el-button>
     </div>
 
     <!-- 更多活動 -->
@@ -104,7 +104,7 @@ const goNews4 = () => goto('/news4')
 .topbar-dropdowns {
   display: flex;
   gap: 15px; /* 按鈕間距 */
-  margin-left: 40px;
+  margin: 20px 0 0 40px;
   flex-wrap: wrap; /* 允許換行 */
 }
 
@@ -115,7 +115,6 @@ const goNews4 = () => goto('/news4')
   padding: 8px 12px; /* 放大按鈕 */
   font-size: 18px;
   cursor: pointer;
-  /* gap: 50px; */
 }
 
 .topbar-btn:hover,

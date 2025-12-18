@@ -3,8 +3,8 @@
     <el-menu-item index="news" class="main-link">最新消息</el-menu-item>
     <el-menu-item index="about" class="main-link">關於我們</el-menu-item>
     <el-menu-item index="home" class="main-link">回首頁</el-menu-item>
-    <el-menu-item index="guide" class="main-link">購物須知</el-menu-item>
-    <el-menu-item index="home" class="main-link">常見問題 Q&A</el-menu-item>
+    <el-menu-item index="guide" class="main-link">購買須知</el-menu-item>
+    <el-menu-item index="qa" class="main-link">常見問題 Q&A</el-menu-item>
 
     <el-divider />
 
@@ -79,6 +79,9 @@ const handleMenuSelect = (index) => {
       break
     case 'guide':
       emit('navigate', 'ShoppingGuide')
+      break
+    case 'qa':
+      emit('navigate', 'QA')
       break
     case 'news':
       emit('navigate', 'News')

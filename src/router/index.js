@@ -8,7 +8,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('@/views/users/Login.vue'),
-    meta: { CategorySidebar: true },
   },
   { path: '/register', name: 'Register', component: () => import('@/views/users/Register.vue') },
   { path: '/about', name: 'About', component: () => import('@/views/About.vue') },

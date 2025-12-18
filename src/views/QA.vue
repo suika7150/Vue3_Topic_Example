@@ -40,6 +40,10 @@
             請至「個人資料維護」>「訂單查詢」中點選該筆訂單申請退貨，我們將派車前往取件，運費由本公司負擔。
           </div>
         </el-collapse-item>
+        <el-collapse-item title="Q5: 忘記密碼怎麼辦?" name="5">
+          <
+          <div>請至登入頁面點選「忘記密碼」，系統將發送重設郵件至您的註冊信箱。</div>
+        </el-collapse-item>
       </el-collapse>
 
       <div class="support-footer">
@@ -67,6 +71,7 @@ const activeNames = ref(['1']) // 預設展開第一個
   margin: 0;
   display: flex;
   align-items: center;
+  width: 800px;
   gap: 10px;
 }
 .support-footer {
