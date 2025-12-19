@@ -28,7 +28,7 @@ pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
 app.use(pinia)
 
-// 【新增】全域註冊 Font Awesome 元件
+//Font Awesome 元件
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 const userStore = useUserStore()

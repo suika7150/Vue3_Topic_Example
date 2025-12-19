@@ -49,10 +49,11 @@ const routes = [
     name: 'EditProduct',
     component: () => import('@/views/products/EditProduct.vue'),
   },
+  // 開發中
   // {
   //   path: '/product/:id',
   //   name: 'ProductDetail',
-  //   component: () => import('@/views/products/ProductDetailView.vue'), // 開發中
+  //   component: () => import('@/views/products/ProductDetailView.vue'),
   // },
   {
     path: '/settings/options',
@@ -155,7 +156,7 @@ const router = createRouter({
   },
 })
 
-// 權限驗證
+// 路由守衛，權限驗證
 router.beforeEach((to, from, next) => {
   // 檢查是否已登入
   const isLoggedIn = !!Storage.get(TOKEN_KEY)

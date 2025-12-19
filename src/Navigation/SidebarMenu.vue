@@ -59,16 +59,15 @@
 import { computed } from 'vue'
 import { getNavMenu } from '@/Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
-import { ElDivider } from 'element-plus' // 引入 ElDivider
+import { ElDivider } from 'element-plus'
 
 const userStore = useUserStore()
 const isLogin = computed(() => !!userStore.user?.isLogin)
-const userRole = computed(() => userStore.role || 'GUEST') // 假設使用者角色存在
+const userRole = computed(() => userStore.role || 'GUEST')
 
 // 獲取動態選單資料
 const menuData = computed(() => getNavMenu(userRole.value))
 
-// 🚨 這裡需要定義一個事件，讓父元件 (LoginMenu.vue) 知道點擊了哪個選項
 const emit = defineEmits(['navigate', 'open-cart'])
 
 const handleMenuSelect = (index) => {
@@ -90,7 +89,7 @@ const handleMenuSelect = (index) => {
       emit('navigate', 'About')
       break
     case 'cart':
-      emit('open-cart') // 觸發打開購物車的事件
+      emit('open-cart') // 觸發購物車
       break
     case 'profile':
       emit('navigate', 'Profile')
@@ -107,8 +106,6 @@ const handleMenuSelect = (index) => {
     default:
       // 處理動態路由，index 就是 route 路徑 (例如 '/food/drinks')
       if (index.startsWith('/')) {
-        // 這裡假設所有動態選單都是路由，需要使用 $router.push
-        // 但為了保持元件的單純性，我們也透過事件傳遞
         emit('navigate-route', index)
       }
       break
