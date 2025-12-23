@@ -1,5 +1,7 @@
 <template>
   <div class="home-container">
+    <AdModal />
+
     <!-- 圖片輪播 -->
     <div class="carousel-section">
       <AdCarousel />
@@ -20,6 +22,7 @@
 import BrandList from '@/components/Brand/BrandList.vue'
 import AdCarousel from '@/views/AdCarousel.vue'
 import ProductList from '@/views/products/ProductList.vue'
+import AdModal from '@/components/AdModal.vue'
 </script>
 <style scoped>
 .carousel-section {
