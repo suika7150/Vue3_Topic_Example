@@ -58,14 +58,26 @@ onMounted(() => {
 }
 
 .close-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  top: -40px;
-  right: 0;
+  top: -10px;
+  right: -10px;
+  width: 42px;
+  height: 42px;
   background: transparent;
+  background-color: rgba(0, 0, 0, 1);
   border: none;
+  border-radius: 50%;
   color: white;
-  font-size: 30px;
+  font-size: 50px;
   cursor: pointer;
+}
+
+.close-btn:hover {
+  transform: scale(1.2);
+  background-color: black;
 }
 
 /* 進入與離開的動畫 */
