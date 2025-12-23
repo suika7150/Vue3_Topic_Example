@@ -3,9 +3,9 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <h2>
-            <el-icon><ShoppingBag /></el-icon> 購物須知
-          </h2>
+          <h1>
+            <el-icon><ShoppingBag /></el-icon> 購買須知
+          </h1>
         </div>
       </template>
 
@@ -43,9 +43,15 @@ import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
 
 <style scoped>
 .page-container {
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 1440px;
+  margin: 50 80px;
+}
+.card-header {
+  margin-left: 400px;
+}
+.box-card {
+  border-radius: 12px;
+  border: 1px solid #ebeef5;
 }
 .steps-box {
   margin: 40px 0;
@@ -57,6 +63,7 @@ import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
   color: #409eff;
 }
 .info-list {
+  margin-left: 20px;
   line-height: 2;
   color: #606266;
 }

@@ -72,9 +72,8 @@
       </el-col>
     </el-row>
 
-    <!-- 載入更多指示器 -->
     <div class="load-more-container">
-      <!-- 方案一：使用旋轉圖示 -->
+      <!-- 旋轉圖示 -->
       <div v-if="isLoadMoreLoading" class="loading-indicator">
         <el-icon class="is-loading"><Loading /></el-icon>
         <span>載入中...</span>
@@ -109,7 +108,7 @@
 
 <script setup>
 import CartDrawer from '@/components/CartDrawer.vue'
-import api from '@/service/api' // 引入 Loading 圖示
+import api from '@/service/api'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
@@ -125,7 +124,7 @@ const selectedCategory = ref('')
 const isLoading = ref(true)
 const loadMoreCount = 4
 const visibleCount = ref(loadMoreCount)
-const isLoadMoreLoading = ref(false) // 新增：追蹤載入更多的狀態
+const isLoadMoreLoading = ref(false)
 const dialogVisible = ref(false)
 const drawerVisible = ref(false)
 const currentProduct = ref({})
@@ -220,7 +219,6 @@ const openCartDrawer = () => {
 </script>
 
 <style scoped>
-/* Container & Layout */
 .product-list-container {
   max-width: 1200px;
 }
@@ -229,7 +227,6 @@ const openCartDrawer = () => {
   margin-bottom: 50px;
 }
 
-/* Header */
 .product-list-header {
   display: flex;
   justify-content: space-between;
@@ -257,7 +254,6 @@ const openCartDrawer = () => {
   padding: 0px;
 }
 
-/* Product Card */
 .card-image-wrapper {
   position: relative;
   width: 100%;
@@ -306,7 +302,6 @@ const openCartDrawer = () => {
   width: 100%;
 }
 
-/* Load More Button */
 .load-more-container {
   padding: 20px 0;
   text-align: center;
@@ -320,7 +315,6 @@ const openCartDrawer = () => {
   font-size: 14px;
 }
 
-/* Product Detail Dialog */
 .product-detail-dialog {
   display: flex;
   flex-direction: column;

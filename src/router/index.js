@@ -8,7 +8,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('@/views/users/Login.vue'),
-    meta: { CategorySidebar: true },
   },
   { path: '/register', name: 'Register', component: () => import('@/views/users/Register.vue') },
   { path: '/about', name: 'About', component: () => import('@/views/About.vue') },
@@ -18,6 +17,11 @@ const routes = [
     path: '/shoppingguide',
     name: 'ShoppingGuide',
     component: () => import('@/views/ShoppingGuide.vue'),
+  },
+  {
+    path: '/qa',
+    name: 'QA',
+    component: () => import('@/views/QA.vue'),
   },
   {
     path: '/profile',
@@ -45,10 +49,11 @@ const routes = [
     name: 'EditProduct',
     component: () => import('@/views/products/EditProduct.vue'),
   },
+  // 開發中
   // {
   //   path: '/product/:id',
   //   name: 'ProductDetail',
-  //   component: () => import('@/views/products/ProductDetailView.vue'), // 請確認路徑正確
+  //   component: () => import('@/views/products/ProductDetailView.vue'),
   // },
   {
     path: '/settings/options',
@@ -150,7 +155,8 @@ const router = createRouter({
     }
   },
 })
-// ✅ 加入全域導航守衛：權限驗證
+
+// 路由守衛，權限驗證
 router.beforeEach((to, from, next) => {
   // 檢查是否已登入
   const isLoggedIn = !!Storage.get(TOKEN_KEY)

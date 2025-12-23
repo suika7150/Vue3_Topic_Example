@@ -1,83 +1,85 @@
 <template>
-  <el-drawer
-    :model-value="drawerVisible"
-    @update:model-value="emit('update:drawerVisible', $event)"
-    title="🛒 購物車內容"
-    :size="'35%'"
-    @close="handleClose"
-  >
-    <div v-if="cart.length" class="cart-content">
-      <el-table :data="cart" style="width: 100%">
-        <el-table-column label="操作" width="60">
-          <template #default="scope">
-            <el-button
-              type="danger"
-              :icon="Delete"
-              circle
-              plain
-              size="small"
-              @click="removeItem(scope.row.id)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column label="商品" width="80">
-          <template #default="scope">
-            <el-image
-              :src="scope.row.imageBase64"
-              style="width: 50px; height: 50px; border-radius: 4px"
-              fit="cover"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column label="名稱" min-width="80" max-width="150">
-          <template #default="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="價格" width="80">
-          <template #default="scope">
-            <span class="cart-price">${{ scope.row.price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="數量" width="132">
-          <template #default="scope">
-            <el-input-number
-              v-model="scope.row.quantity"
-              :min="1"
-              size="small"
-              @change="(e) => handleQuantityChange(e, scope.row)"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column label="小計" width="80">
-          <template #default="scope">
-            <span class="cart-price">${{ scope.row.price * scope.row.quantity }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <el-empty v-else description="購物車目前是空的" />
-
-    <template #footer>
-      <div class="cart-footer">
-        <div class="cart-total-row">
-          <p class="cart-total-label">總計:</p>
-          <p class="cart-total-amount">${{ cartStore.totalPrice }}</p>
-        </div>
-
-        <el-button
-          type="primary"
-          class="cart-checkout-btn"
-          size="large"
-          :disabled="!cart.length"
-          @click="handleCheckout"
-        >
-          <el-icon class="cart-checkout-icon"><ShoppingCart /></el-icon>
-          前往結帳 ({{ cartStore.totalQuantity }} 件商品)
-        </el-button>
+  <div class="cart-container">
+    <el-drawer
+      :model-value="drawerVisible"
+      @update:model-value="emit('update:drawerVisible', $event)"
+      title="🛒 購物車內容"
+      :size="'40%'"
+      @close="handleClose"
+    >
+      <div v-if="cart.length" class="cart-content">
+        <el-table :data="cart" style="width: 100%">
+          <el-table-column label="操作" width="60">
+            <template #default="scope">
+              <el-button
+                type="danger"
+                :icon="Delete"
+                circle
+                plain
+                size="small"
+                @click="removeItem(scope.row.id)"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="商品" width="80">
+            <template #default="scope">
+              <el-image
+                :src="scope.row.imageBase64"
+                style="width: 50px; height: 50px; border-radius: 4px"
+                fit="cover"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="名稱" min-width="80" max-width="150">
+            <template #default="scope">
+              <span>{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="價格" width="80">
+            <template #default="scope">
+              <span class="cart-price">${{ scope.row.price }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="數量" width="132">
+            <template #default="scope">
+              <el-input-number
+                v-model="scope.row.quantity"
+                :min="1"
+                size="small"
+                @change="(e) => handleQuantityChange(e, scope.row)"
+              />
+            </template>
+          </el-table-column>
+          <!-- <el-table-column label="小計" width="80">
+            <template #default="scope">
+              <span class="cart-price">${{ scope.row.price * scope.row.quantity }}</span>
+            </template>
+          </el-table-column> -->
+        </el-table>
       </div>
-    </template>
-  </el-drawer>
+      <el-empty v-else description="購物車目前是空的" />
+
+      <template #footer>
+        <div class="cart-footer">
+          <div class="cart-total-row">
+            <p class="cart-total-label">總計:</p>
+            <p class="cart-total-amount">${{ cartStore.totalPrice }}</p>
+          </div>
+
+          <el-button
+            type="primary"
+            class="cart-checkout-btn"
+            size="large"
+            :disabled="!cart.length"
+            @click="handleCheckout"
+          >
+            <el-icon class="cart-checkout-icon"><ShoppingCart /></el-icon>
+            前往結帳 ({{ cartStore.totalQuantity }} 件商品)
+          </el-button>
+        </div>
+      </template>
+    </el-drawer>
+  </div>
 </template>
 
 <script setup>
@@ -165,9 +167,15 @@ const removeItem = (productId) => {
 </script>
 
 <style scoped>
+.cart-container {
+  /* width: px; */
+  /* margin-right: 50px; */
+}
 .cart-content {
   flex-grow: 1;
   overflow-y: auto;
+  /* width: 500px; */
+  margin: 0px;
 }
 
 .cart-price {
