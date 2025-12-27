@@ -106,7 +106,7 @@ onBeforeUnmount(() => clearTimeout(timer))
 }
 
 .alert-header {
-  background-color: #42b983; /* Vue 主色調 */
+  background-color: #42b983;
   color: white;
   padding: 16px;
   border-top-left-radius: 10px;

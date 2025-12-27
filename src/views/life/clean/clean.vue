@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>清潔用品專區</h1>
-    <!-- 按鈕測試事件 -->
     <button @click="sayHello">點我試試事件</button>
   </div>
 </template>

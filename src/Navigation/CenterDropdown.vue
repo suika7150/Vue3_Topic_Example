@@ -105,7 +105,7 @@ const goNews4 = () => goto('/news4')
   display: flex;
   gap: 15px;
   margin: 20px 0 0 40px;
-  flex-wrap: wrap; /* 允許換行 */
+  flex-wrap: wrap;
 }
 
 .topbar-btn {

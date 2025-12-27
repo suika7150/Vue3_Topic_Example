@@ -93,7 +93,6 @@ const fetchProductDetail = async () => {
 
   isLoading.value = true
   try {
-    // 假設 API 有通過 ID 獲取單個商品的接口
     const res = await api.getProductDetail(productId)
 
     if (res.code === '0000' && res.result) {
@@ -123,7 +122,6 @@ const addToCart = (productToAdd) => {
     cartStore.addProduct(productToAdd)
     ElMessage.success(`${productToAdd.name} 已加入購物車`)
   }
-  // 可以選擇是否打開購物車抽屜
   openCartDrawer()
 }
 

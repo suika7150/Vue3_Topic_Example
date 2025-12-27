@@ -301,11 +301,10 @@ const login = () => {
   font-size: 16px;
   height: 44px;
   border-radius: 8px;
-  background-color: black; /* 跟 Topbar 融合 */
-  /* border: none; 去掉邊框 */
+  background-color: black;
   color: white;
-  box-shadow: none; /* 去掉陰影 */
-  padding: 8px 12px; /* 可依 Topbar 調整 */
+  box-shadow: none;
+  padding: 8px 12px;
 }
 
 .el-input :deep(.el-input__inner) {

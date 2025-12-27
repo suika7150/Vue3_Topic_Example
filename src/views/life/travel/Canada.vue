@@ -3,7 +3,6 @@
     <h1>加拿大旅遊專區 🇨🇦</h1>
     <p>這裡是 Canada.vue 的內容，可以用來測試是否成功載入。</p>
 
-    <!-- 按鈕測試事件 -->
     <button @click="sayHello">點我試試事件</button>
   </div>
 </template>

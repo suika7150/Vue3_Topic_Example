@@ -50,10 +50,9 @@ import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import api from '@/service/api'
 
-// 表單的 ref，用於存取表單實例並呼叫其方法
 const optionFormRef = ref(null)
 
-// 表單資料，使用 reactive 創建響應式物件
+// 表單資料
 const optionForm = reactive({
   listName: '',
   name: '',
@@ -79,10 +78,9 @@ const submitForm = async (formEl) => {
   // 如果表單實例不存在，則直接返回
   if (!formEl) return
 
-  // 觸發表單驗證
+  // 表單驗證
   await formEl.validate(async (valid, fields) => {
     if (!valid) {
-      // 驗證失敗
       console.log('表單驗證失敗！', fields)
       ElMessage({
         message: '請檢查表單內容是否有誤。',

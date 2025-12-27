@@ -6,7 +6,7 @@ export default function useFormat() {
   const global = instance.appContext.config.globalProperties
 
   return {
-    //需搭配 plugin\format.js 中註冊的函式撰寫
+    //搭配 plugin\format.js
     $formatPrice: global.$formatPrice,
     $formatDate: global.$formatDate,
   }

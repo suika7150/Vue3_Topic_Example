@@ -23,7 +23,7 @@ const close = () => {
   isVisible.value = false
 }
 
-// 刻意延遲，避免使用者嚇到
+// 刻意延遲，避免使用者驚到
 onMounted(() => {
   setTimeout(() => {
     isVisible.value = true

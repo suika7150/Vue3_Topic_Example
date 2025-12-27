@@ -10,7 +10,7 @@ export const useCartStore = defineStore('cartStore', {
     totalQuantity: (state) => {
       return state.cart.reduce((total, item) => total + item.quantity, 0)
     },
-    // 將 totalPrice 改為 getter，會根據 cart 內容自動計算
+
     totalPrice: (state) => {
       // 遍歷購物車，計算每個商品的單價 * 數量，並加總
       return state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0)

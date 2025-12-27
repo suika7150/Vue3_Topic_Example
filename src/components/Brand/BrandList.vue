@@ -10,12 +10,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-
-//導入 BrandIcon：使用 `./`，因為在同一個 Brand 資料夾內
 import BrandIcon from './BrandIcon.vue'
 import { brands } from './brands.js'
 
-//數據狀態和載入邏輯
 const brandsData = ref([])
 
 onMounted(() => {
@@ -24,7 +21,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 樣式保持不變 */
 .brand-list-container {
   width: 100%;
   /* border: 1px solid #eee; */
