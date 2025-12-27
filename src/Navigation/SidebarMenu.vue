@@ -65,13 +65,11 @@ const userStore = useUserStore()
 const isLogin = computed(() => !!userStore.user?.isLogin)
 const userRole = computed(() => userStore.role || 'GUEST')
 
-// 獲取動態選單資料
 const menuData = computed(() => getNavMenu(userRole.value))
 
 const emit = defineEmits(['navigate', 'open-cart'])
 
 const handleMenuSelect = (index) => {
-  // 檢查是否為靜態連結
   switch (index) {
     case 'home':
       emit('navigate', 'Home')
@@ -104,7 +102,6 @@ const handleMenuSelect = (index) => {
       emit('navigate', 'Register')
       break
     default:
-      // 處理動態路由，index 就是 route 路徑 (例如 '/food/drinks')
       if (index.startsWith('/')) {
         emit('navigate-route', index)
       }

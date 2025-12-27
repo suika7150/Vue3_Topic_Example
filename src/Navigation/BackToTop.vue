@@ -52,8 +52,8 @@ const handleScroll = () => {
 <style scoped>
 .line {
   position: fixed;
-  right: 30px; /* 右側距離 */
-  bottom: 220px; /* 下方距離 */
+  right: 30px;
+  bottom: 220px;
   font-size: 20px;
   color: #000;
   border: none;
@@ -61,8 +61,8 @@ const handleScroll = () => {
 }
 .share {
   position: fixed;
-  right: 30px; /* 右側距離 */
-  bottom: 160px; /* 下方距離 */
+  right: 30px;
+  bottom: 160px;
   font-size: 20px;
   color: #000;
   border: none;
@@ -71,8 +71,8 @@ const handleScroll = () => {
 
 .back-to-top {
   position: fixed;
-  right: 30px; /* 右側距離 */
-  bottom: 100px; /* 下方距離 */
+  right: 30px;
+  bottom: 100px;
   font-size: 20px;
   color: #000;
   border: none;

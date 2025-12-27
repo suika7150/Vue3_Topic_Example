@@ -88,7 +88,7 @@ const imagePreview = ref(null)
 
 const states = ref([])
 const category = ref([])
-// 編輯模式的驗證規則 (圖片非必填)
+
 const rules = {
   name: [{ required: true, message: '請輸入商品名稱', trigger: 'blur' }],
   category: [{ required: true, message: '請選擇分類', trigger: 'change' }],
@@ -100,7 +100,7 @@ const rules = {
   imageBase64: [{ required: true, message: '請上傳圖片', trigger: 'change' }],
 }
 
-// 新增一個圖片縮放的方法
+// 圖片縮放
 function resizeImage(img, fileType, targetWidth, targetHeight) {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
@@ -142,12 +142,11 @@ function handleFileChange(event) {
     const img = new Image()
     img.src = reader.result
     img.onload = () => {
-      const MAX_WIDTH = 200 // 你希望的圖片最大寬度
-      const MAX_HEIGHT = 150 // 你希望的圖片最大高度
-      // 呼叫縮圖方法，並將結果賦值給 form
+      const MAX_WIDTH = 200
+      const MAX_HEIGHT = 150
       const resizedImage = resizeImage(img, file.type, MAX_WIDTH, MAX_HEIGHT)
       form.imageBase64 = resizedImage
-      form.imageType = file.type // 儲存圖片類型
+      form.imageType = file.type
       imagePreview.value = resizedImage
     }
   }
@@ -162,7 +161,6 @@ function handleFileChange(event) {
 function removeImage() {
   form.imageBase64 = ''
   imagePreview.value = null
-  // 清空 input[type=file] 欄位(可用 ref 或下方方法)
   document.querySelector('input[type="file"]').value = ''
 }
 
@@ -226,7 +224,6 @@ function submitForm() {
     try {
       await api.updateProduct(productId.value, form)
       ElMessage.success('商品更新成功！')
-      // 更新後可以導航回商品列表
       goTo('ProductList')
     } catch (error) {
       ElMessage.error('更新失敗，請稍後再試')

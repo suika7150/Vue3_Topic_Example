@@ -12,7 +12,7 @@ const apiService = axios.create({
   timeout: 600000, // 10 分鐘
 })
 
-// 請求攔截器：自動加上 Token
+// 自動加上 Token
 apiService.interceptors.request.use(
   (config) => {
     showLoading() // 開啟 loading
@@ -27,14 +27,14 @@ apiService.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-// 回應攔截器：統一錯誤處理（可擴充）
+// 統一錯誤處理
 apiService.interceptors.response.use(
   async (response) => {
     await new Promise((resolve) => setTimeout(resolve, 1000)) // 模擬 2 秒延遲
     hideLoading() // 成功後關閉 loading
-    const res = response.data // 所有 .then 接收到的是 res.data
+    const res = response.data
 
-    // ❗檢查 code 是否為成功代碼
+    // 檢查 code 是否為成功代碼
     if (res.code && res.code !== '0000') {
       ElMessage.error(res.msg || '發生錯誤')
       return Promise.reject(res) // 中止回傳

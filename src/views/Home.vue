@@ -30,7 +30,7 @@ import AdModal from '@/components/AdModal.vue'
   width: 100vw;
   position: relative;
   left: 50%;
-  transform: translateX(-50%); /* 水平置中 */
+  transform: translateX(-50%);
 }
 
 brand-list {
@@ -44,7 +44,7 @@ brand-list {
     width: 100vw;
     position: relative;
     left: 50%;
-    transform: translateX(-50%); /* 水平置中 */
+    transform: translateX(-50%);
   }
 }
 </style>

@@ -70,14 +70,14 @@ import { useRouter } from 'vue-router'
   height: 100%;
   display: flex;
   align-items: center;
-  gap: 30px; /* Logo 與下拉選單間距 */
+  gap: 30px;
   flex-shrink: 0;
 }
 
 .logo {
   font-size: 100px;
   color: #fff;
-  text-decoration: none; /* 移除底線 */
+  text-decoration: none;
 }
 
 .logo-img {
@@ -100,10 +100,9 @@ import { useRouter } from 'vue-router'
 
 .dropdown-below {
   position: absolute;
-  top: 100%; /* 正下方 */
-  right: 0; /* 右對齊 LoginMenu */
-  margin-top: 4px; /* 距離 LoginMenu 一點縫隙 */
-  /* z-index: 1001; 確保在 TopBar 之上 */
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
 }
 
 @media (max-width: 912px) {

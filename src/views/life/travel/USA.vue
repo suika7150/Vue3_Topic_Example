@@ -3,7 +3,6 @@
     <h1>美國旅遊專區 🇺🇸</h1>
     <p>這裡是 USA.vue 的內容，可以用來測試是否成功載入。</p>
 
-    <!-- 你也可以加個按鈕測試事件 -->
     <button @click="sayHello">點我試試事件</button>
   </div>
 </template>

@@ -249,7 +249,6 @@ const openCartDrawer = () => {
   margin-right: 16px;
 }
 
-/* 使用 :deep() 選擇器來修改 el-card 內部的 .el-card__body 樣式 */
 .product-card :deep(.el-card__body) {
   padding: 0px;
 }

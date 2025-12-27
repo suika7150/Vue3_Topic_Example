@@ -247,7 +247,6 @@ const cart = computed(() => cartStore.cart)
 
 const { goTo } = useNavigation()
 
-// 響應式數據
 const currentStep = ref(0)
 const submitting = ref(false)
 const applyingCoupon = ref(false)

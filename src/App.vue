@@ -64,11 +64,11 @@ const navMenu = computed(() => {
 
 .layout {
   display: flex;
-  flex: 1; /*移除此行，讓 layout 高度由內容決定，從而讓 window 滾動 */
+  flex: 1;
   width: 100%;
   margin-top: 160px;
-  align-items: stretch; /*Sidebar與Content高度一致貼齊 */
-  justify-content: stretch; /* Sidebar與Content寬度撐滿 */
+  align-items: stretch;
+  justify-content: stretch;
   box-sizing: border-box;
 }
 
@@ -91,26 +91,26 @@ const navMenu = computed(() => {
   padding: 100px;
   background-color: white;
   overflow: hidden;
-  box-sizing: border-box; /* 避免 padding 推寬度 */
+  box-sizing: border-box;
   flex-direction: column;
   justify-content: stretch;
   max-width: 1440px;
-  margin: 0 auto; /* 水平自動邊距置中 */
+  margin: 0 auto;
 }
 
 /* Footer */
 .footer {
-  overflow-x: hidden; /* 防止水平滾動條 */
+  overflow-x: hidden;
 }
 
 @media (max-width: 912px) {
   .layout {
     display: flex;
-    flex: 1; /*移除此行，讓 layout 高度由內容決定，從而讓 window 滾動 */
+    flex: 1;
     width: 100%;
     margin-top: 40px;
-    align-items: stretch; /*Sidebar與Content高度一致貼齊 */
-    justify-content: stretch; /* Sidebar與Content寬度撐滿 */
+    align-items: stretch;
+    justify-content: stretch;
     box-sizing: border-box;
   }
 
