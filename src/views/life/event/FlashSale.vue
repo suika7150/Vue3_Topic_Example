@@ -1,7 +1,7 @@
 <template>
   <div class="flash-sale-page">
     <div class="header-banner">
-      <el-countdown title="⚡ 距離特惠結束還剩" :value="deadline" time-indices format="HH:mm:ss">
+      <el-countdown title="⚡ 距離特惠結束還剩" :value="deadline">
         <template #suffix>
           <span> 小時</span>
         </template>
