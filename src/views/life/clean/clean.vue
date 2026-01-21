@@ -1,14 +1,11 @@
 <template>
-  <div>
-    <h1>清潔用品專區</h1>
-    <button @click="sayHello">點我試試事件</button>
+  <div class="page-layout">
+    <ProductList forced-category="清潔用品" />
   </div>
 </template>
 
 <script setup>
-const sayHello = () => {
-  alert('施工中，敬請期待！')
-}
+import ProductList from '@/views/products/ProductList.vue'
 </script>
 
 <style scoped>

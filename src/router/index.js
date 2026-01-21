@@ -82,15 +82,15 @@ const routes = [
     component: () => import('@/views/checkout/CheckoutSuccess.vue'),
   },
   {
-    path: '/life/travel/usa',
-    name: 'TravelUSA',
-    component: () => import('@/views/life/travel/USA.vue'),
+    path: '/life/event/flashsale',
+    name: 'FlashSale',
+    component: () => import('@/views/life/event/FlashSale.vue'),
   },
-  {
-    path: '/life/travel/canada',
-    name: 'TravelCanada',
-    component: () => import('@/views/life/travel/Canada.vue'),
-  },
+  // {
+  //   path: '/life/travel/canada',
+  //   name: 'TravelCanada',
+  //   component: () => import('@/views/life/travel/Canada.vue'),
+  // },
   {
     path: '/life/clean',
     name: 'Clean',
