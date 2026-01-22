@@ -3,7 +3,6 @@ import {
   Coffee,
   Cpu,
   Flag,
-  Food,
   IceDrink,
   Loading,
   LocationFilled,
@@ -19,6 +18,10 @@ import {
   Present,
   Compass,
   Timer,
+  GoodsFilled,
+  House,
+  Connection,
+  Calendar,
 } from '@element-plus/icons-vue'
 import { faShirt } from '@fortawesome/free-solid-svg-icons'
 
@@ -51,7 +54,7 @@ export function getNavMenu(userRole) {
     {
       name: 'event',
       label: '活動專區',
-      icon: Coffee,
+      icon: Calendar,
       clickable: false,
       subs: [
         { name: 'FlashSale', label: '本週特惠', icon: Odometer, route: '/event/flashsale' },
@@ -61,7 +64,7 @@ export function getNavMenu(userRole) {
     {
       name: 'crossover',
       label: '聯名專區',
-      icon: Coffee,
+      icon: Connection,
       clickable: false,
       subs: [
         {
@@ -86,14 +89,14 @@ export function getNavMenu(userRole) {
       ],
     },
     {
-      name: 'brand',
+      name: 'brands',
       label: '品牌專區',
-      icon: Food,
+      icon: GoodsFilled,
       clickable: false,
       subs: [
-        { name: 'drinks', label: '', icon: IceDrink, route: '/food/drinks' },
-        { name: 'snacks', label: '', icon: Suitcase, route: '/food/snacks' },
-        { name: 'smoking', label: '', icon: Smoking, route: '/food/smoking' },
+        { name: 'brandFood', label: '食品飲品', icon: IceDrink, route: 'brands/food' },
+        { name: 'brandVehicle', label: '汽機車用品', icon: Van, route: 'brands/vehicle' },
+        { name: 'brandLiving', label: '居家生活', icon: House, route: 'brands/living' },
       ],
     },
     {
