@@ -49,7 +49,16 @@ export function getNavMenu(userRole) {
       icon: Coffee,
       clickable: false,
       subs: [
-        { name: 'FlashSale', label: '本週特惠', icon: Odometer, route: '/life/event/flashsale' },
+        {
+          name: 'travel',
+          label: '旅遊',
+          icon: LocationFilled,
+          clickable: false,
+          subs: [
+            { name: 'usa', label: '美國', icon: Flag, route: '/life/travel/usa' },
+            { name: 'canada', label: '加拿大', icon: Flag, route: '/life/travel/canada' },
+          ],
+        },
         { name: 'Clean', label: '清潔', icon: Loading, route: '/life/clean' },
       ],
     },
