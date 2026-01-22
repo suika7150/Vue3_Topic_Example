@@ -6,17 +6,6 @@
     <el-menu-item index="guide" class="main-link">購買須知</el-menu-item>
     <el-menu-item index="qa" class="main-link">常見問題 Q&A</el-menu-item>
 
-    <el-divider />
-
-    <el-menu-item index="cart" class="main-link">購物車</el-menu-item>
-    <el-menu-item index="profile" class="main-link">個人資料維護</el-menu-item>
-    <el-menu-item index="setting" class="main-link">設定</el-menu-item>
-
-    <template v-if="!isLogin">
-      <el-menu-item index="login" divided class="main-link">登入</el-menu-item>
-      <el-menu-item index="register" divided class="main-link">註冊</el-menu-item>
-    </template>
-
     <el-divider v-if="menuData.length > 0" />
 
     <template v-for="category in menuData" :key="category.name">
@@ -51,6 +40,17 @@
           <!-- </div> -->
         </template>
       </el-sub-menu>
+    </template>
+
+    <el-divider />
+
+    <el-menu-item index="cart" class="main-link">購物車</el-menu-item>
+    <el-menu-item index="profile" class="main-link">個人資料維護</el-menu-item>
+    <el-menu-item index="setting" class="main-link">設定</el-menu-item>
+
+    <template v-if="!isLogin">
+      <el-menu-item index="login" divided class="main-link">登入</el-menu-item>
+      <el-menu-item index="register" divided class="main-link">註冊</el-menu-item>
     </template>
   </el-menu>
 </template>
