@@ -113,6 +113,7 @@ import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
 import { computed, ref } from 'vue'
+import { watch } from 'vue'
 import { onMounted, onBeforeUnmount } from 'vue'
 import throttle from 'lodash/throttle' // 引入 lodash 的 throttle 函數控制載入商品的頻率
 
@@ -120,7 +121,6 @@ const cartStore = useCartStore()
 import { Loading } from '@element-plus/icons-vue'
 const products = ref([])
 const categories = ref([])
-const selectedCategory = ref('')
 const isLoading = ref(true)
 const loadMoreCount = 4
 const visibleCount = ref(loadMoreCount)
@@ -129,6 +129,23 @@ const dialogVisible = ref(false)
 const drawerVisible = ref(false)
 const currentProduct = ref({})
 
+const props = defineProps({
+  forcedCategory: {
+    type: String,
+    default: '',
+  },
+})
+
+const selectedCategory = ref(props.forcedCategory || '')
+
+watch(
+  () => props.forcedCategory,
+  (newVal) => {
+    selectedCategory.value = newVal || ''
+    visibleCount.value = loadMoreCount
+  },
+)
+
 onMounted(async () => {
   isLoading.value = true
   try {
@@ -136,6 +153,9 @@ onMounted(async () => {
     if (res.code === '0000') {
       products.value = res.result
       categories.value = [...new Set(products.value.map((p) => p.category))]
+    }
+    if (props.forcedCategory) {
+      selectedCategory.value = props.forcedCategory
     }
   } catch (err) {
     console.error('載入商品失敗:', err)

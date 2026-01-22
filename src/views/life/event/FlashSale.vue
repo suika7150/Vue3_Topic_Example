@@ -67,31 +67,28 @@ const deadline = ref(Date.now() + 1000 * 60 * 60 * 24)
   /* justify-content: center; */
   /* gap: 10px; */
   margin-bottom: 40px;
-  perspective: 1000px; /* 創造 3D 視角 */
+  perspective: 1000px;
 }
 
-/* 翻轉卡片容器 */
 .flip-card {
   background-color: transparent;
-  width: 45%; /* 調整卡片寬度 */
-  height: 250px; /* 卡片高度 */
+  width: 45%;
+  height: 250px;
   border: 1px solid #f1f1f1;
   border-radius: 15px;
   cursor: pointer;
 }
 
-/* 翻轉卡片內層，用於實際翻轉動畫 */
 .flip-card-inner {
   position: relative;
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.8s; /* 翻轉動畫時長 */
-  transform-style: preserve-3d; /* 讓子元素能在 3D 空間中呈現 */
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
   border-radius: 15px;
 }
 
-/* 滑鼠移入時翻轉 */
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
 }
@@ -102,29 +99,29 @@ const deadline = ref(Date.now() + 1000 * 60 * 60 * 24)
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden; /* 隱藏背面 */
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-  color: white; /* 內部文字為白色 */
+  color: white;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* 卡片背面預設翻轉 180 度 */
+/* 翻轉 180 度 */
 .flip-card-back {
   transform: rotateY(180deg);
 }
 
-/* 綠色卡片樣式 */
+/* 綠卡樣式 */
 .green-card {
   background: linear-gradient(145deg, #4caf50 0%, #388e3c 100%); /* 綠色漸層 */
   box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
 }
 
-/* 橘色卡片樣式 */
+/* 橘卡樣式 */
 .orange-card {
   background: linear-gradient(145deg, #ffc107 0%, #ffa000 100%); /* 橘色漸層 */
   box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
@@ -140,21 +137,18 @@ const deadline = ref(Date.now() + 1000 * 60 * 60 * 24)
   margin-bottom: 20px;
 }
 
-/* 倒數計時框的調整，讓它在綠色卡片中看起來更和諧 */
 .countdown-box {
-  background: rgba(0, 0, 0, 0.4); /* 半透明黑，與綠色背景融合 */
+  background: rgba(0, 0, 0, 0.4);
   padding: 10px 20px;
   border-radius: 8px;
   display: inline-block;
   margin-top: 10px;
 }
 
-/* 隱藏 Element Plus 預設的標題 */
 :deep(.el-statistic__head) {
   display: none;
 }
 
-/* 下方促銷資訊 */
 .promo-info {
   text-align: center;
   margin-bottom: 30px;
