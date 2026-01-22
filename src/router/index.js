@@ -82,14 +82,9 @@ const routes = [
     component: () => import('@/views/checkout/CheckoutSuccess.vue'),
   },
   {
-    path: '/life/event/flashsale',
+    path: '/event/flashsale',
     name: 'FlashSale',
-    component: () => import('@/views/life/event/FlashSale.vue'),
-  },
-  {
-    path: '/life/clean',
-    name: 'Clean',
-    component: () => import('@/views/life/clean/Clean.vue'),
+    component: () => import('@/views/event/FlashSale.vue'),
   },
   {
     path: '/food/drinks',

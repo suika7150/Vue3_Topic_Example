@@ -7,7 +7,7 @@
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews1">新聞1</el-dropdown-item>
+          <el-dropdown-item @click="goNews1">本週特惠</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
