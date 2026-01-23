@@ -93,7 +93,7 @@ const startSpin = () => {
   align-items: center;
   padding: 50px 20px;
   background: radial-gradient(circle, #2c2c2c 0%, #000000 100%);
-  min-height: 80vh;
+  min-height: 100vh;
   border-radius: 20px;
 }
 
@@ -106,8 +106,8 @@ const startSpin = () => {
 
 .wheel-wrapper {
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   border: 12px solid #333;
   border-radius: 50%;
   box-shadow:
@@ -148,11 +148,12 @@ const startSpin = () => {
 
 .wheel-pointer {
   position: absolute;
+  border: #d62828 solid 8px;
   top: -20px;
   left: 50%;
   transform: translateX(-50%);
   width: 40px;
-  height: 50px;
+  height: 40px;
   background: #d62828;
   clip-path: polygon(50% 100%, 0 0, 100% 0);
   z-index: 10;
@@ -160,11 +161,12 @@ const startSpin = () => {
 }
 
 .spin-button {
-  margin-top: 50px;
-  padding: 25px 60px;
-  font-size: 20px;
+  text-align: center;
+  margin-top: 60px;
+  padding: 40px 60px;
+  font-size: 30px;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 15px;
   background: linear-gradient(135deg, #d62828 0%, #a81c1c 100%);
   border: none;
   box-shadow: 0 5px 15px rgba(214, 40, 40, 0.4);
@@ -174,6 +176,7 @@ const startSpin = () => {
   margin-top: 30px;
   color: #fff;
   font-size: 24px;
+  font-weight: bold;
 }
 .result-msg span {
   color: #f1c40f;
@@ -183,6 +186,7 @@ const startSpin = () => {
 @media (max-width: 768px) {
   .lucky-wheel-container {
     padding: 30px 10px;
+    /* min-height: 50vh; */
   }
 
   .wheel-title {
@@ -211,8 +215,9 @@ const startSpin = () => {
 
   .spin-button {
     margin-top: 30px;
-    padding: 15px 40px;
+    padding: 30px 40px;
     width: 200px;
+    font-size: 20px;
   }
 
   .result-msg {
