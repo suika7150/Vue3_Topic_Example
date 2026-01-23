@@ -35,7 +35,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { ElMessage } from 'element-plus'
+// import { ElMessage } from 'element-plus'
+// import Alertbox from '@/components/AlertBox.vue'
 
 const prizes = [
   { name: '9折券', color: '#1a1a1a' },
@@ -81,7 +82,7 @@ const startSpin = () => {
     const index = Math.floor(((360 - actualDeg + 30) % 360) / (360 / prizes.length))
     result.value = prizes[index].name
 
-    ElMessage.success(`恭喜！你獲得了 ${result.value}`)
+    alert(`恭喜！你獲得了 ${result.value}`)
   }, 4000)
 }
 </script>
