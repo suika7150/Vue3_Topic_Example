@@ -79,10 +79,12 @@ const startSpin = () => {
     isSpinning.value = false
     // 計算中獎結果
     const actualDeg = totalDeg % 360
-    const index = Math.floor(((360 - actualDeg + 30) % 360) / (360 / prizes.length))
+    const step = 360 / prizes.length
+    const offset = step / 2
+    const index = Math.floor(((360 - actualDeg + 200 + offset) % 360) / step)
     result.value = prizes[index].name
 
-    alert(`恭喜！你獲得了 ${result.value}`)
+    alert(`恭喜！您獲得了 ${result.value}`)
   }, 4000)
 }
 </script>
