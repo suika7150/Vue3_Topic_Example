@@ -105,7 +105,7 @@ import { useRouter } from 'vue-router'
   margin-top: 4px;
 }
 
-@media (max-width: 912px) {
+@media (max-width: 1030px) {
   .top-bar {
     flex-direction: row;
     position: fixed;
@@ -120,6 +120,10 @@ import { useRouter } from 'vue-router'
     padding: 10px 0;
     overflow: visible;
     z-index: 1002;
+  }
+
+  .topbar-main {
+    display: none;
   }
 
   .menu-bar {

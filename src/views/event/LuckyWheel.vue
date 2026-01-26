@@ -81,7 +81,7 @@ const startSpin = () => {
     const actualDeg = totalDeg % 360
     const step = 360 / prizes.length
     const offset = step / 2
-    const index = Math.floor(((360 - actualDeg + 200 + offset) % 360) / step)
+    const index = Math.floor(((360 - actualDeg + 210 + offset) % 360) / step)
     result.value = prizes[index].name
 
     alert(`恭喜！您獲得了 ${result.value}`)

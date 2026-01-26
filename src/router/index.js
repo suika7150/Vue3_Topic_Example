@@ -91,7 +91,6 @@ const routes = [
     name: 'LuckyWheel',
     component: () => import('@/views/event/LuckyWheel.vue'),
   },
-
   {
     path: '/accessDenied',
     name: 'AccessDenied',

@@ -64,15 +64,17 @@ const deadline = ref(Date.now() + 1000 * 60 * 60 * 24)
 
 .header-banner-container {
   display: flex;
-  /* justify-content: center; */
-  /* gap: 10px; */
+  justify-content: center;
+  gap: 15px;
   margin-bottom: 40px;
   perspective: 1000px;
+  flex-wrap: warp;
 }
 
 .flip-card {
   background-color: transparent;
   width: 45%;
+  min-width: 300px;
   height: 250px;
   border: 1px solid #f1f1f1;
   border-radius: 15px;
@@ -143,6 +145,7 @@ const deadline = ref(Date.now() + 1000 * 60 * 60 * 24)
   border-radius: 8px;
   display: inline-block;
   margin-top: 10px;
+  max-width: 90%;
 }
 
 :deep(.el-statistic__head) {
@@ -156,5 +159,37 @@ const deadline = ref(Date.now() + 1000 * 60 * 60 * 24)
 
 .promo-info p {
   font-size: 24px;
+}
+
+@media (max-width: 768px) {
+  .header-banner-container {
+    flex-direction: column; /* 垂直排列 */
+    align-items: center;
+    gap: 15px;
+  }
+
+  .flip-card {
+    width: 100%; /* 手機版佔滿寬度 */
+    max-width: 400px; /* 但不要太寬，維持美感 */
+    height: 220px; /* 高度稍微縮減 */
+  }
+
+  .flip-card h3 {
+    font-size: 20px; /* 縮小標題 */
+  }
+
+  .flip-card p {
+    font-size: 14px; /* 縮小內文 */
+  }
+
+  .promo-info p {
+    font-size: 18px; /* 縮小說明文字 */
+  }
+}
+
+@media (max-width: 480px) {
+  .flip-card {
+    height: 200px; /* 極小螢幕再縮減高度 */
+  }
 }
 </style>
