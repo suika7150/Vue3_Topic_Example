@@ -7,7 +7,8 @@
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews1">本週特惠</el-dropdown-item>
+          <el-dropdown-item @click="goFlashSale">本週特惠</el-dropdown-item>
+          <el-dropdown-item @click="goLuckyWheel">幸運輪盤</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -19,8 +20,10 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews3">動漫聯名</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">電影聯名</el-dropdown-item>
+          <el-dropdown-item @click="goNews3">動漫聯名款</el-dropdown-item>
+          <el-dropdown-item @click="goNews4">電影大聯盟</el-dropdown-item>
+          <el-dropdown-item @click="goNews4">設計師聯名款</el-dropdown-item>
+          <el-dropdown-item @click="goNews4">全球限量版</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -32,8 +35,9 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu class="center-menu-dropdown">
-          <el-dropdown-item @click="goNews3">蘋果</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">三星</el-dropdown-item>
+          <el-dropdown-item @click="goNews3">食品飲品</el-dropdown-item>
+          <el-dropdown-item @click="goNews4">汽機車用品</el-dropdown-item>
+          <el-dropdown-item @click="goNews4">居家生活</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -45,7 +49,8 @@
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews2">冬季限定</el-dropdown-item>
+          <el-dropdown-item @click="goNews2">季節精選</el-dropdown-item>
+          <el-dropdown-item @click="goNews2">出遊推薦</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -93,11 +98,12 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElIcon } from 'el
 import { ArrowDown, CaretBottom } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'
 
-const { goto, goShoppingGuide, goQA } = useNavigation()
-const goNews1 = () => goto('/news1')
-const goNews2 = () => goto('/news2')
-const goNews3 = () => goto('/news3')
-const goNews4 = () => goto('/news4')
+const { goShoppingGuide, goQA, goFlashSale, goLuckyWheel } = useNavigation()
+
+// const goNews1 = () => goto('/news1')
+// const goNews2 = () => goto('/news2')
+// const goNews3 = () => goto('/news3')
+// const goNews4 = () => goto('/news4')
 </script>
 
 <style scoped>

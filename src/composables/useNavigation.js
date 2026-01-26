@@ -25,6 +25,13 @@ export function useNavigation() {
   const goNews = () => {
     router.push({ name: 'News' })
   }
+  const goFlashSale = () => {
+    router.push({ name: 'FlashSale' })
+  }
+  const goLuckyWheel = () => {
+    router.push({ name: 'LuckyWheel' })
+  }
+
   const goShoppingGuide = () => {
     router.push({ name: 'ShoppingGuide' })
   }
@@ -55,5 +62,7 @@ export function useNavigation() {
     goBack,
     goShoppingGuide,
     goQA,
+    goFlashSale,
+    goLuckyWheel,
   }
 }
