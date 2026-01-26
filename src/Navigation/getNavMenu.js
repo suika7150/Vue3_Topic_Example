@@ -1,16 +1,9 @@
 import {
-  Bicycle,
-  Coffee,
   Cpu,
   Flag,
   IceDrink,
-  Loading,
-  LocationFilled,
-  Mic,
   Monitor,
   Odometer,
-  Smoking,
-  Suitcase,
   Van,
   VideoCameraFilled,
   Brush,
@@ -22,6 +15,8 @@ import {
   House,
   Connection,
   Calendar,
+  Sell,
+  MagicStick,
 } from '@element-plus/icons-vue'
 import { faShirt } from '@fortawesome/free-solid-svg-icons'
 
@@ -116,12 +111,12 @@ export function getNavMenu(userRole) {
     },
     {
       name: 'doubleeleven',
-      label: '雙11大優惠',
+      label: '雙11週年盛典',
       icon: Odometer,
       clickable: false,
       subs: [
-        { name: 'movies', label: '', icon: VideoCameraFilled, route: '/entertainment/movies' },
-        { name: 'music', label: '', icon: Mic, route: '/entertainment/music' },
+        { name: 'rewards', label: '年度特選回饋', icon: Sell, route: '/doubleeleven/rewards' },
+        { name: 'gifts', label: '滿額加碼驚喜', icon: MagicStick, route: '/doubleeleven/gifts' },
       ],
     },
   ]
