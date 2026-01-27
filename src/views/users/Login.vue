@@ -240,10 +240,6 @@ const handleRegister = () => {
 }
 
 @media (max-width: 768px) {
-  .login-wrapper {
-    flex-direction: column;
-    max-width: 400px;
-  }
   .login-ad-section {
     display: none;
   }

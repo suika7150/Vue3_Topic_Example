@@ -372,7 +372,7 @@ const openCartDrawer = () => {
 @media (max-width: 912px) {
   .product-list-container {
     max-width: 1200px;
-    padding: 0px;
+    padding: 20px;
   }
 }
 </style>

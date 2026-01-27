@@ -41,7 +41,6 @@
           </div>
         </el-collapse-item>
         <el-collapse-item title="Q5: 忘記密碼怎麼辦?" name="5">
-          <
           <div>請至登入頁面點選「忘記密碼」，系統將發送重設郵件至您的註冊信箱。</div>
         </el-collapse-item>
       </el-collapse>

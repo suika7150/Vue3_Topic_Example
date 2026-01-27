@@ -47,7 +47,7 @@ import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
   margin: 50 80px;
 }
 .card-header {
-  margin-left: 400px;
+  text-align: center;
 }
 .box-card {
   border-radius: 12px;
