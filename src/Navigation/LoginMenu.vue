@@ -111,12 +111,12 @@ const handleNavigate = (target) => {
 }
 
 const goLoginFromTopbar = () => {
-  goTo('Login')
+  goTo('login')
 }
 
 const logout = () => {
   userStore.logout()
-  goTo('Home')
+  goTo('home')
 }
 
 //模擬通知資料

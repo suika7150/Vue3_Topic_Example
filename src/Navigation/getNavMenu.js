@@ -39,21 +39,15 @@ export function getNavMenu(userRole) {
         { name: 'list', label: '商品管理', icon: Cpu, route: '/products/list' },
       ],
     },
-    {
-      name: 'settings',
-      label: '管理相關',
-      icon: Odometer,
-      clickable: false,
-      subs: [{ name: 'options', label: '選項管理', icon: Cpu }],
-    },
+
     {
       name: 'event',
       label: '活動專區',
       icon: Calendar,
       clickable: false,
       subs: [
-        { name: 'FlashSale', label: '本週特惠', icon: Odometer, route: '/event/flashsale' },
-        { name: 'LuckyWheel', label: '幸運輪盤', icon: Present, route: '/event/luckywheel' },
+        { name: 'flashSale', label: '本週特惠', icon: Odometer, route: '/event/flashsale' },
+        { name: 'luckyWheel', label: '幸運輪盤', icon: Present, route: '/event/luckywheel' },
       ],
     },
     {
@@ -118,6 +112,13 @@ export function getNavMenu(userRole) {
         { name: 'rewards', label: '年度特選回饋', icon: Sell, route: '/doubleeleven/rewards' },
         { name: 'gifts', label: '滿額加碼驚喜', icon: MagicStick, route: '/doubleeleven/gifts' },
       ],
+    },
+    {
+      name: 'settings',
+      label: '管理相關',
+      icon: Odometer,
+      clickable: false,
+      subs: [{ name: 'options', label: '選項管理', icon: Cpu }],
     },
   ]
 

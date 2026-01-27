@@ -4,43 +4,44 @@ export function useNavigation() {
   const router = useRouter()
 
   const goSetting = () => {
-    router.push({ name: 'Setting' })
+    router.push({ name: 'setting' })
   }
 
   const goHome = () => {
-    router.push({ name: 'Home' })
+    router.push({ name: 'home' })
   }
 
   const goLogin = () => {
-    router.push({ name: 'Login' })
+    router.push({ name: 'login' })
   }
 
   const goRegister = () => {
-    router.push({ name: 'Register' })
+    router.push({ name: 'register' })
   }
 
   const goAbout = () => {
-    router.push({ name: 'About' })
+    router.push({ name: 'about' })
   }
   const goNews = () => {
-    router.push({ name: 'News' })
+    router.push({ name: 'news' })
   }
   const goFlashSale = () => {
-    router.push({ name: 'FlashSale' })
+    router.push({ name: 'flashSale' })
   }
   const goLuckyWheel = () => {
-    router.push({ name: 'LuckyWheel' })
+    router.push({ name: 'luckyWheel' })
   }
 
   const goShoppingGuide = () => {
-    router.push({ name: 'ShoppingGuide' })
+    router.push({ name: 'shoppingGuide' })
   }
 
   const goQA = () => {
-    router.push({ name: 'QA' })
+    router.push({ name: 'qa' })
   }
 
   const goTo = (name, params = {}, query = {}) => {
+    if (router.currentRoute.value.name === name) return
     router.push({ name, params, query })
   }
 
@@ -53,13 +54,13 @@ export function useNavigation() {
   }
 
   return {
+    goTo,
+    replaceTo,
+    goBack,
     goNews,
     goAbout,
     goHome,
     goLogin,
-    goTo,
-    replaceTo,
-    goBack,
     goShoppingGuide,
     goQA,
     goFlashSale,

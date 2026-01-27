@@ -72,34 +72,34 @@ const emit = defineEmits(['navigate', 'open-cart'])
 const handleMenuSelect = (index) => {
   switch (index) {
     case 'home':
-      emit('navigate', 'Home')
+      emit('navigate', 'home')
       break
     case 'guide':
-      emit('navigate', 'ShoppingGuide')
+      emit('navigate', 'shoppingGuide')
       break
     case 'qa':
-      emit('navigate', 'QA')
+      emit('navigate', 'qa')
       break
     case 'news':
-      emit('navigate', 'News')
+      emit('navigate', 'news')
       break
     case 'about':
-      emit('navigate', 'About')
+      emit('navigate', 'about')
       break
     case 'cart':
       emit('open-cart') // 觸發購物車
       break
     case 'profile':
-      emit('navigate', 'Profile')
+      emit('navigate', 'profile')
       break
     case 'setting':
-      emit('navigate', 'Setting')
+      emit('navigate', 'setting')
       break
     case 'login':
-      emit('navigate', 'Login')
+      emit('navigate', 'login')
       break
     case 'register':
-      emit('navigate', 'Register')
+      emit('navigate', 'register')
       break
     default:
       if (index.startsWith('/')) {

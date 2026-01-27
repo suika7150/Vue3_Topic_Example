@@ -27,7 +27,7 @@ const router = useRouter()
 const orderId = route.params.orderId || 'N/A'
 
 const goHome = () => {
-  router.push({ name: 'Home' })
+  router.push({ name: 'home' })
 }
 
 const viewOrder = () => {

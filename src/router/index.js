@@ -3,29 +3,29 @@ import Storage, { TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
-  { path: '/', name: 'Home', component: () => import('@/views/Home.vue') },
+  { path: '/', name: 'home', component: () => import('@/views/Home.vue') },
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: () => import('@/views/users/Login.vue'),
   },
-  { path: '/register', name: 'Register', component: () => import('@/views/users/Register.vue') },
-  { path: '/about', name: 'About', component: () => import('@/views/About.vue') },
-  { path: '/News', name: 'News', component: () => import('@/views/News.vue') },
-  { path: '/setting', name: 'Setting', component: () => import('@/views/Setting.vue') },
+  { path: '/register', name: 'register', component: () => import('@/views/users/Register.vue') },
+  { path: '/about', name: 'about', component: () => import('@/views/About.vue') },
+  { path: '/News', name: 'news', component: () => import('@/views/News.vue') },
+  { path: '/setting', name: 'setting', component: () => import('@/views/Setting.vue') },
   {
     path: '/shoppingguide',
-    name: 'ShoppingGuide',
+    name: 'shoppingGuide',
     component: () => import('@/views/ShoppingGuide.vue'),
   },
   {
     path: '/qa',
-    name: 'QA',
+    name: 'qa',
     component: () => import('@/views/QA.vue'),
   },
   {
     path: '/profile',
-    name: 'Profile',
+    name: 'profile',
     component: () => import('@/views/users/Profile.vue'),
     meta: { requiresAuth: true, role: ['USER'] },
   },
@@ -83,12 +83,12 @@ const routes = [
   },
   {
     path: '/event/flashsale',
-    name: 'FlashSale',
+    name: 'flashSale',
     component: () => import('@/views/event/FlashSale.vue'),
   },
   {
     path: '/event/luckywheel',
-    name: 'LuckyWheel',
+    name: 'luckyWheel',
     component: () => import('@/views/event/LuckyWheel.vue'),
   },
   {
