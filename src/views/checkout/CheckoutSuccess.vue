@@ -22,19 +22,14 @@ import { useRoute } from 'vue-router'
 import { useNavigation } from '@/composables/useNavigation.js'
 
 const route = useRoute()
-const { goTo } = useNavigation()
-// const router = useRouter()
+const { goTo, goHome, goOrderDetail } = useNavigation()
 
-// 從路由參數拿 orderId
+// 取得訂單編號
 const orderId = route.params.orderId || 'N/A'
 
-const goHome = () => {
-  goTo('home')
-}
-
-const goOrderDetail = () => {
-  goTo('orderDetail', { orderId })
-}
+// const goOrderDetail = () => {
+//   goTo('orderDetail', { orderId })
+// }
 </script>
 
 <style scoped>

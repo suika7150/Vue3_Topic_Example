@@ -144,7 +144,7 @@ onMounted(async () => {
 <style scoped>
 .container {
   max-width: 1200px;
-  margin: 20px 20px;
+  margin: 20px 120px;
 }
 
 .header {
