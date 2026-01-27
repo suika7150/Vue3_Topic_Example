@@ -80,4 +80,9 @@ const activeNames = ref(['1']) // 預設展開第一個
   padding: 20px;
   border-radius: 8px;
 }
+@media (max-width: 912px) {
+  .page-container {
+    margin: 0 0;
+  }
+}
 </style>

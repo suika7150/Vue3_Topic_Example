@@ -42,7 +42,7 @@
   color: #fff;
   box-sizing: border-box;
   margin: 0;
-  padding: 20px 0px;
+  padding: 30px 0px;
   flex-shrink: 0;
 }
 
