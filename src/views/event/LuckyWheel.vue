@@ -96,8 +96,7 @@ const startSpin = () => {
   align-items: center;
   padding: 50px 20px;
   background: radial-gradient(circle, #2c2c2c 0%, #000000 100%);
-  min-height: 100vh;
-  border-radius: 20px;
+  width: 100%;
 }
 
 .wheel-title {
@@ -189,7 +188,6 @@ const startSpin = () => {
 @media (max-width: 768px) {
   .lucky-wheel-container {
     padding: 30px 10px;
-    /* min-height: 50vh; */
   }
 
   .wheel-title {

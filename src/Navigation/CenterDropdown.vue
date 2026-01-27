@@ -129,4 +129,10 @@ const { goShoppingGuide, goQA, goFlashSale, goLuckyWheel } = useNavigation()
   border: none;
   outline: none;
 }
+
+@media (max-width: 1145px) {
+  .topbar-dropdowns {
+    display: none;
+  }
+}
 </style>

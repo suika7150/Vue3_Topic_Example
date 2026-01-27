@@ -54,10 +54,7 @@ const navMenu = computed(() => {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   width: 100%;
-  margin: 0;
-  padding: 0;
   overflow-x: hidden;
   box-sizing: border-box;
 }
@@ -66,7 +63,6 @@ const navMenu = computed(() => {
   display: flex;
   flex: 1;
   width: 100%;
-  margin-top: 160px;
   align-items: stretch;
   justify-content: stretch;
   box-sizing: border-box;
@@ -88,14 +84,12 @@ const navMenu = computed(() => {
 .content {
   display: flex;
   flex: 1;
-  padding: 100px;
-  background-color: white;
+  padding-top: 220px;
   overflow: hidden;
   box-sizing: border-box;
   flex-direction: column;
   justify-content: stretch;
-  max-width: 1440px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 /* Footer */
@@ -108,7 +102,6 @@ const navMenu = computed(() => {
     display: flex;
     flex: 1;
     width: 100%;
-    margin-top: 40px;
     align-items: stretch;
     justify-content: stretch;
     box-sizing: border-box;
@@ -117,7 +110,7 @@ const navMenu = computed(() => {
   /* 主內容區 */
   .content {
     width: 100%;
-    padding: 100px 10px;
+    padding-top: 139px;
     background-color: white;
   }
 

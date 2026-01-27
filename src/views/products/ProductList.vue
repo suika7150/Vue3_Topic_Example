@@ -241,6 +241,7 @@ const openCartDrawer = () => {
 <style scoped>
 .product-list-container {
   max-width: 1200px;
+  padding: 100px;
 }
 
 .product-col {
@@ -366,5 +367,12 @@ const openCartDrawer = () => {
 .detail-rating {
   margin-bottom: 8px;
   justify-content: center;
+}
+
+@media (max-width: 912px) {
+  .product-list-container {
+    max-width: 1200px;
+    padding: 0px;
+  }
 }
 </style>

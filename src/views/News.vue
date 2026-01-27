@@ -73,10 +73,13 @@ const openDetails = (item) => {
 
 <style scoped>
 .news-container {
-  min-height: 100vh;
-  background-color: #0a0a0a; /* 極黑背景 */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #0a0a0a;
   padding: 80px 20px;
   color: #fff;
+  box-sizing: border-box;
 }
 
 .news-header {
@@ -102,7 +105,6 @@ const openDetails = (item) => {
   font-size: 16px;
 }
 
-/* 響應式網格 */
 .news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -111,7 +113,6 @@ const openDetails = (item) => {
   margin: 0 auto;
 }
 
-/* 新聞卡片質感 */
 .news-card {
   background: #1a1a1a;
   border-radius: 20px;
@@ -195,8 +196,7 @@ const openDetails = (item) => {
   letter-spacing: 1px;
 }
 
-/* RWD 調整 */
-@media (max-width: 768px) {
+@media (max-width: 912px) {
   .news-container {
     padding: 40px 15px;
   }
