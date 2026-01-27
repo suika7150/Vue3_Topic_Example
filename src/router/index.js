@@ -12,7 +12,7 @@ const routes = [
   },
   { path: '/register', name: 'register', component: () => import('@/views/users/Register.vue') },
   { path: '/about', name: 'about', component: () => import('@/views/About.vue') },
-  { path: '/News', name: 'news', component: () => import('@/views/News.vue') },
+  { path: '/news', name: 'news', component: () => import('@/views/News.vue') },
   { path: '/setting', name: 'setting', component: () => import('@/views/Setting.vue') },
   {
     path: '/shoppingguide',
@@ -67,6 +67,21 @@ const routes = [
     meta: { requiresAuth: true, role: ['ADMIN', 'USER'] },
   },
   {
+    path: '/event/flashsale',
+    name: 'flashSale',
+    component: () => import('@/views/event/FlashSale.vue'),
+  },
+  {
+    path: '/event/luckywheel',
+    name: 'luckyWheel',
+    component: () => import('@/views/event/LuckyWheel.vue'),
+  },
+  {
+    path: '/crossover/anime',
+    name: 'anime',
+    component: () => import('@/views/crossover/Anime.vue'),
+  },
+  {
     path: '/checkout',
     name: 'checkout',
     component: () => import('@/views/checkout/checkout.vue'),
@@ -89,16 +104,7 @@ const routes = [
     name: 'checkoutSuccess',
     component: () => import('@/views/checkout/CheckoutSuccess.vue'),
   },
-  {
-    path: '/event/flashsale',
-    name: 'flashSale',
-    component: () => import('@/views/event/FlashSale.vue'),
-  },
-  {
-    path: '/event/luckywheel',
-    name: 'luckyWheel',
-    component: () => import('@/views/event/LuckyWheel.vue'),
-  },
+
   {
     path: '/accessDenied',
     name: 'accessDenied',
