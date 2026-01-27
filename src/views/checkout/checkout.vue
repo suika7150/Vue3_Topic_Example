@@ -402,7 +402,7 @@ const submitOrder = async () => {
     cartStore.clearCart()
 
     // 跳轉到成功頁面
-    goTo('CheckoutSuccess')
+    goTo('checkoutSuccess')
 
     ElMessage.success('訂單建立成功！')
   } catch (error) {

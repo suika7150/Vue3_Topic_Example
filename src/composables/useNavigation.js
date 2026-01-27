@@ -40,6 +40,10 @@ export function useNavigation() {
     router.push({ name: 'qa' })
   }
 
+  const goOrderDetail = () => {
+    router.push({ name: 'orderDetail' })
+  }
+
   const goTo = (name, params = {}, query = {}) => {
     if (router.currentRoute.value.name === name) return
     router.push({ name, params, query })
@@ -65,5 +69,6 @@ export function useNavigation() {
     goQA,
     goFlashSale,
     goLuckyWheel,
+    goOrderDetail,
   }
 }

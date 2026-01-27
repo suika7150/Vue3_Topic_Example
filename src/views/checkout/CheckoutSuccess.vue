@@ -10,7 +10,7 @@
 
         <div class="actions">
           <el-button type="primary" @click="goHome">返回首頁</el-button>
-          <el-button type="success" @click="viewOrder">查看訂單</el-button>
+          <el-button type="success" @click="goOrderDetail">查看訂單</el-button>
         </div>
       </div>
     </div>
@@ -18,20 +18,22 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+import { useNavigation } from '@/composables/useNavigation.js'
 
 const route = useRoute()
-const router = useRouter()
+const { goTo } = useNavigation()
+// const router = useRouter()
 
 // 從路由參數拿 orderId
 const orderId = route.params.orderId || 'N/A'
 
 const goHome = () => {
-  router.push({ name: 'home' })
+  goTo('home')
 }
 
-const viewOrder = () => {
-  router.push({ name: 'OrderDetail', params: { orderId } })
+const goOrderDetail = () => {
+  goTo('orderDetail', { orderId })
 }
 </script>
 
