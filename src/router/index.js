@@ -82,6 +82,11 @@ const routes = [
     component: () => import('@/views/crossover/Anime.vue'),
   },
   {
+    path: '/crossover/movie',
+    name: 'movie',
+    component: () => import('@/views/crossover/Movie.vue'),
+  },
+  {
     path: '/checkout',
     name: 'checkout',
     component: () => import('@/views/checkout/checkout.vue'),

@@ -22,14 +22,21 @@ export function useNavigation() {
   const goAbout = () => {
     router.push({ name: 'about' })
   }
+
   const goNews = () => {
     router.push({ name: 'news' })
   }
+
   const goFlashSale = () => {
     router.push({ name: 'flashSale' })
   }
+
   const goLuckyWheel = () => {
     router.push({ name: 'luckyWheel' })
+  }
+
+  const goAnime = () => {
+    router.push({ name: 'anime' })
   }
 
   const goShoppingGuide = () => {
@@ -69,6 +76,7 @@ export function useNavigation() {
     goQA,
     goFlashSale,
     goLuckyWheel,
+    goAnime,
     goOrderDetail,
   }
 }
