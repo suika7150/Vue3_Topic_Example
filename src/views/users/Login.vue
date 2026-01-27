@@ -1,40 +1,49 @@
 <!-- 帳號:Admin12 // 密碼:A12345 -->
 <template>
   <div class="login-container">
-    <el-card class="login-card">
-      <h2 class="title">會員登入</h2>
-
-      <el-form :model="form" :rules="rules" ref="loginForm" label-width="80px">
-        <el-form-item label="帳號" prop="username">
-          <el-input v-model="form.username" placeholder="請輸入帳號或Email" clearable />
-        </el-form-item>
-
-        <el-form-item label="密碼" prop="password">
-          <el-input
-            v-model="form.password"
-            type="password"
-            show-password
-            placeholder="請輸入密碼"
-            clearable
-            @keyup.enter="handleLogin"
-          />
-        </el-form-item>
-
-        <el-form-item>
-          <el-checkbox v-model="form.rememberUsername">記住帳號</el-checkbox>
-          <el-checkbox v-model="form.rememberMe">保持登入</el-checkbox>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button class="login-btn" @click="handleLogin" style="width: 100%"> 登入 </el-button>
-        </el-form-item>
-
-        <div class="login-links">
-          <el-link type="text" @click="handleForgotPassword">忘記密碼？</el-link>
-          <el-link type="text" @click="handleRegister">註冊新帳號</el-link>
+    <div class="login-wrapper">
+      <div class="login-ad-section">
+        <div class="ad-content">
+          <h3>年度盛典正式開啟</h3>
+          <p>立即登入領取雙 11 限定優惠券</p>
+          <div class="ad-placeholder">AD / PROMO IMAGE</div>
         </div>
-      </el-form>
-    </el-card>
+      </div>
+
+      <div class="login-form-section">
+        <h2 class="title">會員登入</h2>
+        <el-form :model="form" :rules="rules" ref="loginForm" label-position="top">
+          <el-form-item label="帳號" prop="username">
+            <el-input v-model="form.username" placeholder="請輸入帳號或Email" clearable />
+          </el-form-item>
+
+          <el-form-item label="密碼" prop="password">
+            <el-input
+              v-model="form.password"
+              type="password"
+              show-password
+              placeholder="請輸入密碼"
+              clearable
+              @keyup.enter="handleLogin"
+            />
+          </el-form-item>
+
+          <div class="form-options">
+            <el-checkbox v-model="form.rememberUsername">記住帳號</el-checkbox>
+            <el-checkbox v-model="form.rememberMe">保持登入</el-checkbox>
+          </div>
+
+          <el-button class="login-btn" @click="handleLogin"> 登入 </el-button>
+
+          <div class="login-links">
+            <el-link type="info" :underline="false" @click="handleForgotPassword"
+              >忘記密碼？</el-link
+            >
+            <el-link type="primary" :underline="false" @click="handleRegister">註冊新帳號</el-link>
+          </div>
+        </el-form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,6 +54,9 @@ import { useUserStore } from '@/store/userStore'
 import Storage, { TOKEN_KEY, USER_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
+import QrcodeVue from 'qrcode.vue'
+
+const qrValue = ref('https://your-store.com/promo/default')
 
 const { goTo, goHome } = useNavigation()
 
@@ -141,70 +153,110 @@ const handleRegister = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 110vh;
-  background: linear-gradient(135deg, #0c0c0c 100%, #8183ad 100%);
-  padding: 20px;
+  background-color: #ffffff;
+  padding: 40px 20px;
 }
 
-.login-card {
+.login-wrapper {
+  display: flex;
   width: 100%;
-  max-width: 400px;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  min-height: 500px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+}
+
+/* 左側廣告區 */
+.login-ad-section {
+  flex: 1;
+  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: white;
+}
+
+.ad-content {
+  text-align: center;
+}
+
+.ad-placeholder {
+  margin-top: 20px;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+/* 右側帳密區 */
+.login-form-section {
+  width: 400px;
+  padding: 50px 40px;
   background: white;
-  backdrop-filter: blur(10px);
 }
 
 .title {
-  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
   margin-bottom: 30px;
-  font-size: 28px;
-  font-weight: 600;
   color: #333;
-  background: linear-gradient(135deg, #1bbfce 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+}
+
+.form-options {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .login-btn {
   width: 100%;
-  margin-right: 50px;
+  height: 48px;
+  font-size: 16px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.login-btn:hover {
+  opacity: 0.8;
 }
 
 .login-links {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  font-size: 14px;
 }
 
-.el-form-item {
-  margin-bottom: 20px;
-}
-
-.el-button {
-  font-size: 16px;
-  height: 44px;
-  border-radius: 8px;
-  background-color: black;
-  color: white;
-  box-shadow: none; /* 去陰影 */
-  padding: 8px 12px; /* 依 Topbar 調整 */
+@media (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+    max-width: 400px;
+  }
+  .login-ad-section {
+    display: none;
+  }
+  .login-form-section {
+    width: 100%;
+  }
 }
 
 .el-input :deep(.el-input__inner) {
   height: 44px;
-  border-radius: 8px;
 }
-
-/* --- :deep() 選擇器，修改 el-checkbox 樣式 --- */
-.login-container :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
-  background-color: #1bbfce;
-  border-color: #1bbfce;
-}
-
-.login-container :deep(.el-checkbox__input.is-checked + .el-checkbox__label) {
-  color: #1bbfce;
+:deep(.el-form-item__label) {
+  padding-bottom: 4px;
+  font-weight: 500;
 }
 </style>
