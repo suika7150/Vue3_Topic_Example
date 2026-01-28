@@ -21,7 +21,6 @@
 <script setup>
 import LoginMenu from './LoginMenu.vue'
 import CenterDropdown from './CenterDropdown.vue'
-import { useRouter } from 'vue-router'
 </script>
 
 <style scoped>
@@ -110,15 +109,15 @@ import { useRouter } from 'vue-router'
     flex-direction: row;
     position: fixed;
     display: flex;
-    top: 40px;
-    left: 0;
-    width: 100%;
+    /* top: 40px; */
+    /* left: 0; */
+    /* width: 100%; */
     height: 80px;
     background-color: #000000fb;
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    overflow: visible;
+    /* overflow: visible; */
     z-index: 1002;
   }
 

@@ -26,25 +26,23 @@ import AdModal from '@/components/AdModal.vue'
 </script>
 <style scoped>
 .carousel-section {
-  margin-bottom: 30px;
-  width: 100vw;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100vw;
 }
 
-brand-list {
+.brand-list {
   width: 100%;
   margin-bottom: 50px;
 }
 
-@media (max-width: 912px) {
+@media (max-width: 1024px) {
   .carousel-section {
     margin-bottom: 30px;
     width: 100vw;
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
   }
 }
 </style>

@@ -77,7 +77,7 @@
   transition: all 0.2s ease;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .footer-content {
     flex-direction: column;
     align-items: flex-start;

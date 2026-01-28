@@ -54,9 +54,10 @@ const navMenu = computed(() => {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  width: 100%;
   overflow-x: hidden;
   box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .layout {
@@ -87,7 +88,7 @@ const navMenu = computed(() => {
   justify-content: center;
   flex-direction: column;
   flex: 1;
-  padding-top: 250px;
+  padding-top: 220px;
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;
@@ -100,7 +101,7 @@ const navMenu = computed(() => {
   overflow-x: hidden;
 }
 
-@media (max-width: 912px) {
+@media (max-width: 1024px) {
   .layout {
     display: flex;
     flex: 1;
@@ -112,7 +113,6 @@ const navMenu = computed(() => {
 
   /* 主內容區 */
   .content {
-    /* width: 100%; */
     padding-top: 139px;
     background-color: white;
   }

@@ -161,7 +161,7 @@ const deadline = ref(Date.now() + 1000 * 60 * 60 * 24)
   font-size: 24px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .header-banner-container {
     flex-direction: column; /* 垂直排列 */
     align-items: center;

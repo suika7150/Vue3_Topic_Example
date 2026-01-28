@@ -98,6 +98,8 @@ onUnmounted(() => {
 
 .carousel-container :deep(.el-carousel__item) {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 0vh;
+  aspect-ratio: 16/9;
 }
 
 .carousel-container :deep(.el-carousel__item:not(.is-active)) {
@@ -105,7 +107,7 @@ onUnmounted(() => {
   transform: scale(0.9);
 }
 
-@media (max-width: 912px) {
+@media (max-width: 1024px) {
   .carousel-container :deep(.el-carousel__container) {
     padding-left: 0 !important;
     padding-right: 0 !important;

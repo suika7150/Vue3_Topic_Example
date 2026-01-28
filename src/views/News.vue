@@ -196,7 +196,7 @@ const openDetails = (item) => {
   letter-spacing: 1px;
 }
 
-@media (max-width: 912px) {
+@media (max-width: 1024px) {
   .news-container {
     padding: 40px 15px;
   }

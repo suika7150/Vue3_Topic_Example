@@ -130,7 +130,7 @@ const { goShoppingGuide, goQA, goFlashSale, goLuckyWheel, goAnime } = useNavigat
   outline: none;
 }
 
-@media (max-width: 1145px) {
+@media (max-width: 1100px) {
   .topbar-dropdowns {
     display: none;
   }
