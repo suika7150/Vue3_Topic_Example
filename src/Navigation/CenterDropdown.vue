@@ -20,7 +20,7 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goAnime">動漫聯名款</el-dropdown-item>
+          <el-dropdown-item @click="goNews3">動漫聯名款</el-dropdown-item>
           <el-dropdown-item @click="goNews4">電影大聯盟</el-dropdown-item>
           <el-dropdown-item @click="goNews4">設計師聯名款</el-dropdown-item>
           <el-dropdown-item @click="goNews4">全球限量版</el-dropdown-item>
@@ -98,7 +98,7 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElIcon } from 'el
 import { ArrowDown, CaretBottom } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'
 
-const { goShoppingGuide, goQA, goFlashSale, goLuckyWheel, goAnime } = useNavigation()
+const { goShoppingGuide, goQA, goFlashSale, goLuckyWheel } = useNavigation()
 
 // const goNews1 = () => goto('/news1')
 // const goNews2 = () => goto('/news2')

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProductList from '@/views/products/ProductList.vue'
+import ProductList from '../products/ProductList.vue'
 </script>
 
 <template>
@@ -20,7 +20,6 @@ import ProductList from '@/views/products/ProductList.vue'
     </div>
 
     <div class="content-wrapper">
-      <ProductList />
       <!-- <el-row :gutter="40">
         <el-col :xs="24" :sm="12" :md="12" v-for="item in animeProducts" :key="item.id">
           <div class="large-product-box" @click="goToDetail(item.id)">
@@ -47,16 +46,23 @@ import ProductList from '@/views/products/ProductList.vue'
   background-color: #fff;
 }
 
+/* 滿版 Hero 樣式 */
 .hero-banner {
   height: 85vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
   overflow: hidden;
+=======
+  position: relative;
+  overflow: hidden; /* 確保影片不溢出 */
+>>>>>>> parent of 7f9b1da (新增電影大聯盟頁面)
   margin-bottom: 80px;
 }
 
+/* 影片背景樣式 */
 .video-background {
   position: absolute;
   top: 0;
@@ -73,6 +79,7 @@ import ProductList from '@/views/products/ProductList.vue'
   left: 0;
   width: 100%;
   height: 100%;
+  /* 漸層遮罩，讓底部文字更清楚 */
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
   z-index: 1;
 }
@@ -86,7 +93,7 @@ import ProductList from '@/views/products/ProductList.vue'
 }
 
 .main-title {
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-size: clamp(2.5rem, 8vw, 4.5rem); /* 響應式字體大小 */
   font-weight: 800;
   letter-spacing: 12px;
   margin: 25px 0;
@@ -192,6 +199,7 @@ import ProductList from '@/views/products/ProductList.vue'
   border-radius: 2px;
 }
 
+/* 手機版微調 */
 @media (max-width: 768px) {
   .hero-banner {
     height: 60vh;
