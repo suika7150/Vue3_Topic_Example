@@ -20,6 +20,7 @@ import ProductList from '../products/ProductList.vue'
     </div>
 
     <div class="content-wrapper">
+      <ProductList />
       <!-- <el-row :gutter="40">
         <el-col :xs="24" :sm="12" :md="12" v-for="item in animeProducts" :key="item.id">
           <div class="large-product-box" @click="goToDetail(item.id)">
@@ -50,22 +51,18 @@ import ProductList from '../products/ProductList.vue'
 .hero-banner {
   height: 85vh;
   width: 100%;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-<<<<<<< HEAD
   overflow: hidden;
-=======
-  position: relative;
-  overflow: hidden; /* 確保影片不溢出 */
->>>>>>> parent of 7f9b1da (新增電影大聯盟頁面)
-  margin-bottom: 80px;
+  margin-top: -110px;
 }
 
 /* 影片背景樣式 */
 .video-background {
   position: absolute;
-  top: 0;
+  top: 0px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -200,9 +197,10 @@ import ProductList from '../products/ProductList.vue'
 }
 
 /* 手機版微調 */
-@media (max-width: 768px) {
+@media (max-width: 912px) {
   .hero-banner {
-    height: 60vh;
+    height: 70vh;
+    margin-top: 0px;
     position: relative;
   }
   .main-title {

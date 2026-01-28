@@ -242,6 +242,7 @@ const openCartDrawer = () => {
 .product-list-container {
   max-width: 1500px;
   padding: 100px;
+  margin: 0 auto;
 }
 
 .product-col {

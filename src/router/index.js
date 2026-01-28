@@ -42,7 +42,7 @@ const routes = [
   },
   {
     path: '/products/manage',
-    name: 'ProductManage',
+    name: 'productManage',
     component: () => import('@/views/products/ProductManage.vue'),
     meta: {
       requiresAuth: true,
@@ -80,6 +80,11 @@ const routes = [
     path: '/crossover/anime',
     name: 'anime',
     component: () => import('@/views/crossover/Anime.vue'),
+  },
+  {
+    path: '/crossover/movie',
+    name: 'movie',
+    component: () => import('@/views/crossover/Movie.vue'),
   },
   {
     path: '/checkout',

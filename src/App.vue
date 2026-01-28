@@ -83,11 +83,11 @@ const navMenu = computed(() => {
 /* 主內容區 */
 .content {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
   flex-direction: column;
   flex: 1;
-  padding-top: 220px;
+  padding-top: 250px;
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;

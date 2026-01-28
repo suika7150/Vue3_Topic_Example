@@ -105,7 +105,7 @@ import { useRouter } from 'vue-router'
   margin-top: 4px;
 }
 
-@media (max-width: 1030px) {
+@media (max-width: 1024px) {
   .top-bar {
     flex-direction: row;
     position: fixed;

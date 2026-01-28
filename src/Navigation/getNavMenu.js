@@ -36,7 +36,7 @@ export function getNavMenu(userRole) {
         // { name: '', label: '商品總覽', icon: Cpu },
         // { name: 'list', label: '商品管理', icon: Cpu },
         { name: 'overview', label: '商品總覽', icon: Cpu, route: '/products' },
-        { name: 'list', label: '商品管理', icon: Cpu, route: '/products/list' },
+        { name: 'productManage', label: '商品管理', icon: Cpu, route: '/products/manage' },
       ],
     },
 
