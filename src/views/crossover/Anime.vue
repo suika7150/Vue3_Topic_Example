@@ -53,7 +53,6 @@ import ProductList from '@/views/products/ProductList.vue'
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   overflow: hidden;
   margin-bottom: 80px;
 }
@@ -125,9 +124,8 @@ import ProductList from '@/views/products/ProductList.vue'
 
 /* 商品內容區 */
 .content-wrapper {
-  max-width: 1400px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 40px;
 }
 
 .large-product-box {
@@ -197,6 +195,7 @@ import ProductList from '@/views/products/ProductList.vue'
 @media (max-width: 768px) {
   .hero-banner {
     height: 60vh;
+    position: relative;
   }
   .main-title {
     letter-spacing: 5px;

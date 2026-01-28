@@ -83,13 +83,16 @@ const navMenu = computed(() => {
 /* 主內容區 */
 .content {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   flex: 1;
   padding-top: 220px;
   overflow: hidden;
   box-sizing: border-box;
-  flex-direction: column;
-  justify-content: stretch;
   width: 100%;
+  /* max-width: 100%; */
+  /* margin: 0 auto; */
 }
 
 /* Footer */
@@ -109,7 +112,7 @@ const navMenu = computed(() => {
 
   /* 主內容區 */
   .content {
-    width: 100%;
+    /* width: 100%; */
     padding-top: 139px;
     background-color: white;
   }

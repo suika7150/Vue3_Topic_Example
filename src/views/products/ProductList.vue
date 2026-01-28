@@ -240,7 +240,7 @@ const openCartDrawer = () => {
 
 <style scoped>
 .product-list-container {
-  max-width: 1200px;
+  max-width: 1500px;
   padding: 100px;
 }
 
