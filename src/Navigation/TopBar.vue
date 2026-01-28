@@ -109,15 +109,11 @@ import CenterDropdown from './CenterDropdown.vue'
     flex-direction: row;
     position: fixed;
     display: flex;
-    /* top: 40px; */
-    /* left: 0; */
-    /* width: 100%; */
     height: 80px;
     background-color: #000000fb;
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    /* overflow: visible; */
     z-index: 1002;
   }
 

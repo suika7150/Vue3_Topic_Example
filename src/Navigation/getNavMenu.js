@@ -18,7 +18,6 @@ import {
   Sell,
   MagicStick,
 } from '@element-plus/icons-vue'
-import { faShirt } from '@fortawesome/free-solid-svg-icons'
 
 /**
  * 根據使用者角色動態產生導覽選單

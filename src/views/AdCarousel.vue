@@ -71,7 +71,7 @@ const checkMobile = () => {
 const carouselType = computed(() => (isMobile.value ? '' : 'card'))
 
 // 手機 & PC 高度
-const carouselHight = computed(() => (isMobile.value ? '215px' : '400px'))
+const carouselHight = computed(() => (isMobile.value ? '100vh' : '50vh'))
 
 onMounted(() => {
   checkMobile()
@@ -98,8 +98,8 @@ onUnmounted(() => {
 
 .carousel-container :deep(.el-carousel__item) {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  min-height: 0vh;
-  aspect-ratio: 16/9;
+  position: absolute;
+  min-height: 50vh;
 }
 
 .carousel-container :deep(.el-carousel__item:not(.is-active)) {
@@ -109,17 +109,13 @@ onUnmounted(() => {
 
 @media (max-width: 1024px) {
   .carousel-container :deep(.el-carousel__container) {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
+    min-width: 0vh;
+    width: 100%;
   }
 
   .carousel-container :deep(.el-carousel__item) {
     margin: 0 !important;
     padding: 0 !important;
-
     border-radius: 0 !important;
     box-shadow: none !important;
   }

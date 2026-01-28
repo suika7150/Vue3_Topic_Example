@@ -191,7 +191,7 @@ const startSpin = () => {
 
 @media (max-width: 1024px) {
   .lucky-wheel-container {
-    padding: 200px 10px;
+    padding: 100px 0px;
   }
 
   .wheel-title {

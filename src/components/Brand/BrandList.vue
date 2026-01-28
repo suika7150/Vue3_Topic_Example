@@ -23,9 +23,8 @@ onMounted(() => {
 <style scoped>
 .brand-list-container {
   width: 100%;
-  /* border: 1px solid #eee; */
   border-radius: 8px;
-  margin: 20px auto;
+  margin: 50px auto;
   max-width: 1000px;
 }
 

@@ -26,7 +26,7 @@ const navMenu = computed(() => {
       </div>
     </header>
     <div class="layout">
-      <Breadcrumb />
+      <!-- <Breadcrumb /> -->
 
       <div class="content">
         <router-view />
@@ -62,10 +62,10 @@ const navMenu = computed(() => {
 
 .layout {
   display: flex;
-  flex: 1;
-  width: 100%;
   align-items: stretch;
   justify-content: stretch;
+  flex: 1;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -84,7 +84,6 @@ const navMenu = computed(() => {
 /* 主內容區 */
 .content {
   display: flex;
-  /* align-items: center; */
   justify-content: center;
   flex-direction: column;
   flex: 1;
@@ -92,8 +91,6 @@ const navMenu = computed(() => {
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;
-  /* max-width: 100%; */
-  /* margin: 0 auto; */
 }
 
 /* Footer */

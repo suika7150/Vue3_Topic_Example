@@ -92,7 +92,6 @@ watch(
   color: #fff;
   display: block;
   font-size: 15px;
-  /* white-space: nowrap; 禁用換行 */
 }
 
 /* 垂直滑動動畫 */
