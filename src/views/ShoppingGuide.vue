@@ -44,7 +44,8 @@ import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
 <style scoped>
 .page-container {
   max-width: 1440px;
-  margin: 50 80px;
+  width: 90%;
+  margin: 50px auto;
 }
 .card-header {
   text-align: center;
@@ -52,8 +53,10 @@ import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
 .box-card {
   border-radius: 12px;
   border: 1px solid #ebeef5;
+  width: 100%;
 }
 .steps-box {
+  width: 100%;
   margin: 40px 0;
 }
 .section h3 {
