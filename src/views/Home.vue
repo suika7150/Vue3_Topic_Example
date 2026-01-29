@@ -1,12 +1,12 @@
 <template>
   <div class="home-container">
     <AdModal />
-    <div class="test">
-      <!-- 圖片輪播 -->
-      <div class="carousel-section">
-        <AdCarousel />
-      </div>
+
+    <!-- 圖片輪播 -->
+    <div class="carousel-section">
+      <AdCarousel />
     </div>
+
     <!-- 熱門品牌 -->
     <div class="brand-list">
       <BrandList />
@@ -25,13 +25,11 @@ import ProductList from '@/views/products/ProductList.vue'
 import AdModal from '@/components/AdModal.vue'
 </script>
 <style scoped>
-.test {
-  margin-bottom: 50px;
-}
-
 .carousel-section {
   position: relative;
-  width: 100vw;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
 }
 
 .brand-list {
@@ -42,8 +40,6 @@ import AdModal from '@/components/AdModal.vue'
 @media (max-width: 1024px) {
   .carousel-section {
     margin-bottom: 30px;
-    width: 100vw;
-    position: relative;
   }
 }
 </style>

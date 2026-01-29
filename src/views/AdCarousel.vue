@@ -61,7 +61,7 @@ const adBanners = [
 ]
 
 const isMobile = ref(false)
-const MOBILE_WIDTH = 912 // 手機模式的臨界寬度
+const MOBILE_WIDTH = 319 // 手機模式的臨界寬度
 
 // 檢查視窗寬度
 const checkMobile = () => {
@@ -109,15 +109,16 @@ onUnmounted(() => {
 
 @media (max-width: 1024px) {
   .carousel-container :deep(.el-carousel__container) {
-    /* display: flex; */
-    /* object-fit: cover; */
-    min-width: 0vh;
-    /* min-height: 0vh; */
+    height: auto;
+    aspect-ratio: 16 / 7;
     width: 100%;
+    min-width: 0vh;
+    /* min-height: 250px; */
   }
 
   .carousel-container :deep(.el-carousel__item) {
     width: 100vh;
+    overflow: hidden;
     margin: 0 !important;
     padding: 0 !important;
     border-radius: 0 !important;
@@ -127,11 +128,6 @@ onUnmounted(() => {
   .ad-link {
     width: 100% !important;
     height: 100% !important;
-  }
-  .ad-image {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
   }
 
   .ad-image {
