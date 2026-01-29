@@ -63,8 +63,8 @@ const activeNames = ref(['1']) // 預設展開第一個
 <style scoped>
 .page-container {
   padding: 20px;
-  /* max-width: 800px; */
   max-width: 1440px;
+
   margin: 0 auto;
 }
 .card-header h2 {
