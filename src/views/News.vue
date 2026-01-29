@@ -77,7 +77,6 @@ const openDetails = (item) => {
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
-  /* height: 100px; */
   background-color: #0a0a0a;
   padding: 80px 20px;
   color: #fff;

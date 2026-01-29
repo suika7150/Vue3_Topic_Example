@@ -109,11 +109,13 @@ onUnmounted(() => {
 
 @media (max-width: 1024px) {
   .carousel-container :deep(.el-carousel__container) {
+    display: flex;
     height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
     aspect-ratio: 16 / 7;
     width: 100%;
     min-width: 0vh;
-    /* min-height: 250px; */
   }
 
   .carousel-container :deep(.el-carousel__item) {
