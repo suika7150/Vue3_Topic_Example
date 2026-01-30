@@ -30,7 +30,7 @@ const navMenu = computed(() => {
       <!-- <Breadcrumb /> -->
 
       <SideAdBanner
-        position="left"
+        position="right"
         image="/Banner/SideAdBanner.png"
         link="/promo/double-11"
         title="年終狂歡節"

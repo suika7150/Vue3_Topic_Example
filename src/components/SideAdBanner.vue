@@ -82,6 +82,10 @@ onUnmounted(() => {
   left: 20px;
 }
 
+.right {
+  right: 20px;
+}
+
 .ad-link {
   display: block;
   width: 100%;
