@@ -119,7 +119,7 @@ onUnmounted(() => {
   }
 
   .carousel-container :deep(.el-carousel__item) {
-    width: 100vh;
+    width: 50vw;
     overflow: hidden;
     margin: 0 !important;
     padding: 0 !important;

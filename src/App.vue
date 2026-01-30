@@ -6,6 +6,7 @@ import { getNavMenu } from './Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
 import TopBarAdBanner from './Navigation/TopBarAdBanner.vue'
 import BackToTop from './Navigation/BackToTop.vue'
+import SideAdBanner from './components/SideAdBanner.vue'
 
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userRole)
@@ -27,6 +28,13 @@ const navMenu = computed(() => {
     </header>
     <div class="layout">
       <!-- <Breadcrumb /> -->
+
+      <SideAdBanner
+        position="left"
+        image="/Banner/SideAdBanner.png"
+        link="/promo/double-11"
+        title="年終狂歡節"
+      />
 
       <div class="content">
         <router-view />
@@ -93,7 +101,9 @@ const navMenu = computed(() => {
   width: 100%;
 }
 
-/* Footer */
+.backtotop {
+  z-index: 200;
+}
 .footer {
   overflow-x: hidden;
 }

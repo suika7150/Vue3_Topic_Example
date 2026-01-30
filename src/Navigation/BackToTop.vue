@@ -53,7 +53,7 @@ const handleScroll = () => {
 .line {
   position: fixed;
   right: 30px;
-  bottom: 220px;
+  bottom: 140px;
   font-size: 20px;
   color: #000;
   border: none;
@@ -62,7 +62,7 @@ const handleScroll = () => {
 .share {
   position: fixed;
   right: 30px;
-  bottom: 160px;
+  bottom: 80px;
   font-size: 20px;
   color: #000;
   border: none;
@@ -72,7 +72,7 @@ const handleScroll = () => {
 .back-to-top {
   position: fixed;
   right: 30px;
-  bottom: 100px;
+  bottom: 20px;
   font-size: 20px;
   color: #000;
   border: none;
