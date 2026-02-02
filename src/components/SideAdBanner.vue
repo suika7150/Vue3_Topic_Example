@@ -3,9 +3,7 @@
     class="side-ad"
     :class="[position, { 'ad-float': isScrolling }]"
     v-if="isVisible"
-    :style="{
-      transform: isScrolling ? `translateY(${scrollDirection * 100}px)` : 'translateY(0)',
-    }"
+    :style="adStyles"
   >
     <button class="close-btn" @click="isVisible = false" title="關閉廣告">×</button>
     <a :href="link" target="_blank" class="ad-link">
@@ -15,14 +13,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 
-defineProps({
+const props = defineProps({
   position: { type: String, default: 'left' },
   image: { type: String, default: '' },
   link: { type: String, default: '#' },
   title: { type: String, default: '活動廣告' },
+  //推開
+  shift: { type: Number, default: 0 },
 })
 
 const isVisible = ref(true)
@@ -30,6 +30,21 @@ const isScrolling = ref(false)
 const scrollDirection = ref(0) //方向
 let lastScrollY = window.scrollY
 let scrollTimer = null
+
+const adStyles = computed(() => {
+  const yOffset = isScrolling.value ? scrollDirection.value * 100 : 0
+
+  return {
+    // 同時處理水平推擠與垂直捲動
+    // 左右位置根據 position 和 shift 動態計算
+    left: props.position === 'left' ? `${20 + props.shift}px` : 'unset',
+    right: props.position === 'right' ? '20px' : 'unset',
+    transform: `translateY(${yOffset}px)`,
+    // 確保 transition 包含 left 屬性，這樣推開時才有動畫
+    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    zIndex: 9999, // 建議比 Drawer 低，以免穿透
+  }
+})
 
 const handleScroll = () => {
   isScrolling.value = true
@@ -78,13 +93,13 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-.left {
+/* .left {
   left: 20px;
 }
 
 .right {
   right: 20px;
-}
+} */
 
 .ad-link {
   display: block;

@@ -2,6 +2,7 @@
   <div class="product-list-container">
     <div class="product-list-header">
       <h2 class="header-title">商品列表</h2>
+      <!-- <Breadcrumb /> -->
       <div class="header-controls">
         <el-select
           v-model="selectedCategory"
@@ -108,6 +109,7 @@
 
 <script setup>
 import CartDrawer from '@/components/CartDrawer.vue'
+import Breadcrumb from '@/Navigation/Breadcrumb.vue'
 import api from '@/service/api'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
@@ -115,7 +117,7 @@ import { ElMessage } from 'element-plus'
 import { computed, ref } from 'vue'
 import { watch } from 'vue'
 import { onMounted, onBeforeUnmount } from 'vue'
-import throttle from 'lodash/throttle' // 引入 lodash 的 throttle 函數控制載入商品的頻率
+import throttle from 'lodash/throttle'
 
 const cartStore = useCartStore()
 import { Loading } from '@element-plus/icons-vue'

@@ -7,11 +7,19 @@ import { useUserStore } from '@/store/userStore'
 import TopBarAdBanner from './Navigation/TopBarAdBanner.vue'
 import BackToTop from './Navigation/BackToTop.vue'
 import SideAdBanner from './components/SideAdBanner.vue'
+import { useSidebarStore } from './store/sidebarStore'
+// import Breadcrumb from './Navigation/Breadcrumb.vue'
 
+const sidebarStore = useSidebarStore()
 const userStore = useUserStore()
 const userRole = computed(() => userStore.userRole)
 const navMenu = computed(() => {
   return getNavMenu(userRole.value)
+})
+
+const adShift = computed(() => {
+  console.log('🚀 側邊欄狀態變了！目前是:', userStore.isDrawerOpen)
+  return !sidebarStore.isCollapsed ? 300 : 0
 })
 </script>
 
@@ -26,11 +34,11 @@ const navMenu = computed(() => {
         <TopBar bannerOn />
       </div>
     </header>
-    <div class="layout">
-      <!-- <Breadcrumb /> -->
 
+    <div class="layout">
       <SideAdBanner
-        position="right"
+        position="left"
+        :shift="adShift"
         image="/Banner/SideAdBanner.png"
         link="/promo/double-11"
         title="年終狂歡節"
@@ -78,7 +86,7 @@ const navMenu = computed(() => {
 }
 
 /* 側邊欄 */
-.el-menu-vertical-demo {
+/* .el-menu-vertical-demo {
   display: flex;
   position: sticky;
   top: 0px;
@@ -87,7 +95,7 @@ const navMenu = computed(() => {
   box-shadow: 2px 0 5px rgba(245, 240, 240, 0.05);
   transition: all 0.3s;
   padding: 90px 0 0;
-}
+} */
 
 /* 主內容區 */
 .content {
