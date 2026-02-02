@@ -87,6 +87,11 @@ const routes = [
     component: () => import('@/views/crossover/Movie.vue'),
   },
   {
+    path: '/crossover/designer',
+    name: 'designer',
+    component: () => import('@/views/crossover/Designer.vue'),
+  },
+  {
     path: '/checkout',
     name: 'checkout',
     component: () => import('@/views/checkout/checkout.vue'),

@@ -13,7 +13,8 @@ body {
   width: 100%;
   margin-left: 0;
   padding: 0;
-  overflow-x: hidden; /* 防止水平捲軸出現 */
+  overflow-x: hidden;
+  scroll-behavior: smooth; /* 讓所有的捲動動作都帶有平滑動畫 */
 }
 header {
   margin: 0;
@@ -23,23 +24,22 @@ header {
 @media (max-width: 1024px) {
   .topbar-main {
     height: 100%;
-    display: none !important; /* 手機上隱藏主要導覽列 */
+    display: none;
     align-items: center;
     margin-top: 20px;
     flex-shrink: 1;
     min-width: 0;
   }
 
-  /* 2. 處理 Logo 尺寸和定位 */
   .topbar-left {
-    width: 100%; /* 讓 Logo 區塊佔滿寬度 */
+    width: 100%;
   }
 
   .topbar-right {
     display: flex;
     white-space: normal;
-    justify-content: center; /* 讓 LoginMenu 區塊置中 */
-    width: 100%; /* 確保其有足夠寬度 */
+    justify-content: center;
+    width: 100%;
   }
 
   .backtotop {
@@ -56,11 +56,10 @@ header {
 
   .search-input {
     width: 180px;
-    /* margin: 0px; */
   }
 
   .hamburger-btn {
-    background-color: transparent; /* Element Plus 主色 */
+    background-color: transparent;
     color: white;
     border-radius: 6px;
     padding: 8px 12px;

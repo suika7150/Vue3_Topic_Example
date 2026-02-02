@@ -18,7 +18,6 @@ const navMenu = computed(() => {
 })
 
 const adShift = computed(() => {
-  console.log('🚀 側邊欄狀態變了！目前是:', userStore.isDrawerOpen)
   return !sidebarStore.isCollapsed ? 300 : 0
 })
 </script>

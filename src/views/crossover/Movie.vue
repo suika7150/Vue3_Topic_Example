@@ -101,12 +101,18 @@ const goToDetail = (id: number) => {
 }
 
 .glitch-title {
-  font-size: 5rem;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
   font-weight: 900;
   text-transform: uppercase;
   margin: 10px 0;
   letter-spacing: 15px;
   color: #e50914;
+}
+
+.description {
+  font-size: clamp(1.2rem, 1vw, 4.5rem);
+  letter-spacing: 2px;
+  opacity: 0.9;
 }
 
 /* 電影卡片風格 */

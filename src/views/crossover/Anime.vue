@@ -95,7 +95,7 @@ import ProductList from '../products/ProductList.vue'
 }
 
 .sub-title {
-  font-size: 1.2rem;
+  font-size: clamp(1.2rem, 1vw, 4.5rem);
   letter-spacing: 2px;
   opacity: 0.9;
 }

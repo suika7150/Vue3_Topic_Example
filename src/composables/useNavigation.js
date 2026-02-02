@@ -43,6 +43,10 @@ export function useNavigation() {
     router.push({ name: 'movie' })
   }
 
+  const goDesigner = () => {
+    router.push({ name: 'designer' })
+  }
+
   const goShoppingGuide = () => {
     router.push({ name: 'shoppingGuide' })
   }
@@ -83,5 +87,6 @@ export function useNavigation() {
     goAnime,
     goOrderDetail,
     goMovie,
+    goDesigner,
   }
 }

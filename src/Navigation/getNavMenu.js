@@ -68,7 +68,7 @@ export function getNavMenu(userRole) {
           route: '/crossover/movie',
         },
         {
-          name: 'collab',
+          name: 'designer',
           label: '設計師聯名款',
           icon: Brush,
           route: '/crossover/designer',
