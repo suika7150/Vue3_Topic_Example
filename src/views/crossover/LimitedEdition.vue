@@ -37,7 +37,7 @@ import ProductList from '@/views/products/ProductList.vue'
   overflow: hidden;
   min-height: 110vh;
   width: 100%;
-  margin-top: -80px;
+  margin-top: 0px;
 }
 
 .hero-image {
@@ -46,13 +46,13 @@ import ProductList from '@/views/products/ProductList.vue'
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   z-index: 0;
 }
 
 .overlay {
   position: absolute;
-  inset: 0;
+  /* inset: 0; */
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.75));
   z-index: 1;
 }
@@ -100,18 +100,19 @@ import ProductList from '@/views/products/ProductList.vue'
 
 /* 商品區 */
 .content-wrapper {
+  position: relative;
+  max-width: 100%;
+  margin: -70px 0px;
   background: white;
   color: black;
-  margin-top: -120px;
-  padding: 60px;
-  position: relative;
   z-index: 3;
 }
 
 @media (max-width: 1024px) {
   .hero-banner {
-    min-height: 55vh;
-    margin-top: 0;
+    min-height: 50vh;
+    margin-top: 0px;
+    top: 0px;
   }
 
   .main-title {
@@ -119,9 +120,7 @@ import ProductList from '@/views/products/ProductList.vue'
   }
 
   .content-wrapper {
-    margin-top: -40px;
     padding: 30px 20px;
-    border-radius: 20px 20px 0 0;
   }
 }
 </style>

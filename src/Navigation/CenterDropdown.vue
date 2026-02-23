@@ -87,9 +87,9 @@
     </div>
 
     <!-- 常見問題 Q&A -->
-    <div>
+    <!-- <div>
       <el-button class="topbar-btn" @click="goQA"> 常見問題 Q&A </el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -134,7 +134,7 @@ const {
   outline: none;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1024px) {
   .topbar-dropdowns {
     display: none;
   }
