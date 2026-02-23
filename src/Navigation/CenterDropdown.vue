@@ -23,7 +23,7 @@
           <el-dropdown-item @click="goAnime">動漫聯名款</el-dropdown-item>
           <el-dropdown-item @click="goMovie">電影大聯盟</el-dropdown-item>
           <el-dropdown-item @click="goDesigner">設計師聯名款</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">全球限量版</el-dropdown-item>
+          <el-dropdown-item @click="goLimited">全球限量版</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -58,12 +58,12 @@
     <!-- 雙11大優惠 -->
     <el-dropdown trigger="hover">
       <el-button class="topbar-btn">
-        雙11大優惠 <el-icon><CaretBottom /></el-icon>
+        雙11周年慶典 <el-icon><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews3">新聞</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">公告</el-dropdown-item>
+          <el-dropdown-item @click="goNews3">年度特選回饋</el-dropdown-item>
+          <el-dropdown-item @click="goNews4">滿額加碼驚喜</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -98,8 +98,16 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElIcon } from 'el
 import { ArrowDown, CaretBottom } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'
 
-const { goShoppingGuide, goQA, goFlashSale, goLuckyWheel, goAnime, goMovie, goDesigner } =
-  useNavigation()
+const {
+  goShoppingGuide,
+  goQA,
+  goFlashSale,
+  goLuckyWheel,
+  goAnime,
+  goMovie,
+  goDesigner,
+  goLimited,
+} = useNavigation()
 </script>
 
 <style scoped>

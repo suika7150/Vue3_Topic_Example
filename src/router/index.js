@@ -92,6 +92,11 @@ const routes = [
     component: () => import('@/views/crossover/Designer.vue'),
   },
   {
+    path: '/crossover/limited',
+    name: 'limited',
+    component: () => import('@/views/crossover/LimitedEdition.vue'),
+  },
+  {
     path: '/checkout',
     name: 'checkout',
     component: () => import('@/views/checkout/checkout.vue'),

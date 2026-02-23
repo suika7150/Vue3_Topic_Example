@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProductList from '../products/ProductList.vue'
+import ProductList from '@/views/products/ProductList.vue'
 </script>
 
 <template>
@@ -97,7 +97,6 @@ import ProductList from '../products/ProductList.vue'
 .sub-title {
   font-size: clamp(1.2rem, 1vw, 4.5rem);
   letter-spacing: 2px;
-  opacity: 0.9;
 }
 
 .explore-btn {
