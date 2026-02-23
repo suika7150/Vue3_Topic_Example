@@ -120,6 +120,7 @@ import ProductList from '@/views/products/ProductList.vue'
   }
 
   .content-wrapper {
+    margin: 0px;
     padding: 30px 20px;
   }
 }
