@@ -23,6 +23,24 @@ const movieProducts = ref([
     isLimited: false,
     tag: '暗夜傳奇',
   },
+  {
+    id: 103,
+    title: '神鬼奇航 - 傑克船長傳奇羅盤',
+    series: 'PIRATES OF THE CARIBBEAN',
+    price: 1680,
+    image: '/Images/Pirates.png',
+    isLimited: true,
+    tag: '年度神作',
+  },
+  {
+    id: 104,
+    title: '魔戒 - 至尊魔戒 18K 金紀念戒',
+    series: 'THE LORD OF THE RINGS',
+    price: 9999,
+    image: '/Images/Rings.png',
+    isLimited: true,
+    tag: '史詩絕唱',
+  },
 ])
 
 const goToDetail = (id: number) => {
@@ -44,7 +62,7 @@ const goToDetail = (id: number) => {
 
     <div class="movie-content">
       <el-row :gutter="50">
-        <el-col :xs="24" :md="12" v-for="product in movieProducts" :key="product.id">
+        <el-col :xs="24" :sm="12" :md="8" v-for="product in movieProducts" :key="product.id">
           <div class="movie-card" @click="goToDetail(product.id)">
             <div class="poster-wrap">
               <img :src="product.image" class="poster-img" />
