@@ -64,7 +64,7 @@ export function useNavigation() {
   }
 
   const goTo = (name, params = {}, query = {}) => {
-    if (router.currentRoute.value.name === name) return
+    // if (router.currentRoute.value.name === name) return
     router.push({ name, params, query })
   }
 
