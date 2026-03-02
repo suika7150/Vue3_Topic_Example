@@ -19,8 +19,8 @@ const api = {
   // 新增產品
   addProduct: (data) => apiService.post(API_ROUTES.PRODUCT_ADD, data),
 
-  // 取得產品列表 & 搜尋產品
-  getProducts: (params) => apiService.get(API_ROUTES.PRODUCT_LIST, { params }),
+  // 取得產品列表
+  getProducts: () => apiService.get(API_ROUTES.PRODUCT_LIST),
 
   // 取得產品詳細資料
   getProductById: (id) => apiService.get(API_ROUTES.PRODUCT_DETAIL(id)),

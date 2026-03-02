@@ -11,7 +11,6 @@
         placeholder="搜尋商品"
         class="search-input"
         @blur="collapseSearch"
-        @keyup.enter="performSearch"
       >
         <template #append>
           <el-button type="primary" @click="performSearch">搜尋</el-button>
@@ -23,20 +22,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useNavigation } from '@/composables/useNavigation'
 import { Search } from '@element-plus/icons-vue'
 
-const { goTo } = useNavigation()
 const showSearch = ref(false)
 const searchText = ref('')
-
-const performSearch = () => {
-  if (!searchText.value.trim()) return
-
-  goTo('Products', {}, { keyword: searchText.value })
-
-  showSearch.value = false
-}
 
 const toggleSearch = () => {
   showSearch.value = !showSearch.value

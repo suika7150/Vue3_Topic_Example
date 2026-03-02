@@ -111,7 +111,6 @@
 import CartDrawer from '@/components/CartDrawer.vue'
 import Breadcrumb from '@/Navigation/Breadcrumb.vue'
 import api from '@/service/api'
-import { useRoute } from 'vue-router'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
@@ -131,7 +130,6 @@ const isLoadMoreLoading = ref(false)
 const dialogVisible = ref(false)
 const drawerVisible = ref(false)
 const currentProduct = ref({})
-const route = useRoute()
 
 const props = defineProps({
   forcedCategory: {
@@ -140,35 +138,6 @@ const props = defineProps({
   },
 })
 
-const fetchProducts = async () => {
-  isLoading.value = true
-  try {
-    // 這裡就是從網址抓關鍵字的地方
-    const currentKeyword = route.query.keyword
-
-    // 呼叫後端 API
-    const res = await api.getProducts({ keyword: currentKeyword || undefined })
-
-    if (res.code === '0000') {
-      products.value = res.result
-      visibleCount.value = loadMoreCount // 搜尋後重置載入筆數
-
-      //如果正在搜尋，就手動把分類下拉選單清空
-      if (currentKeyword) {
-        selectedCategory.value = ''
-      }
-    }
-  } finally {
-    isLoading.value = false
-  }
-}
-
-watch(
-  () => route.query.keyword,
-  () => {
-    fetchProducts() // 只要網址 keyword 變了，就去後端撈新資料
-  },
-)
 const selectedCategory = ref(props.forcedCategory || '')
 
 watch(
@@ -180,18 +149,28 @@ watch(
 )
 
 onMounted(async () => {
-  await fetchProducts()
-
-  if (products.value.length > 0 && categories.value.length === 0) {
-    categories.value = [...new Set(products.value.map((p) => p.category))]
-  }
-
-  if (props.forcedCategory) {
-    selectedCategory.value = props.forcedCategory
+  isLoading.value = true
+  try {
+    const res = await api.getProducts()
+    if (res.code === '0000') {
+      products.value = res.result
+      categories.value = [...new Set(products.value.map((p) => p.category))]
+    }
+    if (props.forcedCategory) {
+      selectedCategory.value = props.forcedCategory
+    }
+  } catch (err) {
+    console.error('載入商品失敗:', err)
+  } finally {
+    isLoading.value = false
   }
 
   Storage.get(CART_KEY)
+
+  //自動載入更多商品
   window.addEventListener('scroll', handleScrollThrottled)
+
+  loadMore()
 })
 
 const handleImageError = (e) => {
