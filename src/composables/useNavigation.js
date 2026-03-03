@@ -27,6 +27,10 @@ export function useNavigation() {
     router.push({ name: 'news' })
   }
 
+  const goProducts = () => {
+    router.push({ name: 'overview' })
+  }
+
   const goFlashSale = () => {
     router.push({ name: 'flashSale' })
   }
@@ -72,18 +76,14 @@ export function useNavigation() {
     router.replace({ name, params, query })
   }
 
-  const goBack = () => {
-    router.back()
-  }
-
   return {
     goTo,
     replaceTo,
-    goBack,
     goNews,
     goAbout,
     goHome,
     goLogin,
+    goProducts,
     goShoppingGuide,
     goQA,
     goFlashSale,

@@ -33,7 +33,7 @@ const searchText = ref('')
 const performSearch = () => {
   if (!searchText.value.trim()) return
 
-  goTo('Products', {}, { keyword: searchText.value })
+  goTo('overview', {}, { keyword: searchText.value })
 
   showSearch.value = false
 }
