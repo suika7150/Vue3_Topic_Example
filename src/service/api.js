@@ -6,16 +6,22 @@ import { create } from 'lodash'
 const api = {
   // 註冊
   register: (data) => apiService.post(API_ROUTES.REGISTER, data),
+
   // 登入
   login: (data) => apiService.post(API_ROUTES.LOGIN, data),
+
   // 用戶資料
   user: () => apiService.get(API_ROUTES.USER),
+
   // 查詢個人資料
   findUser: () => apiService.get(API_ROUTES.FINDUSER),
+
   // 個人資料維護
   updateProfile: (data) => apiService.put(API_ROUTES.PROFILE, data),
+
   // 登出
   logout: () => apiService.post(API_ROUTES.LOGOUT),
+
   // 新增產品
   addProduct: (data) => apiService.post(API_ROUTES.PRODUCT_ADD, data),
 
@@ -24,6 +30,7 @@ const api = {
 
   // 取得產品詳細資料
   getProductById: (id) => apiService.get(API_ROUTES.PRODUCT_DETAIL(id)),
+
   // 更新產品資料
   updateProduct: (id, data) => apiService.put(API_ROUTES.PRODUCT_UPDATE(id), data),
 
@@ -45,15 +52,15 @@ const api = {
   // 刪除選項
   deleteOption: (id) => apiService.delete(API_ROUTES.OPTIONS_DELETE(id)),
 
-  // //新增訂單
-  // createOrder: (data) => apiService.post(API_ROUTES.ORDER, data),
-
   // 取得選項列表
   getOptionsByListName: (listName) =>
     apiService.get(API_ROUTES.OPTIONS_BY_LISTNAME(), { params: { listName: listName } }),
 
   //新增訂單
   createOrder: (data) => apiService.post(API_ROUTES.ORDER_CREATE, data),
+
+  // //新增訂單
+  // createOrder: (data) => apiService.post(API_ROUTES.ORDER, data),
 }
 
 export default api

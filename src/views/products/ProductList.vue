@@ -1,115 +1,113 @@
 <template>
   <div class="product-list-container">
-    <div class="product-list-header">
-      <h2 class="header-title">商品列表</h2>
-      <!-- <Breadcrumb /> -->
-      <div class="header-controls">
-        <el-select
-          v-model="selectedCategory"
-          placeholder="選擇分類"
-          clearable
-          class="category-select"
+    <template v-if="isLoading">
+      <div class="product-list-header">
+        <h2 class="header-title">正在載入商品...</h2>
+      </div>
+      <el-row :gutter="20">
+        <el-col v-for="i in 4" :key="i" :span="6" class="product-col">
+          <el-skeleton animated :rows="5" />
+        </el-col>
+      </el-row>
+    </template>
+
+    <template v-else-if="filteredProducts.length > 0">
+      <div class="product-list-header">
+        <h2 class="header-title">商品列表</h2>
+        <div class="header-controls">
+          <el-select
+            v-model="selectedCategory"
+            placeholder="選擇分類"
+            clearable
+            class="category-select"
+          >
+            <el-option label="全部" value="" />
+            <el-option
+              v-for="category in categories"
+              :key="category"
+              :label="category"
+              :value="category"
+            />
+          </el-select>
+          <el-button @click="openCartDrawer" type="primary">購物車</el-button>
+        </div>
+      </div>
+
+      <el-row :gutter="20">
+        <el-col
+          v-for="product in visibleProducts"
+          :key="product.id"
+          :span="6"
+          :xs="12"
+          :sm="12"
+          :md="8"
+          :lg="6"
+          class="product-col"
         >
-          <el-option label="全部" value="" />
-          <el-option
-            v-for="category in categories"
-            :key="category"
-            :label="category"
-            :value="category"
-          />
-        </el-select>
-        <el-button @click="openCartDrawer" type="primary" class="openCartDrawer">
-          購物車
+          <el-card shadow="hover" class="product-card">
+            <div class="card-image-wrapper" @click="showProductDetail(product)">
+              <el-tooltip :content="product.description" placement="top">
+                <img
+                  :src="product.imageBase64"
+                  loading="lazy"
+                  class="card-image"
+                  @error="handleImageError"
+                />
+              </el-tooltip>
+            </div>
+            <div class="card-body">
+              <h3 class="product-name">{{ product.name }}</h3>
+              <p class="product-category">{{ product.category }}</p>
+              <el-rate v-model="product.rating" disabled show-score :max="5" />
+              <p class="product-price">$ {{ product.price }}</p>
+              <el-button
+                type="primary"
+                size="small"
+                class="add-to-cart-button"
+                @click="addToCart(product)"
+              >
+                加入購物車
+              </el-button>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <div class="load-more-container">
+        <div v-if="isLoadMoreLoading" class="loading-indicator">
+          <el-icon class="is-loading"><Loading /></el-icon>
+          <span>載入中...</span>
+        </div>
+        <el-button v-else-if="visibleCount < filteredProducts.length" @click="loadMore" plain>
+          載入更多
         </el-button>
       </div>
-    </div>
+    </template>
 
-    <el-row v-if="isLoading" :gutter="20">
-      <el-col v-for="i in 4" :key="i" :span="6" class="product-col">
-        <el-skeleton animated :rows="5" />
-      </el-col>
-    </el-row>
-
-    <el-row v-else :gutter="20">
-      <el-col
-        v-for="product in visibleProducts"
-        :key="product.id"
-        :span="6"
-        :xs="12"
-        :sm="12"
-        :md="8"
-        :lg="6"
-        class="product-col"
-      >
-        <el-card shadow="hover" class="product-card">
-          <div class="card-image-wrapper" @click="showProductDetail(product)">
-            <el-tooltip :content="product.description" placement="top">
-              <img
-                :src="product.imageBase64"
-                loading="lazy"
-                alt="product image"
-                class="card-image"
-                @error="handleImageError"
-              />
-            </el-tooltip>
-          </div>
-
-          <div class="card-body">
-            <h3 class="product-name">{{ product.name }}</h3>
-            <p class="product-category">{{ product.category }}</p>
-            <el-rate v-model="product.rating" disabled show-score :max="5" class="product-rating" />
-            <p class="product-price">$ {{ product.price }}</p>
-
-            <el-button
-              type="primary"
-              size="small"
-              class="add-to-cart-button"
-              @click="addToCart(product)"
-            >
-              加入購物車
-            </el-button>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <div class="load-more-container">
-      <!-- 旋轉圖示 -->
-      <div v-if="isLoadMoreLoading" class="loading-indicator">
-        <el-icon class="is-loading"><Loading /></el-icon>
-        <span>載入中...</span>
-      </div>
-
-      <!-- 當還有更多商品且未在載入時，才顯示按鈕 -->
-      <el-button v-else-if="visibleCount < filteredProducts.length" @click="loadMore" plain>
-        載入更多
-      </el-button>
+    <div v-else class="empty-state">
+      <el-empty description="哎呀！找不到相關商品" :image-size="300">
+        <el-button type="primary" @click="clearSearch">返回顯示所有商品</el-button>
+      </el-empty>
     </div>
 
     <el-dialog v-model="dialogVisible" :title="currentProduct.name" width="1000px">
       <div v-if="currentProduct" class="product-detail-dialog">
-        <img :src="currentProduct.imageBase64" alt="product image" class="product-detail-image" />
+        <img :src="currentProduct.imageBase64" class="product-detail-image" />
         <div class="product-detail-content">
           <p class="detail-price">$ {{ currentProduct.price }}</p>
           <p class="detail-description">{{ currentProduct.description }}</p>
-          <el-rate
-            v-model="currentProduct.rating"
-            disabled
-            show-score
-            :max="5"
-            class="detail-rating"
-          />
+          <el-rate v-model="currentProduct.rating" disabled show-score :max="5" />
         </div>
       </div>
     </el-dialog>
     <CartDrawer v-model:drawerVisible="drawerVisible" />
   </div>
-  <!-- <div v-for="product in products" :key="product.id"></div> -->
 </template>
 
 <script setup>
 import CartDrawer from '@/components/CartDrawer.vue'
-import Breadcrumb from '@/Navigation/Breadcrumb.vue'
+// import Breadcrumb from '@/Navigation/Breadcrumb.vue'
+import { useNavigation } from '@/composables/useNavigation'
 import api from '@/service/api'
 import { useRoute } from 'vue-router'
 import { useCartStore } from '@/store/cartStore'
@@ -119,9 +117,9 @@ import { computed, ref } from 'vue'
 import { watch } from 'vue'
 import { onMounted, onBeforeUnmount } from 'vue'
 import throttle from 'lodash/throttle'
+import { Loading } from '@element-plus/icons-vue'
 
 const cartStore = useCartStore()
-import { Loading } from '@element-plus/icons-vue'
 const products = ref([])
 const categories = ref([])
 const isLoading = ref(true)
@@ -132,6 +130,7 @@ const dialogVisible = ref(false)
 const drawerVisible = ref(false)
 const currentProduct = ref({})
 const route = useRoute()
+const { goProducts } = useNavigation()
 
 const props = defineProps({
   forcedCategory: {
@@ -259,13 +258,19 @@ const addToCart = (product) => {
 const openCartDrawer = () => {
   drawerVisible.value = true
 }
+
+const clearSearch = () => {
+  selectedCategory.value = ''
+  visibleCount.value = loadMoreCount
+  goProducts()
+}
 </script>
 
 <style scoped>
 .product-list-container {
   max-width: 1500px;
   padding: 100px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 .product-col {
@@ -301,9 +306,10 @@ const openCartDrawer = () => {
 .card-image-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 200px;
   overflow: hidden;
   cursor: pointer;
+  background-color: #f5f7fa;
 }
 
 .card-image {

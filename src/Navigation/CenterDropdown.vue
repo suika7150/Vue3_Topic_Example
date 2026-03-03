@@ -35,9 +35,9 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu class="center-menu-dropdown">
-          <el-dropdown-item @click="goNews3">食品飲品</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">汽機車用品</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">居家生活</el-dropdown-item>
+          <el-dropdown-item @click="">食品飲品</el-dropdown-item>
+          <el-dropdown-item @click="">汽機車用品</el-dropdown-item>
+          <el-dropdown-item @click="">居家生活</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -49,8 +49,8 @@
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews2">季節精選</el-dropdown-item>
-          <el-dropdown-item @click="goNews2">出遊推薦</el-dropdown-item>
+          <el-dropdown-item @click="">季節精選</el-dropdown-item>
+          <el-dropdown-item @click="">出遊推薦</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -62,8 +62,8 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews3">年度特選回饋</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">滿額加碼驚喜</el-dropdown-item>
+          <el-dropdown-item @click="">年度特選回饋</el-dropdown-item>
+          <el-dropdown-item @click="">滿額加碼驚喜</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -75,8 +75,8 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goNews3">新聞</el-dropdown-item>
-          <el-dropdown-item @click="goNews4">公告</el-dropdown-item>
+          <el-dropdown-item @click="">新聞</el-dropdown-item>
+          <el-dropdown-item @click="">公告</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>

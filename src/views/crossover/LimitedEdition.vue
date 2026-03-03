@@ -25,7 +25,7 @@ import ProductList from '@/views/products/ProductList.vue'
 
 <style scoped>
 .limited-page {
-  background-color: #111;
+  background-color: #000;
   color: white;
 }
 
