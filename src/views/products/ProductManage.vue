@@ -97,7 +97,7 @@ const filteredProducts = computed(() => {
 })
 
 const editProduct = (productId) => {
-  goTo('EditProduct', { id: productId })
+  goTo('editProduct', { id: productId })
 }
 
 const deleteProduct = async (productId) => {

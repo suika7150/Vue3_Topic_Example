@@ -31,6 +31,10 @@ export function useNavigation() {
     router.push({ name: 'overview' })
   }
 
+  // const goEditProduct = () => {
+  //   router.push({ name: 'editProduct' })
+  // }
+
   const goFlashSale = () => {
     router.push({ name: 'flashSale' })
   }
