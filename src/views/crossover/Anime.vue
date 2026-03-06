@@ -21,23 +21,6 @@ import ProductList from '@/views/products/ProductList.vue'
 
     <div class="content-wrapper">
       <ProductList />
-      <!-- <el-row :gutter="40">
-        <el-col :xs="24" :sm="12" :md="12" v-for="item in animeProducts" :key="item.id">
-          <div class="large-product-box" @click="goToDetail(item.id)">
-            <div class="img-container">
-              <img :src="item.image" class="zoom-img" />
-              <div v-if="item.isLimited" class="status-badge">LIMITED</div>
-            </div>
-            <div class="product-info">
-              <div class="text-group">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.series || '跨界聯名系列' }}</p>
-              </div>
-              <div class="price-tag">NT$ {{ item.price }}</div>
-            </div>
-          </div>
-        </el-col>
-      </el-row> -->
     </div>
   </div>
 </template>
