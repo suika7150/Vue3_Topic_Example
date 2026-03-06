@@ -1,63 +1,83 @@
 <template>
-  <div class="max-w-2xl mx-auto mt-10 p-6 border rounded bg-white shadow">
-    <h2 class="text-2xl font-bold mb-4">編輯商品</h2>
+  <div class="list-container">
+    <div class="list-header">
+      <h2 class="title text-2xl font-bold">編輯商品資訊</h2>
+    </div>
 
-    <el-form :model="form" label-width="100px" :rules="rules" ref="formRef">
-      <el-form-item label="商品名稱" prop="name">
-        <el-input v-model="form.name" placeholder="請輸入商品名稱" />
-      </el-form-item>
-      <el-form-item label="分類" prop="category">
-        <el-select v-model="form.category" placeholder="請選擇分類">
-          <el-option label="電子產品" value="電子產品" />
-          <el-option label="生活用品" value="生活用品" />
-          <el-option label="服飾配件" value="服飾配件" />
-          <el-option label="加工食品" value="加工食品" />
-          <el-option label="交通工具" value="交通工具" />
-          <el-option label="清潔用品" value="清潔用品" />
-          <el-option label="影音娛樂" value="影音娛樂" />
-        </el-select>
-      </el-form-item>
+    <el-form :model="form" label-width="120px" :rules="rules" ref="formRef">
+      <div class="list-item">
+        <el-form-item label="商品名稱" prop="name">
+          <el-input v-model="form.name" placeholder="請輸入商品名稱" />
+        </el-form-item>
+      </div>
 
-      <el-form-item label="價格" prop="price">
-        <el-input-number v-model="form.price" :min="0" :step="100" />
-      </el-form-item>
+      <div class="list-item">
+        <el-form-item label="分類" prop="category">
+          <el-select v-model="form.category" placeholder="請選擇分類">
+            <el-option label="電子產品" value="電子產品" />
+            <el-option label="生活用品" value="生活用品" />
+            <el-option label="服飾配件" value="服飾配件" />
+            <el-option label="加工食品" value="加工食品" />
+            <el-option label="交通工具" value="交通工具" />
+            <el-option label="清潔用品" value="清潔用品" />
+            <el-option label="影音娛樂" value="影音娛樂" />
+          </el-select>
+        </el-form-item>
+      </div>
 
-      <el-form-item label="庫存數量" prop="stock">
-        <el-input-number v-model="form.stock" :min="0" :step="1" placeholder="請輸入庫存數量" />
-      </el-form-item>
+      <div class="list-item">
+        <el-form-item label="銷售價格" prop="price">
+          <el-input-number v-model="form.price" :min="0" :step="100" />
+        </el-form-item>
+      </div>
 
-      <el-form-item label="商品狀態" prop="states">
-        <el-select v-model="form.states" placeholder="請選擇狀態">
-          <el-option
-            v-for="(state, index) in states"
-            :key="index"
-            :label="state.label"
-            :value="state.value"
+      <div class="list-item">
+        <el-form-item label="庫存數量" prop="stock">
+          <el-input-number v-model="form.stock" :min="0" :step="1" placeholder="請輸入庫存數量" />
+        </el-form-item>
+      </div>
+
+      <div class="list-item">
+        <el-form-item label="商品狀態" prop="states">
+          <el-select v-model="form.states" placeholder="請選擇狀態">
+            <el-option
+              v-for="(state, index) in states"
+              :key="index"
+              :label="state.label"
+              :value="state.value"
+            />
+          </el-select>
+        </el-form-item>
+      </div>
+
+      <div class="list-item">
+        <el-form-item label="詳細描述">
+          <el-input
+            v-model="form.description"
+            type="textarea"
+            :rows="3"
+            placeholder="簡要描述商品..."
           />
-        </el-select>
-      </el-form-item>
+        </el-form-item>
+      </div>
 
-      <el-form-item label="描述">
-        <el-input
-          v-model="form.description"
-          type="textarea"
-          :rows="3"
-          placeholder="簡要描述商品..."
-        />
-      </el-form-item>
-      <el-form-item label="上傳圖片">
-        <input type="file" accept="image/*" @change="handleFileChange" />
-        <div v-if="imagePreview" class="mt-2">
-          <img :src="imagePreview" class="h-32 rounded border" />
-          <el-button type="danger" @click="removeImage" text>刪除圖片</el-button>
-        </div>
-      </el-form-item>
+      <div class="list-item noborder">
+        <el-form-item label="上傳圖片">
+          <input type="file" accept="image/*" @change="handleFileChange" />
+          <div v-if="imagePreview" class="mt-2">
+            <img :src="imagePreview" class="h-32 rounded border" />
+            <el-button type="danger" @click="removeImage" text>刪除圖片</el-button>
+          </div>
+        </el-form-item>
+      </div>
 
-      <el-form-item>
-        <el-button type="primary" @click="submitForm">更新商品</el-button>
-        <el-button @click="resetForm" type="default">重設</el-button>
-        <el-button @click="cancelEdit" type="success">取消變更</el-button>
-      </el-form-item>
+      <div class="list-footer">
+        <el-form-item>
+          <el-button type="primary" @click="submitForm">更新商品</el-button>
+          <el-button @click="resetForm" type="default">重設</el-button>
+          <el-button @click="cancelEdit" type="success">取消變更</el-button>
+        </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>
@@ -177,7 +197,7 @@ function resetForm() {
 }
 
 function cancelEdit() {
-  goTo('ProductList')
+  goTo('productManage')
 }
 
 const filterOptions = (allOptions, listNamen) => {
@@ -224,10 +244,88 @@ function submitForm() {
     try {
       await api.updateProduct(productId.value, form)
       ElMessage.success('商品更新成功！')
-      goTo('ProductList')
+      goTo('productManage')
     } catch (error) {
       ElMessage.error('更新失敗，請稍後再試')
     }
   })
 }
 </script>
+<style scoped>
+/* 保持與 Manage 一致的容器寬度與邊距 */
+.list-container {
+  max-width: 1200px;
+  margin: 20px 120px;
+  background-color: #fff;
+}
+
+/* 標題樣式統一 */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #303133;
+}
+
+/* 清單項目樣式 */
+.list-item {
+  padding: 20px 0;
+  border-bottom: 1px solid #f2f6fc;
+}
+
+.noborder {
+  border-bottom: none;
+}
+
+/* 讓輸入框寬度適中，不要橫跨全螢幕 */
+:deep(.el-input),
+:deep(.el-select),
+:deep(.el-textarea) {
+  max-width: 500px;
+  width: 100%;
+}
+
+/* 圖片預覽部分 */
+.img-preview-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+}
+
+.preview-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #dcdfe6;
+}
+
+/* 底部按鈕區 */
+.list-footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #ebeef5;
+  display: flex;
+  gap: 12px;
+}
+
+/* 標籤字體加粗，對應後台質感 */
+:deep(.el-form-item__label) {
+  font-weight: bold;
+  color: #606266;
+}
+
+/* 移除 Form Item 預設底邊距，改由 list-item 控制 */
+:deep(.el-form-item) {
+  margin-bottom: 0;
+}
+</style>

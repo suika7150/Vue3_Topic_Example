@@ -51,7 +51,7 @@ const routes = [
   },
   {
     path: '/products/edit/:id',
-    name: 'EditProduct',
+    name: 'editProduct',
     component: () => import('@/views/products/EditProduct.vue'),
   },
   // 開發中
