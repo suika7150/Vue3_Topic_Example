@@ -1,5 +1,8 @@
 <template>
   <div class="product-list-container">
+    <div class="breadcrumb-strip">
+      <Breadcrumb />
+    </div>
     <template v-if="isLoading">
       <div class="product-list-header">
         <h2 class="header-title">正在載入商品...</h2>
@@ -15,6 +18,9 @@
       <div class="product-list-header">
         <h2 class="header-title">商品列表</h2>
         <div class="header-controls">
+          <!-- <div class="breadcrumb-bar">
+            <Breadcrumb />
+          </div> -->
           <el-select
             v-model="selectedCategory"
             placeholder="選擇分類"
@@ -106,7 +112,7 @@
 
 <script setup>
 import CartDrawer from '@/components/CartDrawer.vue'
-// import Breadcrumb from '@/Navigation/Breadcrumb.vue'
+import Breadcrumb from '@/Navigation/Breadcrumb.vue'
 import { useNavigation } from '@/composables/useNavigation'
 import api from '@/service/api'
 import { useRoute } from 'vue-router'
@@ -270,7 +276,14 @@ const clearSearch = () => {
 .product-list-container {
   max-width: 1500px;
   padding: 100px;
-  /* margin: 0 auto; */
+}
+
+.breadcrumb-strip {
+  /* 增加與下方「商品列表」標題的距離 */
+  margin-bottom: 10px;
+
+  /* 如果你想要麵包屑本身也有點內距，看起來更像一個獨立區塊 */
+  padding: 10px 0;
 }
 
 .product-col {
