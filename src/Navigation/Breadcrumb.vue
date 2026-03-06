@@ -2,12 +2,8 @@
   <el-breadcrumb separator="/">
     <el-breadcrumb-item :to="{ path: '/' }">首頁</el-breadcrumb-item>
 
-    <el-breadcrumb-item
-      v-for="(item, index) in matchedCrumbs"
-      :key="item.path"
-      :to="item.clickable ? item.path : undefined"
-    >
-      {{ item.label }}
+    <el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path" :to="item.path">
+      {{ item.meta.title }}
     </el-breadcrumb-item>
   </el-breadcrumb>
 </template>
@@ -16,44 +12,37 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-const props = defineProps({
-  categories: {
-    type: Array,
-    required: true,
-  },
-  basePath: {
-    type: String,
-    default: '/category',
-  },
-})
-
 const route = useRoute()
 
-// 將 path 轉成結構層級
-const matchedCrumbs = computed(() => {
-  const pathParts = route.path
-    .replace(props.basePath, '') // 移除 basePath
-    .split('/')
-    .filter(Boolean) // 移除空白
-
-  const result = []
-  let currentList = props.categories
-  let currentPath = props.basePath
-
-  for (const segment of pathParts) {
-    const found = currentList.find((item) => item.name === segment)
-    if (!found) break
-
-    currentPath += `/${found.name}`
-    result.push({
-      label: found.label,
-      path: currentPath,
-      clickable: found.clickable !== false, // 預設可點擊
-    })
-
-    currentList = found.subs || [] // 向下一層搜尋
-  }
-
-  return result
+// 核心邏輯：只抓取有標題的路由層級
+const breadcrumbs = computed(() => {
+  return route.matched.filter((item) => item.meta && item.meta.title && item.path !== '/')
 })
 </script>
+
+<style scoped>
+:deep(.el-breadcrumb) {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 2. 可點擊項目的樣式 (未選中狀態) */
+:deep(.el-breadcrumb__inner.is-link) {
+  font-weight: 500;
+  color: #606266;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* 3. 滑鼠移上去的互動效果 */
+:deep(.el-breadcrumb__inner.is-link:hover) {
+  color: #409eff; /* Element Plus 主色藍 */
+  background-color: rgba(64, 158, 255, 0.1); /* 淡淡的藍色背景，讓點擊感更強 */
+}
+
+/* 4. 分隔符號的顏色 (斜線 /) */
+:deep(.el-breadcrumb__separator) {
+  color: #c0c4cc;
+  margin: 0 8px;
+}
+</style>

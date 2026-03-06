@@ -4,25 +4,48 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
 const routes = [
-  { path: '/', name: 'home', component: () => import('@/views/Home.vue') },
+  { path: '/', name: 'home', component: () => import('@/views/Home.vue'), meta: { title: '首頁' } },
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/users/Login.vue'),
+    meta: { title: '登入' },
   },
-  { path: '/register', name: 'register', component: () => import('@/views/users/Register.vue') },
-  { path: '/about', name: 'about', component: () => import('@/views/About.vue') },
-  { path: '/news', name: 'news', component: () => import('@/views/News.vue') },
-  { path: '/setting', name: 'setting', component: () => import('@/views/Setting.vue') },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/views/users/Register.vue'),
+    meta: { title: '註冊' },
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import('@/views/About.vue'),
+    meta: { title: '關於我們' },
+  },
+  {
+    path: '/news',
+    name: 'news',
+    component: () => import('@/views/News.vue'),
+    meta: { title: '新聞資訊' },
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: () => import('@/views/Setting.vue'),
+    meta: { title: '設定' },
+  },
   {
     path: '/shoppingguide',
     name: 'shoppingGuide',
     component: () => import('@/views/ShoppingGuide.vue'),
+    meta: { title: '購物指南' },
   },
   {
     path: '/qa',
     name: 'qa',
     component: () => import('@/views/QA.vue'),
+    meta: { title: '常見問題' },
   },
   {
     path: '/profile',
@@ -34,17 +57,20 @@ const routes = [
     path: '/products',
     name: 'overview',
     component: () => import('@/views/products/ProductList.vue'),
+    meta: { title: '商品總覽' },
   },
   {
     path: '/products/add',
     name: 'AddProduct',
     component: () => import('@/views/products/AddProduct.vue'),
+    meta: { title: '新增商品' },
   },
   {
     path: '/products/manage',
     name: 'productManage',
     component: () => import('@/views/products/ProductManage.vue'),
     meta: {
+      title: '商品管理',
       requiresAuth: true,
       role: ['ADMIN', 'USER'],
     },
@@ -53,6 +79,7 @@ const routes = [
     path: '/products/edit/:id',
     name: 'editProduct',
     component: () => import('@/views/products/EditProduct.vue'),
+    meta: { title: '商品編輯' },
   },
   // 開發中
   // {
@@ -64,37 +91,43 @@ const routes = [
     path: '/settings/options',
     name: 'OptionsManage',
     component: () => import('@/views/settings/OptionsManage.vue'),
-    meta: { requiresAuth: true, role: ['ADMIN', 'USER'] },
+    meta: { meta: { title: '選項管理' }, requiresAuth: true, role: ['ADMIN', 'USER'] },
   },
   {
     path: '/event/flashsale',
     name: 'flashSale',
     component: () => import('@/views/event/FlashSale.vue'),
+    meta: { title: '本週特惠' },
   },
   {
     path: '/event/luckywheel',
     name: 'luckyWheel',
     component: () => import('@/views/event/LuckyWheel.vue'),
+    meta: { title: '活動專區' },
   },
   {
     path: '/crossover/anime',
     name: 'anime',
     component: () => import('@/views/crossover/Anime.vue'),
+    meta: { title: '動漫聯名款' },
   },
   {
     path: '/crossover/movie',
     name: 'movie',
     component: () => import('@/views/crossover/Movie.vue'),
+    meta: { title: '電影大聯盟' },
   },
   {
     path: '/crossover/designer',
     name: 'designer',
     component: () => import('@/views/crossover/Designer.vue'),
+    meta: { title: '設計師聯名款' },
   },
   {
     path: '/crossover/limited',
     name: 'limited',
     component: () => import('@/views/crossover/LimitedEdition.vue'),
+    meta: { title: '全球限量版' },
   },
   {
     path: '/checkout',
