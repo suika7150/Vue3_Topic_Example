@@ -279,10 +279,7 @@ const clearSearch = () => {
 }
 
 .breadcrumb-strip {
-  /* 增加與下方「商品列表」標題的距離 */
   margin-bottom: 10px;
-
-  /* 如果你想要麵包屑本身也有點內距，看起來更像一個獨立區塊 */
   padding: 10px 0;
 }
 
