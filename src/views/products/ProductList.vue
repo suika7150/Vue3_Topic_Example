@@ -50,22 +50,31 @@
           :lg="6"
           class="product-col"
         >
-          <el-card shadow="hover" class="product-card">
+          <el-card class="product-card">
             <div class="card-image-wrapper" @click="showProductDetail(product)">
-              <el-tooltip :content="product.description" placement="top">
-                <img
-                  :src="product.imageBase64"
-                  loading="lazy"
-                  class="card-image"
-                  @error="handleImageError"
-                />
-              </el-tooltip>
+              <!-- <el-tooltip :content="product.description" placement="bottom"> -->
+              <img
+                :src="product.imageBase64"
+                loading="lazy"
+                class="card-image"
+                @error="handleImageError"
+              />
+              <!-- </el-tooltip> -->
             </div>
             <div class="card-body">
               <h3 class="product-name">{{ product.name }}</h3>
               <p class="product-category">{{ product.category }}</p>
               <el-rate v-model="product.rating" disabled show-score :max="5" />
-              <p class="product-price">$ {{ product.price }}</p>
+              <div class="price-action-row">
+                <p class="product-price">$ {{ product.price }}</p>
+                <div
+                  class="wishlist-icon"
+                  :class="{ 'is-active': product.isWishlisted }"
+                  @click.stop="toggleWishlist(product)"
+                >
+                  <el-icon><Star v-if="!product.isWishlisted" /><StarFilled v-else /></el-icon>
+                </div>
+              </div>
               <el-button
                 type="primary"
                 size="small"
@@ -118,13 +127,15 @@ import api from '@/service/api'
 import { useRoute } from 'vue-router'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
-import { ElMessage } from 'element-plus'
+import { toast } from '@/utils/message'
 import { computed, ref } from 'vue'
 import { watch } from 'vue'
 import { onMounted, onBeforeUnmount } from 'vue'
 import throttle from 'lodash/throttle'
-import { Loading } from '@element-plus/icons-vue'
+import { Loading, Star, StarFilled } from '@element-plus/icons-vue'
 
+const route = useRoute()
+const { goProducts } = useNavigation()
 const cartStore = useCartStore()
 const products = ref([])
 const categories = ref([])
@@ -135,8 +146,6 @@ const isLoadMoreLoading = ref(false)
 const dialogVisible = ref(false)
 const drawerVisible = ref(false)
 const currentProduct = ref({})
-const route = useRoute()
-const { goProducts } = useNavigation()
 
 const props = defineProps({
   forcedCategory: {
@@ -253,12 +262,23 @@ const addToCart = (product) => {
   const existingItem = cartStore.cart.find((item) => item.id === product.id)
   if (existingItem) {
     existingItem.quantity += 1
-    ElMessage.success(`${product.name} 數量已更新為 ${existingItem.quantity}`)
+    toast.success(`${product.name} 數量已更新為 ${existingItem.quantity}`)
   } else {
     cartStore.addProduct(product)
-    ElMessage.success(`${product.name} 已加入購物車`)
+    toast.success(`${product.name} 已加入購物車`)
   }
   drawerVisible.value = true
+}
+
+const toggleWishlist = (product) => {
+  // 切換狀態 (實際開發時這裡會呼叫後端 API)
+  product.isWishlisted = !product.isWishlisted
+
+  if (product.isWishlisted) {
+    toast.success('已加入追蹤清單')
+  } else {
+    toast.info('已從追蹤清單移除')
+  }
 }
 
 const openCartDrawer = () => {
@@ -274,96 +294,182 @@ const clearSearch = () => {
 
 <style scoped>
 .product-list-container {
-  max-width: 1500px;
-  padding: 100px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 20px;
 }
 
 .breadcrumb-strip {
-  margin-bottom: 10px;
-  padding: 10px 0;
+  margin-bottom: 20px;
 }
 
 .product-col {
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .product-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 }
 
 .header-title {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.header-controls {
-  display: flex;
-  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1d1d1f;
 }
 
 .category-select {
-  width: 160px;
-  margin-right: 16px;
+  width: 180px;
+  margin-right: 12px;
+}
+
+.product-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 懸浮效果 */
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
 }
 
 .product-card :deep(.el-card__body) {
-  padding: 0px;
+  padding: 0;
 }
 
 .card-image-wrapper {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 240px;
   overflow: hidden;
+  background-color: #f5f5f7;
   cursor: pointer;
-  background-color: #f5f7fa;
 }
 
 .card-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* 圖片放大效果 */
+.product-card:hover .card-image {
+  transform: scale(1.08);
 }
 
 .card-body {
-  padding: 16px;
-  background-color: #fff;
-}
-
-.product-name {
-  font-size: 18px;
-  font-weight: bold;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding: 20px;
+  text-align: left;
 }
 
 .product-category {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #86868b;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
 }
 
-.product-rating {
+.product-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1d1d1f;
   margin-bottom: 8px;
+  line-height: 1.4;
+  /* 標題限制兩行，保持高度整齊 */
+  display: -webkit-box;
+  /* -webkit-line-clamp: 1; */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .product-price {
-  color: #dc2626;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 0;
 }
 
+/* 價格與按鈕 */
+.price-action-row {
+  display: flex;
+  justify-content: space-between; /* 價格靠左，追蹤靠右 */
+  align-items: center;
+  margin: 12px 0;
+}
+
+/* 星星按鈕樣式 */
+.wishlist-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c7c7cc;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 4px;
+  font-size: 25px;
+}
+
+/* 懸浮時變色 */
+.wishlist-icon:hover {
+  transform: scale(1.2);
+  color: #ffb800;
+}
+
+/* 星星點擊後 (變成金色) */
+.wishlist-icon.is-active {
+  color: #ffb800 !important;
+  animation: starBounce 0.4s ease;
+}
+
+/* 星星彈跳動畫 */
+@keyframes starBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 確保價格文字不會擠到星星 */
+.product-price {
+  font-size: 19px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 0;
+}
+
+/* 按鈕 */
 .add-to-cart-button {
   width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  font-weight: 500;
+  border: none;
+  background: #0071e3;
+  transition: background 0.3s ease;
+}
+
+.add-to-cart-button:hover {
+  background: #0077ed;
 }
 
 .load-more-container {
-  padding: 20px 0;
+  margin-top: 40px;
   text-align: center;
 }
 
@@ -371,48 +477,53 @@ const clearSearch = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #909399;
-  font-size: 14px;
+  gap: 8px;
+  color: #86868b;
 }
 
 .product-detail-dialog {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 30px;
+  padding: 20px;
 }
 
 .product-detail-image {
-  width: 100%;
-  margin-bottom: 16px;
-  border-radius: 4px;
-  max-width: 448px;
+  flex: 1;
+  max-width: 50%;
+  border-radius: 12px;
+  object-fit: cover;
 }
 
 .product-detail-content {
-  padding: 8px;
-  text-align: center;
+  flex: 1;
+  text-align: left;
 }
 
 .detail-price {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
 .detail-description {
-  color: #4b5563;
-  margin-bottom: 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #424245;
+  margin-bottom: 24px;
 }
 
-.detail-rating {
-  margin-bottom: 8px;
-  justify-content: center;
-}
-
-@media (max-width: 912px) {
+@media (max-width: 1024px) {
   .product-list-container {
-    max-width: 1200px;
-    padding: 20px;
+    padding: 20px 15px;
+  }
+  .card-image-wrapper {
+    height: 180px;
+  }
+  .product-detail-dialog {
+    flex-direction: column;
+  }
+  .product-detail-image {
+    max-width: 100%;
   }
 }
 </style>

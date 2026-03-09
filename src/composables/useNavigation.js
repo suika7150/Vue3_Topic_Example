@@ -1,3 +1,4 @@
+// import { name } from '@vue/eslint-config-prettier/skip-formatting'
 import { useRouter } from 'vue-router'
 
 export function useNavigation() {
@@ -84,14 +85,21 @@ export function useNavigation() {
   }
 
   //跳轉到指定路由
-  const goTo = (name, params = {}, query = {}) => {
-    // if (router.currentRoute.value.name === name) return
-    router.push({ name, params, query })
+  const goTo = (target, params = {}, query = {}) => {
+    if (typeof target === 'string' && target.startsWith('/')) {
+      router.push({ path: target, params, query })
+    } else {
+      router.push({ name: target, params, query })
+    }
   }
 
   //替換到指定路由
-  const replaceTo = (name, params = {}, query = {}) => {
-    router.replace({ name, params, query })
+  const replaceTo = (target, params = {}, query = {}) => {
+    if (typeof target === 'string' && target.startsWith('/')) {
+      router.replace({ path: target, query })
+    } else {
+      router.replace({ name: target, params, query })
+    }
   }
 
   return {

@@ -8,7 +8,6 @@ import TopBarAdBanner from './Navigation/TopBarAdBanner.vue'
 import BackToTop from './Navigation/BackToTop.vue'
 import SideAdBanner from './components/SideAdBanner.vue'
 import { useSidebarStore } from './store/sidebarStore'
-// import Breadcrumb from './Navigation/Breadcrumb.vue'
 
 const sidebarStore = useSidebarStore()
 const userStore = useUserStore()
@@ -34,7 +33,7 @@ const adShift = computed(() => {
       </div>
     </header>
 
-    <div class="layout">
+    <div class=".sidebar-layout">
       <SideAdBanner
         position="left"
         :shift="adShift"
@@ -75,7 +74,7 @@ const adShift = computed(() => {
   min-height: 100vh;
 }
 
-.layout {
+.sidebar-layout {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
@@ -116,7 +115,7 @@ const adShift = computed(() => {
 }
 
 @media (max-width: 1024px) {
-  .layout {
+  .sidebar-layout {
     display: flex;
     flex: 1;
     width: 100%;

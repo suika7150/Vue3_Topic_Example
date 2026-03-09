@@ -51,15 +51,16 @@
 import { useNavigation } from '@/composables/useNavigation'
 import api from '@/service/api'
 import { useUserStore } from '@/store/userStore'
-import Storage, { TOKEN_KEY, USER_KEY } from '@/utils/storageUtil'
+import Storage, { TOKEN_KEY, USER_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import QrcodeVue from 'qrcode.vue'
 
 const qrValue = ref('https://your-store.com/promo/default')
 
 const { goTo, goHome } = useNavigation()
-
+const route = useRoute()
 const loginForm = ref()
 const userStore = useUserStore()
 
@@ -91,12 +92,12 @@ onMounted(() => {
     form.value.rememberUsername = true
   }
 
-  const token = Storage.get(TOKEN_KEY)
-  if (token) {
-    userStore.login({ username: rememberUsername }, { token }) //回寫token
-    userStore.startTokenCountdown(token) //標記已登入
-    goHome()
-  }
+  // const token = Storage.get(TOKEN_KEY)
+  // if (token) {
+  //   userStore.login({ username: rememberUsername }, { token }) //回寫token
+  //   userStore.startTokenCountdown(token)
+  //   goHome()
+  // }
 })
 
 const handleLogin = async () => {
@@ -112,35 +113,46 @@ const handleLogin = async () => {
     isLogin: true,
   }
 
-  const res = await api.login(loginData)
-  if (res.code === '0000') {
-    const { token } = res.result
+  try {
+    const res = await api.login(loginData)
 
-    //存入 Pinia
-    userStore.login(loginData, res.result)
-    userStore.startTokenCountdown(token)
+    if (res.code === '0000') {
+      // 從後端回傳結果中解構出 token 和 role
+      const { token, role } = res.result
 
-    //存入 localStorage
-    Storage.set(TOKEN_KEY, token)
+      //存入 Pinia
+      userStore.login(loginData, { token, role })
+      userStore.startTokenCountdown(token)
 
-    //記住帳號
-    if (form.value.rememberUsername) {
-      Storage.set(USER_KEY, form.value.username)
+      //存入 localStorage
+      Storage.set(TOKEN_KEY, token)
+      Storage.set(USER_ROLE_KEY, role)
+
+      //記住帳號
+      if (form.value.rememberUsername) {
+        Storage.set(USER_KEY, form.value.username)
+      } else {
+        Storage.remove(USER_KEY)
+      }
+
+      ElMessage.success('登入成功！')
+
+      // 如果網址有 ?redirect=/checkout，就去結帳頁，否則才回首頁
+      const targetPath = route.query.redirect || '/'
+      goTo(targetPath)
     } else {
-      Storage.remove(USER_KEY)
+      ElMessage.error('請檢查帳號及密碼')
     }
-
-    ElMessage.success('登入成功！')
-    goHome()
-  } else {
-    ElMessage.error('請檢查帳號及密碼')
+  } catch (error) {
+    console.error('登入失敗:', error)
+    toast.error('登入過程中發生錯誤，請稍後再試')
   }
 }
 
 //尚未開發
 const handleForgotPassword = () => {
   ElMessage.info('忘記密碼功能開發中...')
-  goTo('home')
+  goHome()
   // router.push('/forgot-password')
 }
 

@@ -39,7 +39,7 @@ export const useUserStore = defineStore('userStore', {
      * 將用戶資料儲存到狀態中
      * */
     login(user, { token, role }) {
-      this.user = user
+      this.user = { user, isLogin: true }
       this.role = role
       Storage.set(USER_ROLE_KEY, role)
       Storage.set(TOKEN_KEY, token)
@@ -111,7 +111,6 @@ export const useUserStore = defineStore('userStore', {
       this.user.isLogin = false
       Storage.remove(USER_ROLE_KEY)
       Storage.remove(TOKEN_KEY)
-      Storage.remove(CART_KEY)
       this.remainingTime = 0
       ElMessageBox.alert('您的登入已過期，請重新登入。')
     },
