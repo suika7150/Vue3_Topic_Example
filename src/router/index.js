@@ -1,5 +1,5 @@
 import CategoryPage from '@/Navigation/sub/CategoryPage.vue'
-import Storage, { TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
+import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
@@ -132,19 +132,18 @@ const routes = [
   {
     path: '/checkout',
     name: 'checkout',
-    component: () => import('@/views/checkout/checkout.vue'),
-    meta: { requiresAuth: true, role: ['USER'] },
+    component: () => import('@/views/checkout/Checkout.vue'),
+    meta: { requiresAuth: true, role: ['USER', 'ADMIN'] },
     beforeEnter: (to, from, next) => {
-      // 1. 登入檢查交給全域守衛 (meta.requiresAuth) 處理即可
-      // 2. 這裡只專心檢查「購物車是否有東西」
-      const cartItems = Storage.get('cartItems') || []
+      // 檢查「購物車是否有東西」
+      const cartItems = Storage.get(CART_KEY) || []
 
       if (cartItems.length === 0) {
         // 如果購物車是空的，移動至登入畫面
         ElMessage.warning('您的購物車是空的，請先挑選商品')
-        return next('/accessDenied')
+        return next('/products')
       }
-      // next()
+      next()
     },
   },
   {
@@ -186,9 +185,13 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !isLoggedIn) {
     ElMessage.error('請先登入會員')
-    return next('/login')
+    //把當前想去的路徑 (to.fullPath) 傳給登入頁
+    return next({
+      path: '/login',
+      query: { redirect: to.fullPath },
+    })
   }
-
+  // 如果已登入，但角色不符
   if (to.meta.requiresAuth && !to.meta?.role?.includes(role)) {
     return next('/accessDenied')
   }

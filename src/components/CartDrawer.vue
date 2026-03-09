@@ -86,7 +86,8 @@
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
 import { Delete, ShoppingCart } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
+import { toast } from '@/utils/message'
 import { computed } from 'vue'
 
 const { goTo } = useNavigation()
@@ -104,7 +105,7 @@ const handleClose = () => {
 }
 
 const handleQuantityChange = (e, product) => {
-  ElMessage.success(`${product.name} 數量已更新為 ${e}`)
+  toast.success(`${product.name} 數量已更新為 ${e}`)
 }
 
 const createCheckoutConfirmContent = () => {
@@ -136,7 +137,7 @@ const createCheckoutConfirmContent = () => {
 
 const handleCheckout = async () => {
   if (!cart.value.length) {
-    ElMessage.warning('購物車是空的，請先添加商品')
+    toast.warning('購物車是空的，請先添加商品')
     return
   }
 
@@ -152,25 +153,25 @@ const handleCheckout = async () => {
     handleClose()
 
     setTimeout(() => {
-      goTo('Checkout')
-      ElMessage.success('正在前往結帳頁面...')
+      goTo('checkout')
+      toast.success('正在前往結帳頁面...')
     }, 300)
   } catch {
-    ElMessage.info('已取消結帳')
+    toast.info('已取消結帳')
   }
 }
 
 const removeItem = (productId) => {
   cartStore.removeProduct(productId)
-  ElMessage.success('商品已從購物車移除')
+  toast.success('商品已從購物車移除')
 }
 </script>
 
 <style scoped>
-.cart-container {
-  /* width: px; */
-  /* margin-right: 50px; */
-}
+/* .cart-container {
+width: px;
+margin-right: 50px;
+} */
 .cart-content {
   flex-grow: 1;
   overflow-y: auto;
