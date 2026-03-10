@@ -295,23 +295,26 @@ const clearSearch = () => {
 <style scoped>
 .product-list-container {
   max-width: 1400px;
-  margin: 0 auto;
   padding: 60px 20px;
 }
 
 .breadcrumb-strip {
   margin-bottom: 20px;
 }
-
-.product-col {
-  margin-bottom: 40px;
-}
-
 .product-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+}
+.header-controls {
+  display: flex;
+  align-items: center;
+}
+.product-col {
+  margin-bottom: 40px;
+  max-width: 25%;
+  box-sizing: border-box;
 }
 
 .header-title {
@@ -329,6 +332,7 @@ const clearSearch = () => {
   border: none;
   border-radius: 16px;
   overflow: hidden;
+  height: 100%;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
@@ -358,7 +362,7 @@ const clearSearch = () => {
 .card-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -524,6 +528,10 @@ const clearSearch = () => {
   }
   .product-detail-image {
     max-width: 100%;
+  }
+  .product-col {
+    flex: 0 0 50%;
+    max-width: 50%;
   }
 }
 </style>
