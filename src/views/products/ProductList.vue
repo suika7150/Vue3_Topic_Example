@@ -294,8 +294,10 @@ const clearSearch = () => {
 
 <style scoped>
 .product-list-container {
-  max-width: 1400px;
-  padding: 60px 20px;
+  max-width: 1200px;
+  padding: 60px 0px;
+  margin: 0 auto;
+  width: 100%; /* 不要拿掉，確保在小螢幕上也能撐滿 */
 }
 
 .breadcrumb-strip {
@@ -339,11 +341,10 @@ const clearSearch = () => {
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
-  background: #ffffff;
+  background: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* 懸浮效果 */
 .product-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
@@ -369,7 +370,6 @@ const clearSearch = () => {
   transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* 圖片放大效果 */
 .product-card:hover .card-image {
   transform: scale(1.08);
 }
@@ -393,9 +393,8 @@ const clearSearch = () => {
   color: #1d1d1f;
   margin-bottom: 8px;
   line-height: 1.4;
-  /* 標題限制兩行，保持高度整齊 */
+  height: 48px;
   display: -webkit-box;
-  /* -webkit-line-clamp: 1; */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -410,12 +409,12 @@ const clearSearch = () => {
 /* 價格與按鈕 */
 .price-action-row {
   display: flex;
-  justify-content: space-between; /* 價格靠左，追蹤靠右 */
+  justify-content: space-between;
   align-items: center;
   margin: 12px 0;
 }
 
-/* 星星按鈕樣式 */
+/* 星星按鈕 */
 .wishlist-icon {
   cursor: pointer;
   display: flex;
@@ -427,7 +426,6 @@ const clearSearch = () => {
   font-size: 25px;
 }
 
-/* 懸浮時變色 */
 .wishlist-icon:hover {
   transform: scale(1.2);
   color: #ffb800;
@@ -460,7 +458,7 @@ const clearSearch = () => {
   margin: 0;
 }
 
-/* 按鈕 */
+/* 加入購物車按鈕 */
 .add-to-cart-button {
   width: 100%;
   height: 40px;
@@ -521,7 +519,7 @@ const clearSearch = () => {
 
 @media (max-width: 1024px) {
   .product-list-container {
-    padding: 20px 15px;
+    padding: 20px 0px;
   }
   .card-image-wrapper {
     height: 180px;

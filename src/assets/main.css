@@ -33,8 +33,8 @@ header {
   align-items: center !important;
   box-sizing: border-box !important;
   width: auto !important;
-  backdrop-filter: blur(12px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+  /* backdrop-filter: blur(12px) saturate(180%) !important; */
+  /* -webkit-backdrop-filter: blur(12px) saturate(180%) !important; */
 }
 
 /* 內容文字樣式 */
@@ -143,5 +143,28 @@ body .el-message-box.checkout-confirm-dialog {
 
   .notification-badge {
     padding-left: 0px;
+  }
+}
+/* 針對手機版 */
+@media (max-width: 768px) {
+  body .el-message-box.checkout-confirm-dialog {
+    width: 90% !important;
+    padding: 15px !important; /* 手機版內距縮小一點 */
+    margin: 0 auto;
+  }
+
+  .checkout-confirm-dialog .el-message-box__title {
+    font-size: 18px !important;
+  }
+
+  .checkout-confirm-dialog .el-message-box__btns {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .checkout-confirm-dialog .el-message-box__btns button {
+    width: 100%;
+    margin-left: 0 !important;
   }
 }

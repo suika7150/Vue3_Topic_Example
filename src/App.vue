@@ -105,6 +105,7 @@ const adShift = computed(() => {
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;
+  margin-bottom: 50px;
 }
 
 .backtotop {

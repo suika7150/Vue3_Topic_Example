@@ -1,3 +1,8 @@
+/*
+*
+meta.title搭配BreadCrumb.vue的title顯示在麵包屑上
+*
+*/
 import CategoryPage from '@/Navigation/sub/CategoryPage.vue'
 import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { createRouter, createWebHistory } from 'vue-router'
