@@ -4,7 +4,7 @@
       :model-value="drawerVisible"
       @update:model-value="emit('update:drawerVisible', $event)"
       title="🛒 購物車內容"
-      :size="'45%'"
+      :size="drawerSize"
       @close="handleClose"
     >
       <div v-if="cart.length" class="cart-content">
@@ -21,6 +21,7 @@
               />
             </template>
           </el-table-column>
+
           <el-table-column label="商品" width="80">
             <template #default="scope">
               <el-image
@@ -30,22 +31,30 @@
               />
             </template>
           </el-table-column>
+
           <el-table-column label="名稱" min-width="80" max-width="150">
             <template #default="scope">
-              <span>{{ scope.row.name }}</span>
+              <div class="product-info-cell">
+                <span class="product-name">{{ scope.row.name }}</span>
+                <span v-if="isMobile" class="mobile-price">{{ scope.row.price }}</span>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="價格" width="80">
+
+          <el-table-column v-if="!isMobile" label="價格" width="80">
             <template #default="scope">
               <span class="cart-price">${{ scope.row.price }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="數量" width="132">
+
+          <el-table-column label="數量" :width="isMobile ? '100' : '135'">
             <template #default="scope">
               <el-input-number
                 v-model="scope.row.quantity"
                 :min="1"
                 size="small"
+                :controls-position="isMobile ? 'right' : ''"
+                style="width: 100%"
                 @change="(e) => handleQuantityChange(e, scope.row)"
               />
             </template>
@@ -69,7 +78,7 @@
             @click="handleCheckout"
           >
             <el-icon class="cart-checkout-icon"><ShoppingCart /></el-icon>
-            前往結帳 ({{ cartStore.totalQuantity }} 件商品)
+            {{ isMobile ? '結帳' : '前往結帳' }} ({{ cartStore.totalQuantity }} 件商品)
           </el-button>
         </div>
       </template>
@@ -78,6 +87,7 @@
 </template>
 
 <script setup>
+import { useBreakpoint } from '@/composables/useBreakpoint'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
 import { Delete, ShoppingCart } from '@element-plus/icons-vue'
@@ -85,9 +95,14 @@ import { ElMessageBox } from 'element-plus'
 import { toast } from '@/utils/message'
 import { computed } from 'vue'
 
+const { isMobile } = useBreakpoint()
 const { goTo } = useNavigation()
 const cartStore = useCartStore()
 const cart = computed(() => cartStore.cart)
+
+const drawerSize = computed(() => {
+  return isMobile.value ? '100%' : '450px'
+})
 
 const props = defineProps({
   drawerVisible: { type: Boolean, required: true },
@@ -168,10 +183,19 @@ const removeItem = (productId) => {
 
 .cart-content {
   flex-grow: 1;
-  /* overflow-y: auto; */
-  /* width: 500px; */
   margin: 0px 10px;
-  /* text-align: center; */
+}
+
+.product-name {
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.mobile-price {
+  font-size: 12px;
+  color: #ff4d4f;
+  margin-top: 4px;
+  font-weight: bold;
 }
 
 .cart-price {
