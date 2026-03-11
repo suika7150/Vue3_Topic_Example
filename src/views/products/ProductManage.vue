@@ -102,15 +102,15 @@
 </template>
 
 <script setup>
-import { useNavigation } from '@/composables/useNavigation'
-import { useBreakpoint } from '@/composables/useBreakpoint' // 引入你的工具
+import { computed, onMounted, ref } from 'vue'
 import api from '@/service/api'
+import { useNavigation } from '@/composables/useNavigation'
+import { useBreakpoint } from '@/composables/useBreakpoint'
 import { Edit, Delete, Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { computed, onMounted, ref } from 'vue'
 
 const { goTo } = useNavigation()
-const { isMobile, isTablet } = useBreakpoint() // 使用斷點邏輯
+const { isMobile, isTablet } = useBreakpoint()
 
 const products = ref([])
 const categories = ref([])

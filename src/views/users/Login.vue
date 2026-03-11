@@ -48,13 +48,14 @@
 </template>
 
 <script setup>
-import { useNavigation } from '@/composables/useNavigation'
+import { ref } from 'vue'
+import { onMounted } from 'vue'
 import api from '@/service/api'
+import { useRoute } from 'vue-router'
+import { useNavigation } from '@/composables/useNavigation'
 import { useUserStore } from '@/store/userStore'
 import Storage, { TOKEN_KEY, USER_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
 import QrcodeVue from 'qrcode.vue'
 
 const qrValue = ref('https://your-store.com/promo/default')
@@ -252,7 +253,7 @@ const handleRegister = () => {
   font-size: 14px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .login-ad-section {
     display: none;
   }

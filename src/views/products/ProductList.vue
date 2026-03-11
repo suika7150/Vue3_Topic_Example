@@ -120,17 +120,17 @@
 </template>
 
 <script setup>
-import CartDrawer from '@/components/CartDrawer.vue'
-import Breadcrumb from '@/Navigation/Breadcrumb.vue'
-import { useNavigation } from '@/composables/useNavigation'
-import api from '@/service/api'
-import { useRoute } from 'vue-router'
-import { useCartStore } from '@/store/cartStore'
-import Storage, { CART_KEY } from '@/utils/storageUtil'
-import { toast } from '@/utils/message'
 import { computed, ref } from 'vue'
 import { watch } from 'vue'
 import { onMounted, onBeforeUnmount } from 'vue'
+import { useRoute } from 'vue-router'
+import CartDrawer from '@/components/CartDrawer.vue'
+import Breadcrumb from '@/Navigation/Breadcrumb.vue'
+import api from '@/service/api'
+import { useNavigation } from '@/composables/useNavigation'
+import { useCartStore } from '@/store/cartStore'
+import Storage, { CART_KEY } from '@/utils/storageUtil'
+import { toast } from '@/utils/message'
 import throttle from 'lodash/throttle'
 import { Loading, Star, StarFilled } from '@element-plus/icons-vue'
 

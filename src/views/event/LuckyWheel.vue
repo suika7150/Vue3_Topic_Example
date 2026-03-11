@@ -97,10 +97,10 @@ const startSpin = () => {
   justify-content: center;
   overflow: hidden;
   padding: 200px 20px;
-  background: radial-gradient(circle, #2c2c2c 0%, #000000 100%);
   width: 100%;
   min-height: 86vh;
   margin-top: -80px;
+  /* background: radial-gradient(circle, #2c2c2c 0%, #000000 100%); */
 }
 
 .wheel-title {

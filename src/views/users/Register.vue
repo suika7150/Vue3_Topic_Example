@@ -52,12 +52,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button
-            clss="register-btn"
-            @click="handleRegister"
-            :loading="loading"
-            style="width: 100%"
-          >
+          <el-button class="register-btn" @click="handleRegister" :loading="loading">
             註冊
           </el-button>
         </el-form-item>
@@ -114,7 +109,6 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useRouter } from 'vue-router'
 import api from '@/service/api'
 import { useNavigation } from '@/composables/useNavigation'
 
@@ -258,7 +252,6 @@ const login = () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, black 100%, #8183ad 100%);
   padding: 20px;
 }
 
@@ -288,7 +281,8 @@ const login = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  text-align: center;
+  /* gap: 8px; */
   margin-top: 20px;
   color: #666;
 }
@@ -297,7 +291,18 @@ const login = () => {
   margin-bottom: 20px;
 }
 
-.el-button {
+.register-btn {
+  font-size: 16px;
+  height: 44px;
+  width: 100%;
+  border-radius: 8px;
+  background-color: black;
+  color: white;
+  box-shadow: none;
+  padding: 8px 12px;
+}
+
+/* .el-button {
   font-size: 16px;
   height: 44px;
   border-radius: 8px;
@@ -305,7 +310,7 @@ const login = () => {
   color: white;
   box-shadow: none;
   padding: 8px 12px;
-}
+} */
 
 .el-input :deep(.el-input__inner) {
   height: 44px;
@@ -333,7 +338,6 @@ const login = () => {
   color: #666;
 }
 
-/* 響應式設計 */
 @media (max-width: 768px) {
   .register-card {
     margin: 10px;

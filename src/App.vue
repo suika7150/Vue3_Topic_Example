@@ -1,12 +1,12 @@
 <script setup>
+import { computed } from 'vue'
+import SideAdBanner from './components/SideAdBanner.vue'
 import BottomFooter from './Navigation/BottomFooter.vue'
 import TopBar from './Navigation/TopBar.vue'
-import { computed } from 'vue'
-import { getNavMenu } from './Navigation/getNavMenu'
-import { useUserStore } from '@/store/userStore'
 import TopBarAdBanner from './Navigation/TopBarAdBanner.vue'
 import BackToTop from './Navigation/BackToTop.vue'
-import SideAdBanner from './components/SideAdBanner.vue'
+import { getNavMenu } from './Navigation/getNavMenu'
+import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from './store/sidebarStore'
 
 const sidebarStore = useSidebarStore()
