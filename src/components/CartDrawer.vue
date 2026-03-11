@@ -4,7 +4,7 @@
       :model-value="drawerVisible"
       @update:model-value="emit('update:drawerVisible', $event)"
       title="🛒 購物車內容"
-      :size="'40%'"
+      :size="'45%'"
       @close="handleClose"
     >
       <div v-if="cart.length" class="cart-content">
@@ -50,11 +50,6 @@
               />
             </template>
           </el-table-column>
-          <!-- <el-table-column label="小計" width="80">
-            <template #default="scope">
-              <span class="cart-price">${{ scope.row.price * scope.row.quantity }}</span>
-            </template>
-          </el-table-column> -->
         </el-table>
       </div>
       <el-empty v-else description="購物車目前是空的" />
@@ -169,14 +164,14 @@ const removeItem = (productId) => {
 
 <style scoped>
 /* .cart-container {
-width: px;
-margin-right: 50px;
 } */
+
 .cart-content {
   flex-grow: 1;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   /* width: 500px; */
-  margin: 0px;
+  margin: 0px 10px;
+  /* text-align: center; */
 }
 
 .cart-price {
