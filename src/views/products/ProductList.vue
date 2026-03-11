@@ -295,7 +295,7 @@ const clearSearch = () => {
 <style scoped>
 .product-list-container {
   max-width: 1200px;
-  padding: 60px 20px;
+  padding: 60px 0px;
   margin: 0 auto;
   width: 100%; /* 不要拿掉，確保在小螢幕上也能撐滿 */
 }
@@ -341,7 +341,7 @@ const clearSearch = () => {
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
-  background: #ffffff;
+  background: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
@@ -519,7 +519,7 @@ const clearSearch = () => {
 
 @media (max-width: 1024px) {
   .product-list-container {
-    padding: 20px 15px;
+    padding: 20px 0px;
   }
   .card-image-wrapper {
     height: 180px;
