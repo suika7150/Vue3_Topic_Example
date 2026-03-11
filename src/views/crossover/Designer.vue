@@ -295,8 +295,7 @@ const goToDetail = (route) => {
   transform: translateY(-3px);
 }
 
-/* 針對小螢幕設備進行調整 */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .hero-banner {
     height: 300px;
   }
