@@ -22,8 +22,7 @@ header {
 }
 
 /* --- 全域 Toast 訊息樣式 --- */
-
-/* --- 1. 定義三種訊息框共通的視覺規格 --- */
+/* --- 定義三種訊息框共通的視覺規格 --- */
 .el-message.glow-toast-success,
 .el-message.glow-toast-error,
 .el-message.glow-toast-info {
@@ -33,32 +32,9 @@ header {
   display: flex !important;
   align-items: center !important;
   box-sizing: border-box !important;
-  /* 寬度設定為 auto，就不會強制變長 */
   width: auto !important;
-  /* 共通的毛玻璃特效 */
   backdrop-filter: blur(12px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
-}
-
-/* --- 2. 成功的顏色與發光 --- */
-.el-message.glow-toast-success {
-  background-color: rgba(240, 249, 235, 0.85) !important;
-  box-shadow: 0 8px 32px rgba(103, 194, 58, 0.15) !important;
-  border-left: 6px solid #67c23a !important;
-}
-
-/* --- 3. 錯誤的顏色與發光 --- */
-.el-message.glow-toast-error {
-  background-color: rgba(254, 240, 240, 0.85) !important;
-  box-shadow: 0 8px 32px rgba(245, 108, 108, 0.15) !important;
-  border-left: 6px solid #f56c6c !important;
-}
-
-/* --- 4. 一般資訊的顏色與發光 --- */
-.el-message.glow-toast-info {
-  background-color: rgba(244, 244, 245, 0.85) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05) !important;
-  border-left: 6px solid #909399 !important;
 }
 
 /* 內容文字樣式 */
@@ -68,11 +44,12 @@ header {
   font-size: 15px;
 }
 
-/* 讓訊息合併時的小數字 (Badge) */
+/* 讓訊息合併時的小數字 */
 .el-message__badge {
   color: #fff !important;
   font-weight: bold;
 }
+
 /* --- Checkout 對話框美化 --- */
 body .el-message-box.checkout-confirm-dialog {
   border: none !important;
@@ -91,7 +68,7 @@ body .el-message-box.checkout-confirm-dialog {
   color: #1d1d1f !important;
 }
 
-/* 確認按鈕 (Apple 風格藍) */
+/* 確認按鈕 */
 .checkout-confirm-dialog .el-button--primary {
   background-color: #0071e3 !important;
   border: none !important;
@@ -105,7 +82,6 @@ body .el-message-box.checkout-confirm-dialog {
   border-radius: 10px !important;
 }
 
-/* 內容區塊的滾動條優化 (針對你寫的內容) */
 .checkout-confirm-dialog .el-message-box__container::-webkit-scrollbar {
   width: 6px;
 }

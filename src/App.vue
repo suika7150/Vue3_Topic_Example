@@ -110,6 +110,7 @@ const adShift = computed(() => {
 .backtotop {
   z-index: 200;
 }
+
 .footer {
   overflow-x: hidden;
 }

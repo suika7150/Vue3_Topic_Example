@@ -301,16 +301,19 @@ const clearSearch = () => {
 .breadcrumb-strip {
   margin-bottom: 20px;
 }
+
 .product-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
 }
+
 .header-controls {
   display: flex;
   align-items: center;
 }
+
 .product-col {
   margin-bottom: 40px;
   max-width: 25%;
