@@ -32,7 +32,6 @@ import BrandList from '@/components/Brand/BrandList.vue'
 import AdCarousel from '@/views/AdCarousel.vue'
 import ProductList from '@/views/products/ProductList.vue'
 import AdModal from '@/components/AdModal.vue'
-import SideAdBanner from '@/components/SideAdBanner.vue'
 </script>
 <style scoped>
 .carousel-section {
