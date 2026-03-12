@@ -5,7 +5,7 @@
       :key="isMobile"
       :interval="4000"
       :type="carouselType"
-      :height="carouselHight"
+      :height="carouselHeight"
       width="100%"
       indicator-position="outside"
       arrow="hover"
@@ -21,6 +21,9 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useBreakpoint } from '@/composables/useBreakpoint'
+
+const { isMobile } = useBreakpoint()
 
 const adBanners = [
   {
@@ -60,27 +63,10 @@ const adBanners = [
   },
 ]
 
-const isMobile = ref(false)
-const MOBILE_WIDTH = 319 // 手機模式的臨界寬度
-
-// 檢查視窗寬度
-const checkMobile = () => {
-  isMobile.value = window.innerWidth <= MOBILE_WIDTH
-}
-// 手機為標準模式 ('')，PC 為卡片模式 ('card')
+// 手機版使用標準模式 ('')，桌機使用卡片模式 ('card')
 const carouselType = computed(() => (isMobile.value ? '' : 'card'))
 
-// 手機 & PC 高度
-const carouselHight = computed(() => (isMobile.value ? '100vh' : '50vh'))
-
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile) //監聽視窗大小變化
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile) //組件銷毀時移除監聽
-})
+const carouselHeight = computed(() => (isMobile.value ? 'auto' : '50vh'))
 </script>
 
 <style scoped>
@@ -89,54 +75,30 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
 }
+
 .ad-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: filter 0.3s ease;
 }
 
-.carousel-container :deep(.el-carousel__item) {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  position: absolute;
-  min-height: 50vh;
-}
-
-.carousel-container :deep(.el-carousel__item:not(.is-active)) {
+/* 桌機卡片模式特有：模糊與縮放 */
+:deep(.el-carousel--card .el-carousel__item:not(.is-active)) {
   filter: blur(4px) brightness(0.7);
   transform: scale(0.9);
+  transition: all 0.3s ease;
 }
 
-@media (max-width: 1024px) {
-  .carousel-container :deep(.el-carousel__container) {
-    display: flex;
-    height: auto;
-    flex-wrap: wrap;
-    justify-content: center;
-    aspect-ratio: 16 / 7;
-    width: 100%;
-    min-width: 0vh;
-  }
-
+@media (max-width: 768px) {
   .carousel-container :deep(.el-carousel__item) {
-    width: 50vw;
-    overflow: hidden;
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-  }
-
-  .ad-link {
-    width: 100% !important;
-    height: 100% !important;
+    aspect-ratio: 16 / 8;
+    width: 100%;
+    height: auto;
   }
 
   .ad-image {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: filter 0.3s ease;
+    height: 100% !important;
   }
 }
 </style>

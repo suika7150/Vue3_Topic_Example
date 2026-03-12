@@ -1,6 +1,7 @@
 /*
  * RWD斷點邏輯封裝
  * 統一管理視窗寬度與裝置斷點
+ * Throttle（節流）
  */
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 
