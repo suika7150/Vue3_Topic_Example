@@ -1,6 +1,6 @@
 <template>
   <div class="search-wrapper">
-    <el-button type="primary" circle @click="toggleSearch" class="search-btn">
+    <el-button type="primary" link circle @click="toggleSearch" class="search-btn">
       <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
     </el-button>
 
@@ -80,14 +80,11 @@ const collapseSearch = () => {
   overflow: hidden;
 }
 .search-btn {
-  background-color: black;
+  color: #fff;
   border: none;
   padding: 25px;
   width: 32px;
   height: 32px;
   font-size: 16px;
-}
-.search-btn:hover {
-  color: #70e0eb;
 }
 </style>

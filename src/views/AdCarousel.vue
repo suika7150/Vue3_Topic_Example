@@ -22,8 +22,12 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useBreakpoint } from '@/composables/useBreakpoint'
-
+import { watch } from 'vue'
 const { isMobile } = useBreakpoint()
+
+watch(isMobile, (newVal) => {
+  console.log('現在是否為手機模式:', newVal, '寬度:', window.innerWidth)
+})
 
 const adBanners = [
   {
@@ -70,6 +74,10 @@ const carouselHeight = computed(() => (isMobile.value ? 'auto' : '50vh'))
 </script>
 
 <style scoped>
+/* .carousel-container {
+  width: 100%;
+  height: 100%;
+} */
 .ad-link {
   display: block;
   width: 100%;
@@ -98,7 +106,7 @@ const carouselHeight = computed(() => (isMobile.value ? 'auto' : '50vh'))
 
   .ad-image {
     width: 100%;
-    height: 100% !important;
+    height: 100%;
   }
 }
 </style>

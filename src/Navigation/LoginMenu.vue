@@ -1,9 +1,8 @@
 <template>
-  <!-- <div class="searchinput"> -->
-  <SearchInput />
-  <!-- </div> -->
-  <div :class="['user-menu-container']">
-    <el-button type="link" class="hamburger-btn" @click="sidebarStore.toggleCollapse">
+  <div class="user-menu">
+    <SearchInput />
+
+    <el-button type="link" class="user-menu-btn" @click="sidebarStore.toggleCollapse">
       <el-icon><Fold /></el-icon>
     </el-button>
 
@@ -13,7 +12,6 @@
       title="導航選單"
       direction="ltr"
       width="250px"
-      size="300px"
     >
       <SidebarMenu
         :is-login="isLogin"
@@ -22,76 +20,76 @@
         @open-cart="openCartDrawer"
       />
     </el-drawer>
+
     <CartDrawer v-model:drawerVisible="showCartDrawer" />
 
-    <!-- 未登入時顯示登入按鈕 -->
-    <el-button v-if="!isLogin" class="topbar-member-btn" @click="goLoginFromTopbar"
-      ><el-icon class="userfilled-icon"><UserFilled /></el-icon>
-      <span class="member-text"></span>
+    <!-- 未登入 -->
+    <el-button v-if="!isLogin" class="user-menu-btn login" @click="goLoginFromTopbar">
+      <el-icon><UserFilled /></el-icon>
     </el-button>
 
-    <!-- 已登入時 -->
+    <!-- 已登入 -->
     <template v-else>
-      <!-- 通知鈴鐺 -->
+      <!-- 通知 -->
       <el-dropdown trigger="click" @visible-change="onDropdownToggle">
-        <el-badge :is-dot="hasUnread" class="notification-badge">
-          <el-button type="link" class="notification-btn">
+        <el-badge :is-dot="hasUnread" class="badge">
+          <el-button type="link" class="user-menu-btn">
             <font-awesome-icon :icon="[bellIconPrefix, 'bell']" />
           </el-button>
         </el-badge>
-        <!-- 通知下拉選單 -->
+
         <template #dropdown>
-          <el-dropdown-menu class="notification-menu">
-            <el-dropdown-item disabled><strong>通知中心</strong></el-dropdown-item>
+          <el-dropdown-menu class="dropdown">
+            <el-dropdown-item disabled>
+              <strong>通知中心</strong>
+            </el-dropdown-item>
 
             <el-dropdown-item
               v-for="(notice, index) in notifications"
               :key="index"
+              class="item"
               @click="markAsRead(index)"
-              class="notice-item"
             >
-              <span
-                class="unread-dot"
-                :style="{ visibility: notice.read ? 'hidden' : 'visible' }"
-              ></span>
+              <span class="dot" :style="{ visibility: notice.read ? 'hidden' : 'visible' }"></span>
+
               <span>{{ notice.message }}</span>
             </el-dropdown-item>
-            <el-dropdown-item v-if="notifications.length === 0" disabled
-              >暫無新通知</el-dropdown-item
-            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
 
       <!-- 使用者資訊 -->
-      <div class="user-info">
-        <div><font-awesome-icon :icon="['fas', 'user']" /> 歡迎 {{ user.username }}</div>
-        <span v-if="remaining > 0" class="token-timer">
-          Token 將於 <strong>{{ $formatSecondsToHHMMSS(remaining) }}</strong> 後過期
+      <div class="info">
+        <div>
+          <font-awesome-icon :icon="['fas', 'user']" />
+          歡迎 {{ user.username }}
+        </div>
+
+        <span v-if="remaining > 0" class="timer">
+          Token 將於
+          <strong>{{ $formatSecondsToHHMMSS(remaining) }}</strong>
+          後過期
         </span>
       </div>
 
-      <el-button class="topbar-logout-btn" @click="logout">
-        <span class="member-text">登出</span>
-      </el-button>
+      <el-button class="user-menu-btn logout" @click="logout"> 登出 </el-button>
     </template>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onDeactivated } from 'vue'
-import { useUserStore } from '@/store/userStore'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from '@/store/sidebarStore'
 import { useNavigation } from '@/composables/useNavigation'
-import SearchInput from './SearchInput.vue'
-import { Setting, User, Fold, UserFilled } from '@element-plus/icons-vue'
 import CartDrawer from '@/components/CartDrawer.vue'
+import SearchInput from './SearchInput.vue'
 import SidebarMenu from './SidebarMenu.vue'
-import { useRouter } from 'vue-router'
+import { Fold, UserFilled } from '@element-plus/icons-vue'
 
 const router = useRouter()
-
 const sidebarStore = useSidebarStore()
 const showCartDrawer = ref(false)
 const userStore = useUserStore()
@@ -155,173 +153,103 @@ const openCartDrawer = () => {
 }
 </script>
 
-<style #scoped>
-.topbar-member-btn.el-button {
-  background-color: transparent; /* Element Plus 主色 */
+<style scoped>
+.user-menu {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* 共用按鈕 */
+.user-menu-btn {
+  background: transparent;
   color: white;
+  border: none;
+  box-shadow: none;
   border-radius: 6px;
-  padding: 8px 8px;
-  margin: 0px;
-  font-size: 22px;
+  padding: 8px 12px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  transition: background-color 0.3s ease;
   cursor: pointer;
-  box-shadow: none;
+  transition: background-color 0.3s;
 }
-.topbar-member-btn.el-button:hover {
-  color: #70e0eb;
-}
-.topbar-logout-btn {
-  background-color: transparent; /* 跟 Topbar 融合 */
-  border: none; /* 去掉邊框 */
-  color: white; /* 文字白色 */
-  box-shadow: none; /* 去掉陰影 */
-  padding: 8px 12px; /* 可依 Topbar 調整 */
-}
-.topbar-logout-btn:hover {
+
+.user-menu-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: #70e0eb;
 }
-.userfilled-icon {
-  font-size: 18px;
-  /* bottom: 2px; */
+
+/* 登入 */
+.login {
+  font-size: 20px;
 }
 
-.user-menu-container {
+/* 登出 */
+.logout {
+  font-size: 14px;
+}
+
+/* 使用者資訊 */
+.info {
   display: flex;
-  align-items: center;
-  /* gap: 5px; */
-  margin-left: auto;
-  /* padding: px; */
+  flex-direction: column;
+  font-size: 10px;
+  color: #e6eaf2;
+  overflow: hidden;
 }
 
-.user-menu-container.small .topbar-member-btn.el-button {
-  padding: 4px 6px;
-  font-size: 12px;
+.info div,
+.info .timer {
+  white-space: nowrap;
 }
-
-.user-menu-container.small .user-info {
-  padding: 4px 6px;
-  font-size: 12px;
-}
-
-.user-menu-container.small .token-timer {
+/* token */
+.timer {
+  color: #e67e22;
+  font-weight: bold;
   font-size: 10px;
 }
 
-.user-menu-container.small .hamburger-btn {
-  padding: 4px 6px;
-  font-size: 19px;
-}
-
-.user-menu-container.small .notification-btn {
-  padding: 4px 6px;
-  font-size: 14px;
-}
-
-.menu-in-drawer {
-  border-right: none;
-}
-
-/* 使用者資訊樣式 */
-.user-info {
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 14px;
-  color: #e6eaf2;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.token-timer {
-  color: #e67e22;
-  font-weight: bold;
-  font-size: 13px;
-}
-
-.hamburger-btn {
-  background-color: transparent; /* Element Plus 主色 */
-  color: white;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-  box-shadow: none;
-}
-.hamburger-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: none;
-}
-.notification-btn {
-  background-color: transparent; /* Element Plus 主色 */
-  color: white;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-  box-shadow: none;
-}
-.notification-btn:hover,
-.notification-btn:focus {
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: none;
-}
-.notification-menu {
+/* 下拉選單 */
+.dropdown {
   min-width: 200px;
   padding: 4px;
 }
-.notification-badge {
+
+/* 通知項目 */
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  position: absolute;
+  right: 10px;
+  width: 4px;
+  height: 4px;
+  background: red;
+  border-radius: 50%;
+}
+
+/* 通知紅點 */
+.badge {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* margin-right: 10px; */
 }
-.notification-badge .el-badge__content {
-  width: 8px; /* 調整大小 */
+
+.badge .el-badge__content {
+  width: 8px;
   height: 8px;
-  background-color: red; /* 顏色 */
-  top: 10px; /* 調整位置 */
-  left: 18px;
-  transition: none !important; /* 取消過渡 */
-}
-
-.unread-dot {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: inline-block;
-  width: 2px;
-  height: 2px;
   background-color: red;
-  border-radius: 50%;
-  margin-right: 6px;
-  vertical-align: middle;
 }
 
-.notice-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.message {
-  flex: 1;
-  color: white;
+.badge :deep(.el-badge__content) {
+  transition: none; /* 不要拿掉，強制取消動畫 */
+  top: 10px;
+  left: 15px;
 }
 </style>
