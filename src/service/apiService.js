@@ -9,49 +9,62 @@ const { goLogin } = useNavigation()
 
 const apiService = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 600000, // 10 分鐘
+  timeout: 600000,
 })
 
-// 自動加上 Token
+// --- 請求攔截器 ---
 apiService.interceptors.request.use(
   (config) => {
-    showLoading() // 開啟 loading
-    if (!isWhiteListed(config.url, config.baseURL)) {
-      const token = Storage.get(TOKEN_KEY)
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`
+    showLoading() // 啟動 Loading
+
+    // 確保即便 token 讀取噴錯也要 hideLoading
+    try {
+      if (!isWhiteListed(config.url, config.baseURL)) {
+        const token = Storage.get(TOKEN_KEY)
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`
+        }
       }
+      return config
+    } catch (err) {
+      hideLoading()
+      return Promise.reject(err)
     }
-    return config
   },
-  (error) => Promise.reject(error),
+  (error) => {
+    hideLoading()
+    return Promise.reject(error)
+  },
 )
 
-// 統一錯誤處理
+// --- 回應攔截器 ---
 apiService.interceptors.response.use(
-  async (response) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000)) // 模擬 2 秒延遲
-    hideLoading() // 成功後關閉 loading
-    const res = response.data
+  (response) => {
+    hideLoading() // 收到資料立刻關閉
 
-    // 檢查 code 是否為成功代碼
+    const res = response.data
+    // 檢查代碼是否為成功
     if (res.code && res.code !== '0000') {
       ElMessage.error(res.msg || '發生錯誤')
-      return Promise.reject(res) // 中止回傳
+      return Promise.reject(res)
     }
 
     return res
   },
   (error) => {
-    hideLoading() // 成功後關閉 loading
-    Storage.remove(CART_KEY) // 清除購物車
-    Storage.remove(TOKEN_KEY) // 清除 token
-    // 可自訂錯誤訊息處理
+    hideLoading() // 網路錯誤也要關閉
+
+    // 處理 401 登入過期
     if (error.response?.status === 401) {
+      Storage.remove(TOKEN_KEY)
+      Storage.remove(CART_KEY)
       ElMessage.error('登入已過期，請重新登入')
       goLogin()
     } else {
-      ElMessage.error('網路錯誤，請稍後再試')
+      // 避免某些取消請求噴出錯誤訊息
+      if (error.message !== 'canceled') {
+        ElMessage.error(error.response?.data?.msg || '網路錯誤，請稍後再試')
+      }
     }
     return Promise.reject(error)
   },
