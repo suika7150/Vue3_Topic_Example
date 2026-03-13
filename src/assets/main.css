@@ -1,24 +1,16 @@
 @import './base.css';
 
-/* 全域重設樣式:防止邊距與捲軸問題 */
+/* 全域基礎重設*/
 * {
   margin: 0;
   padding: 0;
 }
-/* 這裡可以保留專案特有的、不與 base.css 衝突的全域樣式 */
-/* 例如，您可以保留下面的 @media 響應式樣式和 .back-to-top */
 
 html,
 body {
-  width: 100%;
-  margin-left: 0;
-  padding: 0;
   overflow-x: hidden;
+  overflow-y: auto;
   scroll-behavior: smooth; /* 讓所有的捲動動作都帶有平滑動畫 */
-}
-header {
-  margin: 0;
-  padding: 0;
 }
 
 /* --- 全域 Toast 訊息樣式 --- */
@@ -31,10 +23,7 @@ header {
   padding: 12px 20px !important;
   display: flex !important;
   align-items: center !important;
-  box-sizing: border-box !important;
   width: auto !important;
-  /* backdrop-filter: blur(12px) saturate(180%) !important; */
-  /* -webkit-backdrop-filter: blur(12px) saturate(180%) !important; */
 }
 
 /* 內容文字樣式 */
@@ -44,19 +33,11 @@ header {
   font-size: 15px;
 }
 
-/* 讓訊息合併時的小數字 */
-.el-message__badge {
-  color: #fff !important;
-  font-weight: bold;
-}
-
 /* --- Checkout 對話框美化 --- */
 body .el-message-box.checkout-confirm-dialog {
   border: none !important;
   border-radius: 20px !important;
   padding: 20px !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
   background-color: rgba(255, 255, 255, 0.85) !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
 }
@@ -89,6 +70,8 @@ body .el-message-box.checkout-confirm-dialog {
   background: #c1c1c1;
   border-radius: 10px;
 }
+
+/* RWD:1024px */
 @media (max-width: 1024px) {
   .topbar-main {
     height: 100%;
@@ -145,11 +128,12 @@ body .el-message-box.checkout-confirm-dialog {
     padding-left: 0px;
   }
 }
-/* 針對手機版 */
+
+/* RWD:768px */
 @media (max-width: 768px) {
   body .el-message-box.checkout-confirm-dialog {
     width: 90% !important;
-    padding: 15px !important; /* 手機版內距縮小一點 */
+    padding: 15px !important;
     margin: 0 auto;
   }
 

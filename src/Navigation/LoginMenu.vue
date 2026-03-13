@@ -9,6 +9,7 @@
     <el-drawer
       :model-value="!sidebarStore.isCollapsed"
       :before-close="sidebarStore.toggleCollapse"
+      :lock-scroll="false"
       title="導航選單"
       direction="ltr"
       size="300px"
