@@ -9,9 +9,10 @@
     <el-drawer
       :model-value="!sidebarStore.isCollapsed"
       :before-close="sidebarStore.toggleCollapse"
+      :lock-scroll="false"
       title="導航選單"
       direction="ltr"
-      width="250px"
+      size="300px"
     >
       <SidebarMenu
         :is-login="isLogin"
