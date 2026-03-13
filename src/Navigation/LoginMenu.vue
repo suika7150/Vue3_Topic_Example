@@ -11,7 +11,7 @@
       :before-close="sidebarStore.toggleCollapse"
       title="導航選單"
       direction="ltr"
-      width="250px"
+      size="300px"
     >
       <SidebarMenu
         :is-login="isLogin"
