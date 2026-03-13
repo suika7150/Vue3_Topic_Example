@@ -1,50 +1,62 @@
-import { createApp, nextTick, provide } from 'vue'
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
-import './assets/main.css'
-import { Icon } from '@iconify/vue'
-import App from './App.vue'
-import AlertBox from './components/AlertBox.vue'
-import FormatPlugin from './plugins/format' // 載入插件
-import router from './router'
+import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import ElementPlus from 'element-plus'
+import { Icon } from '@iconify/vue'
+
+//樣式、配置
+import 'element-plus/dist/index.css'
+import './assets/main.css'
+
+//專案內元件、插件
+import App from './App.vue'
+import router from './router'
+import AlertBox from './components/AlertBox.vue'
+import FormatPlugin from './plugins/format'
+import setupFontAwesome from './plugins/fontawesome'
+
+//工具
 import { formatSecondsToHHMMSS } from './utils/format'
 import { getAndCacheOptions } from './utils/optionService'
 import { useUserStore } from './store/userStore'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {
-  faMagnifyingGlass,
-  faBell as fasBell,
-  faUser,
-  faShirt,
-} from '@fortawesome/free-solid-svg-icons'
-import { faBell as farBell } from '@fortawesome/free-regular-svg-icons'
-import { library } from '@fortawesome/fontawesome-svg-core'
-library.add(faMagnifyingGlass, fasBell, farBell, faUser, faShirt)
 
+//初始化、Pinia
+const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-const app = createApp(App)
 app.use(pinia)
 
-//Font Awesome 元件
-app.component('font-awesome-icon', FontAwesomeIcon)
-
+//執行Store初始化
 const userStore = useUserStore()
 userStore.initUser() //初始化登入狀態並啟動倒數
 
+//啟動應用
 const start = async () => {
-  const res = await getAndCacheOptions()
-  app.provide('allOptions', res)
-  app.config.globalProperties.$formatSecondsToHHMMSS = formatSecondsToHHMMSS
-  app.use(FormatPlugin) // 註冊插件
-  app.use(router)
-  app.use(ElementPlus)
-  app.component('AlertBox', AlertBox)
-  app.component('Icon', Icon)
-  app.mount('#app')
-}
-start()
+  try {
+    //設定標題
+    document.title = import.meta.env.VITE_APP_TITLE
 
-document.title = import.meta.env.VITE_APP_TITLE
+    //預先載入選項資料
+    const res = await getAndCacheOptions()
+    app.provide('allOptions', res)
+
+    //全域方法
+    app.config.globalProperties.$formatSecondsToHHMMSS = formatSecondsToHHMMSS
+    app.use(FormatPlugin)
+    app.use(router)
+    app.use(ElementPlus)
+
+    //元件註冊
+    setupFontAwesome(app)
+    app.component('AlertBox', AlertBox)
+    app.component('Icon', Icon)
+
+    //掛載實例
+    app.mount('#app')
+  } catch (error) {
+    console.error('啟動應用失敗:', error)
+  }
+}
+
+//啟動應用
+start()
