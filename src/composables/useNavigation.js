@@ -39,6 +39,11 @@ export function useNavigation() {
     router.push({ name: 'overview' })
   }
 
+  //商品詳情
+  const goProductDetail = (id) => {
+    router.push({ name: 'ProductDetail', params: { id } })
+  }
+
   //本週特惠
   const goFlashSale = () => {
     router.push({ name: 'flashSale' })
@@ -110,6 +115,7 @@ export function useNavigation() {
     goHome,
     goLogin,
     goProducts,
+    goProductDetail,
     goShoppingGuide,
     goQA,
     goFlashSale,
