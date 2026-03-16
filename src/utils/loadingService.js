@@ -15,7 +15,7 @@ export function showLoading(text) {
     loadingInstance = ElLoading.service({
       lock: true,
       text: loadingText,
-      // 關鍵：不要在 JS 裡傳 spinner 了，我們直接用 CSS 暴力注入
+      // 不要在 JS 裡傳 spinner ，直接用 CSS 暴力注入
       background: 'transparent',
       customClass: 'rpg-loading-mask',
     })
