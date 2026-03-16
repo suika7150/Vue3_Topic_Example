@@ -105,7 +105,7 @@
       </el-empty>
     </div>
 
-    <el-dialog v-model="dialogVisible" :title="currentProduct.name" width="1000px">
+    <!-- <el-dialog v-model="dialogVisible" :title="currentProduct.name" width="1000px">
       <div v-if="currentProduct" class="product-detail-dialog">
         <img :src="currentProduct.imageBase64" class="product-detail-image" />
         <div class="product-detail-content">
@@ -114,7 +114,7 @@
           <el-rate v-model="currentProduct.rating" disabled show-score :max="5" />
         </div>
       </div>
-    </el-dialog>
+    </el-dialog> -->
     <CartDrawer v-model:drawerVisible="drawerVisible" />
   </div>
 </template>
@@ -135,7 +135,7 @@ import throttle from 'lodash/throttle'
 import { Loading, Star, StarFilled } from '@element-plus/icons-vue'
 
 const route = useRoute()
-const { goProducts } = useNavigation()
+const { goProducts, goProductDetail } = useNavigation()
 const cartStore = useCartStore()
 const products = ref([])
 const categories = ref([])
@@ -153,6 +153,10 @@ const props = defineProps({
     default: '',
   },
 })
+
+const showProductDetail = (product) => {
+  goProductDetail(product.id)
+}
 
 const fetchProducts = async () => {
   isLoading.value = true
@@ -253,10 +257,10 @@ const filteredProducts = computed(() => {
 
 const visibleProducts = computed(() => filteredProducts.value.slice(0, visibleCount.value))
 
-const showProductDetail = (product) => {
-  currentProduct.value = product
-  dialogVisible.value = true
-}
+// const showProductDetail = (product) => {
+//   currentProduct.value = product
+//   dialogVisible.value = true
+// }
 
 const addToCart = (product) => {
   const existingItem = cartStore.cart.find((item) => item.id === product.id)

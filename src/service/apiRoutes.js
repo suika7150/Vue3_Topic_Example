@@ -7,6 +7,7 @@ export const API_ROUTES = {
   LOGOUT: '/api/logout',
   PRODUCT_ADD: '/api/addProducts',
   PRODUCT_LIST: '/api/products',
+  PRODUCT_GET: (id) => `/api/products/${id}`,
   PRODUCT_DETAIL: (id) => `/api/products/edit/${id}`,
   PRODUCT_UPDATE: (id) => `/api/updateProducts/${id}`,
   PRODUCT_MANAGE_LIST: `/api/products/list`,

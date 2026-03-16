@@ -93,7 +93,7 @@ const fetchProductDetail = async () => {
 
   isLoading.value = true
   try {
-    const res = await api.getProductDetail(productId)
+    const res = await api.getProductInfo(productId)
 
     if (res.code === '0000' && res.result) {
       product.value = res.result

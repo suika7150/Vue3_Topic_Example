@@ -87,11 +87,12 @@ const routes = [
     meta: { title: '商品編輯' },
   },
   // 開發中
-  // {
-  //   path: '/product/:id',
-  //   name: 'ProductDetail',
-  //   component: () => import('@/views/products/ProductDetailView.vue'),
-  // },
+  {
+    path: '/product/:id',
+    name: 'ProductDetail',
+    component: () => import('@/views/products/ProductDetailView.vue'),
+    meta: { title: '商品詳情' },
+  },
   {
     path: '/settings/options',
     name: 'OptionsManage',

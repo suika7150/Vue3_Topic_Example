@@ -28,7 +28,10 @@ const api = {
   // 取得產品列表 & 搜尋產品
   getProducts: (params) => apiService.get(API_ROUTES.PRODUCT_LIST, { params }),
 
-  // 取得產品詳細資料
+  // 取得商品詳細資料(前台展示)
+  getProductInfo: (id) => apiService.get(API_ROUTES.PRODUCT_GET(id)),
+
+  // 取得商品詳細資料(後台編輯)
   getProductById: (id) => apiService.get(API_ROUTES.PRODUCT_DETAIL(id)),
 
   // 更新產品資料
@@ -58,9 +61,6 @@ const api = {
 
   //新增訂單
   createOrder: (data) => apiService.post(API_ROUTES.ORDER_CREATE, data),
-
-  // //新增訂單
-  // createOrder: (data) => apiService.post(API_ROUTES.ORDER, data),
 }
 
 export default api
