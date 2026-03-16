@@ -105,16 +105,6 @@
       </el-empty>
     </div>
 
-    <!-- <el-dialog v-model="dialogVisible" :title="currentProduct.name" width="1000px">
-      <div v-if="currentProduct" class="product-detail-dialog">
-        <img :src="currentProduct.imageBase64" class="product-detail-image" />
-        <div class="product-detail-content">
-          <p class="detail-price">$ {{ currentProduct.price }}</p>
-          <p class="detail-description">{{ currentProduct.description }}</p>
-          <el-rate v-model="currentProduct.rating" disabled show-score :max="5" />
-        </div>
-      </div>
-    </el-dialog> -->
     <CartDrawer v-model:drawerVisible="drawerVisible" />
   </div>
 </template>

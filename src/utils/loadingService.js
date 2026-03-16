@@ -3,7 +3,7 @@ import { ElLoading } from 'element-plus'
 let loadingInstance = null
 let loadingCount = 0
 let startTime = 0
-const MIN_LOADING_TIME = 2000
+const MIN_LOADING_TIME = 1000
 
 const tips = ['正在聯繫快遞小哥...', '包裹正在打包中...', '物流飛奔中，請稍候...']
 
