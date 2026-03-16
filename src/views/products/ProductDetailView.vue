@@ -1,68 +1,85 @@
 <template>
-  <div class="product-detail-view">
-    <div v-if="isLoading" class="loading-state">
-      <el-skeleton style="width: 1000px" animated>
-        <template #template>
-          <div class="skeleton-layout">
-            <el-skeleton-item variant="image" class="skeleton-image" />
-            <div class="skeleton-content">
-              <el-skeleton-item variant="h1" style="width: 50%" />
-              <el-skeleton-item variant="text" style="width: 30%" />
-              <el-skeleton-item variant="text" style="width: 100%" />
-              <el-skeleton-item variant="text" style="width: 100%" />
-              <el-skeleton-item variant="text" style="width: 80%" />
-              <el-skeleton-item variant="h3" style="width: 20%; margin-top: 16px" />
-              <el-skeleton-item
-                variant="button"
-                style="width: 100%; height: 40px; margin-top: 24px"
-              />
-            </div>
-          </div>
-        </template>
-      </el-skeleton>
+  <div class="product-page-container">
+    <div class="breadcrumb-wrapper">
+      <Breadcrumb />
     </div>
 
-    <el-card v-else-if="product" class="detail-card">
-      <el-row :gutter="40">
-        <el-col :span="12">
-          <img
-            :src="product.imageBase64"
-            :alt="product.name"
-            class="detail-image"
-            @error="handleImageError"
-          />
+    <section class="product-main-section">
+      <el-row :gutter="60">
+        <el-col :md="11" :sm="24">
+          <div class="gallery-container">
+            <el-image :src="product?.imageBase64" class="product-hero-image" fit="contain" />
+          </div>
         </el-col>
 
-        <el-col :span="12">
-          <h1 class="product-name">{{ product.name }}</h1>
-          <p class="product-category">{{ product.category }}</p>
+        <el-col :md="13" :sm="24">
+          <div class="purchase-info">
+            <span class="category-tag">{{ product?.category }}</span>
+            <h1 class="product-title">{{ product?.name }}</h1>
 
-          <el-rate v-model="product.rating" disabled show-score :max="5" class="product-rating" />
+            <div class="price-wrapper">
+              <span class="price-label">NT</span>
+              <span class="price-symbol">$</span>
+              <span class="price-value">{{ product?.price?.toLocaleString() }}</span>
+            </div>
 
-          <el-divider />
+            <div class="shipping-info">
+              <el-icon><Van /></el-icon>
+              <span>滿 $1000 免運費 | 24小時快速到貨</span>
+            </div>
 
-          <div class="price-section">
-            <span class="product-price-label">價格:</span>
-            <span class="product-price">$ {{ product.price }}</span>
+            <el-divider />
+
+            <div class="spec-selection">
+              <div class="qty-row">
+                <span class="spec-label">數量：</span>
+                <el-input-number
+                  v-model="buyQty"
+                  :min="1"
+                  :max="product?.stock || 99"
+                  controls-position="right"
+                  size="large"
+                />
+                <span class="stock-hint" v-if="product?.stock">
+                  (庫存剩餘 {{ product.stock }} 件)</span
+                >
+              </div>
+            </div>
+
+            <div class="button-group">
+              <el-button class="btn-add-cart" size="large" @click="addToCart(product)">
+                加入購物車
+              </el-button>
+              <el-button type="danger" class="btn-buy-now" size="large"> 立即結帳 </el-button>
+            </div>
           </div>
-
-          <p class="product-description-label">商品描述:</p>
-          <p class="product-description">{{ product.description }}</p>
-
-          <el-button
-            type="primary"
-            size="large"
-            class="add-to-cart-btn"
-            :icon="ShoppingCart"
-            @click="addToCart(product)"
-          >
-            加入購物車
-          </el-button>
         </el-col>
       </el-row>
-    </el-card>
+    </section>
 
-    <el-empty v-else description="找不到該商品或載入失敗"></el-empty>
+    <section class="product-tabs-section">
+      <el-tabs v-model="activeTab" class="custom-tabs">
+        <el-tab-pane label="商品詳情" name="desc">
+          <div class="detail-content">
+            <div class="text-desc">{{ product?.description }}</div>
+            <img v-if="product?.imageBase64" :src="product?.imageBase64" class="promo-image" />
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="規格參數" name="spec">
+          <div class="spec-table">
+            <div class="spec-item">
+              <span>品牌</span><span>{{ product?.brand || '官方正品' }}</span>
+            </div>
+            <div class="spec-item">
+              <span>型號</span><span>{{ product?.id }}</span>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="售後服務" name="service">
+          <p>本商品享有 7 天鑑賞期...</p>
+        </el-tab-pane>
+      </el-tabs>
+    </section>
   </div>
 </template>
 
@@ -72,13 +89,15 @@ import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import api from '@/service/api'
 import { useCartStore } from '@/store/cartStore'
-import { ShoppingCart } from '@element-plus/icons-vue'
+// import { ShoppingCart } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const cartStore = useCartStore()
 
 const product = ref(null)
 const isLoading = ref(true)
+const buyQty = ref(1)
+const activeTab = ref('desc') //預設顯示商品詳情
 
 /**
  * 根據路由參數中的 ID 獲取商品詳情
@@ -122,7 +141,7 @@ const addToCart = (productToAdd) => {
     cartStore.addProduct(productToAdd)
     ElMessage.success(`${productToAdd.name} 已加入購物車`)
   }
-  openCartDrawer()
+  CartDrawer()
 }
 
 /**
@@ -138,99 +157,81 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.product-detail-view {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 20px;
+/* 頁面背景與主容器 */
+.product-page-container {
+  background-color: #f5f5f5; /* 淺灰色底襯托白色內容 */
+  padding-bottom: 60px;
 }
 
-.loading-state,
-.detail-card,
-.el-empty {
-  min-height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.breadcrumb-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 0;
 }
 
-/* 骨架屏樣式 */
-.skeleton-layout {
-  display: flex;
-  gap: 40px;
-  width: 100%;
-}
-.skeleton-image {
-  flex: 1;
-  height: 400px;
-}
-.skeleton-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* 商品卡片與內容 */
-.detail-image {
-  width: 100%;
-  height: auto;
-  max-height: 450px;
-  object-fit: contain;
+/* 主資訊區 */
+.product-main-section {
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  background: #fff;
+  padding: 40px;
   border-radius: 4px;
 }
 
-.product-name {
-  font-size: 32px;
+/* 價格區美化 */
+.price-wrapper {
+  background: #fff5f5;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.price-label {
+  font-size: 30px;
   font-weight: bold;
-  margin-bottom: 8px;
-  color: #303133;
+  color: #cf1322;
 }
 
-.product-category {
-  font-size: 16px;
-  color: #909399;
-  margin-bottom: 16px;
+.price-symbol {
+  font-size: 30px;
+  font-weight: bold;
+  color: #cf1322;
 }
 
-.product-rating {
-  margin-bottom: 20px;
-}
-
-.price-section {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 20px;
-}
-
-.product-price-label {
-  font-size: 18px;
-  color: #606266;
-  margin-right: 10px;
-}
-
-.product-price {
+.price-value {
   font-size: 36px;
-  font-weight: 700;
-  color: #cf1322; /* 醒目紅色 */
-}
-
-.product-description-label {
-  font-size: 16px;
   font-weight: bold;
-  color: #303133;
-  margin-top: 16px;
-  margin-bottom: 8px;
+  color: #cf1322;
 }
 
-.product-description {
-  font-size: 15px;
-  line-height: 1.6;
-  color: #606266;
-  margin-bottom: 30px;
+/* 按鈕美化 */
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
 }
 
-.add-to-cart-btn {
-  width: 100%;
-  margin-top: 10px;
+.btn-add-cart {
+  flex: 1;
+  height: 50px;
+  font-size: 18px;
+  border-color: #cf1322;
+  color: #cf1322;
+}
+
+.btn-buy-now {
+  flex: 1;
+  height: 50px;
+  font-size: 18px;
+  background-color: #cf1322;
+}
+
+/* 下方標籤頁 */
+.product-tabs-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 20px 40px;
+  min-height: 400px;
 }
 </style>
