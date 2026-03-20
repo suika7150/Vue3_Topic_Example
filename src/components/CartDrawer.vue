@@ -90,6 +90,7 @@
 import { useBreakpoint } from '@/composables/useBreakpoint'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
+import { useSidebarStore } from '@/store/sidebarStore'
 import { Delete, ShoppingCart } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { toast } from '@/utils/message'
@@ -98,6 +99,7 @@ import { computed } from 'vue'
 const { isMobile } = useBreakpoint()
 const { goTo } = useNavigation()
 const cartStore = useCartStore()
+const sidebarStore = useSidebarStore()
 const cart = computed(() => cartStore.cart)
 
 const drawerSize = computed(() => {
@@ -164,6 +166,7 @@ const handleCheckout = async () => {
 
     setTimeout(() => {
       goTo('checkout')
+      sidebarStore.setCollapse(true)
       toast.success('正在前往結帳頁面...')
     }, 300)
   } catch {

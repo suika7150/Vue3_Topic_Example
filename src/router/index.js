@@ -5,6 +5,7 @@ meta.title搭配BreadCrumb.vue的title顯示在麵包屑上
 */
 import CategoryPage from '@/Navigation/sub/CategoryPage.vue'
 import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
+import { hideLoading, showLoading } from '@/utils/loadingService'
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
@@ -187,6 +188,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 檢查是否已登入
   const isLoggedIn = !!Storage.get(TOKEN_KEY)
+  showLoading()
   const role = Storage.get(USER_ROLE_KEY)
 
   if (to.meta.requiresAuth && !isLoggedIn) {
@@ -203,4 +205,13 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
+
+router.afterEach(() => {
+  hideLoading()
+})
+
+router.onError(() => {
+  hideLoading()
+})
+
 export default router
