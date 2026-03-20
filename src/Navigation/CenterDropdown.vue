@@ -1,9 +1,9 @@
 <template>
   <div class="topbar-dropdowns">
     <!-- 活動專區 -->
-    <el-dropdown trigger="hover">
+    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
       <el-button class="topbar-btn"
-        >活動專區<el-icon><CaretBottom /></el-icon
+        >活動專區<el-icon class="caret-icon"><CaretBottom /></el-icon
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -14,9 +14,9 @@
     </el-dropdown>
 
     <!-- 聯名專區 -->
-    <el-dropdown trigger="hover">
+    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
       <el-button class="topbar-btn">
-        聯名專區 <el-icon><CaretBottom /></el-icon>
+        聯名專區 <el-icon class="caret-icon"><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -29,9 +29,9 @@
     </el-dropdown>
 
     <!-- 品牌專區 -->
-    <el-dropdown trigger="hover">
+    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
       <el-button class="topbar-btn">
-        品牌專區 <el-icon><CaretBottom /></el-icon>
+        品牌專區 <el-icon class="caret-icon"><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu class="center-menu-dropdown">
@@ -43,9 +43,9 @@
     </el-dropdown>
 
     <!-- 季節限定 -->
-    <el-dropdown trigger="hover">
+    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
       <el-button class="topbar-btn"
-        >季節限定<el-icon><CaretBottom /></el-icon
+        >季節限定<el-icon class="caret-icon"><CaretBottom /></el-icon
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -56,9 +56,9 @@
     </el-dropdown>
 
     <!-- 雙11大優惠 -->
-    <el-dropdown trigger="hover">
+    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
       <el-button class="topbar-btn">
-        雙11周年慶典 <el-icon><CaretBottom /></el-icon>
+        雙11周年慶典 <el-icon class="caret-icon"><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -69,9 +69,9 @@
     </el-dropdown>
 
     <!-- 更多活動 -->
-    <el-dropdown trigger="hover">
+    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
       <el-button class="topbar-btn">
-        更多活動 <el-icon><CaretBottom /></el-icon>
+        更多活動 <el-icon class="caret-icon"><CaretBottom /></el-icon>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -111,11 +111,17 @@ const {
 </script>
 
 <style scoped>
+.custom-dropdown.el-popper {
+  background: #fff !important;
+}
+
 .topbar-dropdowns {
   display: flex;
+  justify-content: center;
   gap: 15px;
-  margin: 20px 0 0 40px;
+  margin: 30px auto 0 auto;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .topbar-btn {
@@ -124,19 +130,67 @@ const {
   border: none;
   padding: 8px 12px;
   font-size: 18px;
+  border-radius: 10px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 40px;
   cursor: pointer;
 }
 
 .topbar-btn:hover,
 .topbar-btn:focus {
+  outline: none;
+  border: none;
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.caret-icon {
+  font-size: 16px;
+  opacity: 0.8;
+  transition: all 0.5s;
+}
+
+.hover {
   border: none;
   outline: none;
+}
+
+.el-icon {
+  margin-left: 4px;
+  opacity: 0.8;
 }
 
 @media (max-width: 1024px) {
   .topbar-dropdowns {
     display: none;
   }
+}
+</style>
+<style>
+.refined-dropdown {
+  background: #ffffff;
+  border-radius: 15px !important;
+  border: none !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.08),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  padding: 4px !important;
+  margin-top: 10px !important;
+}
+
+.refined-dropdown .el-dropdown-menu__item {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #374151;
+  padding: 10px 20px;
+  margin: 2px 4px;
+  border-radius: 15px;
+  transition: all 0.2s ease;
+}
+
+.refined-dropdown .el-dropdown-menu__item:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+  transform: translateY(-1px);
 }
 </style>
