@@ -7,6 +7,7 @@ import { isWhiteListed } from './authWhitelist'
 
 const { goLogin } = useNavigation()
 
+// --- 建立 axios 實例 ---
 const apiService = axios.create({
   baseURL: 'http://192.168.50.43:8080',
   timeout: 600000,
