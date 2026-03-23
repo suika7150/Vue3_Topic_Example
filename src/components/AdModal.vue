@@ -42,7 +42,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* 確保在最上層 */
+  z-index: 9999;
 }
 
 .modal-content {
@@ -80,7 +80,6 @@ onMounted(() => {
   background-color: black;
 }
 
-/* 進入與離開的動畫 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;

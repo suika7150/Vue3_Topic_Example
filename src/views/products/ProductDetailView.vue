@@ -159,7 +159,7 @@ onMounted(() => {
 <style scoped>
 /* 頁面背景與主容器 */
 .product-page-container {
-  background-color: #f5f5f5; /* 淺灰色底襯托白色內容 */
+  background-color: #f5f5f5;
   padding-bottom: 60px;
 }
 
