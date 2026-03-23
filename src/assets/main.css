@@ -71,44 +71,37 @@ body .el-message-box.checkout-confirm-dialog {
   border-radius: 10px;
 }
 
-/* --- 物流車可愛動畫版 --- */
+/* --- 物流車 Loading 動畫 --- */
 
-/* 1. 遮罩背景維持不變 */
 .el-loading-mask.rpg-loading-mask {
   background-color: rgba(18, 18, 20, 0.9) !important;
   backdrop-filter: blur(15px) !important;
   -webkit-backdrop-filter: blur(15px) !important;
 }
 
-/* 2. 容器：負責車子的「上下顛簸感」 */
 .rpg-loading-mask .el-loading-spinner {
   background: none !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  /* 車子行駛時微小的上下震動 */
+  /* 車子行駛上下震動 */
   animation: truck-vibration 0.3s infinite linear;
   will-change: transform;
 }
 
-/* 3. 偽元素 ::before：物流車本體 */
 .rpg-loading-mask .el-loading-spinner::before {
   content: '';
   display: block;
-  width: 80px; /* 車子寬度 */
+  width: 80px;
   height: 50px;
   margin: 0 auto 10px auto;
 
-  /* 白色簡約物流車 SVG */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5s1.5.67 1.5 1.5s-.67 1.5-1.5 1.5zm1.5-6.5l2.25 3H17V9h.75l1.75 3z'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
-
-  /* 讓車子帶點發光質感 */
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
 }
 
-/* 4. 偽元素 ::after：路面飛逝線條 (增加速度感) */
 .rpg-loading-mask .el-loading-spinner::after {
   content: '';
   width: 40px;
@@ -120,9 +113,7 @@ body .el-message-box.checkout-confirm-dialog {
   margin-bottom: 20px;
 }
 
-/* --- 動畫定義 --- */
-
-/* 模擬路面不平的快速震動 */
+/* 模擬車子震動 */
 @keyframes truck-vibration {
   0%,
   100% {
@@ -133,7 +124,7 @@ body .el-message-box.checkout-confirm-dialog {
   }
 }
 
-/* 模擬路面標線快速後退 */
+/* 模擬路面標線後退 */
 @keyframes road-line-move {
   0% {
     transform: translateX(40px);
@@ -162,7 +153,7 @@ body .el-message-box.checkout-confirm-dialog {
   font-weight: 600;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
 }
-/* RWD:1024px */
+
 @media (max-width: 1024px) {
   .topbar-main {
     height: 100%;
