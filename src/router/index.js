@@ -188,6 +188,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 檢查是否已登入
   const isLoggedIn = !!Storage.get(TOKEN_KEY)
+  showLoading()
   const role = Storage.get(USER_ROLE_KEY)
 
   if (to.meta.requiresAuth && !isLoggedIn) {
@@ -202,7 +203,6 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !to.meta?.role?.includes(role)) {
     return next('/accessDenied')
   }
-  showLoading()
   next()
 })
 
