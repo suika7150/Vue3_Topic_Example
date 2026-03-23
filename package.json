@@ -5,8 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:sit": "vite --mode sit",
+    "dev:uat": "vite --mode uat",
+    "dev:prod": "vite --mode prod",
     "serve": "vite --host",
     "build": "vite build",
+    "build:sit": "vite build --mode sit",
+    "build:uat": "vite build --mode uat",
+    "build:prod": "vite build --mode prod",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"
