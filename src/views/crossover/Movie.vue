@@ -138,6 +138,8 @@ const goToDetail = (id: number) => {
   max-width: 1300px;
   margin: 0 auto;
   padding: 100px 40px;
+  overflow: hidden;
+  /* padding-bottom: 0; */
 }
 
 .movie-card {

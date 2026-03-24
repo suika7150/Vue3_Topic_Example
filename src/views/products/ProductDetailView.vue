@@ -50,7 +50,9 @@
               <el-button class="btn-add-cart" size="large" @click="addToCart(product)">
                 加入購物車
               </el-button>
-              <el-button type="danger" class="btn-buy-now" size="large"> 立即結帳 </el-button>
+              <el-button type="danger" class="btn-buy-now" size="large" @click="buyNow">
+                立即結帳
+              </el-button>
             </div>
           </div>
         </el-col>
@@ -85,13 +87,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import api from '@/service/api'
 import { useCartStore } from '@/store/cartStore'
+import Breadcrumb from '@/Navigation/Breadcrumb.vue'
 // import { ShoppingCart } from '@element-plus/icons-vue'
 
 const route = useRoute()
+const router = useRouter()
 const cartStore = useCartStore()
 
 const product = ref(null)
@@ -145,6 +149,20 @@ const addToCart = (productToAdd) => {
 }
 
 /**
+ * 立即結帳：加入目前選擇的數量並跳轉
+ */
+const buyNow = (productToBuy) => {
+  if (!productToBuy) return
+
+  // 使用 cartStore 的方法加入購物車
+  // 確保傳入的是當前選擇的數量 buyQty.value
+  cartStore.addProduct({ ...productToBuy, quantity: buyQty.value })
+
+  // 導向 checkout 結帳頁面
+  router.push('/checkout')
+}
+
+/**
  * 圖片載入失敗時的處理
  */
 const handleImageError = (e) => {
@@ -178,7 +196,7 @@ onMounted(() => {
   border-radius: 4px;
 }
 
-/* 價格區美化 */
+/* 價格區 */
 .price-wrapper {
   background: #fff5f5;
   padding: 15px;
@@ -204,7 +222,7 @@ onMounted(() => {
   color: #cf1322;
 }
 
-/* 按鈕美化 */
+/* 按鈕 */
 .button-group {
   display: flex;
   gap: 12px;
