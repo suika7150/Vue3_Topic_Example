@@ -20,10 +20,10 @@
                 <div class="item-details">
                   <h3 class="item-name">{{ item.name }}</h3>
                   <p class="item-description">{{ item.description }}</p>
-                  <div class="item-quantity-control">
-                    <span class="quantity-label">數量 :</span>
-                    <el-input-number v-model="item.quantity" :min="1" @change="updateStorage" />
-                  </div>
+                </div>
+                <div class="item-quantity-control">
+                  <span class="quantity-label">數量 :</span>
+                  <el-input-number v-model="item.quantity" :min="1" @change="updateStorage" />
                 </div>
                 <div class="item-price-info">
                   <div class="item-total-price">
@@ -31,6 +31,15 @@
                   </div>
                   <div class="item-unit-price">單價: NT$ {{ item.price.toLocaleString() }}</div>
                 </div>
+                <el-button
+                  type="danger"
+                  link
+                  :icon="Delete"
+                  @click="removeItem(item.id)"
+                  class="delete-btn"
+                >
+                  刪除
+                </el-button>
               </div>
             </div>
           </div>
@@ -540,6 +549,7 @@ onMounted(() => {
   padding: 16px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
+  gap: 16px;
 }
 
 .item-image {
@@ -572,6 +582,7 @@ onMounted(() => {
 }
 
 .quantity-label {
+  /* align-items: center; */
   color: #6b7280;
 }
 /* 調整+-按鈕 */
@@ -582,6 +593,7 @@ onMounted(() => {
 
 .item-price-info {
   text-align: right;
+  min-width: 120px;
 }
 
 .item-total-price {
@@ -593,6 +605,11 @@ onMounted(() => {
 .item-unit-price {
   font-size: 14px;
   color: #6b7280;
+}
+
+.delete-btn {
+  margin-left: 8px;
+  padding: 0 8px;
 }
 
 /* Shipping Form */
