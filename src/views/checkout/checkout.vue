@@ -20,9 +20,9 @@
                 <div class="item-details">
                   <h3 class="item-name">{{ item.name }}</h3>
                   <p class="item-description">{{ item.description }}</p>
-                  <div class="item-quantity">
-                    <span class="quantity-label">數量:</span>
-                    {{ item.quantity }}
+                  <div class="item-quantity-control">
+                    <span class="quantity-label">數量 :</span>
+                    <el-input-number v-model="item.quantity" :min="1" @change="updateStorage" />
                   </div>
                 </div>
                 <div class="item-price-info">
@@ -235,18 +235,20 @@
 </template>
 
 <script setup>
-import { useNavigation } from '@/composables/useNavigation'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import api from '@/service/api'
+import { ElMessage } from 'element-plus'
+import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
-import { ElMessage } from 'element-plus'
-import { computed, onMounted, ref } from 'vue'
 
 const cartStore = useCartStore()
 const cart = computed(() => cartStore.cart)
 
 const { goTo } = useNavigation()
 
+const route = useRoute()
 const currentStep = ref(0)
 const submitting = ref(false)
 const applyingCoupon = ref(false)
@@ -454,6 +456,17 @@ const formatExpiryDate = (value) => {
 // 生命週期
 onMounted(() => {
   loadCartItems()
+
+  // 如果購物車是空的，就回到第一步
+  if (!cartItems.value || cartItems.value.length === 0) {
+    goTo('overview')
+    return
+  }
+
+  // 如果 URL 有帶 step 參數，就切換過去
+  // if (route.query.step !== undefined) {
+  //   currentStep.value = parseInt(route.query.step)
+  // }
 })
 </script>
 
@@ -549,16 +562,22 @@ onMounted(() => {
   color: #6b7280;
 }
 
-.item-quantity {
+.item-quantity-control {
   display: flex;
   align-items: center;
+  gap: 12px;
   margin-top: 8px;
   font-size: 14px;
   color: #6b7280;
 }
 
 .quantity-label {
-  margin-right: 8px;
+  color: #6b7280;
+}
+/* 調整+-按鈕 */
+:deep(.el-input-number) {
+  width: 120px;
+  height: 30px;
 }
 
 .item-price-info {

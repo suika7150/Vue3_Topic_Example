@@ -44,6 +44,11 @@ export function useNavigation() {
     router.push({ name: 'ProductDetail', params: { id } })
   }
 
+  //結帳
+  const goCheckout = () => {
+    router.push({ name: 'checkout' })
+  }
+
   //本週特惠
   const goFlashSale = () => {
     router.push({ name: 'flashSale' })
@@ -116,6 +121,7 @@ export function useNavigation() {
     goLogin,
     goProducts,
     goProductDetail,
+    goCheckout,
     goShoppingGuide,
     goQA,
     goFlashSale,

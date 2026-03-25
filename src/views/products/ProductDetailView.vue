@@ -90,13 +90,15 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import api from '@/service/api'
-import { useCartStore } from '@/store/cartStore'
 import Breadcrumb from '@/Navigation/Breadcrumb.vue'
+import { useCartStore } from '@/store/cartStore'
+import { useNavigation } from '@/composables/useNavigation'
 // import { ShoppingCart } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
 const cartStore = useCartStore()
+const { goCheckout } = useNavigation()
 
 const product = ref(null)
 const isLoading = ref(true)
@@ -152,14 +154,19 @@ const addToCart = (productToAdd) => {
  * 立即結帳：加入目前選擇的數量並跳轉
  */
 const buyNow = (productToBuy) => {
-  if (!productToBuy) return
+  // 1. 檢查商品資料是否存在
+  if (!product.value) return
 
-  // 使用 cartStore 的方法加入購物車
-  // 確保傳入的是當前選擇的數量 buyQty.value
-  cartStore.addProduct({ ...productToBuy, quantity: buyQty.value })
+  // 呼叫 Store 把東西塞進購物車
+  // 這裡直接用 product.value，不要從 HTML 傳 item 進來
+  cartStore.addProduct({
+    ...product.value,
+    quantity: buyQty.value,
+  })
 
-  // 導向 checkout 結帳頁面
-  router.push('/checkout')
+  // 3. 跳轉到結帳頁，並指定跳到第 3 步（索引為 2）
+  // 假設你的流程是：0.確認商品 -> 1.填寫資料 -> 2.付款設定
+  goCheckout(2)
 }
 
 /**
