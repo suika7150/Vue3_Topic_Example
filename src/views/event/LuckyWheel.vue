@@ -35,8 +35,6 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-// import { ElMessage } from 'element-plus'
-// import Alertbox from '@/components/AlertBox.vue'
 
 const prizes = [
   { name: '9折券', color: '#1a1a1a' },

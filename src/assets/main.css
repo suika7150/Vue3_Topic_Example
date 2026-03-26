@@ -75,8 +75,6 @@ body .el-message-box.checkout-confirm-dialog {
 
 .el-loading-mask.rpg-loading-mask {
   background-color: rgba(18, 18, 20, 0.9) !important;
-  backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important;
 }
 
 .rpg-loading-mask .el-loading-spinner {

@@ -13,7 +13,7 @@
       <div class="checkout-grid">
         <div class="main-content">
           <div v-if="currentStep === 0" class="checkout-step">
-            <h2 class="step-title">確認購買商品</h2>
+            <h2 class="step-title">訂單明細</h2>
             <div class="space-y-4">
               <div v-for="item in cartItems" :key="item.id" class="item-card">
                 <img :src="item.imageBase64" :alt="item.name" class="item-image" />
@@ -33,7 +33,6 @@
                 </div>
                 <el-button
                   type="danger"
-                  link
                   :icon="Delete"
                   @click="removeItem(item.id)"
                   class="delete-btn"
@@ -248,16 +247,19 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/service/api'
 import { ElMessage } from 'element-plus'
+import { toast } from '@/utils/message'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
+import { useModalStore } from '@/store/modalStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 
 const cartStore = useCartStore()
 const cart = computed(() => cartStore.cart)
 
 const { goTo } = useNavigation()
-
+const modalStore = useModalStore()
 const route = useRoute()
+
 const currentStep = ref(0)
 const submitting = ref(false)
 const applyingCoupon = ref(false)
@@ -338,7 +340,7 @@ const handleShippingChange = ({ value, option, additionalCost }) => {
   console.log('配送方式:', option.name)
   console.log('額外費用:', additionalCost)
 }
-// 計算屬性
+
 const subtotal = computed(() => {
   return cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
 })
@@ -355,9 +357,24 @@ const total = computed(() => {
   return total
 })
 
-// 方法
 const loadCartItems = () => {
   cartItems.value = cart.value
+}
+
+//刪除 & 取消
+const removeItem = (id) => {
+  modalStore.open({
+    title: '提示',
+    message: '確定要刪除此項商品嗎?',
+    onConfirm: () => {
+      cartStore.removeProduct(id) // 呼叫 store 刪除商品
+      Storage.set(CART_KEY, cartStore.cart) // 同步 LocalStorage
+      toast.success('商品已移除')
+      if (cartItems.value.length === 0) {
+        goTo('overview')
+      }
+    },
+  })
 }
 
 const nextStep = async () => {
@@ -415,10 +432,10 @@ const submitOrder = async () => {
     // 跳轉到成功頁面
     goTo('checkoutSuccess')
 
-    ElMessage.success('訂單建立成功！')
+    toast.success('訂單建立成功！')
   } catch (error) {
     console.error('訂單建立失敗:', error)
-    ElMessage.error('訂單建立失敗，請稍後再試')
+    toast.error('訂單建立失敗，請稍後再試')
   } finally {
     submitting.value = false
   }
@@ -426,7 +443,7 @@ const submitOrder = async () => {
 
 const applyCoupon = async () => {
   if (!couponCode.value.trim()) {
-    ElMessage.warning('請輸入優惠券代碼')
+    toast.warning('請輸入優惠券代碼')
     return
   }
 
@@ -435,13 +452,13 @@ const applyCoupon = async () => {
     const response = await api.coupon.validate(couponCode.value)
 
     if (response.valid) {
-      ElMessage.success('優惠券套用成功！')
+      toast.success('優惠券套用成功！')
       // 應用折扣邏輯
     } else {
-      ElMessage.error('優惠券無效或已過期')
+      toast.error('優惠券無效或已過期')
     }
   } catch (error) {
-    ElMessage.error('優惠券驗證失敗')
+    toast.error('優惠券驗證失敗')
   } finally {
     applyingCoupon.value = false
   }
@@ -466,16 +483,11 @@ const formatExpiryDate = (value) => {
 onMounted(() => {
   loadCartItems()
 
-  // 如果購物車是空的，就回到第一步
+  // 如果購物車是空的，就回到商品總覽
   if (!cartItems.value || cartItems.value.length === 0) {
     goTo('overview')
     return
   }
-
-  // 如果 URL 有帶 step 參數，就切換過去
-  // if (route.query.step !== undefined) {
-  //   currentStep.value = parseInt(route.query.step)
-  // }
 })
 </script>
 
@@ -543,18 +555,24 @@ onMounted(() => {
   margin-top: 16px;
 }
 
+/* 訂單明細 */
 .item-card {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  gap: 16px;
+  display: grid;
+  /* 定義五欄：圖片(固定)、名稱(主體)、數量(固定)、價格(固定)、動作(固定) */
+  grid-template-columns: 80px 2fr 1.5fr 1fr 100px;
+  align-items: center; /* 垂直置中 */
+  gap: 24px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
+/* 訂單明細圖片 */
 .item-image {
-  width: 64px;
-  height: 64px;
+  width: 100px;
+  height: 120px;
   object-fit: cover;
   border-radius: 4px;
 }
@@ -591,13 +609,13 @@ onMounted(() => {
   height: 30px;
 }
 
+/* 訂單明細價格 */
 .item-price-info {
-  text-align: right;
   min-width: 120px;
 }
 
 .item-total-price {
-  font-size: 18px;
+  font-size: 25px;
   font-weight: 600;
   color: #f97316;
 }
@@ -607,9 +625,32 @@ onMounted(() => {
   color: #6b7280;
 }
 
+/* 刪除按鈕 */
 .delete-btn {
-  margin-left: 8px;
-  padding: 0 8px;
+  --el-button-bg-color: #fff1f0;
+  --el-button-text-color: #ff4d4f;
+  --el-button-border-color: #ffccc7;
+
+  --el-button-hover-bg-color: #ff4d4f;
+  --el-button-hover-text-color: #ffffff;
+  --el-button-hover-border-color: #ff4d4f;
+
+  justify-self: end;
+  border-radius: 10px;
+  padding: 8px 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.2);
+}
+
+:deep(.el-button--danger) {
+  background-color: var(--el-button-bg-color);
+  color: var(--el-button-text-color);
+  border-color: var(--el-button-border-color);
 }
 
 /* Shipping Form */

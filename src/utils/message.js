@@ -1,6 +1,7 @@
 import { ElMessage } from 'element-plus'
 
 /**
+ * toast
  *封裝統一的訊息樣式
  */
 

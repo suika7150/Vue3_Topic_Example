@@ -9,7 +9,7 @@
     >
       <div v-if="cart.length" class="cart-content">
         <el-table :data="cart" style="width: 100%">
-          <el-table-column label="操作" width="60">
+          <el-table-column label="操作" width="60" :align="center">
             <template #default="scope">
               <el-button
                 type="danger"
@@ -22,7 +22,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="商品" width="80">
+          <el-table-column label="商品" width="80" :align="center">
             <template #default="scope">
               <el-image
                 :src="scope.row.imageBase64"
@@ -32,7 +32,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="名稱" min-width="80" max-width="150">
+          <el-table-column label="名稱" min-width="80" max-width="150" :align="center">
             <template #default="scope">
               <div class="product-info-cell">
                 <span class="product-name">{{ scope.row.name }}</span>
@@ -41,20 +41,20 @@
             </template>
           </el-table-column>
 
-          <el-table-column v-if="!isMobile" label="價格" width="80">
+          <el-table-column v-if="!isMobile" label="價格" width="80" :align="center">
             <template #default="scope">
               <span class="cart-price">${{ scope.row.price }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="數量" :width="isMobile ? '100' : '135'">
+          <el-table-column label="數量" :width="isMobile ? '100' : '135'" :align="center">
             <template #default="scope">
               <el-input-number
                 v-model="scope.row.quantity"
                 :min="1"
                 size="small"
                 :controls-position="isMobile ? 'right' : ''"
-                style="width: 100%"
+                style="width: 70%"
                 @change="(e) => handleQuantityChange(e, scope.row)"
               />
             </template>
@@ -83,18 +83,43 @@
         </div>
       </template>
     </el-drawer>
+    <CheckoutConfirmModal v-model="showConfirmModal" title="確認結帳清單">
+      <div class="confirm-list-wrapper">
+        <div v-for="item in cart" :key="item.id" class="confirm-item">
+          <div class="item-info">
+            <span class="item-name">{{ item.name }}</span>
+            <span class="item-qty">× {{ item.quantity }}</span>
+          </div>
+          <div class="item-price">NT$ {{ (item.price * item.quantity).toLocaleString() }}</div>
+        </div>
+
+        <div class="confirm-summary">
+          <div class="total-line">
+            <span>應付總額</span>
+            <span class="total-amount">NT$ {{ cartStore.totalPrice.toLocaleString() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <template #footer>
+        <el-button @click="showConfirmModal = false">回購物車</el-button>
+        <el-button type="primary" class="confirm-pay-btn" @click="proceedToCheckout">
+          確認結帳
+        </el-button>
+      </template>
+    </CheckoutConfirmModal>
   </div>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
 import { useBreakpoint } from '@/composables/useBreakpoint'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
 import { useSidebarStore } from '@/store/sidebarStore'
-import { Delete, ShoppingCart } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus'
+import CheckoutConfirmModal from '@/components/CheckoutConfirmModal.vue'
 import { toast } from '@/utils/message'
-import { computed } from 'vue'
+import { Delete, ShoppingCart } from '@element-plus/icons-vue'
 
 const { isMobile } = useBreakpoint()
 const { goTo } = useNavigation()
@@ -120,32 +145,7 @@ const handleQuantityChange = (e, product) => {
   toast.success(`${product.name} 數量已更新為 ${e}`)
 }
 
-const createCheckoutConfirmContent = () => {
-  const itemsHtml = cart.value
-    .map(
-      (item) =>
-        `<div style="display: flex; justify-content: space-between; margin: 5px 0;">
-      <span>${item.name} × ${item.quantity}</span>
-      <span style="font-weight: bold;">$${item.price * item.quantity}</span>
-    </div>`,
-    )
-    .join('')
-
-  return `
-    <div style="max-height: 200px; overflow-y: auto;">
-      <p style="margin-bottom: 10px; font-weight: bold;">購買商品清單：</p>
-      ${itemsHtml}
-      <hr style="margin: 15px 0;">
-      <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #e74c3c;">
-        <span>總計：</span>
-        <span>$${cartStore.totalPrice}</span>
-      </div>
-      <p style="margin-top: 10px; color: #666; font-size: 12px;">
-        * 點擊「確認結帳」將前往結帳頁面完成訂單
-      </p>
-    </div>
-  `
-}
+const showConfirmModal = ref(false)
 
 const handleCheckout = async () => {
   if (!cart.value.length) {
@@ -153,25 +153,19 @@ const handleCheckout = async () => {
     return
   }
 
-  try {
-    await ElMessageBox.confirm(createCheckoutConfirmContent(), '確認結帳', {
-      confirmButtonText: '確認結帳',
-      cancelButtonText: '取消',
-      type: 'info',
-      customClass: 'checkout-confirm-dialog',
-      dangerouslyUseHTMLString: true,
-    })
+  // 不再調用 ElMessageBox，直接打開組件彈窗
+  showConfirmModal.value = true
+}
 
-    handleClose()
+const proceedToCheckout = () => {
+  showConfirmModal.value = false // 關閉彈窗
+  handleClose() // 關閉 Drawer
 
-    setTimeout(() => {
-      goTo('checkout')
-      sidebarStore.setCollapse(true)
-      toast.success('正在前往結帳頁面...')
-    }, 300)
-  } catch {
-    toast.info('已取消結帳')
-  }
+  setTimeout(() => {
+    goTo('checkout')
+    sidebarStore.setCollapse(true)
+    toast.success('正在前往結帳頁面...')
+  }, 300)
 }
 
 const removeItem = (productId) => {
@@ -181,12 +175,9 @@ const removeItem = (productId) => {
 </script>
 
 <style scoped>
-/* .cart-container {
-} */
-
 .cart-content {
   flex-grow: 1;
-  margin: 0px 10px;
+  /* margin: 0px 10px; */
 }
 
 .product-name {
@@ -234,5 +225,62 @@ const removeItem = (productId) => {
 
 .cart-checkout-icon {
   margin-right: 8px;
+}
+
+.confirm-list-wrapper {
+  padding: 10px 5px;
+}
+
+.confirm-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.item-qty {
+  font-size: 12px;
+  color: #999;
+}
+
+.item-price {
+  font-weight: bold;
+  color: #333;
+}
+
+.confirm-summary {
+  margin-top: 20px;
+  padding-top: 15px;
+}
+
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-amount {
+  font-size: 22px;
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.confirm-pay-btn {
+  background-color: #0071e3;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
 }
 </style>

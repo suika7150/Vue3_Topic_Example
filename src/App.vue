@@ -8,6 +8,7 @@ import BackToTop from './Navigation/BackToTop.vue'
 import { getNavMenu } from './Navigation/getNavMenu'
 import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from './store/sidebarStore'
+import ModalProvider from './components/ModalProvider.vue'
 
 const sidebarStore = useSidebarStore()
 const userStore = useUserStore()
@@ -23,6 +24,7 @@ const adShift = computed(() => {
 
 <template>
   <div class="app-wrapper">
+    <ModalProvider />
     <header>
       <div class="topbar-ad-banner">
         <TopBarAdBanner />

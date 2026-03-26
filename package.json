@@ -8,11 +8,13 @@
     "dev:sit": "vite --mode sit",
     "dev:uat": "vite --mode uat",
     "dev:prod": "vite --mode prod",
+    "dev:hotspot": "vite --mode hotspot",
     "serve": "vite --host",
     "build": "vite build",
     "build:sit": "vite build --mode sit",
     "build:uat": "vite build --mode uat",
     "build:prod": "vite build --mode prod",
+    "build hotspot": "vite build --mode hotspot",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"

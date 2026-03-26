@@ -262,7 +262,6 @@ const login = () => {
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   background: white;
-  backdrop-filter: blur(10px);
 }
 
 .title {
