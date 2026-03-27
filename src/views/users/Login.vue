@@ -2,13 +2,7 @@
 <template>
   <div class="login-container">
     <div class="login-wrapper">
-      <div class="login-ad-section">
-        <div class="ad-content">
-          <h3>年度盛典正式開啟</h3>
-          <p>立即登入領取雙 11 限定優惠券</p>
-          <div class="ad-placeholder">AD / PROMO IMAGE</div>
-        </div>
-      </div>
+      <LoginAd />
 
       <div class="login-form-section">
         <h2 class="title">會員登入</h2>
@@ -53,17 +47,15 @@ import { onMounted } from 'vue'
 import api from '@/service/api'
 import { useRoute } from 'vue-router'
 import { useNavigation } from '@/composables/useNavigation'
+import LoginAd from '@/components/LoginAd.vue'
 import { useUserStore } from '@/store/userStore'
 import Storage, { TOKEN_KEY, USER_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { ElMessage } from 'element-plus'
-import QrcodeVue from 'qrcode.vue'
-
-const qrValue = ref('https://your-store.com/promo/default')
 
 const { goTo, goHome } = useNavigation()
 const route = useRoute()
-const loginForm = ref()
 const userStore = useUserStore()
+const loginForm = ref()
 
 const form = ref({
   username: '',
@@ -84,21 +76,13 @@ const rules = {
   ],
 }
 
-// 載入記住的帳號
 onMounted(() => {
-  //讀取token
+  //載入記住的帳號，讀取token
   const rememberUsername = Storage.get(USER_KEY)
   if (rememberUsername) {
     form.value.username = rememberUsername
     form.value.rememberUsername = true
   }
-
-  // const token = Storage.get(TOKEN_KEY)
-  // if (token) {
-  //   userStore.login({ username: rememberUsername }, { token }) //回寫token
-  //   userStore.startTokenCountdown(token)
-  //   goHome()
-  // }
 })
 
 const handleLogin = async () => {
@@ -183,33 +167,6 @@ const handleRegister = () => {
   border: 1px solid #eee;
 }
 
-/* 左側廣告區 */
-.login-ad-section {
-  flex: 1;
-  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-  color: white;
-}
-
-.ad-content {
-  text-align: center;
-}
-
-.ad-placeholder {
-  margin-top: 20px;
-  width: 200px;
-  height: 200px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px dashed rgba(255, 255, 255, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-}
-
 /* 右側帳密區 */
 .login-form-section {
   width: 400px;
@@ -254,9 +211,6 @@ const handleRegister = () => {
 }
 
 @media (max-width: 1024px) {
-  .login-ad-section {
-    display: none;
-  }
   .login-form-section {
     width: 100%;
   }
