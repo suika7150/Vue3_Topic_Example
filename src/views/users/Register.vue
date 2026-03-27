@@ -1,10 +1,12 @@
 <!-- src/views/Register.vue -->
 <template>
   <div class="register-container">
-    <el-card class="register-card">
-      <h2 class="title">會員註冊</h2>
+    <el-card class="register-card" shadow="never">
+      <div class="register-header">
+        <h2 class="title">會員註冊</h2>
+      </div>
 
-      <el-form :model="form" :rules="rules" ref="registerForm" label-width="80px">
+      <el-form :model="form" :rules="rules" ref="registerForm" label-position="top">
         <el-form-item label="帳號" prop="username">
           <el-input v-model="form.username" placeholder="請輸入帳號（3-20個字符）" clearable />
         </el-form-item>
@@ -38,11 +40,41 @@
           <el-input v-model="form.fullName" placeholder="請輸入真實姓名" clearable />
         </el-form-item>
 
+        <el-form-item label="性別" prop="gender">
+          <el-radio-group v-model="form.gender">
+            <el-radio label="M">男</el-radio>
+            <el-radio label="F">女</el-radio>
+            <el-radio label="O">其他</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="生日" prop="birthday">
+          <el-date-picker
+            v-model="form.birthday"
+            type="date"
+            placeholder="選擇您的生日"
+            format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD"
+            style="width: 100%"
+          />
+        </el-form-item>
+
         <el-form-item label="手機號碼" prop="phone">
           <el-input v-model="form.phone" placeholder="請輸入手機號碼" clearable />
         </el-form-item>
-
-        <el-form-item>
+        <el-form-item label="簡訊驗證碼" prop="smsCode">
+          <div class="sms-input-wrapper">
+            <el-input v-model="form.smsCode" placeholder="請輸入6位驗證碼" maxlength="6" />
+            <el-button
+              class="send-sms-btn"
+              :disabled="smsCountdown > 0 || !form.phone"
+              @click="handleSendSms"
+            >
+              {{ smsCountdown > 0 ? `${smsCountdown}s 後重發` : '獲取驗證碼' }}
+            </el-button>
+          </div>
+        </el-form-item>
+        <el-form-item class="agreement-section">
           <el-checkbox v-model="form.agreeTerms" :true-label="true" :false-label="false">
             我已閱讀並同意
             <el-link type="primary" @click="showTerms">《服務條款》</el-link>
@@ -58,7 +90,7 @@
         </el-form-item>
 
         <div class="register-links">
-          <span>已有帳號？</span>
+          <span>已有帳號?</span>
           <el-link type="primary" @click="login">立即登入</el-link>
         </div>
       </el-form>
@@ -125,6 +157,9 @@ const form = ref({
   confirmPassword: '',
   fullName: '',
   phone: '',
+  gender: '',
+  birthday: '',
+  smsCode: '',
   agreeTerms: false,
 })
 
@@ -192,15 +227,21 @@ const validateTerms = (rule, value, callback) => {
 }
 
 const rules = {
-  username: [{ validator: validateUsername, trigger: 'blur' }],
-  email: [{ validator: validateEmail, trigger: 'blur' }],
-  password: [{ validator: validatePassword, trigger: 'blur' }],
-  confirmPassword: [{ validator: validateConfirmPassword, trigger: 'blur' }],
+  username: [{ validator: validateUsername, required: true, trigger: 'blur' }],
+  email: [{ validator: validateEmail, required: true, trigger: 'blur' }],
+  password: [{ validator: validatePassword, required: true, trigger: 'blur' }],
+  confirmPassword: [{ validator: validateConfirmPassword, required: true, trigger: 'blur' }],
   fullName: [
-    { required: true, message: '請輸入姓名', trigger: 'blur' },
+    { required: false, message: '請輸入姓名', trigger: 'blur' },
     { min: 2, message: '姓名至少需要2個字符', trigger: 'blur' },
   ],
-  phone: [{ validator: validatePhone, trigger: 'blur' }],
+  phone: [{ validator: validatePhone, required: true, trigger: 'blur' }],
+  gender: [{ required: true, message: '請選擇性別', trigger: 'change' }],
+  birthday: [{ required: true, message: '請選擇生日', trigger: 'change' }],
+  smsCode: [
+    { required: true, message: '請輸入6位驗證碼', trigger: 'blur' },
+    { len: 6, message: '驗證碼長度應為 6 位', trigger: 'blur' },
+  ],
   agreeTerms: [{ validator: validateTerms, trigger: 'change' }],
 }
 
@@ -257,13 +298,17 @@ const login = () => {
 
 .register-card {
   width: 100%;
-  max-width: 500px;
+  max-width: 800px;
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   background: white;
 }
 
+.register-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
 .title {
   text-align: center;
   margin-bottom: 30px;
@@ -276,18 +321,22 @@ const login = () => {
   background-clip: text;
 }
 
-.register-links {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  /* gap: 8px; */
-  margin-top: 20px;
-  color: #666;
-}
-
 .el-form-item {
   margin-bottom: 20px;
+}
+
+.agreement-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+:deep(.agreement-section .el-form-item__content) {
+  margin-left: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .register-btn {
@@ -301,15 +350,15 @@ const login = () => {
   padding: 8px 12px;
 }
 
-/* .el-button {
-  font-size: 16px;
-  height: 44px;
-  border-radius: 8px;
-  background-color: black;
-  color: white;
-  box-shadow: none;
-  padding: 8px 12px;
-} */
+.register-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  margin-top: 20px;
+  color: #666;
+}
 
 .el-input :deep(.el-input__inner) {
   height: 44px;
@@ -337,14 +386,79 @@ const login = () => {
   color: #666;
 }
 
+/** el-input 樣式 */
+:deep(.el-input__wrapper) {
+  background-color: transparent;
+  box-shadow: none;
+  border-bottom: 1px solid #dcdfe6;
+  border-radius: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+  transition: border-color 0.3s ease;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  border-bottom: 1px solid #000;
+}
+
+/** 輸入框內容樣式 */
+:deep(.el-input__inner) {
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+  padding-top: 5px;
+}
+
+:deep(.el-input__inner::placeholder) {
+  font-size: 15px;
+  /* font-weight: 400; */
+  color: #a8abb2;
+}
+
+/** 滑過聚焦樣式 */
+:deep(.el-input__wrapper:hover) {
+  border-bottom: 1px solid #000;
+}
+
+:deep(.el-form-item__label) {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+  margin-bottom: 4px;
+  padding: 0;
+  line-height: 1;
+}
+
+/* 移除驗證失敗的紅框 */
+:deep(.el-form-item.is-error) .el-input__wrapper,
+:deep(.el-form-item.is-error) .el-input__wrapper:hover,
+:deep(.el-form-item.is-error) .el-input__wrapper.is-focus {
+  box-shadow: none;
+}
+
+/* :deep(.el-checkbox) {
+  display: flex;
+  align-items: center;
+  white-space: normal;
+  height: auto;
+  margin-right: 0;
+} */
+
 @media (max-width: 768px) {
-  .register-card {
-    margin: 10px;
-    padding: 20px;
+  .agreement-section {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .title {
-    font-size: 24px;
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+
+  .register-links {
+    font-size: 14px;
   }
 }
 </style>
