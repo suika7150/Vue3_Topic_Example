@@ -181,12 +181,33 @@ const handleRegister = () => {
   color: #333;
 }
 
+/* --- 底線輸入框樣式 --- */
+:deep(.el-input__wrapper) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid #dcdfe6;
+  border-radius: 0;
+  padding-left: 12px; /* 文字向右挪 */
+  padding-right: 12px;
+  transition: border-color 0.3s ease;
+}
+
+:deep(.el-input__wrapper.is-focus) :deep(.el-input__wrapper:hover) {
+  border-bottom: 1px solid #000;
+}
+.el-input :deep(.el-input__inner) {
+  height: 50px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  padding-top: 8px;
+}
 .form-options {
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
 }
-
+/* 登入按鈕 */
 .login-btn {
   width: 100%;
   height: 48px;
@@ -216,9 +237,6 @@ const handleRegister = () => {
   }
 }
 
-.el-input :deep(.el-input__inner) {
-  height: 44px;
-}
 :deep(.el-form-item__label) {
   padding-bottom: 4px;
   font-weight: 500;

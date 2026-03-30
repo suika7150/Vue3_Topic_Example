@@ -11,6 +11,12 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   scroll-behavior: smooth; /* 讓所有的捲動動作都帶有平滑動畫 */
+  padding-right: 0 !important;
+}
+
+.el-popup-parent--hidden {
+  padding-right: 0;
+  overflow: hidden;
 }
 
 /* --- 全域 Toast 訊息樣式 --- */

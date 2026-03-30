@@ -177,7 +177,6 @@ const removeItem = (productId) => {
 <style scoped>
 .cart-content {
   flex-grow: 1;
-  /* margin: 0px 10px; */
 }
 
 .product-name {
