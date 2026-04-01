@@ -187,7 +187,7 @@ const handleRegister = () => {
   box-shadow: none !important;
   border-bottom: 1px solid #dcdfe6;
   border-radius: 0;
-  padding-left: 12px; /* 文字向右挪 */
+  padding-left: 12px;
   padding-right: 12px;
   transition: border-color 0.3s ease;
 }

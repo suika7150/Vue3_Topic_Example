@@ -35,7 +35,7 @@ const adShift = computed(() => {
       </div>
     </header>
 
-    <div class=".sidebar-layout">
+    <div class="sidebar-layout">
       <SideAdBanner
         position="left"
         :shift="adShift"
@@ -61,7 +61,7 @@ const adShift = computed(() => {
   display: flex;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 30px;
   background-color: rgb(19, 204, 170);
   z-index: 1001;
@@ -139,7 +139,7 @@ const adShift = computed(() => {
     display: flex;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 50px;
     background-color: rgb(19, 204, 170);
     z-index: 1001;

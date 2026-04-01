@@ -16,15 +16,6 @@
     <div class="product-list-section">
       <ProductList />
     </div>
-
-    <!-- <div>
-      <SideAdBanner
-        position="left"
-        image="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&h=1000&auto=format&fit=crop"
-        link="/promo/double-11"
-        title="年終狂歡節"
-      />
-    </div> -->
   </div>
 </template>
 <script setup>
