@@ -9,7 +9,7 @@
       :lock-scroll="false"
     >
       <div v-if="cart.length" class="cart-content">
-        <el-table :data="cart" style="width: 100%">
+        <el-table v-if="!isMobile" :data="cart" style="width: 100%">
           <el-table-column label="操作" width="60" :align="center">
             <template #default="scope">
               <el-button
@@ -25,42 +25,58 @@
 
           <el-table-column label="商品" width="80" :align="center">
             <template #default="scope">
-              <el-image
-                :src="scope.row.imageBase64"
-                style="width: 50px; height: 50px; border-radius: 4px"
-                fit="cover"
-              />
+              <el-image :src="scope.row.imageBase64" class="pc-thumb" fit="cover" />
             </template>
           </el-table-column>
 
-          <el-table-column label="名稱" min-width="80" max-width="150" :align="center">
+          <el-table-column label="名稱" min-width="80" :align="center">
             <template #default="scope">
-              <div class="product-info-cell">
-                <span class="product-name">{{ scope.row.name }}</span>
-                <span v-if="isMobile" class="mobile-price">{{ scope.row.price }}</span>
-              </div>
+              <span class="product-name">{{ scope.row.name }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column v-if="!isMobile" label="價格" width="80" :align="center">
+          <el-table-column label="價格" width="80" :align="center">
             <template #default="scope">
               <span class="cart-price">${{ scope.row.price }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="數量" :width="isMobile ? '100' : '135'" :align="center">
+          <el-table-column label="數量" width="100" :align="center">
             <template #default="scope">
               <el-input-number
                 v-model="scope.row.quantity"
                 :min="1"
                 size="small"
-                :controls-position="isMobile ? 'right' : ''"
-                style="width: 70%"
                 @change="(e) => handleQuantityChange(e, scope.row)"
               />
             </template>
           </el-table-column>
         </el-table>
+        <div v-else class="mobile-cart-list">
+          <div v-for="item in cart" :key="item.id" class="mobile-cart-item">
+            <el-image :src="item.imageBase64" class="mobile-thumb" fit="cover" />
+
+            <div class="mobile-info">
+              <div class="mobile-header">
+                <span class="mobile-name">{{ item.name }}</span>
+                <el-button type="danger" :icon="Delete" link @click="removeItem(item.id)" />
+              </div>
+
+              <div class="mobile-price">單價: ${{ item.price }}</div>
+
+              <div class="mobile-footer">
+                <el-input-number
+                  v-model="item.quantity"
+                  :min="1"
+                  size="small"
+                  controls-position="right"
+                  @change="(e) => handleQuantityChange(e, item)"
+                />
+                <div class="mobile-subtotal">小計: ${{ item.price * item.quantity }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <el-empty v-else description="購物車目前是空的" />
 
@@ -180,9 +196,26 @@ const removeItem = (productId) => {
   flex-grow: 1;
 }
 
+.pc-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+}
+
 .product-name {
   font-size: 14px;
   line-height: 1.3;
+}
+
+/* 1. 縮減單元格內邊距，釋放空間給 + 號 */
+:deep(.el-table .cell) {
+  padding-left: 10px !important;
+  padding-right: 4px !important;
+}
+
+/* 2. 稍微縮小輸入框寬度 (預設 small 約 135px，我們降到 110px-120px) */
+:deep(.el-table .el-input-number--small) {
+  width: 80px !important;
 }
 
 .mobile-price {
@@ -282,5 +315,75 @@ const removeItem = (productId) => {
   border: none;
   border-radius: 8px;
   padding: 10px 20px;
+}
+
+@media (max-width: 1024px) {
+  .mobile-cart-list {
+    padding: 10px;
+  }
+
+  .mobile-cart-item {
+    display: flex;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+    align-items: flex-start;
+  }
+
+  .mobile-thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .mobile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0; /* 確保文字溢出能正常運作 */
+  }
+
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .mobile-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 最多顯示兩行 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+  }
+
+  .mobile-price {
+    font-size: 13px;
+    color: #888;
+  }
+
+  .mobile-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 8px;
+  }
+
+  .mobile-subtotal {
+    font-weight: bold;
+    color: #ff4d4f;
+    font-size: 14px;
+  }
+
+  /* 讓 InputNumber 在手機版不要太寬 */
+  :deep(.mobile-footer .el-input-number--small) {
+    width: 90px;
+  }
 }
 </style>

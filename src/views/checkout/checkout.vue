@@ -212,15 +212,6 @@
               </el-form>
             </div>
           </div>
-
-          <div class="navigation-buttons">
-            <el-button v-if="currentStep > 0" @click="previousStep"> 上一步 </el-button>
-            <div v-else></div>
-
-            <el-button v-if="currentStep < 2" @click="nextStep"> 下一步 </el-button>
-
-            <el-button v-else @click="submitOrder" :loading="submitting"> 確認訂單 </el-button>
-          </div>
         </div>
 
         <div class="sidebar">
@@ -265,6 +256,18 @@
                 <span>{{ item.name }} × {{ item.quantity }}</span>
                 <span>NT$ {{ (item.price * item.quantity).toLocaleString() }}</span>
               </div>
+            </div>
+
+            <div class="navigation-buttons">
+              <el-button v-if="currentStep > 0" @click="previousStep"> 上一步 </el-button>
+
+              <el-button v-if="currentStep < 2" type="primary" @click="nextStep">
+                下一步
+              </el-button>
+
+              <el-button v-else type="success" @click="submitOrder" :loading="submitting">
+                確認訂單
+              </el-button>
             </div>
           </div>
         </div>
@@ -572,7 +575,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(15px); /* 毛玻璃質感 */
   padding: 10px 25px;
   border-radius: 50px;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -678,7 +680,10 @@ onMounted(() => {
 }
 
 .sidebar {
+  position: static;
   grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 24px;
 }
 
 .step-title {
@@ -694,9 +699,10 @@ onMounted(() => {
 
 /* 訂單明細 */
 .item-card {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   /* 定義五欄：圖片(固定)、名稱(主體)、數量(固定)、價格(固定)、動作(固定) */
-  grid-template-columns: 80px 2fr 1.5fr 1fr 100px;
+  /* grid-template-columns: 80px 2fr 1.5fr 1fr 100px; */
   align-items: center; /* 垂直置中 */
   gap: 24px;
   padding: 20px;
@@ -717,6 +723,7 @@ onMounted(() => {
 .item-details {
   margin-left: 16px;
   flex: 1;
+  min-width: 150px;
 }
 
 .item-name {
@@ -878,11 +885,12 @@ onMounted(() => {
   gap: 16px;
 }
 
-/* Navigation Buttons */
+/* 上一步 & 下一步 & 確認訂單 按鈕*/
 .navigation-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 32px;
+  gap: 12px;
 }
 
 /* Order Summary */
@@ -980,9 +988,56 @@ onMounted(() => {
   }
 }
 
-@media (min-width: 640px) {
-  .card-info-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* --- 手機版優化 (640px 以下) --- */
+@media (max-width: 640px) {
+  .item-card {
+    gap: 12px; /* 縮小間距節省空間 */
+    padding: 12px;
+  }
+
+  .item-image {
+    width: 70px; /* 手機版圖片縮小一點 */
+    height: 85px;
+  }
+
+  .item-details {
+    margin-left: 8px;
+    flex: 1; /* 讓名稱區塊撐開 */
+  }
+
+  .item-name {
+    font-size: 15px; /* 字體調小 */
+  }
+
+  /* 讓數量、價格、刪除按鈕這三個元素在第二行排版 */
+  .item-quantity-control {
+    width: 100%; /* 強制換行到第二行 */
+    order: 2; /* 調整顯示順序 */
+    justify-content: flex-start;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px dashed #f0f0f0; /* 加一條虛線區隔 */
+  }
+
+  .item-price-info {
+    flex: 1; /* 佔據剩餘空間 */
+    order: 3;
+    text-align: left; /* 手機版靠左比較自然 */
+    margin-top: 4px;
+  }
+
+  .item-total-price {
+    font-size: 18px;
+  }
+
+  .delete-btn {
+    order: 4;
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .address-fields {
+    width: 100%;
   }
 }
 </style>
