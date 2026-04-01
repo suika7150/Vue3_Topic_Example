@@ -139,7 +139,7 @@ const adShift = computed(() => {
     display: flex;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100;
     height: 50px;
     background-color: rgb(19, 204, 170);
     z-index: 1001;

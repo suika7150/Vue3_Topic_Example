@@ -6,6 +6,7 @@
       title="🛒 購物車內容"
       :size="drawerSize"
       @close="handleClose"
+      :lock-scroll="false"
     >
       <div v-if="cart.length" class="cart-content">
         <el-table :data="cart" style="width: 100%">
