@@ -300,7 +300,9 @@ const couponCode = ref('')
 const cartItems = computed(() => cartStore.cart)
 
 const updateStorage = (val, itemId) => {
-  cartStore.updateQuantity(itemId, val)
+  cartStore.updateQuantity(itemId, val) //更新 store 中的數據
+  const item = cartItems.value.find((i) => i.id === itemId) //從購物車中找出該商品以獲取名稱
+  toast.success(`${item.name} 數量已更新為 ${val}`)
 }
 
 // 配送表單
@@ -935,7 +937,17 @@ onMounted(() => {
 }
 
 .coupon-section {
+  width: 100%;
+  max-width: 280px;
   margin-bottom: 16px;
+}
+
+.coupon-section :deep(.el-iput__inner) {
+  text-align: center;
+}
+
+.coupon-section :deep(.el-input__inner::placeholder) {
+  text-align: center; /* 讓提示文字 (Placeholder) 置中 */
 }
 
 .summary-item-list {
