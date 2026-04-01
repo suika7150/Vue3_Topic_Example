@@ -1,14 +1,41 @@
 <template>
   <div class="checkout-page">
     <div class="container">
-      <div class="step-indicator">
+      <div class="step-container">
+        <div class="modern-steps">
+          <div
+            v-for="(step, index) in ['確認商品', '配送資訊', '付款方式', '完成訂單']"
+            :key="index"
+            class="step-wrapper"
+          >
+            <div
+              :class="[
+                'step-item',
+                {
+                  active: currentStep === index,
+                  completed: currentStep > index,
+                },
+              ]"
+            >
+              <div class="step-icon">
+                <el-icon v-if="currentStep > index"><Check /></el-icon>
+                <span v-else>{{ index + 1 }}</span>
+              </div>
+              <span class="step-text">{{ step }}</span>
+            </div>
+
+            <div v-if="index < 3" :class="['step-line', { active: currentStep > index }]"></div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="step-indicator">
         <el-steps :active="currentStep" finish-status="success" align-center>
           <el-step title="確認商品"></el-step>
           <el-step title="配送資訊"></el-step>
           <el-step title="付款方式"></el-step>
           <el-step title="完成訂單"></el-step>
         </el-steps>
-      </div>
+      </div> -->
 
       <div class="checkout-grid">
         <div class="main-content">
@@ -23,7 +50,11 @@
                 </div>
                 <div class="item-quantity-control">
                   <span class="quantity-label">數量 :</span>
-                  <el-input-number v-model="item.quantity" :min="1" @change="updateStorage" />
+                  <el-input-number
+                    v-model="item.quantity"
+                    :min="1"
+                    @change="(val) => updateStorage(val, item.id)"
+                  />
                 </div>
                 <div class="item-price-info">
                   <div class="item-total-price">
@@ -247,6 +278,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/service/api'
 import { ElMessage } from 'element-plus'
+import { Check, Delete } from '@element-plus/icons-vue'
 import { toast } from '@/utils/message'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
@@ -266,6 +298,10 @@ const applyingCoupon = ref(false)
 const couponCode = ref('')
 
 const cartItems = computed(() => cartStore.cart)
+
+const updateStorage = (val, itemId) => {
+  cartStore.updateQuantity(itemId, val)
+}
 
 // 配送表單
 const shippingForm = ref({
@@ -368,12 +404,19 @@ const removeItem = (id) => {
     message: '確定要刪除此項商品嗎?',
     onConfirm: () => {
       cartStore.removeProduct(id) // 呼叫 store 刪除商品
-      Storage.set(CART_KEY, cartStore.cart) // 同步 LocalStorage
+      //Storage.set(CART_KEY, cartStore.cart)  同步 LocalStorage
       toast.success('商品已移除')
       if (cartItems.value.length === 0) {
         goTo('overview')
       }
     },
+  })
+}
+//點擊後回到頁面頂端
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth', //平滑滾動效果
   })
 }
 
@@ -391,10 +434,12 @@ const nextStep = async () => {
   }
 
   currentStep.value++
+  scrollToTop() //置頂
 }
 
 const previousStep = () => {
   currentStep.value--
+  scrollToTop() //置頂
 }
 
 const submitOrder = async () => {
@@ -513,9 +558,116 @@ onMounted(() => {
   gap: 32px;
 }
 
-@media (min-width: 1024px) {
-  .checkout-grid {
-    grid-template-columns: 2fr 1fr;
+/* --- 流程步驟條 --- */
+.step-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.modern-steps {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px); /* 毛玻璃質感 */
+  padding: 10px 25px;
+  border-radius: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.step-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0px;
+  border-radius: 30px;
+  transition: all 0.4s ease;
+}
+
+.step-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #f2f2f7;
+  color: #86868b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* 進行中狀態 */
+.step-item.active .step-icon {
+  background: #0071e3;
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0, 113, 227, 0.4);
+}
+
+.step-item.active .step-text {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+
+/* 已完成狀態 */
+.step-item.completed .step-icon {
+  background: #34c759;
+  color: #fff;
+}
+
+.step-text {
+  font-size: 14px;
+  color: #86868b;
+  white-space: nowrap;
+}
+
+/* 連接線 */
+.step-line {
+  width: 60px;
+  height: 2px;
+  background: #e5e5e7;
+  margin: 0 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: #34c759;
+  transform: translateX(-100%);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.step-line.active::after {
+  transform: translateX(0);
+}
+
+.checkout-step {
+  margin-bottom: 32px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -523,25 +675,8 @@ onMounted(() => {
   grid-column: 1 / -1;
 }
 
-@media (min-width: 1024px) {
-  .main-content {
-    grid-column: span 2 / span 2;
-  }
-}
-
 .sidebar {
   grid-column: 1 / -1;
-}
-
-@media (min-width: 1024px) {
-  .sidebar {
-    grid-column: span 1 / span 1;
-  }
-}
-
-/* Steps */
-.checkout-step {
-  margin-bottom: 32px;
 }
 
 .step-title {
@@ -741,12 +876,6 @@ onMounted(() => {
   gap: 16px;
 }
 
-@media (min-width: 640px) {
-  .card-info-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 /* Navigation Buttons */
 .navigation-buttons {
   display: flex;
@@ -825,5 +954,23 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
+}
+
+@media (min-width: 1024px) {
+  .checkout-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+  .main-content {
+    grid-column: span 2 / span 2;
+  }
+  .sidebar {
+    grid-column: span 1 / span 1;
+  }
+}
+
+@media (min-width: 640px) {
+  .card-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>

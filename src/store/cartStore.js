@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 
 export const useCartStore = defineStore('cartStore', {
   state: () => ({
-    cart: Storage.get(CART_KEY) || [],
+    // 初始載入時確保是陣列
+    cart: Array.isArray(Storage.get(CART_KEY)) ? Storage.get(CART_KEY) : [],
   }),
   getters: {
     carEmpty: (state) => state.cart.length === 0,
@@ -17,11 +18,29 @@ export const useCartStore = defineStore('cartStore', {
     },
   },
   actions: {
+    //統一存儲入口
+    persist() {
+      if (this.cart.length === 0) {
+        Storage.remove(CART_KEY)
+      } else {
+        Storage.set(CART_KEY, this.cart)
+      }
+    },
+    updateQuantity(productId, quantity) {
+      //購物車陣列中找到對應 ID 的商品
+      const item = this.cart.find((item) => item.id === productId)
+      if (item) {
+        const newQty = Math.max(1, Math.floor(Number(quantity))) // 確保數量至少為 1
+        item.quantity = newQty //更新商品數量
+        this.persist() //同步到 localStorage
+      }
+    },
     addProduct(product) {
       //檢查是否已經有該商品 (比對 ID)
       const existingItem = this.cart.find((item) => item.id === product.id)
+      const addQTY = Math.max(1, Math.floor(Number(product.quantity || 1))) //確保新增數量至少為 1
       if (existingItem) {
-        existingItem.quantity = Number(existingItem.quantity) + Number(product.quantity || 1)
+        existingItem.quantity += addQTY
       } else {
         //如果不存在，才新增商品，且確保有初始數量
         this.cart.push({
@@ -30,16 +49,15 @@ export const useCartStore = defineStore('cartStore', {
           quantity: Number(product.quantity || 1),
         })
       }
-      // this.cart.push({ ...product, quantity: 1 })
-      Storage.set(CART_KEY, this.cart)
+      this.persist() //同步到 localStorage
     },
     removeProduct(productId) {
       this.cart = this.cart.filter((item) => item.id !== productId)
-      Storage.set(CART_KEY, this.cart)
+      this.persist()
     },
     clearCart() {
       this.cart = []
-      Storage.remove(CART_KEY)
+      this.persist()
     },
   },
 })
