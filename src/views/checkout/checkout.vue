@@ -28,14 +28,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="step-indicator">
-        <el-steps :active="currentStep" finish-status="success" align-center>
-          <el-step title="確認商品"></el-step>
-          <el-step title="配送資訊"></el-step>
-          <el-step title="付款方式"></el-step>
-          <el-step title="完成訂單"></el-step>
-        </el-steps>
-      </div> -->
 
       <div class="checkout-grid">
         <div class="main-content">
@@ -224,6 +216,15 @@
                 <span>NT$ {{ subtotal.toLocaleString() }}</span>
               </div>
 
+              <div
+                v-if="discount > 0"
+                class="summary-line"
+                style="color: #34c759; font-weight: 500"
+              >
+                <span>優惠券折扣</span>
+                <span>- NT$ {{ discount.toLocaleString() }}</span>
+              </div>
+
               <div class="summary-line">
                 <span>運費</span>
                 <span>NT$ {{ shippingFee.toLocaleString() }}</span>
@@ -248,6 +249,9 @@
                   <el-button @click="applyCoupon" :loading="applyingCoupon"> 使用 </el-button>
                 </template>
               </el-input>
+              <div class="coupon-hint">
+                測試代碼：<code @click="couponCode = 'DOUBLE11'" class="code-tag">DOUBLE11</code>
+              </div>
             </div>
 
             <div class="summary-item-list">
@@ -295,16 +299,18 @@ const { goTo } = useNavigation()
 const modalStore = useModalStore()
 const route = useRoute()
 
-const currentStep = ref(0)
-const submitting = ref(false)
-const applyingCoupon = ref(false)
-const couponCode = ref('')
+const currentStep = ref(0) // 當前步驟
+const submitting = ref(false) // 訂單提交狀態
+
+const applyingCoupon = ref(false) // 優惠券套用中狀態
+const couponCode = ref('') // 優惠券代碼
+const discount = ref(0) // 優惠金額，預設為 0
 
 const cartItems = computed(() => cartStore.cart)
 
 const updateStorage = (val, itemId) => {
-  cartStore.updateQuantity(itemId, val) //更新 store 中的數據
-  const item = cartItems.value.find((i) => i.id === itemId) //從購物車中找出該商品以獲取名稱
+  cartStore.updateQuantity(itemId, val) // 更新 store 中的數據
+  const item = cartItems.value.find((i) => i.id === itemId) // 從購物車中找出該商品以獲取名稱
   toast.success(`${item.name} 數量已更新為 ${val}`)
 }
 
@@ -382,34 +388,40 @@ const handleShippingChange = ({ value, option, additionalCost }) => {
   console.log('額外費用:', additionalCost)
 }
 
+// 商品小計
 const subtotal = computed(() => {
   return cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
 })
 
+// 運費
 const shippingFee = computed(() => {
   return shippingForm.value.shippingMethod === 'express' ? 100 : 0
 })
 
+// 總計
 const total = computed(() => {
-  let total = subtotal.value + shippingFee.value
+  // 計算基礎總額：小計 + 運費 - 優惠折扣
+  let totalAmount = subtotal.value + shippingFee.value - discount.value
+
+  // 判斷是否需要外加貨到付款手續費
   if (paymentMethod.value === 'cash_on_delivery') {
-    total += 30 // 貨到付款手續費
+    totalAmount += 30 // 貨到付款手續費
   }
-  return total
+  return Math.max(0, totalAmount) // 確保總額不為負數
 })
 
 const loadCartItems = () => {
   cartItems.value = cart.value
 }
 
-//刪除 & 取消
+// 刪除 & 取消
 const removeItem = (id) => {
   modalStore.open({
     title: '提示',
     message: '確定要刪除此項商品嗎?',
     onConfirm: () => {
       cartStore.removeProduct(id) // 呼叫 store 刪除商品
-      //Storage.set(CART_KEY, cartStore.cart)  同步 LocalStorage
+      // Storage.set(CART_KEY, cartStore.cart)  同步 LocalStorage
       toast.success('商品已移除')
       if (cartItems.value.length === 0) {
         goTo('overview')
@@ -417,11 +429,11 @@ const removeItem = (id) => {
     },
   })
 }
-//點擊後回到頁面頂端
+// 點擊後回到頁面頂端
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth', //平滑滾動效果
+    behavior: 'smooth', // 平滑滾動效果
   })
 }
 
@@ -439,12 +451,12 @@ const nextStep = async () => {
   }
 
   currentStep.value++
-  scrollToTop() //置頂
+  scrollToTop() // 置頂
 }
 
 const previousStep = () => {
   currentStep.value--
-  scrollToTop() //置頂
+  scrollToTop() // 置頂
 }
 
 const submitOrder = async () => {
@@ -472,7 +484,7 @@ const submitOrder = async () => {
 
     console.log('🚀 訂單資料', orderData)
 
-    //呼叫後端API
+    // 呼叫後端API
     const response = await api.createOrder(orderData)
 
     // 清空購物車
@@ -492,23 +504,28 @@ const submitOrder = async () => {
 }
 
 const applyCoupon = async () => {
-  if (!couponCode.value.trim()) {
+  const code = couponCode.value.trim().toUpperCase()
+
+  if (!code) {
     toast.warning('請輸入優惠券代碼')
     return
   }
 
   try {
     applyingCoupon.value = true
-    const response = await api.coupon.validate(couponCode.value)
+    const response = await api.validateCoupon(code)
 
+    // 測試用
+    // 假設後端回傳格式為 { valid: true, discountAmount: 100, message: '成功' }
     if (response.valid) {
-      toast.success('優惠券套用成功！')
-      // 應用折扣邏輯
+      discount.value = response.discountAmount //更新折扣金額
+      toast.success(response.message || '優惠券套用成功！')
     } else {
-      toast.error('優惠券無效或已過期')
+      discount.value = 0 // 清空折扣金額
+      toast.error(response.message || '優惠券無效或已過期')
     }
   } catch (error) {
-    toast.error('優惠券驗證失敗')
+    toast.error('優惠券驗證失敗', error)
   } finally {
     applyingCoupon.value = false
   }
@@ -747,7 +764,7 @@ onMounted(() => {
   /* align-items: center; */
   color: #6b7280;
 }
-/* 調整+-按鈕 */
+/* +-按鈕 */
 :deep(.el-input-number) {
   width: 120px;
   height: 30px;
@@ -934,7 +951,7 @@ onMounted(() => {
   font-size: 18px;
 }
 
-.summary-total-price {
+.summary-total-line.summary-total-price {
   color: #f97316;
 }
 
@@ -955,7 +972,7 @@ onMounted(() => {
 }
 
 .coupon-section :deep(.el-input__inner::placeholder) {
-  text-align: center; /* 讓提示文字 (Placeholder) 置中 */
+  text-align: center;
 }
 
 .summary-item-list {
@@ -988,41 +1005,41 @@ onMounted(() => {
   }
 }
 
-/* --- 手機版優化 (640px 以下) --- */
+/* --- RWD --- */
 @media (max-width: 640px) {
   .item-card {
-    gap: 12px; /* 縮小間距節省空間 */
+    gap: 12px;
     padding: 12px;
   }
 
   .item-image {
-    width: 70px; /* 手機版圖片縮小一點 */
+    width: 70px;
     height: 85px;
   }
 
   .item-details {
     margin-left: 8px;
-    flex: 1; /* 讓名稱區塊撐開 */
+    flex: 1;
   }
 
   .item-name {
-    font-size: 15px; /* 字體調小 */
+    font-size: 15px;
   }
 
-  /* 讓數量、價格、刪除按鈕這三個元素在第二行排版 */
+  /* 讓數量、價格、刪除按鈕三個元素在第二行排版 */
   .item-quantity-control {
-    width: 100%; /* 強制換行到第二行 */
-    order: 2; /* 調整顯示順序 */
+    width: 100%;
+    order: 2;
     justify-content: flex-start;
     margin-top: 4px;
     padding-top: 8px;
-    border-top: 1px dashed #f0f0f0; /* 加一條虛線區隔 */
+    border-top: 1px dashed #f0f0f0;
   }
 
   .item-price-info {
-    flex: 1; /* 佔據剩餘空間 */
+    flex: 1;
     order: 3;
-    text-align: left; /* 手機版靠左比較自然 */
+    text-align: left;
     margin-top: 4px;
   }
 

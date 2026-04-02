@@ -12,10 +12,11 @@ export const API_ROUTES = {
   PRODUCT_UPDATE: (id) => `/api/updateProducts/${id}`,
   PRODUCT_MANAGE_LIST: `/api/products/list`,
   PRODUCT_DELETE: (id) => `/api/deleteProduct/${id}`,
+  COUPON_VALIDATE: (code) => `/api/coupon/validate/${code}`, // 驗證優惠券
   ORDER_CREATE: '/api/orders', //新增訂單
-  OPTIONS_LIST: `/options/list`,
-  OPTIONS_ADD: `/options/add`,
-  OPTIONS_UPDATE: (id) => `/options/update/${id}`,
-  OPTIONS_DELETE: (id) => `/options/delete/${id}`,
-  OPTIONS_BY_LISTNAME: () => `/options/getByListName`,
+  OPTIONS_LIST: `/api/options/list`,
+  OPTIONS_ADD: `/api/options/add`,
+  OPTIONS_UPDATE: (id) => `/api/options/update/${id}`,
+  OPTIONS_DELETE: (id) => `/api/options/delete/${id}`,
+  OPTIONS_BY_LISTNAME: () => `/api/options/getByListName`,
 }

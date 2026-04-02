@@ -236,7 +236,7 @@ const removeItem = (productId) => {
 
 .cart-total-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 16px;
 }

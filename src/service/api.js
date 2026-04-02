@@ -76,6 +76,11 @@ const api = {
   getOptionsByListName: (listName) =>
     apiService.get(API_ROUTES.OPTIONS_BY_LISTNAME(), { params: { listName: listName } }),
 
+  /* ===== 優惠碼相關 API ===== */
+
+  /** 驗證優惠券*/
+  validateCoupon: (code) => apiService.get(API_ROUTES.COUPON_VALIDATE(code)),
+
   /* ===== 訂單相關 API ===== */
 
   /** 新增訂單*/
