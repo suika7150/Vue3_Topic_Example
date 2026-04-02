@@ -68,7 +68,12 @@
 
           <div v-if="currentStep === 1" class="checkout-step">
             <h2 class="step-title">配送資訊</h2>
-            <el-form :model="shippingForm" :rules="shippingRules" ref="shippingFormRef">
+            <el-form
+              :model="shippingForm"
+              :rules="shippingRules"
+              ref="shippingFormRef"
+              class="minimalist-form"
+            >
               <el-form-item label="收件人" prop="name">
                 <el-input v-model="shippingForm.name" placeholder="請輸入收件人姓名" />
               </el-form-item>
@@ -92,10 +97,11 @@
                       v-model="shippingForm.district"
                       placeholder="請選擇區域"
                       class="flex-1"
+                      :disabled="!shippingForm.city"
                     >
                       <el-option
                         v-for="district in districts"
-                        :key="district.value"
+                        :key="district.zip"
                         :label="district.label"
                         :value="district.value"
                       />
@@ -227,7 +233,16 @@
 
               <div class="summary-line">
                 <span>運費</span>
-                <span>NT$ {{ shippingFee.toLocaleString() }}</span>
+                <span v-if="shippingFee === 0" style="color: #34c759; font-weight: 500">免運</span>
+                <span v-else>NT$ {{ shippingFee.toLocaleString() }}</span>
+              </div>
+
+              <div
+                v-if="subtotal < FREE_SHIPPING_THRESHOLD"
+                class="coupon-hint"
+                style="font-size: 12px; margin-top: 4px"
+              >
+                再買 NT$ {{ (FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString() }} 即可享免運！
               </div>
 
               <div v-if="paymentMethod === 'cash_on_delivery'" class="summary-line">
@@ -255,7 +270,7 @@
             </div>
 
             <div class="summary-item-list">
-              <h4 class="summary-item-list-title">購買商品</h4>
+              <h4 class="summary-item-list-title">購買項目</h4>
               <div v-for="item in cartItems" :key="item.id" class="summary-item-line">
                 <span>{{ item.name }} × {{ item.quantity }}</span>
                 <span>NT$ {{ (item.price * item.quantity).toLocaleString() }}</span>
@@ -281,11 +296,13 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/service/api'
 import { ElMessage } from 'element-plus'
 import { Check, Delete } from '@element-plus/icons-vue'
+import taiwanData from '@/assets/data/AllData.json'
 import { toast } from '@/utils/message'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
@@ -305,6 +322,8 @@ const submitting = ref(false) // 訂單提交狀態
 const applyingCoupon = ref(false) // 優惠券套用中狀態
 const couponCode = ref('') // 優惠券代碼
 const discount = ref(0) // 優惠金額，預設為 0
+
+const FREE_SHIPPING_THRESHOLD = 1000 // 滿額免運門檻
 
 const cartItems = computed(() => cartStore.cart)
 
@@ -355,34 +374,35 @@ const creditCardRules = {
   cardholderName: [{ required: true, message: '請輸入持卡人姓名', trigger: 'blur' }],
 }
 
-// 地區數據
-const cities = ref([
-  { label: '台北市', value: 'taipei' },
-  { label: '新北市', value: 'new_taipei' },
-  { label: '桃園市', value: 'taoyuan' },
-  { label: '基隆市', value: 'keelung' },
-  { label: '新竹市', value: 'hsinchu' },
-  { label: '新竹縣', value: 'hsinchu_county' },
-  { label: '苗栗縣', value: 'miaoli' },
-  { label: '彰化縣', value: 'changhua' },
-  { label: '南投縣', value: 'nantou' },
-  { label: '雲林縣', value: 'yunlin' },
-  { label: '嘉義市', value: 'chiayi' },
-  { label: '嘉義縣', value: 'chiayi_county' },
-  { label: '台中市', value: 'taichung' },
-  { label: '高雄市', value: 'kaohsiung' },
-  { label: '台南市', value: 'tainan' },
-])
+// 取得台灣縣市資料 (JSON 資料在 assets/data/AllData.json)
+const cities = computed(() => {
+  return taiwanData.map((item) => ({ label: item.CityName, value: item.CityName }))
+})
 
-const districts = ref([
-  { label: '新莊區', value: 'xinzhuang' },
-  { label: '樹林區', value: 'shulin' },
-  { label: '板橋區', value: 'banqiao' },
-  { label: '中和區', value: 'zhonghe' },
-  { label: '永和區', value: 'yonghe' },
-  { label: '土城區', value: 'tucheng' },
-])
+// 根據目前選中的縣市，動態計算該縣市的區域清單
+const districts = computed(() => {
+  if (!shippingForm.value.city) return []
 
+  // 找出目前選中的縣市資料
+  const selectedCity = taiwanData.find((item) => item.CityName === shippingForm.value.city)
+
+  // 回傳該縣市的區域清單
+  return selectedCity
+    ? selectedCity.AreaList.map((area) => ({
+        label: area.AreaName,
+        value: area.AreaName,
+        zip: area.ZipCode,
+      }))
+    : []
+})
+
+// 縣市切換時，自動重設區域，避免錯誤組合
+watch(
+  () => shippingForm.value.city,
+  () => {
+    shippingForm.value.district = ''
+  },
+)
 const handleShippingChange = ({ value, option, additionalCost }) => {
   console.log('配送方式:', option.name)
   console.log('額外費用:', additionalCost)
@@ -395,7 +415,13 @@ const subtotal = computed(() => {
 
 // 運費
 const shippingFee = computed(() => {
-  return shippingForm.value.shippingMethod === 'express' ? 100 : 0
+  // 如果總計達到免運門檻，則運費為 0
+  if (subtotal.value >= FREE_SHIPPING_THRESHOLD) {
+    return 0
+  }
+
+  // 根據選擇的配送方式計算運費
+  return shippingForm.value.shippingMethod === 'express' ? 100 : 60
 })
 
 // 總計
@@ -814,6 +840,58 @@ onMounted(() => {
   border-color: var(--el-button-border-color);
 }
 
+/* --- 現代簡約底線風格 --- */
+.minimalist-form :deep(.el-input__wrapper) {
+  background-color: transparent !important;
+  box-shadow: none !important; /* 移除預設的四周邊框陰影 */
+  border-bottom: 1px solid #dcdfe6; /* 只留底線 */
+  border-radius: 0; /* 移除圓角 */
+  padding: 0 4px;
+  transition: border-color 0.3s ease;
+}
+
+/* 懸停時底線顏色加深 */
+.minimalist-form :deep(.el-input__wrapper:hover) {
+  border-bottom-color: #a8abb2;
+}
+
+/* Focus 聚焦時底線變色且加粗 */
+.minimalist-form :deep(.el-input__wrapper.is-focus) {
+  border-bottom: 2px solid #0071e3 !important; /* 配合你的主色調 */
+}
+
+/* 針對 Select 選擇框的特殊處理 */
+.minimalist-form :deep(.el-select .el-input__wrapper) {
+  padding-right: 0;
+}
+
+/* 針對 Textarea 的處理 (通常仍保留微量內距) */
+.minimalist-form :deep(.el-textarea__inner) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none;
+  border-bottom: 1px solid #dcdfe6;
+  border-radius: 0;
+  padding: 8px 4px;
+  resize: none; /* 為了美觀通常禁用縮放 */
+}
+
+.minimalist-form :deep(.el-textarea__inner:focus) {
+  border-bottom: 2px solid #0071e3;
+}
+
+/* 調整 Label 標籤字體大小，讓整體看起來更輕盈 */
+.minimalist-form :deep(.el-form-item__label) {
+  font-weight: 500;
+  color: #86868b;
+  padding-bottom: 4px;
+}
+
+/* 錯誤提示時的底線顏色 */
+.minimalist-form :deep(.el-form-item.is-error .el-input__wrapper) {
+  border-bottom-color: #f56c6c !important;
+}
+
 /* Shipping Form */
 .address-fields {
   display: flex;
@@ -978,13 +1056,17 @@ onMounted(() => {
 .summary-item-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
 }
 
 .summary-item-list-title {
-  font-weight: 500;
-  font-size: 14px;
-  color: #4b5563;
+  font-weight: 600;
+  font-size: 18px;
+  color: #1d1d1f;
+  margin-bottom: 4px;
 }
 
 .summary-item-line {
