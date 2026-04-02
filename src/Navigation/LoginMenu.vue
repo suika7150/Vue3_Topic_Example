@@ -2,7 +2,7 @@
   <div class="user-menu">
     <SearchInput />
 
-    <el-button type="link" class="user-menu-btn" @click="sidebarStore.toggleCollapse">
+    <el-button link class="user-menu-btn" @click="sidebarStore.toggleCollapse">
       <el-icon><Fold /></el-icon>
     </el-button>
 
@@ -34,7 +34,7 @@
       <!-- 通知 -->
       <el-dropdown trigger="click" @visible-change="onDropdownToggle">
         <el-badge :is-dot="hasUnread" class="badge">
-          <el-button type="link" class="user-menu-btn">
+          <el-button link class="user-menu-btn">
             <font-awesome-icon :icon="[bellIconPrefix, 'bell']" />
           </el-button>
         </el-badge>

@@ -1,11 +1,5 @@
 <template>
-  <div
-    v-if="show"
-    class="topbar-ad-banner"
-    :style="{ width }"
-    @mouseenter="pauseRotation"
-    @mouseleave="startRotation"
-  >
+  <div v-if="show" class="topbar-ad-banner" @mouseenter="pauseRotation" @mouseleave="startRotation">
     <div class="marquee">
       <transition-group name="slide">
         <div class="ad-text" :key="currentAdIndex">

@@ -25,7 +25,12 @@
 
           <el-table-column label="商品" width="80" :align="center">
             <template #default="scope">
-              <el-image :src="scope.row.imageBase64" class="pc-thumb" fit="cover" />
+              <el-image
+                :src="scope.row.imageBase64"
+                class="pc-thumb"
+                fit="cover"
+                @error="handleImgError"
+              />
             </template>
           </el-table-column>
 
@@ -54,7 +59,12 @@
         </el-table>
         <div v-else class="mobile-cart-list">
           <div v-for="item in cart" :key="item.id" class="mobile-cart-item">
-            <el-image :src="item.imageBase64" class="mobile-thumb" fit="cover" />
+            <el-image
+              :src="item.imageBase64"
+              class="mobile-thumb"
+              fit="cover"
+              @error="handleImgError"
+            />
 
             <div class="mobile-info">
               <div class="mobile-header">
@@ -136,13 +146,17 @@ import { useCartStore } from '@/store/cartStore'
 import { useSidebarStore } from '@/store/sidebarStore'
 import CheckoutConfirmModal from '@/components/CheckoutConfirmModal.vue'
 import { toast } from '@/utils/message'
-import { Delete, ShoppingCart } from '@element-plus/icons-vue'
+import { Delete, ShoppingCart, Picture } from '@element-plus/icons-vue'
 
 const { isMobile } = useBreakpoint()
 const { goTo } = useNavigation()
 const cartStore = useCartStore()
 const sidebarStore = useSidebarStore()
 const cart = computed(() => cartStore.cart)
+
+const handleImgError = (e) => {
+  e.target.src = 'https://placehold.jp/24/cccccc/ffffff/150x150.png?text=無圖片'
+}
 
 const drawerSize = computed(() => {
   return isMobile.value ? '100%' : '450px'
@@ -159,6 +173,8 @@ const handleClose = () => {
 }
 
 const handleQuantityChange = (e, product) => {
+  // 確保資料持久化 (localStorage) 與 store 同步
+  cartStore.updateQuantity(product.id, e)
   toast.success(`${product.name} 數量已更新為 ${e}`)
 }
 
@@ -186,6 +202,7 @@ const proceedToCheckout = () => {
 }
 
 const removeItem = (productId) => {
+  // 確保資料持久化 (localStorage) 與 store 同步
   cartStore.removeProduct(productId)
   toast.success('商品已從購物車移除')
 }

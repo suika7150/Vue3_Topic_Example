@@ -1,11 +1,9 @@
-import { useNavigation } from '@/composables/useNavigation'
-import { hideLoading, showLoading } from '@/utils/loadingService'
-import Storage, { CART_KEY, TOKEN_KEY } from '@/utils/storageUtil'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { isWhiteListed } from './authWhitelist'
-
-const { goLogin } = useNavigation()
+import router from '@/router'
+import { hideLoading, showLoading } from '@/utils/loadingService'
+import Storage, { CART_KEY, TOKEN_KEY } from '@/utils/storageUtil'
 
 // --- 建立 axios 實例 ---
 const apiService = axios.create({
@@ -61,7 +59,7 @@ apiService.interceptors.response.use(
       Storage.remove(TOKEN_KEY)
       Storage.remove(CART_KEY)
       ElMessage.error('登入已過期，請重新登入')
-      goLogin()
+      router.push('/login')
     } else {
       // 避免某些取消請求噴出錯誤訊息
       if (error.message !== 'canceled') {

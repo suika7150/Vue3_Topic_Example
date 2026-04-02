@@ -30,10 +30,10 @@
           <el-button class="login-btn" @click="handleLogin"> 登入 </el-button>
 
           <div class="login-links">
-            <el-link type="info" :underline="false" @click="handleForgotPassword"
+            <el-link type="info" underline="never" @click="handleForgotPassword"
               >忘記密碼？</el-link
             >
-            <el-link type="primary" :underline="false" @click="handleRegister">註冊新帳號</el-link>
+            <el-link type="primary" underline="never" @click="handleRegister">註冊新帳號</el-link>
           </div>
         </el-form>
       </div>
@@ -50,7 +50,7 @@ import { useNavigation } from '@/composables/useNavigation'
 import LoginAd from '@/components/LoginAd.vue'
 import { useUserStore } from '@/store/userStore'
 import Storage, { TOKEN_KEY, USER_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
-import { ElMessage } from 'element-plus'
+import { toast } from '@/utils/message'
 
 const { goTo, goHome } = useNavigation()
 const route = useRoute()
@@ -120,13 +120,13 @@ const handleLogin = async () => {
         Storage.remove(USER_KEY)
       }
 
-      ElMessage.success('登入成功！')
+      toast.success('登入成功！')
 
       // 如果網址有 ?redirect=/checkout，就去結帳頁，否則才回首頁
       const targetPath = route.query.redirect || '/'
       goTo(targetPath)
     } else {
-      ElMessage.error('請檢查帳號及密碼')
+      toast.error('請檢查帳號及密碼')
     }
   } catch (error) {
     console.error('登入失敗:', error)
@@ -136,7 +136,7 @@ const handleLogin = async () => {
 
 //尚未開發
 const handleForgotPassword = () => {
-  ElMessage.info('忘記密碼功能開發中...')
+  toast.info('忘記密碼功能開發中...')
   goHome()
   // router.push('/forgot-password')
 }

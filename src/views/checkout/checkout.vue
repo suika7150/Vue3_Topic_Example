@@ -74,18 +74,22 @@
               ref="shippingFormRef"
               class="minimalist-form"
             >
-              <el-form-item label="收件人" prop="name">
+              <el-form-item label="收件人" prop="name" class="narrow-item">
                 <el-input v-model="shippingForm.name" placeholder="請輸入收件人姓名" />
               </el-form-item>
 
-              <el-form-item label="聯絡電話" prop="phone">
+              <el-form-item label="聯絡電話" prop="phone" class="narrow-item">
                 <el-input v-model="shippingForm.phone" placeholder="請輸入聯絡電話" />
               </el-form-item>
 
               <el-form-item label="配送地址" prop="address">
                 <div class="address-fields">
                   <div class="address-selects">
-                    <el-select v-model="shippingForm.city" placeholder="請選擇縣市" class="flex-1">
+                    <el-select
+                      v-model="shippingForm.city"
+                      placeholder="請選擇縣市"
+                      class="wide-item"
+                    >
                       <el-option
                         v-for="city in cities"
                         :key="city.value"
@@ -214,7 +218,7 @@
 
         <div class="sidebar">
           <div class="order-summary-card">
-            <h3 class="summary-title">訂單摘要</h3>
+            <h3 class="summary-title">訂單明細</h3>
 
             <div class="summary-details">
               <div class="summary-line">
@@ -290,6 +294,7 @@
             </div>
           </div>
         </div>
+        <RecommendSection />
       </div>
     </div>
   </div>
@@ -300,17 +305,16 @@ import { ref, computed, onMounted } from 'vue'
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/service/api'
-import { ElMessage } from 'element-plus'
 import { Check, Delete } from '@element-plus/icons-vue'
 import taiwanData from '@/assets/data/AllData.json'
 import { toast } from '@/utils/message'
+import RecommendSection from '@/components/RecommendSection.vue'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
 import { useModalStore } from '@/store/modalStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 
 const cartStore = useCartStore()
-const cart = computed(() => cartStore.cart)
 
 const { goTo } = useNavigation()
 const modalStore = useModalStore()
@@ -436,10 +440,6 @@ const total = computed(() => {
   return Math.max(0, totalAmount) // 確保總額不為負數
 })
 
-const loadCartItems = () => {
-  cartItems.value = cart.value
-}
-
 // 刪除 & 取消
 const removeItem = (id) => {
   modalStore.open({
@@ -508,8 +508,6 @@ const submitOrder = async () => {
       })),
     }
 
-    console.log('🚀 訂單資料', orderData)
-
     // 呼叫後端API
     const response = await api.createOrder(orderData)
 
@@ -574,8 +572,6 @@ const formatExpiryDate = (value) => {
 
 // 生命週期
 onMounted(() => {
-  loadCartItems()
-
   // 如果購物車是空的，就回到商品總覽
   if (!cartItems.value || cartItems.value.length === 0) {
     goTo('overview')
@@ -602,8 +598,9 @@ onMounted(() => {
 
 .checkout-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 32px;
+  align-items: start;
 }
 
 /* --- 流程步驟條 --- */
@@ -724,9 +721,8 @@ onMounted(() => {
 
 .sidebar {
   position: static;
-  grid-column: 1 / -1;
+  grid-column: span 1 / span 1;
   width: 100%;
-  margin-top: 24px;
 }
 
 .step-title {
@@ -744,9 +740,7 @@ onMounted(() => {
 .item-card {
   display: flex;
   flex-wrap: wrap;
-  /* 定義五欄：圖片(固定)、名稱(主體)、數量(固定)、價格(固定)、動作(固定) */
-  /* grid-template-columns: 80px 2fr 1.5fr 1fr 100px; */
-  align-items: center; /* 垂直置中 */
+  align-items: center;
   gap: 24px;
   padding: 20px;
   background: #fff;
@@ -840,32 +834,41 @@ onMounted(() => {
   border-color: var(--el-button-border-color);
 }
 
-/* --- 現代簡約底線風格 --- */
 .minimalist-form :deep(.el-input__wrapper) {
   background-color: transparent !important;
-  box-shadow: none !important; /* 移除預設的四周邊框陰影 */
-  border-bottom: 1px solid #dcdfe6; /* 只留底線 */
-  border-radius: 0; /* 移除圓角 */
+  box-shadow: none !important;
+  border-bottom: 1px solid #dcdfe6;
+  border-radius: 0;
   padding: 0 4px;
   transition: border-color 0.3s ease;
+  width: 100%;
 }
 
-/* 懸停時底線顏色加深 */
+/* 統一限制表單項目的寬度，這樣右側邊界就會對齊 */
+.minimalist-form :deep(.narrow-item) {
+  max-width: 400px;
+}
+
+.minimalist-from :deep(.wide-item) {
+  max-width: 700px; /* 比較寬的項目可以有更大的寬度 */
+}
+
+.minimalist-form :deep(.el-textarea__inner) {
+  max-width: 500px;
+}
+
 .minimalist-form :deep(.el-input__wrapper:hover) {
   border-bottom-color: #a8abb2;
 }
 
-/* Focus 聚焦時底線變色且加粗 */
 .minimalist-form :deep(.el-input__wrapper.is-focus) {
-  border-bottom: 2px solid #0071e3 !important; /* 配合你的主色調 */
+  border-bottom: 2px solid #0071e3 !important;
 }
 
-/* 針對 Select 選擇框的特殊處理 */
 .minimalist-form :deep(.el-select .el-input__wrapper) {
   padding-right: 0;
 }
 
-/* 針對 Textarea 的處理 (通常仍保留微量內距) */
 .minimalist-form :deep(.el-textarea__inner) {
   background-color: transparent !important;
   box-shadow: none !important;
@@ -873,14 +876,13 @@ onMounted(() => {
   border-bottom: 1px solid #dcdfe6;
   border-radius: 0;
   padding: 8px 4px;
-  resize: none; /* 為了美觀通常禁用縮放 */
+  resize: none;
 }
 
 .minimalist-form :deep(.el-textarea__inner:focus) {
   border-bottom: 2px solid #0071e3;
 }
 
-/* 調整 Label 標籤字體大小，讓整體看起來更輕盈 */
 .minimalist-form :deep(.el-form-item__label) {
   font-weight: 500;
   color: #86868b;
@@ -892,12 +894,12 @@ onMounted(() => {
   border-bottom-color: #f56c6c !important;
 }
 
-/* Shipping Form */
+/* 配送地址 */
 .address-fields {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 40%;
+  width: 30%;
 }
 
 .address-selects {
@@ -926,7 +928,7 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* Payment Methods */
+/* 付款方式 */
 .payment-option-card {
   display: block;
   padding: 16px;
@@ -986,12 +988,6 @@ onMounted(() => {
   justify-content: flex-end;
   margin-top: 32px;
   gap: 12px;
-}
-
-/* Order Summary */
-.sidebar {
-  position: sticky;
-  top: 16px;
 }
 
 .order-summary-card {
@@ -1075,20 +1071,14 @@ onMounted(() => {
   font-size: 14px;
 }
 
-@media (min-width: 1024px) {
-  .checkout-grid {
-    grid-template-columns: 2fr 1fr;
-  }
-  .main-content {
-    grid-column: span 2 / span 2;
-  }
-  .sidebar {
-    grid-column: span 1 / span 1;
-  }
+/* 推薦 */
+:deep(.recommend-column) {
+  position: sticky;
+  top: 20px;
 }
 
 /* --- RWD --- */
-@media (max-width: 640px) {
+@media (-width: 1024px) {
   .item-card {
     gap: 12px;
     padding: 12px;
@@ -1108,7 +1098,6 @@ onMounted(() => {
     font-size: 15px;
   }
 
-  /* 讓數量、價格、刪除按鈕三個元素在第二行排版 */
   .item-quantity-control {
     width: 100%;
     order: 2;

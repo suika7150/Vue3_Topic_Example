@@ -21,6 +21,13 @@
 <script setup>
 import LoginMenu from './LoginMenu.vue'
 import CenterDropdown from './CenterDropdown.vue'
+
+const props = defineProps({
+  bannerOn: {
+    type: [String, Boolean, Number],
+    default: false,
+  },
+})
 </script>
 
 <style scoped>

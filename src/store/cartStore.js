@@ -5,6 +5,9 @@ export const useCartStore = defineStore('cartStore', {
   state: () => ({
     // 初始載入時確保是陣列
     cart: Array.isArray(Storage.get(CART_KEY)) ? Storage.get(CART_KEY) : [],
+
+    // 控制購物車抽屜顯示
+    drawerVisible: false,
   }),
   getters: {
     carEmpty: (state) => state.cart.length === 0,
@@ -18,7 +21,12 @@ export const useCartStore = defineStore('cartStore', {
     },
   },
   actions: {
-    //統一存儲入口
+    // 控制抽屜顯示
+    setDrawerVisible(visible) {
+      this.drawerVisible = visible
+    },
+
+    // 統一存儲入口
     persist() {
       if (this.cart.length === 0) {
         Storage.remove(CART_KEY)
@@ -54,6 +62,9 @@ export const useCartStore = defineStore('cartStore', {
     removeProduct(productId) {
       this.cart = this.cart.filter((item) => item.id !== productId)
       this.persist()
+
+      // 開啟購物車
+      this.drawerVisible = true
     },
     clearCart() {
       this.cart = []

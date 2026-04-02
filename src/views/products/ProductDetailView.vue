@@ -24,7 +24,7 @@
             </div>
 
             <div class="shipping-info">
-              <el-icon><Van /></el-icon>
+              <Icon icon="lucide:truck" style="vertical-align: middle; margin-right: 8px" />
               <span>滿 $1000 免運費 | 24小時快速到貨</span>
             </div>
 
@@ -89,6 +89,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { Van } from '@element-plus/icons-vue'
 import api from '@/service/api'
 import Breadcrumb from '@/Navigation/Breadcrumb.vue'
 import { useCartStore } from '@/store/cartStore'
@@ -147,7 +148,7 @@ const addToCart = (productToAdd) => {
     cartStore.addProduct(productToAdd)
     ElMessage.success(`${productToAdd.name} 已加入購物車`)
   }
-  CartDrawer()
+  cartStore.drawerVisible = true // 開啟購物車抽屜
 }
 
 /**

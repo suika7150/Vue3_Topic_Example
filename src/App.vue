@@ -1,6 +1,8 @@
 <script setup>
 import { computed } from 'vue'
 import SideAdBanner from './components/SideAdBanner.vue'
+import CartDrawer from '@/components/CartDrawer.vue'
+import { useCartStore } from '@/store/cartStore'
 import BottomFooter from './Navigation/BottomFooter.vue'
 import TopBar from './Navigation/TopBar.vue'
 import TopBarAdBanner from './Navigation/TopBarAdBanner.vue'
@@ -12,6 +14,8 @@ import ModalProvider from './components/ModalProvider.vue'
 
 const sidebarStore = useSidebarStore()
 const userStore = useUserStore()
+const cartStore = useCartStore()
+
 const userRole = computed(() => userStore.userRole)
 const navMenu = computed(() => {
   return getNavMenu(userRole.value)
@@ -25,6 +29,8 @@ const adShift = computed(() => {
 <template>
   <div class="app-wrapper">
     <ModalProvider />
+
+    <CartDrawer v-model:drawerVisible="cartStore.drawerVisible" />
     <header>
       <div class="topbar-ad-banner">
         <TopBarAdBanner />

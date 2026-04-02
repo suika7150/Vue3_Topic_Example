@@ -247,11 +247,6 @@ const filteredProducts = computed(() => {
 
 const visibleProducts = computed(() => filteredProducts.value.slice(0, visibleCount.value))
 
-// const showProductDetail = (product) => {
-//   currentProduct.value = product
-//   dialogVisible.value = true
-// }
-
 const addToCart = (product) => {
   const existingItem = cartStore.cart.find((item) => item.id === product.id)
   if (existingItem) {
