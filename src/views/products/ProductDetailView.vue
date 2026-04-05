@@ -155,7 +155,7 @@ const addToCart = (productToAdd) => {
  * 立即結帳：加入目前選擇的數量並跳轉
  */
 const buyNow = (productToBuy) => {
-  // 1. 檢查商品資料是否存在
+  // 檢查商品資料是否存在
   if (!product.value) return
 
   // 呼叫 Store 把東西塞進購物車
@@ -165,8 +165,6 @@ const buyNow = (productToBuy) => {
     quantity: buyQty.value,
   })
 
-  // 3. 跳轉到結帳頁，並指定跳到第 3 步（索引為 2）
-  // 假設你的流程是：0.確認商品 -> 1.填寫資料 -> 2.付款設定
   goCheckout(2)
 }
 
@@ -177,6 +175,7 @@ const handleImageError = (e) => {
   e.target.src = 'https://via.placeholder.com/600x400?text=無法載入'
 }
 
+// 在組件掛載時獲取商品詳情
 onMounted(() => {
   fetchProductDetail()
 })
