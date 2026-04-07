@@ -43,5 +43,6 @@ export const ResultMsg = {
  * @returns {string} 對應的訊息
  */
 export const getMsgByCode = (code) => {
-  return ResultMsg[code] || '發生未知錯誤'
+  if (!code) return '連線異常，請稍後再試'
+  return ResultMsg[code] || `發生未知錯誤 (${code})`
 }
