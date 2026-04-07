@@ -7,11 +7,16 @@
       <div class="login-form-section">
         <h2 class="title">會員登入</h2>
         <el-form :model="form" :rules="rules" ref="loginForm" label-position="top">
-          <el-form-item label="帳號" prop="username">
-            <el-input v-model="form.username" placeholder="請輸入帳號或Email" clearable />
+          <el-form-item label="帳號" prop="username" :error="backendErrors.username">
+            <el-input
+              v-model="form.username"
+              placeholder="請輸入帳號或Email"
+              clearable
+              @input="backendErrors.username = ''"
+            />
           </el-form-item>
 
-          <el-form-item label="密碼" prop="password">
+          <el-form-item label="密碼" prop="password" :error="backendErrors.password">
             <el-input
               v-model="form.password"
               type="password"
@@ -19,6 +24,7 @@
               placeholder="請輸入密碼"
               clearable
               @keyup.enter="handleLogin"
+              @input="backendErrors.password = ''"
             />
           </el-form-item>
 
@@ -51,6 +57,7 @@ import LoginAd from '@/components/LoginAd.vue'
 import { useUserStore } from '@/store/userStore'
 import Storage, { TOKEN_KEY, USER_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
+import { ResultCode, getMsgByCode } from '@/utils/resultCode'
 
 const { goTo, goHome } = useNavigation()
 const route = useRoute()
@@ -62,6 +69,12 @@ const form = ref({
   password: '',
   rememberMe: false,
   rememberUsername: false,
+})
+
+//儲存後端錯誤的變數
+const backendErrors = ref({
+  username: '',
+  password: '',
 })
 
 // 驗證規則
@@ -85,12 +98,22 @@ onMounted(() => {
   }
 })
 
+// 登入驗證
 const handleLogin = async () => {
   if (!loginForm.value) return
 
-  const valid = await loginForm.value.validate()
-  if (!valid) return
+  // 每次登入前先清空舊的後端錯誤
+  backendErrors.value.username = ''
+  backendErrors.value.password = ''
 
+  // 執行表單驗證
+  try {
+    await loginForm.value.validate()
+  } catch (error) {
+    return // 驗證沒過就停止
+  }
+
+  // 發送給後端的資料
   const loginData = {
     username: form.value.username,
     password: form.value.password,
@@ -98,39 +121,56 @@ const handleLogin = async () => {
     isLogin: true,
   }
 
+  // 發送請求與處理結果
   try {
     const res = await api.login(loginData)
+    toast.success('登入成功')
 
-    if (res.code === '0000') {
-      // 從後端回傳結果中解構出 token 和 role
-      const { token, role } = res.result
+    // 從後端回傳結果中解構出 token 和 role
+    const { token, role } = res.result
 
-      //存入 Pinia
-      userStore.login(loginData, { token, role })
-      userStore.startTokenCountdown(token)
+    //存入 Pinia
+    userStore.login(loginData, { token, role })
+    userStore.startTokenCountdown(token)
 
-      //存入 localStorage
-      Storage.set(TOKEN_KEY, token)
-      Storage.set(USER_ROLE_KEY, role)
+    //存入 localStorage
+    Storage.set(TOKEN_KEY, token)
+    Storage.set(USER_ROLE_KEY, role)
 
-      //記住帳號
-      if (form.value.rememberUsername) {
-        Storage.set(USER_KEY, form.value.username)
-      } else {
-        Storage.remove(USER_KEY)
-      }
-
-      toast.success('登入成功！')
-
-      // 如果網址有 ?redirect=/checkout，就去結帳頁，否則才回首頁
-      const targetPath = route.query.redirect || '/'
-      goTo(targetPath)
+    //記住帳號
+    if (form.value.rememberUsername) {
+      Storage.set(USER_KEY, form.value.username)
     } else {
-      toast.error('請檢查帳號及密碼')
+      Storage.remove(USER_KEY)
     }
+
+    // 如果網址有 ?redirect=/checkout，就去結帳頁，否則才回首頁
+    const targetPath = route.query.redirect || '/'
+    goTo(targetPath)
   } catch (error) {
-    console.error('登入失敗:', error)
-    toast.error('登入過程中發生錯誤，請稍後再試')
+    // 這裡的 error 是 apiService 拋出的 response.data
+    const code = error.code
+
+    // 如果是 9999 (FAIL)，且 result 裡有 GET not supported，就特別提示
+    if (code === ResultCode.FAIL) {
+      console.error('後端異常詳細資訊:', error.result)
+      toast.error('系統連線異常，請檢查請求方法')
+      return
+    }
+
+    // 其他情況，直接根據 code 轉換成中文訊息
+    const message = getMsgByCode(code)
+    console.log('後端錯誤碼:', code, '對應訊息:', message)
+    if (code === ResultCode.USER_NOT_FOUND || code === ResultCode.USER_IS_NOT_EXIST) {
+      backendErrors.value.username = message // 讓帳號輸入框變紅並顯示文字
+    } else if (code === ResultCode.PASSWORD_NOT_MATCH) {
+      backendErrors.value.password = message // 讓密碼輸入框變紅並顯示文字
+    } else if (code === ResultCode.FAIL) {
+      toast.error('系統連線異常，請稍後再試')
+    } else {
+      // 其他錯誤直接顯示訊息
+      toast.error(message)
+    }
   }
 }
 

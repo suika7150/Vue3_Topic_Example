@@ -30,7 +30,8 @@ export const ResultCode = {
 export const ResultMsg = {
   [ResultCode.SUCCESS]: '成功',
   [ResultCode.USER_NOT_FOUND]: '此帳號不存在',
-  [ResultCode.PASSWORD_NOT_MATCH]: '密碼輸入錯誤',
+  [ResultCode.USER_IS_NOT_EXIST]: '帳號不存在，請重新輸入',
+  [ResultCode.PASSWORD_NOT_MATCH]: '帳號或密碼輸入錯誤',
   [ResultCode.FAIL]: '系統繁忙，請稍後再試',
   [ResultCode.ACCOUNT_IS_EXIST]: '帳號已存在',
   [ResultCode.EMAIL_IS_EXIST]: 'Email 已存在',
