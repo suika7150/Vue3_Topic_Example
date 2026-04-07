@@ -7,12 +7,40 @@
       </div>
 
       <el-form :model="form" :rules="rules" ref="registerForm" label-position="top">
-        <el-form-item label="帳號" prop="username">
-          <el-input v-model="form.username" placeholder="請輸入帳號（3-20個字符）" clearable />
+        <el-form-item label="帳號" prop="username" :error="backendErrors.username">
+          <el-input
+            v-model="form.username"
+            @input="backendErrors.username = ''"
+            placeholder="請輸入帳號（3-20個字符）"
+            clearable
+          />
         </el-form-item>
 
-        <el-form-item label="Email" prop="email">
-          <el-input v-model="form.email" placeholder="請輸入Email地址" clearable />
+        <el-form-item label="Email" prop="email" :error="backendErrors.email">
+          <div class="email-wrapper">
+            <el-input
+              v-model="form.email"
+              @input="backendErrors.email = ''"
+              placeholder="請輸入Email地址"
+              clearable
+            />
+            <el-button
+              class="send-code-btn"
+              :disabled="emailCountdown > 0 || !form.email"
+              @click="handleSendEmailCode"
+            >
+              {{ emailCountdown > 0 ? `${emailCountdown}s 重新發送` : '發送驗證碼' }}
+            </el-button>
+          </div>
+        </el-form-item>
+
+        <el-form-item label="信箱驗證碼" prop="emailCode">
+          <div class="verify-input-wrapper">
+            <el-input v-model="form.emailCode" placeholder="請輸入6位驗證碼" maxlength="6" />
+            <span class="mock-code-hint" v-if="mockCodeDisplay">
+              測試驗證碼: {{ mockCodeDisplay || '尚未發送' }}
+            </span>
+          </div>
         </el-form-item>
 
         <el-form-item label="密碼" prop="password">
@@ -59,21 +87,15 @@
           />
         </el-form-item>
 
-        <el-form-item label="手機號碼" prop="phone">
-          <el-input v-model="form.phone" placeholder="請輸入手機號碼" clearable />
+        <el-form-item label="手機號碼" prop="phone" :error="backendErrors.phone">
+          <el-input
+            v-model="form.phone"
+            @input="backendErrors.phone = ''"
+            placeholder="請輸入手機號碼"
+            clearable
+          />
         </el-form-item>
-        <el-form-item label="簡訊驗證碼" prop="smsCode">
-          <div class="sms-input-wrapper">
-            <el-input v-model="form.smsCode" placeholder="請輸入6位驗證碼" maxlength="6" />
-            <el-button
-              class="send-sms-btn"
-              :disabled="smsCountdown > 0 || !form.phone"
-              @click="handleSendSms"
-            >
-              {{ smsCountdown > 0 ? `${smsCountdown}s 後重發` : '獲取驗證碼' }}
-            </el-button>
-          </div>
-        </el-form-item>
+
         <el-form-item class="agreement-section">
           <el-checkbox v-model="form.agreeTerms" :true-label="true" :false-label="false">
             我已閱讀並同意
@@ -142,6 +164,8 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import api from '@/service/api'
+import { ResultCode, getMsgByCode } from '@/utils/resultCode'
+import { toast } from '@/utils/message'
 import { useNavigation } from '@/composables/useNavigation'
 
 const { goLogin } = useNavigation()
@@ -149,6 +173,14 @@ const registerForm = ref()
 const loading = ref(false)
 const termsVisible = ref(false)
 const privacyVisible = ref(false)
+const emailCountdown = ref(0) // 信箱驗證碼倒數計時
+const mockCodeDisplay = ref('') // 顯示在按鈕旁的變數
+
+const backendErrors = ref({
+  username: '',
+  email: '',
+  phone: '',
+})
 
 const form = ref({
   username: '',
@@ -159,7 +191,7 @@ const form = ref({
   phone: '',
   gender: '',
   birthday: '',
-  smsCode: '',
+  emailCode: '',
   agreeTerms: false,
 })
 
@@ -238,15 +270,62 @@ const rules = {
   phone: [{ validator: validatePhone, required: true, trigger: 'blur' }],
   gender: [{ required: true, message: '請選擇性別', trigger: 'change' }],
   birthday: [{ required: true, message: '請選擇生日', trigger: 'change' }],
-  smsCode: [
+  emailCode: [
     { required: true, message: '請輸入6位驗證碼', trigger: 'blur' },
     { len: 6, message: '驗證碼長度應為 6 位', trigger: 'blur' },
   ],
   agreeTerms: [{ validator: validateTerms, trigger: 'change' }],
 }
 
+// 模擬信箱驗證碼倒數計時
+const handleSendEmailCode = async () => {
+  if (!form.value.email) return toast.error('請輸入Email地址')
+
+  // 僅驗證 Email 欄位，格式正確才發送 API
+  registerForm.value.validateField('email', async (valid) => {
+    if (!valid) return // 如果 Email 格式錯誤（如沒寫 .com），直接攔截
+    try {
+      // 先清空舊的後端錯誤訊息
+      backendErrors.value.email = ''
+
+      const res = await api.sendEmailCode(form.value.email)
+
+      const code = res.result || (res.data && res.data.result) || res
+      if (code) {
+        mockCodeDisplay.value = typeof code === 'object' ? code.result : code
+        toast.success(`驗證碼已發送至您的信箱`)
+      }
+
+      // 倒數計時
+      emailCountdown.value = 60
+      const timer = setInterval(() => {
+        emailCountdown.value--
+        if (emailCountdown.value <= 0) {
+          clearInterval(timer)
+          mockCodeDisplay.value = '' // 清除顯示的驗證碼
+        }
+      }, 1000)
+    } catch (error) {
+      // 處理「信箱已存在」或其他錯誤
+      const code = error.code
+      const message = getMsgByCode(code)
+
+      if (code === ResultCode.EMAIL_IS_EXIST) {
+        backendErrors.value.email = message
+      } else {
+        toast.error('發送驗證碼失敗，請稍後再試。')
+      }
+    }
+  })
+}
+
 const handleRegister = async () => {
   if (!registerForm.value) return
+
+  // 每次註冊前先清空舊的後端錯誤
+  backendErrors.value.username = ''
+  backendErrors.value.email = ''
+  backendErrors.value.phone = ''
 
   try {
     const valid = await registerForm.value.validate()
@@ -254,21 +333,23 @@ const handleRegister = async () => {
 
     loading.value = true
 
-    // 模擬註冊API調用
-    await api.register({
-      username: form.value.username,
-      email: form.value.email,
-      password: form.value.password,
-      fullName: form.value.fullName,
-      phone: form.value.phone,
-    })
-
-    ElMessage.success('註冊成功！請登入您的帳號')
-
-    // 註冊成功後跳轉到登入頁面
+    const res = await api.register(form.value)
+    toast.success('註冊成功！請登入您的帳號')
     goLogin()
   } catch (error) {
-    ElMessage.error(error.message || '註冊失敗，請稍後再試')
+    //獲取後端回傳的 code
+    const code = error.code
+    const message = getMsgByCode(code)
+
+    // 根據 code 分流顯示錯誤
+    if (code === ResultCode.ACCOUNT_IS_EXIST) {
+      backendErrors.value.username = message // 帳號重複，紅字噴在帳號欄
+    } else if (code === ResultCode.EMAIL_IS_EXIST) {
+      backendErrors.value.email = message // Email 重複，紅字噴在 Email 欄
+    } else {
+      // 其他錯誤（如驗證碼錯誤、系統繁忙）用彈窗
+      toast.error(message)
+    }
   } finally {
     loading.value = false
   }
@@ -309,6 +390,7 @@ const login = () => {
   text-align: center;
   margin-bottom: 50px;
 }
+
 .title {
   text-align: center;
   margin-bottom: 30px;
@@ -319,6 +401,49 @@ const login = () => {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/** Email驗證碼區塊 */
+.email-wrapper {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+/** Email驗證碼區塊 */
+.send-code-btn {
+  height: 44px;
+  width: 120px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+
+/** Email驗證碼區塊 */
+.send-code-btn:disabled {
+  background-color: #f5f7fa;
+  color: #a8abb2;
+}
+
+/** Email驗證碼區塊*/
+.verify-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/** Email驗證碼區塊 */
+.mock-code-hint {
+  font-size: 12px;
+  font-weight: bold;
+  color: #f56c6c;
+  background-color: #fef0f0;
+  border: 1px dashed #f56c6c;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap; /* 避免換行 */
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .el-form-item {
@@ -397,7 +522,10 @@ const login = () => {
   transition: border-color 0.3s ease;
 }
 
-:deep(.el-input__wrapper.is-focus) {
+/** 滑過聚焦樣式 */
+:deep(.el-input__wrapper:hover),
+:deep(.el-input__wrapper.is-focus),
+:deep(.el-form-item.is-error) .el-input__wrapper {
   border-bottom: 1px solid #000;
 }
 
@@ -411,13 +539,7 @@ const login = () => {
 
 :deep(.el-input__inner::placeholder) {
   font-size: 15px;
-  /* font-weight: 400; */
   color: #a8abb2;
-}
-
-/** 滑過聚焦樣式 */
-:deep(.el-input__wrapper:hover) {
-  border-bottom: 1px solid #000;
 }
 
 :deep(.el-form-item__label) {
@@ -438,13 +560,15 @@ const login = () => {
   box-shadow: none;
 }
 
-/* :deep(.el-checkbox) {
-  display: flex;
-  align-items: center;
-  white-space: normal;
-  height: auto;
-  margin-right: 0;
-} */
+/* 強制覆蓋 Chrome 自動填入時的藍色背景 */
+:deep(input:-webkit-autofill),
+:deep(input:-webkit-autofill:hover),
+:deep(input:-webkit-autofill:focus),
+:deep(input:-webkit-autofill:active) {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
 
 @media (max-width: 768px) {
   .agreement-section {

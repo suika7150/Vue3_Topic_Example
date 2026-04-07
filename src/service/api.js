@@ -11,6 +11,11 @@ const api = {
    */
   register: (data) => apiService.post(API_ROUTES.REGISTER, data),
 
+  /** * 發送信箱驗證碼
+   * @param {string} email - Email 地址
+   */
+  sendEmailCode: (email) => apiService.post(API_ROUTES.SEND_EMAIL_CODE, { email: email }),
+
   /** 登入
    * @param {object} data - 登入資料{username, password}
    */

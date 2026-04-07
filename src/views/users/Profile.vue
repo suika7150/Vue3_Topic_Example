@@ -7,7 +7,10 @@
 
       <el-form :model="form" :rules="rules" ref="profileForm" label-position="top">
         <el-form-item label="帳號">
-          <el-input v-model="form.username" disabled />
+          <div class="readonly-username">
+            <el-icon><User /></el-icon>
+            <span>{{ form.username }}</span>
+          </div>
         </el-form-item>
 
         <el-form-item label="Email" prop="email">
@@ -22,6 +25,25 @@
           <el-input v-model="form.phone" placeholder="請輸入手機號碼" clearable />
         </el-form-item>
 
+        <el-form-item label="性別" prop="gender">
+          <el-radio-group v-model="form.gender">
+            <el-radio label="M">男</el-radio>
+            <el-radio label="F">女</el-radio>
+            <el-radio label="O">其他</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="生日" prop="birthday">
+          <el-date-picker
+            v-model="form.birthday"
+            type="date"
+            placeholder="選擇生日"
+            format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD"
+            style="width: 100%"
+          />
+        </el-form-item>
+
         <el-form-item class="update-section">
           <el-button class="profile-btn" @click="handleUpdate" :loading="loading">
             更新資料
@@ -33,11 +55,12 @@
 </template>
 
 <script setup>
-import { useNavigation } from '@/composables/useNavigation'
-import api from '@/service/api'
-import Storage, { TOKEN_KEY } from '@/utils/storageUtil'
-import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { User } from '@element-plus/icons-vue'
+import api from '@/service/api'
+import { useNavigation } from '@/composables/useNavigation'
+import Storage, { TOKEN_KEY } from '@/utils/storageUtil'
 
 const { goLogin } = useNavigation()
 const profileForm = ref()
@@ -48,6 +71,8 @@ const form = ref({
   email: '',
   fullName: '',
   phone: '',
+  gender: '',
+  birthday: '',
 })
 
 onMounted(async () => {
@@ -97,6 +122,8 @@ const rules = {
     { min: 2, message: '姓名至少需要2個字符', trigger: 'blur' },
   ],
   phone: [{ validator: validatePhone, trigger: 'blur' }],
+  gender: [{ required: true, message: '請選擇性別', trigger: 'change' }],
+  birthday: [{ required: true, message: '請選擇生日', trigger: 'change' }],
 }
 
 const handleUpdate = async () => {
@@ -155,6 +182,19 @@ const handleUpdate = async () => {
 
 .el-form-item {
   margin-bottom: 25px;
+}
+
+/** 帳號 */
+.readonly-username {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f8f9fa;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: #606266;
+  font-weight: 500;
+  border: 1px solid #eee;
 }
 
 :deep(.el-input__wrapper) {
@@ -227,7 +267,7 @@ const handleUpdate = async () => {
   box-shadow: none !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .profile-card {
     padding: 20px;
   }
