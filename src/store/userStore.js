@@ -1,6 +1,7 @@
-import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { defineStore } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
+import api from '@/service/api.js'
 
 function parseJwt(token) {
   try {
@@ -16,7 +17,6 @@ export const useUserStore = defineStore('userStore', {
   state: () => ({
     user: {
       username: '',
-      password: '',
       rememberMe: false,
       isLogin: false,
     },
@@ -36,15 +36,44 @@ export const useUserStore = defineStore('userStore', {
      * @description
      * 將用戶資料儲存到狀態中
      * 啟動 Token 倒數
-     * 將用戶資料儲存到狀態中
+     * 從後端獲取最新使用者資料
+     * 用於同步 DB 狀態到前端畫面
      * */
-    login(user, { token, role }) {
-      this.user = { user, isLogin: true }
-      this.role = role
+    async fetchUserInfo() {
+      try {
+        const res = await api.user()
+        if (res) {
+          // 同步 DB 狀態到前端畫面
+          this.user = {
+            ...res,
+            isLogin: true,
+          }
+          this.role = res.role || Storage.get(USER_ROLE_KEY)
+          return res
+        }
+      } catch (error) {
+        console.error('同步使用者資料失敗:', error)
+        throw error
+      }
+    },
+
+    async login(userData, { token, role }) {
+      // 將用戶資料儲存到Storage
       Storage.set(USER_ROLE_KEY, role)
       Storage.set(TOKEN_KEY, token)
-      this.startTokenCountdown(token)
       Storage.set('EXPIRY_TIME', parseJwt(token).exp)
+      // this.startTokenCountdown(token)
+
+      // 更新State
+      this.user = {
+        username: userData.username,
+        isLogin: true,
+        // rememberMe: loginData.rememberMe || false,
+      }
+      this.role = role
+
+      // 啟動倒數
+      this.startTokenCountdown(token)
     },
     /**
      * 啟動 Token 倒數
@@ -81,6 +110,9 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
+    /**
+     * 初始化使用者 (主要用於 F5 重新整理時)
+     */
     initUser() {
       const token = Storage.get(TOKEN_KEY)
       const role = Storage.get(USER_ROLE_KEY)

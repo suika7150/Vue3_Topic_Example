@@ -21,6 +21,14 @@ export const useCartStore = defineStore('cartStore', {
     },
   },
   actions: {
+    async fetchCartList() {
+      const savedCart = Storage.get(CART_KEY)
+      if (Array.isArray(savedCart)) {
+        this.cart = savedCart
+      }
+      return this.cart
+    },
+
     // 控制抽屜顯示
     setDrawerVisible(visible) {
       this.drawerVisible = visible

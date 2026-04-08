@@ -3,11 +3,13 @@
 meta.title搭配BreadCrumb.vue的title顯示在麵包屑上
 *
 */
+import { createRouter, createWebHistory } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/store/userStore'
+import { useCartStore } from '@/store/cartStore'
 import CategoryPage from '@/Navigation/sub/CategoryPage.vue'
 import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { hideLoading, showLoading } from '@/utils/loadingService'
-import { createRouter, createWebHistory } from 'vue-router'
-import { ElMessage } from 'element-plus'
 
 const routes = [
   { path: '/', name: 'home', component: () => import('@/views/Home.vue'), meta: { title: '首頁' } },
@@ -143,10 +145,10 @@ const routes = [
     meta: { requiresAuth: true, role: ['USER', 'ADMIN'] },
     beforeEnter: (to, from, next) => {
       // 檢查「購物車是否有東西」
-      const cartItems = Storage.get(CART_KEY) || []
+      const cartStore = useCartStore()
 
-      if (cartItems.length === 0) {
-        // 如果購物車是空的，移動至登入畫面
+      if (cartStore.cart.length === 0) {
+        // 如果購物車是空的，跳轉到商品總覽
         ElMessage.warning('您的購物車是空的，請先挑選商品')
         return next('/products')
       }
@@ -158,7 +160,6 @@ const routes = [
     name: 'checkoutSuccess',
     component: () => import('@/views/checkout/CheckoutSuccess.vue'),
   },
-
   {
     path: '/accessDenied',
     name: 'accessDenied',
@@ -185,12 +186,40 @@ const router = createRouter({
 })
 
 // 路由守衛，權限驗證
-router.beforeEach((to, from, next) => {
-  // 檢查是否已登入
-  const isLoggedIn = !!Storage.get(TOKEN_KEY)
-  const role = Storage.get(USER_ROLE_KEY)
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore()
+  const cartStore = useCartStore()
 
+  const token = Storage.get(TOKEN_KEY)
+  const isLoggedIn = !!token
+
+  // 處理排除項：如果是去登入頁且已經登入，直接回首頁
+  if (to.path === '/login' && isLoggedIn) {
+    return next('/')
+  }
+
+  // 資料同步邏輯
+  if (isLoggedIn && !userStore.user.username) {
+    try {
+      // 同步使用者資料
+      await Promise.all([userStore.fetchUserInfo(), cartStore.fetchCartList()])
+    } catch (error) {
+      console.error('同步使用者資料失敗:', error)
+      Storage.remove(TOKEN_KEY)
+      Storage.remove(USER_ROLE_KEY)
+      hideLoading()
+      return next('/login')
+    } finally {
+      hideLoading()
+    }
+  }
+
+  // 如果 Store 裡有，就用 Store 的；沒有才去抓 Storage 的保底
+  const role = userStore.userRole || Storage.get(USER_ROLE_KEY)
+
+  // 檢查是否需要登入權限
   if (to.meta.requiresAuth && !isLoggedIn) {
+    hideLoading()
     ElMessage.error('請先登入會員')
     //把當前想去的路徑 (to.fullPath) 傳給登入頁
     return next({
@@ -198,11 +227,12 @@ router.beforeEach((to, from, next) => {
       query: { redirect: to.fullPath },
     })
   }
-  // 如果已登入，但角色不符
+  // 如果已登入，檢查角色權限
   if (to.meta.requiresAuth && !to.meta?.role?.includes(role)) {
+    hideLoading()
     return next('/accessDenied')
   }
-  showLoading()
+
   next()
 })
 

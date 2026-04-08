@@ -73,6 +73,7 @@
               :rules="shippingRules"
               ref="shippingFormRef"
               class="minimalist-form"
+              label-width="100px"
             >
               <el-form-item label="收件人" prop="name" class="narrow-item">
                 <el-input v-model="shippingForm.name" placeholder="請輸入收件人姓名" />
@@ -85,6 +86,12 @@
               <el-form-item label="配送地址" prop="address">
                 <div class="address-fields">
                   <div class="address-selects">
+                    <el-input
+                      v-model="currentZipCode"
+                      placeholder="郵遞區號"
+                      style="width: 80px"
+                      disabled
+                    />
                     <el-select
                       v-model="shippingForm.city"
                       placeholder="請選擇縣市"
@@ -115,19 +122,40 @@
                     v-model="shippingForm.address"
                     placeholder="請輸入詳細地址"
                     type="textarea"
-                    :rows="2"
+                    :rows="1"
                   />
                 </div>
               </el-form-item>
 
               <el-form-item label="配送方式" prop="shippingMethod">
-                <el-radio-group v-model="shippingForm.shippingMethod">
-                  <el-radio label="standard" class="shipping-radio">
-                    <div class="shipping-option">
-                      <div class="shipping-name">標準配送 3-5 個工作天</div>
-                      <span class="shipping-price">免費</span>
-                    </div>
-                  </el-radio>
+                <el-radio-group v-model="shippingForm.shippingMethod" class="w-full">
+                  <div class="shipping-option-wrapper">
+                    <el-radio label="standard" class="shipping-radio">
+                      <div class="shipping-option">
+                        <div class="shipping-name">宅配到府 (3-5 個工作天)</div>
+                        <span class="shipping-price">{{
+                          subtotal >= FREE_SHIPPING_THRESHOLD ? '免運' : 'NT$ 60'
+                        }}</span>
+                      </div>
+                    </el-radio>
+                    <transition name="el-zoom-in-top">
+                      <div
+                        v-if="shippingForm.shippingMethod === 'standard'"
+                        class="sub-provider-select"
+                      >
+                        <p class="sub-label">請選擇物流商：</p>
+                        <el-radio-group v-model="shippingForm.deliveryProvider" size="small">
+                          <el-radio-button
+                            v-for="p in deliveryProviders"
+                            :key="p.value"
+                            :label="p.value"
+                          >
+                            {{ p.icon }} {{ p.label }}
+                          </el-radio-button>
+                        </el-radio-group>
+                      </div>
+                    </transition>
+                  </div>
                   <el-radio label="express" class="shipping-radio">
                     <div class="shipping-option">
                       <div class="shipping-name">快速配送 1-2 個工作天</div>
@@ -141,7 +169,7 @@
                 <el-input
                   v-model="shippingForm.notes"
                   type="textarea"
-                  :rows="3"
+                  :rows="1"
                   placeholder="有任何特殊需求請在此註明"
                 />
               </el-form-item>
@@ -344,9 +372,24 @@ const shippingForm = ref({
   city: '',
   district: '',
   address: '',
-  shippingMethod: 'standard',
+  shippingMethod: 'home_delivery',
+  shippingMethod: 'standdard', // 標準配送
+  deliveryProvider: 't-cat', // 預設物流廠商
   notes: '',
 })
+
+const shippingOptions = [
+  { label: '宅配到府', value: 'home_delivery', price: 80, desc: '由黑貓或新竹物流配送' },
+  { label: '超商取貨', value: 'store_pickup', price: 60, desc: '請於備註填寫門市名稱' },
+  { label: '貨到付款', value: 'cod', price: 100, desc: '需加收物流代收手續費' },
+]
+
+// 物流廠商選項
+const deliveryProviders = [
+  { label: '黑貓宅急便', value: 't-cat', icon: '🐈' },
+  { label: '新竹物流', value: 'hct', icon: '🚚' },
+  { label: '大榮貨運', value: 'ktj', icon: '📦' },
+]
 
 const shippingFormRef = ref()
 
@@ -894,6 +937,29 @@ onMounted(() => {
   border-bottom-color: #f56c6c !important;
 }
 
+.shipping-option-wrapper {
+  background-color: #f9fafb;
+  border: 1px solid #f0f0f0;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.sub-provider-select {
+  margin-top: 12px;
+  margin-left: 28px; /* 避開 radio 圓點 */
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sub-label {
+  font-size: 12px;
+  color: #86868b;
+  margin-bottom: 8px;
+}
+
 /* 配送地址 */
 .address-fields {
   display: flex;
@@ -909,6 +975,7 @@ onMounted(() => {
 
 .shipping-radio {
   display: block;
+
   margin-bottom: 8px;
 }
 

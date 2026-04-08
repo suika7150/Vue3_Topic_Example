@@ -130,7 +130,7 @@ const handleLogin = async () => {
     const { token, role } = res.result
 
     //存入 Pinia
-    userStore.login(loginData, { token, role })
+    await userStore.login(loginData, { token, role })
     userStore.startTokenCountdown(token)
 
     //存入 localStorage
