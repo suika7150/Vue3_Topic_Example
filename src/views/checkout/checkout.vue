@@ -83,15 +83,9 @@
                 <el-input v-model="shippingForm.phone" placeholder="請輸入聯絡電話" />
               </el-form-item>
 
-              <el-form-item label="配送地址" prop="address">
+              <el-form-item label="聯絡地址" prop="address">
                 <div class="address-fields">
                   <div class="address-selects">
-                    <el-input
-                      v-model="currentZipCode"
-                      placeholder="郵遞區號"
-                      style="width: 80px"
-                      disabled
-                    />
                     <el-select
                       v-model="shippingForm.city"
                       placeholder="請選擇縣市"
@@ -128,42 +122,83 @@
               </el-form-item>
 
               <el-form-item label="配送方式" prop="shippingMethod">
-                <el-radio-group v-model="shippingForm.shippingMethod" class="w-full">
-                  <div class="shipping-option-wrapper">
-                    <el-radio label="standard" class="shipping-radio">
-                      <div class="shipping-option">
-                        <div class="shipping-name">宅配到府 (3-5 個工作天)</div>
-                        <span class="shipping-price">{{
-                          subtotal >= FREE_SHIPPING_THRESHOLD ? '免運' : 'NT$ 60'
-                        }}</span>
-                      </div>
-                    </el-radio>
-                    <transition name="el-zoom-in-top">
-                      <div
-                        v-if="shippingForm.shippingMethod === 'standard'"
-                        class="sub-provider-select"
-                      >
-                        <p class="sub-label">請選擇物流商：</p>
-                        <el-radio-group v-model="shippingForm.deliveryProvider" size="small">
-                          <el-radio-button
-                            v-for="p in deliveryProviders"
-                            :key="p.value"
-                            :label="p.value"
-                          >
-                            {{ p.icon }} {{ p.label }}
-                          </el-radio-button>
-                        </el-radio-group>
-                      </div>
-                    </transition>
-                  </div>
-                  <el-radio label="express" class="shipping-radio">
-                    <div class="shipping-option">
-                      <div class="shipping-name">快速配送 1-2 個工作天</div>
-                      <span class="shipping-price">NT$ 100</span>
-                    </div>
-                  </el-radio>
+                <el-radio-group v-model="shippingForm.shippingMethod">
+                  <el-radio-button
+                    v-for="opt in shippingOptions"
+                    :key="opt.value"
+                    :label="opt.value"
+                  >
+                    {{ opt.icon }} {{ opt.label }}
+                  </el-radio-button>
                 </el-radio-group>
               </el-form-item>
+
+              <div class="shipping-detail-box">
+                <template v-if="shippingForm.shippingMethod === 'home_delivery'">
+                  <el-form-item label="配送地址" required>
+                    <div class="address-fields">
+                      <div class="address-selects">
+                        <el-select
+                          v-model="shippingForm.deliveryCity"
+                          placeholder="請選擇縣市"
+                          class="flex-1"
+                        >
+                          <el-option
+                            v-for="city in cities"
+                            :key="city.value"
+                            :label="city.label"
+                            :value="city.value"
+                          />
+                        </el-select>
+
+                        <el-select
+                          v-model="shippingForm.deliveryDistrict"
+                          placeholder="請選擇區域"
+                          class="flex-1"
+                          :disabled="!shippingForm.city"
+                        >
+                          <el-option
+                            v-for="district in districts"
+                            :key="district.zip"
+                            :label="district.label"
+                            :value="district.value"
+                          />
+                        </el-select>
+                      </div>
+
+                      <el-input
+                        v-model="shippingForm.deliveryAddress"
+                        placeholder="請輸詳細地址"
+                        type="textarea"
+                        :rows="1"
+                        class="mt-2"
+                      />
+                    </div>
+                  </el-form-item>
+                </template>
+
+                <template v-else-if="shippingForm.shippingMethod === 'cvs'">
+                  <el-form-item label="選擇門市">
+                    <el-button type="primary" plain @click="openCvsMap"
+                      >開啟電子地圖選取門市</el-button
+                    >
+                    <div v-if="shippingForm.cvsStore" class="mt-2 text-blue-500">
+                      已選門市：{{ shippingForm.cvsStore.storeName }} ({{
+                        shippingForm.cvsStore.storeAddress
+                      }})
+                    </div>
+                  </el-form-item>
+                </template>
+
+                <template v-else-if="shippingForm.shippingMethod === 'store_pickup'">
+                  <el-form-item label="取貨門市">
+                    <el-select v-model="shippingForm.pickupStoreId" placeholder="請選擇取貨地點">
+                      <el-option label="台北總店 - 台北市信義區..." value="001" />
+                      <el-option label="台中分店 - 台中市西屯區..." value="002" />
+                    </el-select>
+                  </el-form-item>
+                </template>
+              </div>
 
               <el-form-item label="備註">
                 <el-input
@@ -369,19 +404,29 @@ const updateStorage = (val, itemId) => {
 const shippingForm = ref({
   name: '',
   phone: '',
+  shippingMethod: 'home_delivery', // 預設宅配
+
+  //基本資料
   city: '',
   district: '',
   address: '',
-  shippingMethod: 'home_delivery',
-  shippingMethod: 'standdard', // 標準配送
-  deliveryProvider: 't-cat', // 預設物流廠商
+
+  // 宅配專用
+  deliveryCity: '',
+  deliveryDistrict: '',
+  deliveryAddress: '',
+  deliveryProvider: 't-cat', // 預設黑貓
+  // 超商專用
+  cvsStore: null, // 儲存選擇的門市資訊
+  //自取專用
+  pickupStoreId: '',
   notes: '',
 })
 
 const shippingOptions = [
-  { label: '宅配到府', value: 'home_delivery', price: 80, desc: '由黑貓或新竹物流配送' },
-  { label: '超商取貨', value: 'store_pickup', price: 60, desc: '請於備註填寫門市名稱' },
-  { label: '貨到付款', value: 'cod', price: 100, desc: '需加收物流代收手續費' },
+  { label: '超商取貨', value: 'cvs', icon: '🏪', price: 60 },
+  { label: '宅配到府', value: 'home_delivery', icon: '🚚', price: 80 },
+  { label: '到店自取', value: 'store_pickup', icon: '🏢', price: 0 },
 ]
 
 // 物流廠商選項
@@ -465,6 +510,17 @@ const shippingFee = computed(() => {
   // 如果總計達到免運門檻，則運費為 0
   if (subtotal.value >= FREE_SHIPPING_THRESHOLD) {
     return 0
+  }
+  // 根據選擇的配送方式計算運費
+  switch (shippingForm.value.shippingMethod) {
+    case 'cvs':
+      return 60
+    case 'home_delivery':
+      return 80
+    case 'store_pickup':
+      return 0
+    default:
+      return 60
   }
 
   // 根據選擇的配送方式計算運費
@@ -759,12 +815,12 @@ onMounted(() => {
 }
 
 .main-content {
-  grid-column: 1 / -1;
+  grid-column: 1 / 3;
 }
 
 .sidebar {
   position: static;
-  grid-column: span 1 / span 1;
+  grid-column: 1 / 2;
   width: 100%;
 }
 
@@ -937,14 +993,6 @@ onMounted(() => {
   border-bottom-color: #f56c6c !important;
 }
 
-.shipping-option-wrapper {
-  background-color: #f9fafb;
-  border: 1px solid #f0f0f0;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-}
-
 .sub-provider-select {
   margin-top: 12px;
   margin-left: 28px; /* 避開 radio 圓點 */
@@ -971,12 +1019,6 @@ onMounted(() => {
 .address-selects {
   display: flex;
   gap: 8px;
-}
-
-.shipping-radio {
-  display: block;
-
-  margin-bottom: 8px;
 }
 
 .shipping-option {
@@ -1146,6 +1188,25 @@ onMounted(() => {
 
 /* --- RWD --- */
 @media (-width: 1024px) {
+  .checkout-grid {
+    /* 變回單欄佈局 */
+    grid-template-columns: 1fr;
+  }
+
+  .main-content,
+  .sidebar {
+    /* 全部佔滿第一欄 */
+    grid-column: 1 / 2;
+  }
+
+  .sidebar {
+    position: static; /* 手機版取消固定 */
+  }
+
+  .address-selects {
+    flex-direction: column;
+    gap: 8px;
+  }
   .item-card {
     gap: 12px;
     padding: 12px;

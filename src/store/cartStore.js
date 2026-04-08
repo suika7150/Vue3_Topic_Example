@@ -1,5 +1,5 @@
-import Storage, { CART_KEY } from '@/utils/storageUtil'
 import { defineStore } from 'pinia'
+import Storage, { CART_KEY } from '@/utils/storageUtil'
 
 export const useCartStore = defineStore('cartStore', {
   state: () => ({
@@ -42,6 +42,7 @@ export const useCartStore = defineStore('cartStore', {
         Storage.set(CART_KEY, this.cart)
       }
     },
+
     updateQuantity(productId, quantity) {
       //購物車陣列中找到對應 ID 的商品
       const item = this.cart.find((item) => item.id === productId)
