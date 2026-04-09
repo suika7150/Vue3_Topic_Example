@@ -15,6 +15,7 @@ export const API_ROUTES = {
   PRODUCT_DELETE: (id) => `/api/deleteProduct/${id}`,
   COUPON_VALIDATE: (code) => `/api/coupon/validate/${code}`, // 驗證優惠券
   ORDER_CREATE: '/api/orders', //新增訂單
+  PAYMENT_GET_PARAMS: (paymentId) => `/api/payment/params/${paymentId}`, // 綠界支付
   OPTIONS_LIST: `/api/options/list`,
   OPTIONS_ADD: `/api/options/add`,
   OPTIONS_UPDATE: (id) => `/api/options/update/${id}`,

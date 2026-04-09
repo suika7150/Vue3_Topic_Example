@@ -141,7 +141,7 @@ const routes = [
   {
     path: '/checkout',
     name: 'checkout',
-    component: () => import('@/views/checkout/Checkout.vue'),
+    component: () => import('@/views/checkout/checkout.vue'),
     meta: { requiresAuth: true, role: ['USER', 'ADMIN'] },
     beforeEnter: (to, from, next) => {
       // 檢查「購物車是否有東西」

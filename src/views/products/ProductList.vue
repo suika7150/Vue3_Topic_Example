@@ -70,7 +70,7 @@
                 <div
                   class="wishlist-icon"
                   :class="{ 'is-active': product.isWishlisted }"
-                  @click.stop="toggleWishlist(product)"
+                  @click="toggleWishlist(product)"
                 >
                   <el-icon><Star v-if="!product.isWishlisted" /><StarFilled v-else /></el-icon>
                 </div>

@@ -71,9 +71,6 @@ export const useCartStore = defineStore('cartStore', {
     removeProduct(productId) {
       this.cart = this.cart.filter((item) => item.id !== productId)
       this.persist()
-
-      // 開啟購物車
-      this.drawerVisible = true
     },
     clearCart() {
       this.cart = []

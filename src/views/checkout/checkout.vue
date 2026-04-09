@@ -520,7 +520,7 @@ const shippingFee = computed(() => {
     case 'store_pickup':
       return 0
     default:
-      return 60
+      return shippingForm.value.shippingMethod === 'express' ? 100 : 60
   }
 
   // 根據選擇的配送方式計算運費
@@ -538,6 +538,23 @@ const total = computed(() => {
   }
   return Math.max(0, totalAmount) // 確保總額不為負數
 })
+
+// 結帳
+const handleCheckout = async () => {
+  try {
+    // 建立訂單
+    const orderRes = await api.createOrder(orderData)
+    const paymentId = orderRes.paymentId
+
+    // 拿到 paymentId 後，抓取綠界參數
+    const payRes = await api.getEcpayParams(paymentId)
+
+    // 把參數塞進 EcpayProvider 並啟動跳轉
+    // ecpayRef.value.processPayment(payRes.data);
+  } catch (error) {
+    toast.error('結帳過程發生錯誤')
+  }
+}
 
 // 刪除 & 取消
 const removeItem = (id) => {
@@ -589,6 +606,7 @@ const submitOrder = async () => {
   submitting.value = true
 
   try {
+    // 建立訂單資料
     const orderData = {
       name: shippingForm.value.name,
       phone: shippingForm.value.phone,
@@ -607,16 +625,25 @@ const submitOrder = async () => {
       })),
     }
 
-    // 呼叫後端API
+    // 呼叫後端建立訂單
     const response = await api.createOrder(orderData)
 
-    // 清空購物車
+    console.log('--- API Response Start ---')
+    console.log('原始 response:', response)
+    const { id, ecpayParams, merchantTradeNo } = response.result
+
+    if (paymentMethod.value === 'credit_card') {
+      toast.info('正在導向支付頁面...')
+
+      processEcpayPayment(ecpayParams)
+      return
+    }
+
+    // 如果是貨到付款或轉帳，直接清空並完成訂單
     Storage.remove(CART_KEY)
     cartStore.clearCart()
-
     // 跳轉到成功頁面
     goTo('checkoutSuccess')
-
     toast.success('訂單建立成功！')
   } catch (error) {
     console.error('訂單建立失敗:', error)
@@ -624,6 +651,31 @@ const submitOrder = async () => {
   } finally {
     submitting.value = false
   }
+}
+
+// 實作跳轉函式
+const processEcpayPayment = (params) => {
+  // 建立一個隱藏的 form
+  const form = document.createElement('form')
+  form.method = 'POST'
+  // 注意：測試環境網址是 https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5
+  // 正式環境網址不同，建議由後端回傳 action 網址或寫在 config
+  form.action = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5'
+
+  // 將所有參數塞入 input
+  for (const key in params) {
+    if (Object.prototype.hasOwnProperty.call(params, key)) {
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = key
+      input.value = params[key]
+      form.appendChild(input)
+    }
+  }
+
+  // 插入到 body 並執行送出
+  document.body.appendChild(form)
+  form.submit()
 }
 
 const applyCoupon = async () => {
@@ -656,11 +708,21 @@ const applyCoupon = async () => {
 
 const formatCardNumber = (value) => {
   // 格式化信用卡號：1234 5678 9012 3456
-  const formatted = value
-    .replace(/\s/g, '')
-    .replace(/(\d{4})/g, '$1 ')
-    .trim()
-  creditCardForm.value.cardNumber = formatted
+  const formatted = value.replace(/\s/g, '').replace(/[^0-9]/gi, '')
+  const matches = formatted.match(/\d{4,16}/g)
+  const match = (matches && matches[0]) || ''
+  const parts = []
+
+  for (let i = 0, len = match.length; i < len; i += 4) {
+    parts.push(match.substring(i, i + 4))
+  }
+
+  // 如果有格式化後的號碼，就更新表單的值
+  if (parts.length) {
+    creditCardForm.value.cardNumber = parts.join(' ')
+  } else {
+    creditCardForm.value.cardNumber = formatted
+  }
 }
 
 const formatExpiryDate = (value) => {

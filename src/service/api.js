@@ -90,6 +90,14 @@ const api = {
 
   /** 新增訂單*/
   createOrder: (data) => apiService.post(API_ROUTES.ORDER_CREATE, data),
+
+  /* ===== 金流相關 API ===== */
+  /** * 取得綠界支付需要的加密參數
+   * 注意：因為後端是 @PostMapping，所以這裡要用 axios.post
+   */
+  getEcpayParams: (paymentId) =>
+    // POST 請求如果沒有要傳 Body，可以傳空物件 {} 或 null
+    apiService.post(API_ROUTES.PAYMENT_GET_PARAMS(paymentId), {}),
 }
 
 export default api
