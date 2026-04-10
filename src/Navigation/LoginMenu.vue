@@ -59,6 +59,10 @@
         </template>
       </el-dropdown>
 
+      <el-button link class="user-menu-btn order-btn" @click="goOrderList">
+        <span class="btn-text">我的訂單</span>
+      </el-button>
+
       <!-- 使用者資訊 -->
       <div class="info">
         <div>
@@ -98,7 +102,7 @@ const isLogin = computed(() => !!userStore.user?.isLogin)
 const user = computed(() => userStore.user || {})
 const { remainingTime: remaining } = storeToRefs(userStore)
 
-const { goTo } = useNavigation()
+const { goTo, goOrderList } = useNavigation()
 
 const handleNavigate = (target) => {
   if (typeof target === 'string' && target.startsWith('/')) {
@@ -175,6 +179,21 @@ const openCartDrawer = () => {
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s;
+}
+/* 訂單按鈕 */
+.order-btn {
+  margin-right: 10px;
+  font-size: 14px; /* 比通知圖示稍微小一點點，讓層次分明 */
+}
+/* 訂單按鈕 */
+.order-btn .el-icon {
+  margin-right: 4px;
+  font-size: 18px;
+}
+/* 訂單按鈕 */
+.btn-text {
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .user-menu-btn:hover {

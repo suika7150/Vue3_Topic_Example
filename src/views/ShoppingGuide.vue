@@ -28,7 +28,7 @@
           <el-icon><Warning /></el-icon> 注意事項
         </h3>
         <ul class="info-list">
-          <li><strong>運送方式：</strong>全館滿 $999 免運，支援宅配、超商取貨。</li>
+          <li><strong>運送方式：</strong>全館滿 $1000 免運，支援宅配、超商取貨。</li>
           <li><strong>出貨時間：</strong>現貨商品於下單後 2-3 個工作天內出貨。</li>
           <li><strong>退換貨：</strong>享有 7 天鑑賞期（非試用期），拆封請錄影存證。</li>
         </ul>
@@ -44,7 +44,7 @@ import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
 <style scoped>
 .page-container {
   max-width: 1440px;
-  width: 90%;
+  width: 80%;
   margin: 50px auto;
 }
 .card-header {

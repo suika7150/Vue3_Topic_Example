@@ -10,6 +10,7 @@ import { useCartStore } from '@/store/cartStore'
 import CategoryPage from '@/Navigation/sub/CategoryPage.vue'
 import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { hideLoading, showLoading } from '@/utils/loadingService'
+import { before } from 'lodash'
 
 const routes = [
   { path: '/', name: 'home', component: () => import('@/views/Home.vue'), meta: { title: '首頁' } },
@@ -160,6 +161,14 @@ const routes = [
     name: 'checkoutSuccess',
     component: () => import('@/views/checkout/CheckoutSuccess.vue'),
     meta: { title: '結帳成功' },
+    // 防止直接輸入網址進入結帳成功頁面
+    beforeEnter: (to, from, next) => {
+      if (from.name === 'checkout') {
+        next()
+      } else {
+        next({ name: 'notFound' })
+      }
+    },
   },
   {
     path: '/orders/list',
@@ -179,10 +188,10 @@ const routes = [
     component: () => import('@/views/users/AccessDenied.vue'),
   },
   {
-    path: '/:paths(.*)*',
-    name: 'Category',
-    component: CategoryPage,
-    props: true,
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/error/NotFound.vue'),
+    meta: { title: '404 - 找不到頁面' },
   },
 ]
 

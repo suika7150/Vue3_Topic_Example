@@ -88,7 +88,7 @@ export function useNavigation() {
     router.push({ name: 'qa' })
   }
 
-  // 1. 結帳成功跳轉 (帶單號)
+  // 結帳成功跳轉
   const goCheckoutSuccess = (orderId) => {
     router.push({
       name: 'checkoutSuccess',
@@ -96,7 +96,7 @@ export function useNavigation() {
     })
   }
 
-  // 2. 跳轉到訂單詳情 (帶單號)
+  // 訂單詳情
   const goOrderDetail = (orderId) => {
     router.push({
       name: 'orderDetail',
@@ -104,9 +104,14 @@ export function useNavigation() {
     })
   }
 
-  // 3. 跳轉到訂單列表 (不需參數)
+  // 訂單列表
   const goOrderList = () => {
     router.push({ name: 'orderList' })
+  }
+
+  // 404頁面
+  const goNotFound = () => {
+    router.push({ name: 'notFound' })
   }
 
   //跳轉到指定路由
@@ -150,5 +155,6 @@ export function useNavigation() {
     goLimited,
     goRegister,
     goSetting,
+    goNotFound,
   }
 }

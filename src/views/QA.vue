@@ -47,7 +47,7 @@
 
       <div class="support-footer">
         <p>還有其他問題嗎？歡迎聯繫我們</p>
-        <el-button type="primary" plain>聯繫在線客服</el-button>
+        <el-button type="primary" plain>聯繫客服</el-button>
       </div>
     </el-card>
   </div>
@@ -62,9 +62,13 @@ const activeNames = ref(['1']) // 預設展開第一個
 
 <style scoped>
 .page-container {
-  width: 70%;
+  width: 80%;
   max-width: 1440px;
   margin: 50px auto;
+}
+.card-header {
+  display: flex;
+  justify-content: center;
 }
 .card-header h2 {
   margin: 0;
@@ -76,11 +80,16 @@ const activeNames = ref(['1']) // 預設展開第一個
   margin-top: 30px;
   text-align: center;
   background-color: #f9f9f9;
-  padding: 20px;
+  padding: 40px;
   border-radius: 8px;
 }
+.support-footer p {
+  margin-bottom: 20px;
+}
+/* RWD */
 @media (max-width: 1024px) {
   .page-container {
+    width: 100%;
     margin: 0 0;
   }
 }

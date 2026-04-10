@@ -379,7 +379,7 @@ import Storage, { CART_KEY } from '@/utils/storageUtil'
 
 const cartStore = useCartStore()
 
-const { goTo } = useNavigation()
+const { goTo, goCheckoutSuccess } = useNavigation()
 const modalStore = useModalStore()
 const route = useRoute()
 
@@ -583,8 +583,9 @@ const submitOrder = async () => {
       processEcpayPayment(ecpayParams)
     } else {
       // 如果是貨到付款或轉帳，直接清空並完成訂單
-      Storage.remove(CART_KEY)
       cartStore.clearCart()
+      Storage.remove(CART_KEY)
+
       toast.success('訂單建立成功！')
       goCheckoutSuccess(merchantTradeNo)
     }

@@ -1,3 +1,4 @@
+/** * 無權限頁面 */
 <template>
   <div class="denied-container">
     <el-card class="denied-card">
