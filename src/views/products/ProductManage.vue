@@ -36,12 +36,12 @@
         <el-table-column label="圖片" width="90" align="center">
           <template #default="{ row }">
             <el-image
-              :src="row.imageBase64"
+              :src="API_ROUTES.PRODUCT_IMAGE(row.id)"
               fit="cover"
               style="width: 50px; height: 50px"
               class="img-rounded"
               lazy
-              :preview-src-list="[row.imageBase64]"
+              :preview-src-list="[API_ROUTES.PRODUCT_IMAGE(row.id)]"
               preview-teleported
             />
           </template>
@@ -108,6 +108,7 @@ import { useNavigation } from '@/composables/useNavigation'
 import { useBreakpoint } from '@/composables/useBreakpoint'
 import { Edit, Delete, Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { API_ROUTES } from '@/service/apiRoutes'
 
 const { goTo } = useNavigation()
 const { isMobile, isTablet } = useBreakpoint()

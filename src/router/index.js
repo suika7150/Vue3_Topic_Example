@@ -100,7 +100,7 @@ const routes = [
     path: '/settings/options',
     name: 'OptionsManage',
     component: () => import('@/views/settings/OptionsManage.vue'),
-    meta: { meta: { title: '選項管理' }, requiresAuth: true, role: ['ADMIN', 'USER'] },
+    meta: { title: '選項管理', requiresAuth: true, role: ['ADMIN', 'USER'] },
   },
   {
     path: '/event/flashsale',
@@ -142,7 +142,7 @@ const routes = [
     path: '/checkout',
     name: 'checkout',
     component: () => import('@/views/checkout/checkout.vue'),
-    meta: { requiresAuth: true, role: ['USER', 'ADMIN'] },
+    meta: { title: '結帳', requiresAuth: true, role: ['USER', 'ADMIN'] },
     beforeEnter: (to, from, next) => {
       // 檢查「購物車是否有東西」
       const cartStore = useCartStore()
@@ -156,9 +156,22 @@ const routes = [
     },
   },
   {
-    path: '/checkout/success',
+    path: '/checkout/success/:orderId',
     name: 'checkoutSuccess',
     component: () => import('@/views/checkout/CheckoutSuccess.vue'),
+    meta: { title: '結帳成功' },
+  },
+  {
+    path: '/orders/list',
+    name: 'orderList',
+    component: () => import('@/views/orders/OrderList.vue'),
+    meta: { title: '我的訂單', requiresAuth: true, role: ['USER', 'ADMIN'] },
+  },
+  {
+    path: '/orders/detail/:orderId',
+    name: 'orderDetail',
+    component: () => import('@/views/orders/OrderDetail.vue'),
+    meta: { title: '訂單詳情', requiresAuth: true, role: ['USER', 'ADMIN'] },
   },
   {
     path: '/accessDenied',

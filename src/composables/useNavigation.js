@@ -1,4 +1,3 @@
-// import { name } from '@vue/eslint-config-prettier/skip-formatting'
 import { useRouter } from 'vue-router'
 
 export function useNavigation() {
@@ -89,32 +88,48 @@ export function useNavigation() {
     router.push({ name: 'qa' })
   }
 
-  //訂單詳情
-  const goOrderDetail = () => {
-    router.push({ name: 'orderDetail' })
+  // 1. 結帳成功跳轉 (帶單號)
+  const goCheckoutSuccess = (orderId) => {
+    router.push({
+      name: 'checkoutSuccess',
+      params: { orderId },
+    })
+  }
+
+  // 2. 跳轉到訂單詳情 (帶單號)
+  const goOrderDetail = (orderId) => {
+    router.push({
+      name: 'orderDetail',
+      params: { orderId },
+    })
+  }
+
+  // 3. 跳轉到訂單列表 (不需參數)
+  const goOrderList = () => {
+    router.push({ name: 'orderList' })
   }
 
   //跳轉到指定路由
   const goTo = (target, params = {}, query = {}) => {
     if (typeof target === 'string' && target.startsWith('/')) {
-      router.push({ path: target, params, query })
+      router.push({ path: target, query })
     } else {
       router.push({ name: target, params, query })
     }
   }
 
   //替換到指定路由
-  const replaceTo = (target, params = {}, query = {}) => {
-    if (typeof target === 'string' && target.startsWith('/')) {
-      router.replace({ path: target, query })
-    } else {
-      router.replace({ name: target, params, query })
-    }
-  }
+  // const replaceTo = (target, params = {}, query = {}) => {
+  //   if (typeof target === 'string' && target.startsWith('/')) {
+  //     router.replace({ path: target, query })
+  //   } else {
+  //     router.replace({ name: target, params, query })
+  //   }
+  // }
 
   return {
     goTo,
-    replaceTo,
+    // replaceTo,
     goNews,
     goAbout,
     goHome,
@@ -122,12 +137,14 @@ export function useNavigation() {
     goProducts,
     goProductDetail,
     goCheckout,
+    goCheckoutSuccess,
+    goOrderDetail,
+    goOrderList,
     goShoppingGuide,
     goQA,
     goFlashSale,
     goLuckyWheel,
     goAnime,
-    goOrderDetail,
     goMovie,
     goDesigner,
     goLimited,

@@ -91,6 +91,9 @@ const api = {
   /** 新增訂單*/
   createOrder: (data) => apiService.post(API_ROUTES.ORDER_CREATE, data),
 
+  /** 取得訂單詳情*/
+  getOrderDetail: (id) => apiService.get(API_ROUTES.ORDER_DETAIL(id)),
+
   /* ===== 金流相關 API ===== */
   /** * 取得綠界支付需要的加密參數
    * 注意：因為後端是 @PostMapping，所以這裡要用 axios.post

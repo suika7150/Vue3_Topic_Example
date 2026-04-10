@@ -9,12 +9,14 @@ export const API_ROUTES = {
   PRODUCT_ADD: '/api/addProducts',
   PRODUCT_LIST: '/api/products',
   PRODUCT_GET: (id) => `/api/products/${id}`,
+  PRODUCT_IMAGE: (id) => `/api/products/${id}/image`,
   PRODUCT_DETAIL: (id) => `/api/products/edit/${id}`,
   PRODUCT_UPDATE: (id) => `/api/updateProducts/${id}`,
   PRODUCT_MANAGE_LIST: `/api/products/list`,
   PRODUCT_DELETE: (id) => `/api/deleteProduct/${id}`,
   COUPON_VALIDATE: (code) => `/api/coupon/validate/${code}`, // 驗證優惠券
   ORDER_CREATE: '/api/orders', //新增訂單
+  ORDER_DETAIL: (id) => `/api/orders/${id}`, //訂單詳情
   PAYMENT_GET_PARAMS: (paymentId) => `/api/payment/params/${paymentId}`, // 綠界支付
   OPTIONS_LIST: `/api/options/list`,
   OPTIONS_ADD: `/api/options/add`,

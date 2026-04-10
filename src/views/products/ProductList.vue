@@ -54,7 +54,7 @@
             <div class="card-image-wrapper" @click="showProductDetail(product)">
               <!-- <el-tooltip :content="product.description" placement="bottom"> -->
               <img
-                :src="product.imageBase64"
+                :src="API_ROUTES.PRODUCT_IMAGE(product.id)"
                 loading="lazy"
                 class="card-image"
                 @error="handleImageError"
@@ -114,6 +114,7 @@ import { computed, ref } from 'vue'
 import { watch } from 'vue'
 import { onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
+import { API_ROUTES } from '@/service/apiRoutes'
 import CartDrawer from '@/components/CartDrawer.vue'
 import Breadcrumb from '@/Navigation/Breadcrumb.vue'
 import api from '@/service/api'

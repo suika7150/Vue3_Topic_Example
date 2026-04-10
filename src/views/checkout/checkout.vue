@@ -540,19 +540,59 @@ const total = computed(() => {
 })
 
 // 結帳
-const handleCheckout = async () => {
+const submitOrder = async () => {
+  if (submitting.value) return // 防止重複提交
+  submitting.value = true
+
   try {
-    // 建立訂單
-    const orderRes = await api.createOrder(orderData)
-    const paymentId = orderRes.paymentId
+    // 根據選擇的配送方式組裝地址
+    let finalAddress = ''
+    if (shippingForm.value.shippingMethod === 'home_delivery') {
+      finalAddress = `${shippingForm.value.deliveryCity}${shippingForm.value.deliveryDistrict}${shippingForm.value.deliveryAddress}`
+    } else if (shippingForm.value.shippingMethod === 'cvs') {
+      finalAddress = `[超商取貨] ${shippingForm.value.cvsStore?.storeName} - ${shippingForm.value.cvsStore?.storeAddress}`
+    } else {
+      finalAddress = `[門市自取] 門市ID: ${shippingForm.value.pickupStoreId}`
+    }
+    // 建立訂單資料
+    const orderData = {
+      name: shippingForm.value.name,
+      phone: shippingForm.value.phone,
+      address: finalAddress, // 使用組裝的地址
+      shippingMethod: shippingForm.value.shippingMethod,
+      notes: shippingForm.value.notes,
+      paymentMethod: paymentMethod.value,
+      total: total.value,
+      // 傳遞購物車項目
+      items: cartItems.value.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+      // 如果是信用卡，可寫備註
+      ...(paymentMethod.value === 'credit_card ' && {
+        paymentStatus: 'paid', // 先設為待付款，等綠界回傳才改為已付款
+      }),
+    }
 
-    // 拿到 paymentId 後，抓取綠界參數
-    const payRes = await api.getEcpayParams(paymentId)
+    // 呼叫後端建立訂單
+    const response = await api.createOrder(orderData)
+    const { ecpayParams, merchantTradeNo } = response.result
 
-    // 把參數塞進 EcpayProvider 並啟動跳轉
-    // ecpayRef.value.processPayment(payRes.data);
+    if (paymentMethod.value === 'credit_card' && ecpayParams) {
+      toast.info('正在導向支付頁面...')
+      processEcpayPayment(ecpayParams)
+    } else {
+      // 如果是貨到付款或轉帳，直接清空並完成訂單
+      Storage.remove(CART_KEY)
+      cartStore.clearCart()
+      toast.success('訂單建立成功！')
+      goCheckoutSuccess(merchantTradeNo)
+    }
   } catch (error) {
-    toast.error('結帳過程發生錯誤')
+    console.error('訂單建立失敗:', error)
+    toast.error('訂單建立失敗，請稍後再試')
+  } finally {
+    submitting.value = false
   }
 }
 
@@ -599,58 +639,6 @@ const nextStep = async () => {
 const previousStep = () => {
   currentStep.value--
   scrollToTop() // 置頂
-}
-
-const submitOrder = async () => {
-  if (submitting.value) return // 防止重複提交
-  submitting.value = true
-
-  try {
-    // 建立訂單資料
-    const orderData = {
-      name: shippingForm.value.name,
-      phone: shippingForm.value.phone,
-      address: `${shippingForm.value.city} ${shippingForm.value.district} ${shippingForm.value.address}`,
-      shippingMethod: shippingForm.value.shippingMethod,
-      notes: shippingForm.value.notes,
-      paymentMethod: paymentMethod.value,
-      total: total.value,
-      ...(paymentMethod.value === 'credit_card' && {
-        cardLast4: creditCardForm.value.cardNumber.slice(-4),
-        paymentStatus: 'paid',
-      }),
-      items: cartItems.value.map((item) => ({
-        productId: item.id,
-        quantity: item.quantity,
-      })),
-    }
-
-    // 呼叫後端建立訂單
-    const response = await api.createOrder(orderData)
-
-    console.log('--- API Response Start ---')
-    console.log('原始 response:', response)
-    const { id, ecpayParams, merchantTradeNo } = response.result
-
-    if (paymentMethod.value === 'credit_card') {
-      toast.info('正在導向支付頁面...')
-
-      processEcpayPayment(ecpayParams)
-      return
-    }
-
-    // 如果是貨到付款或轉帳，直接清空並完成訂單
-    Storage.remove(CART_KEY)
-    cartStore.clearCart()
-    // 跳轉到成功頁面
-    goTo('checkoutSuccess')
-    toast.success('訂單建立成功！')
-  } catch (error) {
-    console.error('訂單建立失敗:', error)
-    toast.error('訂單建立失敗，請稍後再試')
-  } finally {
-    submitting.value = false
-  }
 }
 
 // 實作跳轉函式
