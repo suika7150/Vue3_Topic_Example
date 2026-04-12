@@ -214,7 +214,16 @@ onMounted(() => {
   font-size: 16px;
   font-weight: 500;
   height: 50px;
-  line-height: 50px;
+  line-height: 10px;
+}
+
+.modern-tabs :deep(.el-tabs__nav-wrap::after) {
+  display: none;
+}
+
+.modern-tabs :deep(.el-tabs__active-bar) {
+  height: 2px;
+  border-radius: 2px;
 }
 
 .order-tabs {
