@@ -100,7 +100,7 @@ export function useNavigation() {
   const goOrderDetail = (orderId) => {
     router.push({
       name: 'orderDetail',
-      params: { orderId },
+      params: { orderId: orderId },
     })
   }
 

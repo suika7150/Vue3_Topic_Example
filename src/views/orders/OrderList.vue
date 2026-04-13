@@ -27,8 +27,8 @@
                 <span class="order-id">訂單編號：#{{ order.merchantTradeNo || order.id }}</span>
               </div>
               <div class="order-status-group">
-                <el-tag :type="getStatusTag(order.status)" effect="plain" class="status-tag">
-                  {{ order.statusText }}
+                <el-tag :type="getStatusTag(order.paymentStatus)" effect="plain" class="status-tag">
+                  {{ order.paymentStatus }}
                 </el-tag>
                 <el-link
                   v-if="order.trackingUrl"
@@ -44,15 +44,19 @@
 
             <div class="card-body">
               <div class="product-row">
-                <div v-for="item in order.items.slice(0, 4)" :key="item.id" class="product-item">
+                <div
+                  v-for="item in order.orderItems?.slice(0, 4)"
+                  :key="item.productId"
+                  class="product-item"
+                >
                   <el-image :src="item.productImage" class="product-img" fit="cover" />
                   <div class="item-info">
-                    <p class="name">{{ item.productName }}</p>
+                    <p class="name">{{ item.name }}</p>
                     <p class="qty">x {{ item.quantity }}</p>
                   </div>
                 </div>
-                <div v-if="order.items.length > 4" class="more-items-card">
-                  <span class="count">+ {{ order.items.length - 4 }}</span>
+                <div v-if="order.Items?.length > 4" class="more-items-card">
+                  <span class="count">+ {{ order.Items.length - 4 }}</span>
                   <span class="label">更多商品...</span>
                 </div>
               </div>
@@ -62,7 +66,7 @@
               <div class="summary-group">
                 <div class="price-item">
                   <span class="label">商品小計</span>
-                  <span class="value">NT$ {{ order.subtotal.toLocaleString() }}</span>
+                  <span class="value">NT$ {{ (order.discount || 0).toLocaleString() }}</span>
                 </div>
                 <div class="price-item total">
                   <span class="label">總計</span>
@@ -95,15 +99,16 @@ const activeTab = ref('all')
 const loading = ref(false)
 const orders = ref([])
 
-// 取得訂單資料 (需配合後端)
-const fetchOrders = async (status = 'all') => {
+// 取得訂單資料
+const fetchOrders = async () => {
   loading.value = true
   try {
-    const response = await api.getOrders({ status })
-    orders.value = response.result || []
+    const response = await api.getOrderList()
+    if (response && response.code === '0000') {
+      orders.value = response.result || []
+    }
   } catch (error) {
-    console.error('獲取訂單失敗:', error)
-    mockData() // 測試環境下 API 未好，先給 mock 資料
+    console.error('獲取列表失敗:', error)
   } finally {
     loading.value = false
   }
@@ -115,65 +120,12 @@ const handleTabChange = (tabName) => {
 
 const getStatusTag = (status) => {
   const statusMap = {
-    unpaid: 'danger',
-    processing: 'warning',
-    shipped: 'info',
-    completed: 'success',
+    UNPAID: 'danger',
+    PAID: 'success',
+    SHIPPED: 'info',
+    COMPLETED: 'success',
   }
   return statusMap[status] || ''
-}
-
-// 模擬資料 (開發測試用)
-const mockData = () => {
-  orders.value = [
-    {
-      id: 1,
-      merchantTradeNo: 'SP2604101430001',
-      createTime: '2026-04-10 14:30',
-      status: 'completed',
-      statusText: '已完成',
-      subtotal: 1200,
-      total: 1280,
-      trackingUrl: '#',
-      items: [
-        {
-          id: 101,
-          productName: '太空系列帽T - 時尚黑',
-          quantity: 1,
-          productImage: 'https://via.placeholder.com/100x120?text=Hoodie',
-        },
-        {
-          id: 102,
-          productName: '復古運動鞋 - 紅白藍',
-          quantity: 1,
-          productImage: 'https://via.placeholder.com/100x120?text=Sneakers',
-        },
-        {
-          id: 103,
-          productName: '機能側背包',
-          quantity: 1,
-          productImage: 'https://via.placeholder.com/100x120?text=Bag',
-        },
-      ],
-    },
-    {
-      id: 2,
-      createTime: '2026-04-09 10:15',
-      status: 'shipped',
-      statusText: '已出貨',
-      subtotal: 800,
-      total: 880,
-      trackingUrl: 'https://www.t-cat.com.tw/',
-      items: [
-        {
-          id: 104,
-          productName: '電競滑鼠墊 - 霓虹',
-          quantity: 1,
-          productImage: 'https://via.placeholder.com/100x120?text=MousePad',
-        },
-      ],
-    },
-  ]
 }
 
 onMounted(() => {
@@ -183,12 +135,12 @@ onMounted(() => {
 
 <style scoped>
 .order-list-page {
-  background-color: #f8f9fa; /* 淺灰背景，襯托白色卡片 */
+  background-color: #f8f9fa;
   min-height: 100vh;
 }
 
 .container {
-  max-width: 1200px; /* 這裡設定最大寬度，跟詳情頁面對齊 */
+  max-width: 1200px;
   margin: 0 auto;
   padding: 60px 20px;
 }
@@ -230,10 +182,10 @@ onMounted(() => {
   margin-bottom: 30px;
 }
 
-/* --- 寬幅訂單卡片 --- */
+/* --- 訂單卡片 --- */
 .wide-order-card {
   background: #fff;
-  border-radius: 16px; /* 更圓潤的角 */
+  border-radius: 16px;
   border: 1px solid #e5e7eb;
   margin-bottom: 30px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
