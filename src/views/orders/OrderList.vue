@@ -55,8 +55,8 @@
                     <p class="qty">x {{ item.quantity }}</p>
                   </div>
                 </div>
-                <div v-if="order.Items?.length > 4" class="more-items-card">
-                  <span class="count">+ {{ order.Items.length - 4 }}</span>
+                <div v-if="order.orderItems?.length > 4" class="more-items-card">
+                  <span class="count">+ {{ order.orderItems.length - 4 }}</span>
                   <span class="label">更多商品...</span>
                 </div>
               </div>
@@ -75,7 +75,7 @@
               </div>
               <div class="action-buttons">
                 <el-button size="large" @click="goOrderDetail(order.id)">查看詳情</el-button>
-                <el-button v-if="order.status === 'unpaid'" type="primary" size="large"
+                <el-button v-if="order.paymentStatus === 'pending'" type="primary" size="large"
                   >立即付款</el-button
                 >
               </div>
@@ -99,11 +99,33 @@ const activeTab = ref('all')
 const loading = ref(false)
 const orders = ref([])
 
+const statusMap = {
+  unpaid: 'pending', // 後端 createOrder 初始狀態
+  processing: 'paid', // 處理中
+  shipped: 'shipped', // 已出貨
+  completed: 'completed', // 已完成
+}
+
 // 取得訂單資料
-const fetchOrders = async () => {
+const fetchOrders = async (tabName = 'all') => {
   loading.value = true
   try {
-    const response = await api.getOrderList()
+    const params = {}
+    console.log('fetchOrders 接收到的 tabName:', tabName)
+    // 如果不是全部訂單，就帶入對應的狀態參數
+    if (tabName !== 'all') {
+      const backendStatus = statusMap[tabName]
+      if (backendStatus) {
+        params.status = backendStatus
+      } else {
+        console.error(`statusMap 找不到 key: ${tabName}`)
+      }
+    }
+    // 測試
+    console.log('準備發送 API 請求，參數:', params)
+
+    const response = await api.getOrderList(params)
+
     if (response && response.code === '0000') {
       orders.value = response.result || []
     }
@@ -115,17 +137,18 @@ const fetchOrders = async () => {
 }
 
 const handleTabChange = (tabName) => {
+  console.log('當前點擊的 Tab Name:', tabName)
   fetchOrders(tabName)
 }
 
 const getStatusTag = (status) => {
-  const statusMap = {
-    UNPAID: 'danger',
-    PAID: 'success',
-    SHIPPED: 'info',
-    COMPLETED: 'success',
+  const tagMap = {
+    pending: 'danger', // 待付款用紅色
+    PAID: 'success', // 已付款用綠色
+    SHIPPED: 'warning', // 已出貨用黃色
+    COMPLETED: 'info', // 已完成用灰色
   }
-  return statusMap[status] || ''
+  return tagMap[status] || ''
 }
 
 onMounted(() => {

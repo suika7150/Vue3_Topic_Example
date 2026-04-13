@@ -92,7 +92,7 @@ const api = {
   createOrder: (data) => apiService.post(API_ROUTES.ORDER_CREATE, data),
 
   /** 獲取所有訂單列表*/
-  getOrderList: () => apiService.get(API_ROUTES.ORDER_LIST),
+  getOrderList: (params) => apiService.get(API_ROUTES.ORDER_LIST, { params }),
 
   /** 取得訂單詳情*/
   getOrderDetail: (id) => apiService.get(API_ROUTES.ORDER_DETAIL(id)),
