@@ -169,18 +169,7 @@ body .el-message-box.checkout-confirm-dialog {
     min-width: 0;
   }
 
-  .topbar-left {
-    width: 100%;
-  }
-
-  .topbar-right {
-    display: flex;
-    white-space: normal;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .backtotop {
+  */ .backtotop {
     display: none;
   }
 
@@ -217,7 +206,7 @@ body .el-message-box.checkout-confirm-dialog {
 }
 
 /* RWD:768px */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   body .el-message-box.checkout-confirm-dialog {
     width: 90% !important;
     padding: 15px !important;

@@ -43,7 +43,7 @@
   --el-color-primary-light-9: #e8f9fa; /* 用於背景或禁用狀態 */
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
@@ -55,12 +55,12 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
-}
+} */
 
 *,
 *::before,
 *::after {
-  /* box-sizing: border-box; */
+  box-sizing: border-box;
   margin: 0;
   /* font-weight: normal; */
 }

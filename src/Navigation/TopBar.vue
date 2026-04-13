@@ -35,7 +35,7 @@ const props = defineProps({
   flex-direction: row;
   position: fixed;
   display: flex;
-  top: 40px;
+  top: 30px;
   left: 0;
   width: 100%;
   height: 110px;
@@ -68,7 +68,7 @@ const props = defineProps({
   padding-right: 0px;
   margin-left: 50px;
   flex-shrink: 1;
-  min-width: 0;
+  min-width: auto;
   justify-content: center;
 }
 
@@ -98,7 +98,7 @@ const props = defineProps({
   display: flex;
   justify-content: flex-end;
   overflow: visible;
-  flex-shrink: 1;
+  flex-shrink: 0;
   min-width: 0;
   height: 100%;
   padding-bottom: 50px;
@@ -132,10 +132,10 @@ const props = defineProps({
     flex-direction: row;
     position: fixed;
     display: flex;
-    top: 150px;
+    top: 0px;
     left: 0;
     width: 100%;
-    height: 0px;
+    height: 100px;
     background-color: #000000fb;
     justify-content: center;
     align-items: center;
@@ -146,7 +146,14 @@ const props = defineProps({
   .logo-img {
     display: flex;
     height: 90px;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    padding-bottom: 0;
+    flex-shrink: 1;
+    min-width: 0;
   }
 }
 </style>

@@ -64,27 +64,31 @@ watch(
 
 <style scoped>
 .topbar-ad-banner {
-  padding: 5px 12px;
-  background-color: #000;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  background-color: rgb(19, 204, 170);
   color: #fff;
   font-size: 14px;
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-align: center;
-  height: 0px;
+  height: 40px;
 }
 
 .marquee {
   width: 100%;
+  height: 100%;
   overflow: hidden;
   position: relative;
-  padding: 5px 0;
 }
 
 .ad-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   color: #fff;
-  display: block;
   font-size: 15px;
 }
 

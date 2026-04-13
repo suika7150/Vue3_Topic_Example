@@ -68,9 +68,7 @@ const adShift = computed(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 30px;
-  background-color: rgb(19, 204, 170);
-  z-index: 1001;
+  z-index: 1003;
 }
 
 .app-wrapper {
@@ -145,9 +143,8 @@ const adShift = computed(() => {
     top: 0;
     left: 0;
     width: 100%;
-    height: 50px;
     background-color: rgb(19, 204, 170);
-    z-index: 1001;
+    z-index: 1003;
   }
 }
 </style>

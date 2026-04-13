@@ -28,7 +28,7 @@
               </div>
               <div class="order-status-group">
                 <el-tag :type="getStatusTag(order.paymentStatus)" effect="plain" class="status-tag">
-                  {{ order.paymentStatus }}
+                  {{ getStatusText(order.paymentStatus) }}
                 </el-tag>
                 <el-link
                   v-if="order.trackingUrl"
@@ -42,7 +42,7 @@
               </div>
             </div>
 
-            <div class="card-body">
+            <!-- <div class="card-body">
               <div class="product-row">
                 <div
                   v-for="item in order.orderItems?.slice(0, 4)"
@@ -60,13 +60,26 @@
                   <span class="label">更多商品...</span>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="card-footer">
-              <div class="summary-group">
-                <div class="price-item">
-                  <span class="label">商品小計</span>
-                  <span class="value">NT$ {{ (order.discount || 0).toLocaleString() }}</span>
+              <div class="info-group">
+                <div class="shipping-info">
+                  <el-tag
+                    size="small"
+                    :type="getShippingTagType(order.shippingMethod)"
+                    effect="light"
+                    >出貨方式 :
+                    {{ order.shippingMethod || '宅配到府' }}
+                  </el-tag>
+                  <span class="item-count">
+                    共 {{ order.orderItems?.reduce((sum, i) => sum + i.quantity, 0) || 0 }} 件商品
+                  </span>
+                </div>
+
+                <div class="order-time-info">
+                  <span class="label">訂單時間：</span>
+                  <span class="time">{{ order.createTime }}</span>
                 </div>
                 <div class="price-item total">
                   <span class="label">總計</span>
@@ -111,7 +124,6 @@ const fetchOrders = async (tabName = 'all') => {
   loading.value = true
   try {
     const params = {}
-    console.log('fetchOrders 接收到的 tabName:', tabName)
     // 如果不是全部訂單，就帶入對應的狀態參數
     if (tabName !== 'all') {
       const backendStatus = statusMap[tabName]
@@ -121,8 +133,6 @@ const fetchOrders = async (tabName = 'all') => {
         console.error(`statusMap 找不到 key: ${tabName}`)
       }
     }
-    // 測試
-    console.log('準備發送 API 請求，參數:', params)
 
     const response = await api.getOrderList(params)
 
@@ -137,18 +147,43 @@ const fetchOrders = async (tabName = 'all') => {
 }
 
 const handleTabChange = (tabName) => {
-  console.log('當前點擊的 Tab Name:', tabName)
   fetchOrders(tabName)
 }
 
 const getStatusTag = (status) => {
   const tagMap = {
-    pending: 'danger', // 待付款用紅色
-    PAID: 'success', // 已付款用綠色
-    SHIPPED: 'warning', // 已出貨用黃色
-    COMPLETED: 'info', // 已完成用灰色
+    pending: 'danger', // 待付款紅色
+    paid: 'success', // 已付款綠色
+    shipped: 'warning', // 已出貨黃色
+    completed: 'info', // 已完成灰色
+    expired: 'info', // 已失效灰色
   }
   return tagMap[status] || ''
+}
+
+// 將狀態碼轉換為中文顯示
+const getStatusText = (status) => {
+  const statusCode = status ? status.toLowerCase() : '' // 先轉小寫
+  const textMap = {
+    pending: '未付款',
+    paid: '已付款',
+    shipped: '已出貨',
+    completed: '已完成',
+    expired: '已失效',
+  }
+  if (!textMap[statusCode] && statusCode !== '') {
+    console.warn(`⚠️ 狀態轉換失敗！收到未知的狀態碼: "${statusCode}"`)
+  }
+  return textMap[statusCode] || status
+}
+
+const getShippingTagType = (method) => {
+  const methodMap = {
+    超商取貨: 'success',
+    宅配到府: 'warning',
+    到店取貨: 'danger',
+  }
+  return methodMap[method] || 'info'
 }
 
 onMounted(() => {
@@ -337,11 +372,11 @@ onMounted(() => {
   align-items: flex-end; /* 對齊按鈕底部 */
 }
 
-.summary-group {
+/* .summary-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
+} */
 
 .price-item {
   display: flex;
@@ -368,5 +403,55 @@ onMounted(() => {
 .action-buttons {
   display: flex;
   gap: 15px;
+}
+.info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* 增加行間距 */
+}
+
+.shipping-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-count {
+  font-size: 14px;
+  color: #86868b; /* 淡淡的灰色，不搶戲 */
+  font-weight: 500;
+}
+
+.order-time-info {
+  font-size: 13px;
+  color: #a1a1a6; /* 時間資訊最淡 */
+}
+
+.total-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid #f2f2f7; /* 用實線取代虛線，感覺更穩重 */
+}
+
+.total-amount .label {
+  font-size: 14px;
+  color: #1d1d1f;
+  font-weight: 500;
+}
+
+.total-amount .price {
+  font-size: 28px; /* 顯著放大金額 */
+  font-weight: 700;
+  color: #ff3b30; /* 或者使用你原本的橘色 #f97316 */
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  /* 確保按鈕在垂直方向上跟金額底部對齊 */
+  align-self: flex-end;
 }
 </style>
