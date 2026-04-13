@@ -1,5 +1,7 @@
 <template>
   <el-menu default-active="1" class="menu-in-drawer" @select="handleMenuSelect">
+    <div class="sidebar-header-title">導航選單</div>
+    <el-divider style="margin: 0" />
     <el-menu-item index="news" class="main-link">最新消息</el-menu-item>
     <el-menu-item index="about" class="main-link">關於我們</el-menu-item>
     <el-menu-item index="home" class="main-link">回首頁</el-menu-item>
@@ -113,6 +115,17 @@ console.log('現在的 userRole 是：', userRole.value)
 </script>
 
 <style scoped>
+.sidebar-header-title {
+  display: flex;
+  /* justify-content: center; */
+  /* align-content: center; */
+  padding-bottom: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #303133;
+  background-color: #fff;
+}
+
 .menu-in-drawer {
   border-right: none;
 }

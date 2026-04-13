@@ -50,10 +50,10 @@ const props = defineProps({
   flex-direction: row;
   position: fixed;
   display: flex;
-  top: 140px;
+  top: 100px;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 120px;
   background-color: #000000fb;
   justify-content: center;
   align-items: center;
@@ -90,7 +90,7 @@ const props = defineProps({
   display: block;
   width: auto;
   max-height: 100%;
-  height: 130px;
+  height: 110px;
   padding: 0px 0px;
 }
 
@@ -116,7 +116,7 @@ const props = defineProps({
     flex-direction: row;
     position: fixed;
     display: flex;
-    height: 80px;
+    height: 110px;
     background-color: #000000fb;
     justify-content: space-between;
     align-items: center;
@@ -129,16 +129,18 @@ const props = defineProps({
   }
 
   .menu-bar {
-    flex-direction: row;
-    position: fixed;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    flex-direction: row;
     top: 0px;
     left: 0;
+    height: 100px;
     width: 100%;
     height: 100px;
     background-color: #000000fb;
-    justify-content: center;
-    align-items: center;
+
     overflow: visible;
     z-index: 1001;
   }

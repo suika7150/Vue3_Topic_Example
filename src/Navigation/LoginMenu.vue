@@ -10,7 +10,6 @@
       :model-value="!sidebarStore.isCollapsed"
       :before-close="sidebarStore.toggleCollapse"
       :lock-scroll="false"
-      title="導航選單"
       direction="ltr"
       size="300px"
     >
@@ -224,6 +223,7 @@ const openCartDrawer = () => {
 .info .timer {
   white-space: nowrap;
 }
+
 /* token */
 .timer {
   color: #e67e22;
@@ -271,5 +271,11 @@ const openCartDrawer = () => {
   transition: none; /* 不要拿掉，強制取消動畫 */
   top: 10px;
   left: 15px;
+}
+
+:deep(.el-drawer__header) {
+  margin-bottom: 0;
+  padding: 16px 20px;
+  color: #303133;
 }
 </style>
