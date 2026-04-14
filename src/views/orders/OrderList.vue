@@ -23,13 +23,13 @@
           <div v-for="order in orders" :key="order.id" class="wide-order-card">
             <div class="card-header">
               <div class="order-meta">
-                <span class="order-date">{{ order.createTime }}</span>
+                <span class="order-date">{{ orders.createdAt }}</span>
                 <span class="order-id">訂單編號：#{{ order.merchantTradeNo || order.id }}</span>
               </div>
 
               <div class="order-time-info">
                 <span class="label">訂單時間：</span>
-                <span class="time">{{ order.createTime }}</span>
+                <span class="time">{{ formatDate(order.createAt, 'minute') }}</span>
               </div>
               <div class="order-status-group">
                 <el-tag :type="getStatusTag(order.paymentStatus)" effect="plain" class="status-tag">
@@ -132,7 +132,9 @@
 import { ref, onMounted } from 'vue'
 import { useNavigation } from '@/composables/useNavigation'
 import api from '@/service/api'
+import { formatDate } from '@/utils/format'
 import { Ship, Calendar, Picture } from '@element-plus/icons-vue'
+import format from '@/plugins/format'
 
 const { goHome, goProducts, goOrderDetail } = useNavigation()
 
@@ -288,7 +290,7 @@ onMounted(() => {
 }
 
 .wide-order-card:hover {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06); /* 滑過時有浮起感 */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
 /* 卡片頭部 */
@@ -315,6 +317,7 @@ onMounted(() => {
 }
 
 .order-id {
+  font-size: 14px;
   color: #86868b;
 }
 
@@ -361,7 +364,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 16px;
-  min-width: 250px; /* 限制單個商品的最小寬度 */
+  min-width: 250px;
   flex: 0 0 auto;
 }
 
@@ -437,7 +440,7 @@ onMounted(() => {
   border-top: 1px solid #f0f0f2;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end; /* 對齊按鈕底部 */
+  align-items: flex-end;
 }
 
 .price-item {
@@ -489,7 +492,7 @@ onMounted(() => {
 .info-group {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* 增加行間距 */
+  gap: 12px;
 }
 
 .shipping-info {
@@ -500,20 +503,19 @@ onMounted(() => {
 
 .item-count {
   font-size: 14px;
-  color: #86868b; /* 淡淡的灰色，不搶戲 */
+  color: #86868b;
   font-weight: 500;
 }
 
 .order-time-info {
-  font-size: 13px;
-  color: #a1a1a6; /* 時間資訊最淡 */
+  font-size: 14px;
+  color: #a1a1a6;
 }
 
-/* 新增：讓金額和到貨日並排 */
 .amount-delivery-row {
   display: flex;
-  align-items: flex-end; /* 底部對齊，感覺比較穩 */
-  gap: 30px; /* 兩者之間的間距 */
+  align-items: flex-end;
+  gap: 30px;
   margin-top: 10px;
 }
 
@@ -523,7 +525,7 @@ onMounted(() => {
   gap: 8px;
   margin-top: 4px;
   padding-top: 12px;
-  border-top: 1px solid #f2f2f7; /* 用實線取代虛線，感覺更穩重 */
+  border-top: 1px solid #f2f2f7;
 }
 
 .total-amount .label {
@@ -533,15 +535,14 @@ onMounted(() => {
 }
 
 .total-amount .price {
-  font-size: 28px; /* 顯著放大金額 */
+  font-size: 28px;
   font-weight: 700;
-  color: #ff3b30; /* 或者使用你原本的橘色 #f97316 */
+  color: #ff3b30;
 }
 
 .action-buttons {
   display: flex;
   gap: 12px;
-  /* 確保按鈕在垂直方向上跟金額底部對齊 */
   align-self: flex-end;
 }
 </style>

@@ -13,6 +13,8 @@ function parseJwt(token) {
   }
 }
 
+let isLoggingOut = false
+
 export const useUserStore = defineStore('userStore', {
   state: () => ({
     user: {
@@ -23,11 +25,13 @@ export const useUserStore = defineStore('userStore', {
     remainingTime: 0, // 剩餘秒數
     timer: null, // 計時器
     role: 'GUEST',
+    expiryTimestamp: null, // 存儲絕對過期時間
   }),
   getters: {
     userRole: (state) => state.role,
     isLoggedIn: (state) => state.user.isLogin,
   },
+
   actions: {
     /**
      * 登入
@@ -58,10 +62,13 @@ export const useUserStore = defineStore('userStore', {
     },
 
     async login(userData, { token, role }) {
+      const payload = parseJwt(token)
+      const exp = payload?.exp || 0
+
       // 將用戶資料儲存到Storage
       Storage.set(USER_ROLE_KEY, role)
       Storage.set(TOKEN_KEY, token)
-      Storage.set('EXPIRY_TIME', parseJwt(token).exp)
+      Storage.set('EXPIRY_TIME', exp)
       // this.startTokenCountdown(token)
 
       // 更新State
@@ -73,31 +80,36 @@ export const useUserStore = defineStore('userStore', {
       this.role = role
 
       // 啟動倒數
-      this.startTokenCountdown(token)
+      this.startTokenCountdown()
     },
     /**
      * 啟動 Token 倒數
      * @param {*} token
      * @returns
      */
-    startTokenCountdown(token) {
-      const payload = parseJwt(token)
-      if (!payload?.exp) return
-
-      const now = Math.floor(Date.now() / 1000)
-      let remaining = payload.exp - now // 可測試設定剩餘秒數
-      if (remaining <= 0) {
-        return this.logout()
-      }
+    startTokenCountdown() {
       this.stopTokenCountdown()
-      this.remainingTime = remaining
 
-      this.timer = setInterval(() => {
-        this.remainingTime--
-        if (this.remainingTime <= 0) {
+      // 取得最新的過期時間
+      const exp = this.expiryTimestamp || Storage.get('EXPIRY_TIME')
+      if (!exp) return
+
+      // 定義一個更新函數
+      const update = () => {
+        const now = Math.floor(Date.now() / 1000)
+        const diff = exp - now
+
+        if (diff <= 0) {
+          this.remainingTime = 0
+          this.stopTokenCountdown()
           this.logout()
+        } else {
+          this.remainingTime = diff
         }
-      }, 1000)
+      }
+
+      update() // 先執行一次防止畫面閃爍
+      this.timer = setInterval(update, 1000) // 每一秒「比對」一次
     },
 
     /**
@@ -115,21 +127,18 @@ export const useUserStore = defineStore('userStore', {
      */
     initUser() {
       const token = Storage.get(TOKEN_KEY)
-      const role = Storage.get(USER_ROLE_KEY)
-      const expiryTime = Storage.get('EXPIRY_TIME')
+      const exp = Storage.get('EXPIRY_TIME')
 
-      if (token && expiryTime) {
-        // const payload = parseJwt(token)
+      if (token && exp) {
+        this.expiryTimestamp = exp
         const now = Math.floor(Date.now() / 1000)
-        const remaining = expiryTime - now
 
-        if (remaining > 0) {
+        if (exp - now > 0) {
           this.user.isLogin = true
-          this.role = role || 'USER'
-          this.remainingTime = remaining
-          this.startTokenCountdown(token)
+          this.role = Storage.get(USER_ROLE_KEY) || 'USER'
+          this.startTokenCountdown()
         } else {
-          this.logout()
+          this.logout() // Token 過期直接踢出去
         }
       }
     },
@@ -138,29 +147,30 @@ export const useUserStore = defineStore('userStore', {
      * 登出
      */
     logout() {
+      if (isLoggingOut) return
+      isLoggingOut = true
       this.stopTokenCountdown()
       this.role = 'GUEST'
       this.user.isLogin = false
       Storage.remove(USER_ROLE_KEY)
       Storage.remove(TOKEN_KEY)
+      Storage.remove('EXPIRY_TIME')
       this.remainingTime = 0
-      ElMessageBox.alert('您的登入已過期，請重新登入。')
+
+      ElMessageBox.alert('您的登入已過期，請重新登入。', '提示', {
+        confirmButtonText: '確定',
+        callback: () => {
+          isLogggingOut = false
+          window.location.href = '/login' // 強制跳轉，最乾淨
+        },
+      })
     },
   },
-  // // 手動新增啟動時自動從Storage載入登入資料
-  // initUser() {
-  //   const token = Storage.get(TOKEN_KEY)
-  //   const role = Storage.get(USER_ROLE_KEY)
-  //   if (token) {
-  //     this.user.isLogin = true
-  //     this.role = role || 'USER'
-  //   }
-  // },
 
-  //自動新增啟動時自動從Storage載入登入資料
+  // 自動新增啟動時自動從Storage載入登入資料
   persist: {
     enabled: true,
-    storage: localStorage, //或sessionStorage(依照需求)
-    paths: ['user', 'role'], //持久化狀態
+    storage: localStorage, // 或sessionStorage(依照需求)
+    paths: ['user', 'role', 'expiryTimestamp'], // 持久化狀態
   },
 })

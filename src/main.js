@@ -30,6 +30,30 @@ app.use(pinia)
 const userStore = useUserStore()
 userStore.initUser() //初始化登入狀態並啟動倒數
 
+let checkTimer = null
+const checkTokenStatus = () => {
+  // 如果 300ms 內重複觸發，會先清除上一個定時器
+  if (checkTimer) clearTimeout(checkTimer)
+
+  checkTimer = setTimeout(() => {
+    // 只在登入狀態下才執行校對
+    if (userStore.user.isLogin) {
+      console.log('檢測到視窗喚醒，重新校對 Token 時間...')
+      userStore.startTokenCountdown()
+    }
+  }, 300)
+}
+
+// 監聽分頁切換
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    checkTokenStatus()
+  }
+})
+
+// 監聽視窗獲得焦點 (例如從別的軟體點回瀏覽器)
+window.addEventListener('focus', checkTokenStatus)
+
 //啟動應用
 const start = async () => {
   try {

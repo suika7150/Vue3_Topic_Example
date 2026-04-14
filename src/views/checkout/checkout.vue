@@ -122,15 +122,25 @@
               </el-form-item>
 
               <el-form-item label="配送方式" prop="shippingMethod">
-                <el-radio-group v-model="shippingForm.shippingMethod">
-                  <el-radio-button
+                <div class="shipping-method-grid">
+                  <div
                     v-for="opt in shippingOptions"
                     :key="opt.value"
-                    :label="opt.value"
+                    :class="['method-card', { active: shippingForm.shippingMethod === opt.value }]"
+                    @click="shippingForm.shippingMethod = opt.value"
                   >
-                    {{ opt.icon }} {{ opt.label }}
-                  </el-radio-button>
-                </el-radio-group>
+                    <div class="method-icon">{{ opt.icon }}</div>
+                    <div class="method-info">
+                      <div class="method-label">{{ opt.label }}</div>
+                      <div class="method-price">
+                        {{ opt.price === 0 ? '免運費' : `NT$ ${opt.price}` }}
+                      </div>
+                    </div>
+                    <div class="active-badge" v-if="shippingForm.shippingMethod === opt.value">
+                      <el-icon><Check /></el-icon>
+                    </div>
+                  </div>
+                </div>
               </el-form-item>
 
               <div class="shipping-detail-box">
@@ -177,8 +187,12 @@
                   </el-form-item>
                 </template>
 
-                <template v-else-if="shippingForm.shippingMethod === 'cvs'">
-                  <el-form-item label="選擇門市">
+                <template
+                  v-else-if="['CVS_711', 'CVS_FAMILY'].includes(shippingForm.shippingMethod)"
+                >
+                  <el-form-item
+                    :label="shippingForm.shippingMethod === 'CVS_711' ? '7-11 門市' : '全家門市'"
+                  >
                     <el-button type="primary" plain @click="openCvsMap"
                       >開啟電子地圖選取門市</el-button
                     >
@@ -192,7 +206,7 @@
 
                 <template v-else-if="shippingForm.shippingMethod === 'store_pickup'">
                   <el-form-item label="取貨門市">
-                    <el-select v-model="shippingForm.pickupStoreId" placeholder="請選擇取貨地點">
+                    <el-select v-model="shippingForm.pickupStoreId" placeholder="請選擇店家">
                       <el-option label="台北總店 - 台北市信義區..." value="001" />
                       <el-option label="台中分店 - 台中市西屯區..." value="002" />
                     </el-select>
@@ -424,9 +438,10 @@ const shippingForm = ref({
 })
 
 const shippingOptions = [
-  { label: '超商取貨', value: 'cvs', icon: '🏪', price: 60 },
-  { label: '宅配到府', value: 'home_delivery', icon: '🚚', price: 80 },
-  { label: '到店自取', value: 'store_pickup', icon: '🏢', price: 0 },
+  { label: '宅配到府', value: 'HOME_DELIVERY', icon: '🚚', price: 80 },
+  { label: '7-11 取貨', value: 'CVS_711', icon: '🏪', price: 60 },
+  { label: '全家取貨', value: 'CVS_FAMILY', icon: '🏪', price: 60 },
+  { label: '到店自取', value: 'STORE_PICKUP', icon: '🏢', price: 0 },
 ]
 
 // 物流廠商選項
@@ -547,9 +562,10 @@ const submitOrder = async () => {
   try {
     // 根據選擇的配送方式組裝地址
     let finalAddress = ''
+    const method = shippingForm.value.shippingMethod
     if (shippingForm.value.shippingMethod === 'home_delivery') {
       finalAddress = `${shippingForm.value.deliveryCity}${shippingForm.value.deliveryDistrict}${shippingForm.value.deliveryAddress}`
-    } else if (shippingForm.value.shippingMethod === 'cvs') {
+    } else if (['CVS_711', 'CVS_FAMILY'].includes(method)) {
       finalAddress = `[超商取貨] ${shippingForm.value.cvsStore?.storeName} - ${shippingForm.value.cvsStore?.storeAddress}`
     } else {
       finalAddress = `[門市自取] 門市ID: ${shippingForm.value.pickupStoreId}`
@@ -569,7 +585,7 @@ const submitOrder = async () => {
         quantity: item.quantity,
       })),
       // 如果是信用卡，可寫備註
-      ...(paymentMethod.value === 'credit_card ' && {
+      ...(paymentMethod.value === 'credit_card' && {
         paymentStatus: 'paid', // 先設為待付款，等綠界回傳才改為已付款
       }),
     }
@@ -1057,6 +1073,84 @@ onMounted(() => {
   font-size: 12px;
   color: #86868b;
   margin-bottom: 8px;
+}
+
+/* 配送方式網格 */
+.shipping-method-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.method-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 10px;
+  background: #ffffff;
+  border: 1.5px solid #e5e5e7;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.method-card:hover {
+  border-color: #d2d2d7;
+  background: #fbfbfd;
+}
+
+/* 選中狀態 */
+.method-card.active {
+  border-color: #0071e3;
+  background: #f5faff;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.1);
+}
+
+.method-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.method-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1d1d1f;
+  margin-bottom: 4px;
+}
+
+.method-price {
+  font-size: 12px;
+  color: #86868b;
+}
+
+.method-card.active .method-price {
+  color: #0071e3;
+  font-weight: 500;
+}
+
+/* 右上角選中標記 */
+.active-badge {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 20px;
+  height: 20px;
+  background: #0071e3;
+  color: white;
+  border-radius: 0 10px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* 移除原有的 el-form-item 底線影響（如果你有寫的話） */
+.shipping-method-grid :deep(.el-input__wrapper) {
+  border-bottom: none !important;
 }
 
 /* 配送地址 */
