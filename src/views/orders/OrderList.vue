@@ -26,6 +26,11 @@
                 <span class="order-date">{{ order.createTime }}</span>
                 <span class="order-id">訂單編號：#{{ order.merchantTradeNo || order.id }}</span>
               </div>
+
+              <div class="order-time-info">
+                <span class="label">訂單時間：</span>
+                <span class="time">{{ order.createTime }}</span>
+              </div>
               <div class="order-status-group">
                 <el-tag :type="getStatusTag(order.paymentStatus)" effect="plain" class="status-tag">
                   {{ getStatusText(order.paymentStatus) }}
@@ -42,25 +47,45 @@
               </div>
             </div>
 
-            <!-- <div class="card-body">
+            <div class="card-body">
+              <div
+                class="delivery-estimate"
+                v-if="
+                  order.paymentStatus === 'pending' ||
+                  order.paymentStatus === 'paid' ||
+                  order.paymentStatus === 'shipped'
+                "
+              ></div>
+
               <div class="product-row">
                 <div
-                  v-for="item in order.orderItems?.slice(0, 4)"
-                  :key="item.productId"
+                  v-for="(item, index) in order.items?.slice(0, 4)"
+                  :key="index"
                   class="product-item"
                 >
-                  <el-image :src="item.productImage" class="product-img" fit="cover" />
+                  <el-image :src="item.productImage" fit="cover" class="product-img" lazy>
+                    <template #error>
+                      <div class="image-slot">
+                        <el-icon><Picture /></el-icon>
+                      </div>
+                    </template>
+                  </el-image>
                   <div class="item-info">
                     <p class="name">{{ item.name }}</p>
                     <p class="qty">x {{ item.quantity }}</p>
                   </div>
                 </div>
-                <div v-if="order.orderItems?.length > 4" class="more-items-card">
-                  <span class="count">+ {{ order.orderItems.length - 4 }}</span>
-                  <span class="label">更多商品...</span>
+
+                <div
+                  v-if="order.items?.length > 4"
+                  class="more-items-card"
+                  @click="goOrderDetail(order.id)"
+                >
+                  <span class="count">+{{ order.items.length - 4 }}</span>
+                  <span class="label">查看更多</span>
                 </div>
               </div>
-            </div> -->
+            </div>
 
             <div class="card-footer">
               <div class="info-group">
@@ -69,21 +94,24 @@
                     size="small"
                     :type="getShippingTagType(order.shippingMethod)"
                     effect="light"
-                    >出貨方式 :
+                    >配送方式 :
                     {{ order.shippingMethod || '宅配到府' }}
                   </el-tag>
                   <span class="item-count">
-                    共 {{ order.orderItems?.reduce((sum, i) => sum + i.quantity, 0) || 0 }} 件商品
+                    共 {{ order.items?.reduce((sum, i) => sum + i.quantity, 0) || 0 }} 項商品
                   </span>
                 </div>
 
-                <div class="order-time-info">
-                  <span class="label">訂單時間：</span>
-                  <span class="time">{{ order.createTime }}</span>
-                </div>
-                <div class="price-item total">
-                  <span class="label">總計</span>
-                  <span class="value price">NT$ {{ order.total.toLocaleString() }}</span>
+                <div class="amount-delivery-row">
+                  <div class="price-item total">
+                    <span class="label">總計</span>
+                    <span class="price">NT$ {{ order.total.toLocaleString() }}</span>
+                  </div>
+
+                  <div class="delivery-info-inline" v-if="order.paymentStatus !== 'completed'">
+                    <el-icon><Calendar /></el-icon>
+                    <span>預計到貨日：{{ getEstimatedArrival(order.createTime) }}</span>
+                  </div>
                 </div>
               </div>
               <div class="action-buttons">
@@ -104,7 +132,7 @@
 import { ref, onMounted } from 'vue'
 import { useNavigation } from '@/composables/useNavigation'
 import api from '@/service/api'
-import { Ship } from '@element-plus/icons-vue'
+import { Ship, Calendar, Picture } from '@element-plus/icons-vue'
 
 const { goHome, goProducts, goOrderDetail } = useNavigation()
 
@@ -148,6 +176,15 @@ const fetchOrders = async (tabName = 'all') => {
 
 const handleTabChange = (tabName) => {
   fetchOrders(tabName)
+}
+
+// 模擬計算預計到貨日 (例如：下單後 3-5 天)
+const getEstimatedArrival = (createTime) => {
+  if (!createTime) return '計算中...'
+  const date = new Date(createTime)
+  if (isNaN(date.getTime())) return '待確認' // 防呆
+  date.setDate(date.getDate() + 3) // 假設固定 3 天後
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
 }
 
 const getStatusTag = (status) => {
@@ -266,13 +303,15 @@ onMounted(() => {
 
 .order-meta {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 0px;
   font-size: 15px;
 }
 
 .order-date {
   color: #1d1d1f;
   font-weight: 600;
+  width: 180px;
 }
 
 .order-id {
@@ -300,6 +339,16 @@ onMounted(() => {
   padding: 30px;
 }
 
+.delivery-estimate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
 .product-row {
   display: flex;
   gap: 20px;
@@ -317,10 +366,22 @@ onMounted(() => {
 }
 
 .product-img {
-  width: 100px;
-  height: 120px;
-  border-radius: 8px;
-  border: 1px solid #f0f0f2;
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.image-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #f5f7fa;
+  color: #a8abb2;
 }
 
 .item-info .name {
@@ -352,6 +413,13 @@ onMounted(() => {
   background-color: #f8f9fa;
   color: #86868b;
   border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.more-items-card:hover {
+  background-color: #edf2f7;
+  border-color: #cbd5e1;
 }
 
 .more-items-card .count {
@@ -372,21 +440,20 @@ onMounted(() => {
   align-items: flex-end; /* 對齊按鈕底部 */
 }
 
-/* .summary-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-} */
-
 .price-item {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: 220px;
   font-size: 14px;
   color: #86868b;
 }
 
 .price-item.total {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  width: auto;
+  gap: 15px;
   font-size: 16px;
   color: #1d1d1f;
   font-weight: 600;
@@ -396,8 +463,23 @@ onMounted(() => {
 }
 
 .price-item .price {
+  transform: none;
   font-size: 24px;
+  line-height: 1;
   color: #f97316;
+}
+
+/* 預計到貨日 */
+.delivery-info-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0369a1;
+  font-size: 16px;
+  background-color: #f0f9ff;
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-bottom: 2px;
 }
 
 .action-buttons {
@@ -425,6 +507,14 @@ onMounted(() => {
 .order-time-info {
   font-size: 13px;
   color: #a1a1a6; /* 時間資訊最淡 */
+}
+
+/* 新增：讓金額和到貨日並排 */
+.amount-delivery-row {
+  display: flex;
+  align-items: flex-end; /* 底部對齊，感覺比較穩 */
+  gap: 30px; /* 兩者之間的間距 */
+  margin-top: 10px;
 }
 
 .total-amount {

@@ -88,10 +88,11 @@ const props = defineProps({
 
 .logo-img {
   display: block;
-  width: auto;
+  width: 100%;
+  height: 170px;
   max-height: 100%;
-  height: 110px;
-  padding: 0px 0px;
+  padding-top: 0px;
+  transform: translateY(40px);
 }
 
 .topbar-right {
@@ -113,13 +114,13 @@ const props = defineProps({
 
 @media (max-width: 1024px) {
   .top-bar {
-    flex-direction: row;
-    position: fixed;
     display: flex;
-    height: 110px;
-    background-color: #000000fb;
     justify-content: space-between;
     align-items: center;
+    flex-direction: row;
+    position: fixed;
+    height: 110px;
+    background-color: #000000fb;
     padding: 10px 0;
     z-index: 1002;
   }
@@ -146,9 +147,10 @@ const props = defineProps({
   }
 
   .logo-img {
-    display: flex;
+    display: block;
+    width: auto;
     height: 90px;
-    padding-bottom: 0px;
+    transform: translateX(0px);
   }
   .topbar-right {
     display: flex;
