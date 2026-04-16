@@ -127,14 +127,15 @@ const handleLogin = async () => {
     toast.success('登入成功')
 
     // 從後端回傳結果中解構出 token 和 role
-    const { token, role } = res.result
+    const { token, refreshToken, role } = res.result
 
     //存入 Pinia
-    await userStore.login(loginData, { token, role })
+    await userStore.login(loginData, { token, refreshToken, role })
     userStore.startTokenCountdown(token)
 
     //存入 localStorage
     Storage.set(TOKEN_KEY, token)
+    Storage.set('refreshToken', refreshToken)
     Storage.set(USER_ROLE_KEY, role)
 
     //記住帳號
@@ -149,7 +150,7 @@ const handleLogin = async () => {
     goTo(targetPath)
   } catch (error) {
     // 這裡的 error 是 apiService 拋出的 response.data
-    const code = error.code
+    // const code = error.code
 
     // 如果是 9999 (FAIL)，且 result 裡有 GET not supported，就特別提示
     if (code === ResultCode.FAIL) {
@@ -159,7 +160,9 @@ const handleLogin = async () => {
     }
 
     // 其他情況，直接根據 code 轉換成中文訊息
+
     const message = getMsgByCode(code)
+
     console.log('後端錯誤碼:', code, '對應訊息:', message)
     if (code === ResultCode.USER_NOT_FOUND || code === ResultCode.USER_IS_NOT_EXIST) {
       backendErrors.value.username = message // 讓帳號輸入框變紅並顯示文字

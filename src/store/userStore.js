@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import api from '@/service/api.js'
+import router from '@/router'
 
 function parseJwt(token) {
   try {
@@ -12,8 +13,6 @@ function parseJwt(token) {
     return null
   }
 }
-
-let isLoggingOut = false
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -26,6 +25,7 @@ export const useUserStore = defineStore('userStore', {
     timer: null, // 計時器
     role: 'GUEST',
     expiryTimestamp: null, // 存儲絕對過期時間
+    isLoggingOut: false,
   }),
   getters: {
     userRole: (state) => state.role,
@@ -61,7 +61,7 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    async login(userData, { token, role }) {
+    async login(userData, { token, refreshToken, role }) {
       const payload = parseJwt(token)
       const exp = payload?.exp || 0
 
@@ -69,7 +69,7 @@ export const useUserStore = defineStore('userStore', {
       Storage.set(USER_ROLE_KEY, role)
       Storage.set(TOKEN_KEY, token)
       Storage.set('EXPIRY_TIME', exp)
-      // this.startTokenCountdown(token)
+      Storage.set('refreshToken', refreshToken)
 
       // 更新State
       this.user = {
@@ -79,7 +79,22 @@ export const useUserStore = defineStore('userStore', {
       }
       this.role = role
 
+      this.expiryTimestamp = exp
+
       // 啟動倒數
+      this.startTokenCountdown()
+    },
+    setToken(newToken) {
+      const payload = parseJwt(newToken)
+      const exp = payload?.exp || 0
+
+      Storage.set(TOKEN_KEY, newToken)
+      Storage.set('EXPIRY_TIME', exp)
+
+      this.expiryTimestamp = exp
+      this.user.isLogin = true
+
+      // 重新啟動倒數
       this.startTokenCountdown()
     },
     /**
@@ -95,21 +110,38 @@ export const useUserStore = defineStore('userStore', {
       if (!exp) return
 
       // 定義一個更新函數
-      const update = () => {
+      const update = async () => {
         const now = Math.floor(Date.now() / 1000)
         const diff = exp - now
 
         if (diff <= 0) {
-          this.remainingTime = 0
+          // 時間到了！先停掉舊的計時器
           this.stopTokenCountdown()
-          this.logout()
+          // this.stopTokenCountdown()
+
+          const rfToken = Storage.get('refreshToken')
+
+          if (rfToken) {
+            // --- 保持登入的邏輯 ---
+            try {
+              // 主動發起請求，這會觸發 apiService 的攔截器去刷新 Token
+              await this.fetchUserInfo()
+              // 成功後，攔截器會自動呼叫 setToken()，那邊會重新啟動新的 startTokenCountdown
+            } catch (error) {
+              // 如果連 Refresh Token 都失效了（例如手動刪了 Cookie 或後端過期）
+              this.logout()
+            }
+          } else {
+            // --- 沒勾保持登入的邏輯 ---
+            this.logout()
+          }
         } else {
           this.remainingTime = diff
+          this.timer = setTimeout(update, 1000)
         }
       }
-
-      update() // 先執行一次防止畫面閃爍
-      this.timer = setInterval(update, 1000) // 每一秒「比對」一次
+      update()
+      // this.timer = setInterval(update, 1000)
     },
 
     /**
@@ -117,7 +149,8 @@ export const useUserStore = defineStore('userStore', {
      */
     stopTokenCountdown() {
       if (this.timer) {
-        clearInterval(this.timer)
+        clearTimeout(this.timer)
+        // clearInterval(this.timer)
         this.timer = null
       }
     },
@@ -128,6 +161,9 @@ export const useUserStore = defineStore('userStore', {
     initUser() {
       const token = Storage.get(TOKEN_KEY)
       const exp = Storage.get('EXPIRY_TIME')
+      const rfToken = Storage.get('refreshToken')
+      // 初始化時，強制把登出狀態清除，避免被登出提示卡死
+      this.isLoggingOut = false
 
       if (token && exp) {
         this.expiryTimestamp = exp
@@ -137,8 +173,8 @@ export const useUserStore = defineStore('userStore', {
           this.user.isLogin = true
           this.role = Storage.get(USER_ROLE_KEY) || 'USER'
           this.startTokenCountdown()
-        } else {
-          this.logout() // Token 過期直接踢出去
+        } else if (rfToken) {
+          this.user.isLogin = true // 只有短效 token 沒了但長效還在，也先算登入
         }
       }
     },
@@ -147,8 +183,9 @@ export const useUserStore = defineStore('userStore', {
      * 登出
      */
     logout() {
-      if (isLoggingOut) return
-      isLoggingOut = true
+      if (this.isLoggingOut) return
+      this.isLoggingOut = true
+
       this.stopTokenCountdown()
       this.role = 'GUEST'
       this.user.isLogin = false
@@ -160,8 +197,11 @@ export const useUserStore = defineStore('userStore', {
       ElMessageBox.alert('您的登入已過期，請重新登入。', '提示', {
         confirmButtonText: '確定',
         callback: () => {
-          isLogggingOut = false
-          window.location.href = '/login' // 強制跳轉，最乾淨
+          this.isLoggingOut = false
+          // 如果點確定時已經又是登入狀態，就不用跳轉
+          if (!this.user.isLogin) {
+            router.push('/')
+          }
         },
       })
     },

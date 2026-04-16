@@ -6,6 +6,7 @@ export const API_ROUTES = {
   FINDUSER: '/api/finduser',
   PROFILE: '/api/profile',
   LOGOUT: '/api/logout',
+  TOKEN_REFRESH: '/api/token/refresh', // 刷新 Token
   PRODUCT_ADD: '/api/addProducts',
   PRODUCT_LIST: '/api/products',
   PRODUCT_GET: (id) => `/api/products/${id}`,
