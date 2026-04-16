@@ -215,12 +215,8 @@ router.beforeEach(async (to, from, next) => {
   const token = Storage.get(TOKEN_KEY)
   const isLoggedIn = !!token
 
-  // 如果是去登入頁且已經登入，直接回首頁
+  // 處理排除項：如果是去登入頁且已經登入，直接回首頁
   if (to.path === '/login' && isLoggedIn) {
-    // 如果 localStorage 有 Token 但 Pinia 沒狀態，幫它初始化
-    if (!userStore.user.isLogin) {
-      userStore.initUser()
-    }
     return next('/')
   }
 
@@ -259,25 +255,6 @@ router.beforeEach(async (to, from, next) => {
     return next('/accessDenied')
   }
 
-  if (userStore.user.isLogin && !isLoggedIn) {
-    userStore.logout()
-    return next('/login')
-  }
-
-  // 1. 如果有 Token 且需要同步資料
-  if (token && !userStore.user.username) {
-    try {
-      await userStore.fetchUserInfo() // 只抓使用者資訊，不抓購物車(減輕壓力)
-      next()
-    } catch (error) {
-      // 如果這裡抓不到資料，說明 Token 真的是無效的，徹底清理
-      Storage.remove(TOKEN_KEY)
-      userStore.logout()
-      next('/login')
-    }
-  } else {
-    next()
-  }
   next()
 })
 

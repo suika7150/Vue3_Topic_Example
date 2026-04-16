@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import ElementPlus from 'element-plus'
-import { ElMessageBox } from 'element-plus'
 import { Icon } from '@iconify/vue'
 
 //樣式、配置
@@ -19,7 +18,6 @@ import setupFontAwesome from './plugins/fontawesome'
 //工具
 import { formatSecondsToHHMMSS } from './utils/format'
 import { getAndCacheOptions } from './utils/optionService'
-import { TOKEN_KEY } from './utils/storageUtil'
 import { useUserStore } from './store/userStore'
 
 //初始化、Pinia
@@ -39,14 +37,9 @@ const checkTokenStatus = () => {
 
   checkTimer = setTimeout(() => {
     // 只在登入狀態下才執行校對
-
-    const exp = userStore.expiryTimestamp
-    const now = Math.floor(Date.now() / 1000)
-    if (userStore.user.isLogin && exp && exp > now) {
+    if (userStore.user.isLogin) {
+      console.log('檢測到視窗喚醒，重新校對 Token 時間...')
       userStore.startTokenCountdown()
-    } else if (userStore.user.isLogin) {
-      // 如果已經過期了，不要啟動計時器，直接交給攔截器或執行一次換票
-      userStore.fetchUserInfo().catch(() => userStore.logout())
     }
   }, 300)
 }
@@ -60,25 +53,6 @@ document.addEventListener('visibilitychange', () => {
 
 // 監聽視窗獲得焦點 (例如從別的軟體點回瀏覽器)
 window.addEventListener('focus', checkTokenStatus)
-
-// 監聽跨分頁的 Storage 變動
-window.addEventListener('storage', (event) => {
-  // 這裡的 'TOKEN' 對應 storageUtil 裡的 TOKEN_KEY 實際字串
-  if (event.key === TOKEN_KEY) {
-    if (event.newValue) {
-      ElMessageBox.close()
-
-      userStore.initUser() // 重新觸發初始化，捕捉最新的 Token 和時間
-
-      // 如果A頁已登入B頁當前頁面正好在登入頁，自動跳轉至首頁
-      if (router.currentRoute.value.path === '/login') {
-        router.push('/')
-      }
-    } else {
-      userStore.logout() // Token 過期直接踢出去
-    }
-  }
-})
 
 //啟動應用
 const start = async () => {

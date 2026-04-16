@@ -35,14 +35,6 @@ const api = {
   /** 登出 */
   logout: () => apiService.post(API_ROUTES.LOGOUT),
 
-  /* ===== Token相關 API ===== */
-
-  /** * 刷新 Token (無感續期)
-   * @param {string} rfToken - 儲存在 localStorage 的 Refresh Token
-   */
-  refreshToken: (rfToken) =>
-    apiService.post(API_ROUTES.TOKEN_REFRESH, {}, { headers: { 'X-Refresh-Token': rfToken } }),
-
   /* ===== 商品相關 API ===== */
 
   /** 新增商品
