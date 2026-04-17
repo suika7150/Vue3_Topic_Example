@@ -18,9 +18,9 @@ const Storage = {
       return defaultValue
     }
   },
-  remove(...key) {
-    key.forEach((item) => {
-      localStorage.removeItem(item)
+  remove(...keys) {
+    keys.forEach((key) => {
+      localStorage.removeItem(key)
     })
   },
   clear() {
