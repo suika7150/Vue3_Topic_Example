@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
 import { isWhiteListed } from './authWhitelist'
 import router from '@/router'
 import { hideLoading, showLoading } from '@/utils/loadingService'
 import Storage, { CART_KEY, TOKEN_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
+import { useUserStore } from '@/store/userStore'
 
 // --- 建立 axios 實例 ---
 const apiService = axios.create({
@@ -21,7 +21,7 @@ apiService.interceptors.request.use(
     // 確保即便 token 讀取噴錯也要 hideLoading
     try {
       if (!isWhiteListed(config.url, config.baseURL)) {
-        const token = Storage.get(TOKEN_KEY)
+        const token = Storage.get(TOKEN_KEY) || Storage.sessionGet(TOKEN_KEY)
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
@@ -32,6 +32,7 @@ apiService.interceptors.request.use(
       return Promise.reject(err)
     }
   },
+
   (error) => {
     hideLoading()
     return Promise.reject(error)
@@ -45,7 +46,7 @@ apiService.interceptors.response.use(
 
     const res = response.data
     // 檢查代碼是否為成功
-    if (res.code !== undefined && res.code !== '0000' && res.code !== 200) {
+    if (res.code !== '0000') {
       toast.error(res.msg || '發生錯誤')
       return Promise.reject(res)
     }
@@ -57,10 +58,8 @@ apiService.interceptors.response.use(
 
     // 處理 401 登入過期
     if (error.response?.status === 401) {
-      const keys = [TOKEN_KEY, CART_KEY, 'USER_ROLE_KEY', 'EXPIRY_TIME']
-      Storage.remove(...keys)
-
-      toast.error('登入已過期，請重新登入')
+      const userStore = useUserStore()
+      userStore.logout()
     } else if (error.message !== 'canceled') {
       toast.error(error.response?.data?.msg || '網路錯誤，請稍後再試')
     }

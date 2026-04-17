@@ -19,7 +19,7 @@ import setupFontAwesome from './plugins/fontawesome'
 import { formatSecondsToHHMMSS } from './utils/format'
 import { getAndCacheOptions } from './utils/optionService'
 import { TOKEN_KEY } from './utils/storageUtil'
-import { useUserStore } from './store/userStore'
+import { useUserStore } from '@/store/userStore'
 
 //初始化、Pinia
 const app = createApp(App)
@@ -31,17 +31,9 @@ app.use(pinia)
 const userStore = useUserStore()
 userStore.initUser() //初始化登入狀態並啟動倒數
 
-// 視窗喚醒校對
-const checkTokenStatus = () => {
-  if (userStore.user.isLogin) {
-    userStore.startTokenCountdown()
-  }
-}
-// || event.key === TOKEN_KEY
 // 跨視窗狀態同步監聽
 window.addEventListener('storage', (event) => {
-  // console.log('監聽到 Key 變更:', event.key)
-  // 當 TOKEN_KEY 發生變化（代表另一個分頁登入或登出了）
+  // 當 userStore 發生變化（代表另一個分頁登入或登出了）
   if (event.key === 'userStore') {
     if (event.oldValue === event.newValue) return
 
@@ -50,7 +42,7 @@ window.addEventListener('storage', (event) => {
     if (userStore.isLoggedIn && router.currentRoute.value.path === '/login') {
       router.push('/')
     }
-  } else {
+  } else if (event.key === TOKEN_KEY && !event.newValue) {
     if (userStore.user.isLogin) {
       userStore.logout()
       if (router.currentRoute.value.path !== '/login') {
@@ -59,16 +51,6 @@ window.addEventListener('storage', (event) => {
     }
   }
 })
-
-// 監聽分頁切換
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
-    checkTokenStatus()
-  }
-})
-
-// 監聽視窗獲得焦點 (例如從別的軟體點回瀏覽器)
-window.addEventListener('focus', checkTokenStatus)
 
 //啟動應用
 const start = async () => {
