@@ -37,13 +37,26 @@ const checkTokenStatus = () => {
     userStore.startTokenCountdown()
   }
 }
-
+// || event.key === TOKEN_KEY
 // 跨視窗狀態同步監聽
 window.addEventListener('storage', (event) => {
   // console.log('監聽到 Key 變更:', event.key)
   // 當 TOKEN_KEY 發生變化（代表另一個分頁登入或登出了）
-  if (event.key === 'userStore' || event.key === TOKEN_KEY) {
+  if (event.key === 'userStore') {
+    if (event.oldValue === event.newValue) return
+
+    // 執行同步，把最新的資料從 localStorage 抓回 Pinia
     userStore.syncStatus()
+    if (userStore.isLoggedIn && router.currentRoute.value.path === '/login') {
+      router.push('/')
+    }
+  } else {
+    if (userStore.user.isLogin) {
+      userStore.logout()
+      if (router.currentRoute.value.path !== '/login') {
+        router.push('/')
+      }
+    }
   }
 })
 

@@ -180,10 +180,12 @@ export const useUserStore = defineStore('userStore', {
       const exp = Storage.get('EXPIRY_TIME')
 
       if (token && exp) {
-        this.user.isLogin = true
-        this.role = Storage.get(USER_ROLE_KEY) || 'USER'
-        this.expiryTimestamp = exp
-        this.startTokenCountdown()
+        if (!this.user.isLogin) {
+          this.user.isLogin = true
+          this.role = Storage.get(USER_ROLE_KEY) || 'USER'
+          this.expiryTimestamp = exp
+          this.startTokenCountdown()
+        }
       } else if (this.user.isLogin) {
         // 如果 Token 沒了（表示另一個視窗登出了）
         this.logout()
@@ -194,7 +196,7 @@ export const useUserStore = defineStore('userStore', {
   // 自動新增啟動時自動從Storage載入登入資料
   persist: {
     enabled: true,
-    storage: localStorage, // 或sessionStorage(依照需求)
+    storage: localStorage,
     paths: ['user', 'role', 'expiryTimestamp'], // 持久化狀態
   },
 })
