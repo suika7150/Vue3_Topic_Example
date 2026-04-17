@@ -161,11 +161,11 @@ export const useUserStore = defineStore('userStore', {
       Storage.sessionRemove(...keys)
       if (window.location.pathname !== '/login') {
         ElMessageBox.alert('您的登入已過期，請重新登入。', '提示', {
-          // confirmButtonText: '確定',
-          // callback: () => {
-          //   isLoggingOut = false
-          //   window.location.href = '/login'
-          // },
+          confirmButtonText: '確定',
+          callback: () => {
+            isLoggingOut = false
+            // window.location.href = '/login'
+          },
         })
       } else {
         isLoggingOut = false
@@ -175,16 +175,16 @@ export const useUserStore = defineStore('userStore', {
      * 跨視窗同步狀態
      */
     syncStatus() {
-      const token = Storage.get(TOKEN_KEY) || Storage.sessionGet(TOKEN_KEY)
-      const role = Storage.get(USER_ROLE_KEY) || Storage.sessionGet(USER_ROLE_KEY)
-      const exp = Storage.get('EXPIRY_TIME') || Storage.sessionGet('EXPIRY_TIME')
+      const token = Storage.get(TOKEN_KEY)
+      const role = Storage.get(USER_ROLE_KEY)
+      const exp = Storage.get('EXPIRY_TIME')
 
       if (token && exp) {
         this.user.isLogin = true
-        this.role = role || 'USER'
+        this.role = Storage.get(USER_ROLE_KEY) || 'USER'
         this.expiryTimestamp = exp
         this.startTokenCountdown()
-      } else {
+      } else if (this.user.isLogin) {
         // 如果 Token 沒了（表示另一個視窗登出了）
         this.logout()
       }
