@@ -130,12 +130,18 @@ const handleLogin = async () => {
     const { token, role } = res.result
 
     //存入 Pinia
-    await userStore.login(loginData, { token, role })
-    userStore.startTokenCountdown(token)
+    await userStore.login(loginData, { token, role, rememberMe: form.value.rememberMe })
+    // userStore.startTokenCountdown(token)
 
-    //存入 localStorage
-    Storage.set(TOKEN_KEY, token)
-    Storage.set(USER_ROLE_KEY, role)
+    if (form.value.rememberMe) {
+      //存入 localStorage
+      Storage.set(TOKEN_KEY, token)
+      Storage.set(USER_ROLE_KEY, role)
+    } else {
+      //存入 localStorage
+      Storage.sessionSet(TOKEN_KEY, token)
+      Storage.sessionSet(USER_ROLE_KEY, role)
+    }
 
     //記住帳號
     if (form.value.rememberUsername) {
@@ -151,25 +157,17 @@ const handleLogin = async () => {
     // 這裡的 error 是 apiService 拋出的 response.data
     const code = error.code
 
-    // 如果是 9999 (FAIL)，且 result 裡有 GET not supported，就特別提示
-    if (code === ResultCode.FAIL) {
-      console.error('後端異常詳細資訊:', error.result)
-      toast.error('系統連線異常，請檢查請求方法')
-      return
-    }
+    console.debug('[Auth] Login failed:', error)
 
-    // 其他情況，直接根據 code 轉換成中文訊息
     const message = getMsgByCode(code)
-    console.log('後端錯誤碼:', code, '對應訊息:', message)
-    if (code === ResultCode.USER_NOT_FOUND || code === ResultCode.USER_IS_NOT_EXIST) {
-      backendErrors.value.username = message // 讓帳號輸入框變紅並顯示文字
+    if (code === ResultCode.FAIL) {
+      toast.error('目前無法連線至伺服器，請檢查網路狀態')
+    } else if (code === ResultCode.USER_NOT_FOUND || code === ResultCode.USER_IS_NOT_EXIST) {
+      backendErrors.value.username = message
     } else if (code === ResultCode.PASSWORD_NOT_MATCH) {
-      backendErrors.value.password = message // 讓密碼輸入框變紅並顯示文字
-    } else if (code === ResultCode.FAIL) {
-      toast.error('系統連線異常，請稍後再試')
+      backendErrors.value.password = message
     } else {
-      // 其他錯誤直接顯示訊息
-      toast.error(message)
+      toast.error(message || '登入失敗')
     }
   }
 }

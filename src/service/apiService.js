@@ -4,6 +4,7 @@ import { isWhiteListed } from './authWhitelist'
 import router from '@/router'
 import { hideLoading, showLoading } from '@/utils/loadingService'
 import Storage, { CART_KEY, TOKEN_KEY } from '@/utils/storageUtil'
+import { toast } from '@/utils/message'
 
 // --- 建立 axios 實例 ---
 const apiService = axios.create({
@@ -40,31 +41,28 @@ apiService.interceptors.request.use(
 // --- 回應攔截器 ---
 apiService.interceptors.response.use(
   (response) => {
-    hideLoading() // 收到資料立刻關閉
+    hideLoading()
 
     const res = response.data
     // 檢查代碼是否為成功
-    if (res.code && res.code !== '0000') {
-      ElMessage.error(res.msg || '發生錯誤')
+    if (res.code !== undefined && res.code !== '0000' && res.code !== 200) {
+      toast.error(res.msg || '發生錯誤')
       return Promise.reject(res)
     }
 
     return res
   },
   (error) => {
-    hideLoading() // 網路錯誤也要關閉
+    hideLoading()
 
     // 處理 401 登入過期
     if (error.response?.status === 401) {
-      Storage.remove(TOKEN_KEY)
-      Storage.remove(CART_KEY)
-      ElMessage.error('登入已過期，請重新登入')
-      router.push('/login')
-    } else {
-      // 避免某些取消請求噴出錯誤訊息
-      if (error.message !== 'canceled') {
-        ElMessage.error(error.response?.data?.msg || '網路錯誤，請稍後再試')
-      }
+      const keys = [TOKEN_KEY, CART_KEY, 'USER_ROLE_KEY', 'EXPIRY_TIME']
+      Storage.remove(...keys)
+
+      toast.error('登入已過期，請重新登入')
+    } else if (error.message !== 'canceled') {
+      toast.error(error.response?.data?.msg || '網路錯誤，請稍後再試')
     }
     return Promise.reject(error)
   },

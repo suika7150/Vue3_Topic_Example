@@ -18,6 +18,7 @@ import setupFontAwesome from './plugins/fontawesome'
 //工具
 import { formatSecondsToHHMMSS } from './utils/format'
 import { getAndCacheOptions } from './utils/optionService'
+import { TOKEN_KEY } from './utils/storageUtil'
 import { useUserStore } from './store/userStore'
 
 //初始化、Pinia
@@ -30,19 +31,21 @@ app.use(pinia)
 const userStore = useUserStore()
 userStore.initUser() //初始化登入狀態並啟動倒數
 
-let checkTimer = null
+// 視窗喚醒校對
 const checkTokenStatus = () => {
-  // 如果 300ms 內重複觸發，會先清除上一個定時器
-  if (checkTimer) clearTimeout(checkTimer)
-
-  checkTimer = setTimeout(() => {
-    // 只在登入狀態下才執行校對
-    if (userStore.user.isLogin) {
-      console.log('檢測到視窗喚醒，重新校對 Token 時間...')
-      userStore.startTokenCountdown()
-    }
-  }, 300)
+  if (userStore.user.isLogin) {
+    userStore.startTokenCountdown()
+  }
 }
+
+// 跨視窗狀態同步監聽
+window.addEventListener('storage', (event) => {
+  // console.log('監聽到 Key 變更:', event.key)
+  // 當 TOKEN_KEY 發生變化（代表另一個分頁登入或登出了）
+  if (event.key === 'userStore' || event.key === TOKEN_KEY) {
+    userStore.syncStatus()
+  }
+})
 
 // 監聽分頁切換
 document.addEventListener('visibilitychange', () => {
@@ -78,9 +81,10 @@ const start = async () => {
     //掛載實例
     app.mount('#app')
   } catch (error) {
-    console.error('啟動應用失敗:', error)
+    if (import.meta.env.DEV) {
+      console.error('[啟動攔截]:', error)
+    }
   }
 }
-
 //啟動應用
 start()

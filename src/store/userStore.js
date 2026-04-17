@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import Storage, { CART_KEY, TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
+import { ElMessageBox } from 'element-plus'
+import Storage, { TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import api from '@/service/api.js'
 
 function parseJwt(token) {
@@ -56,28 +56,29 @@ export const useUserStore = defineStore('userStore', {
           return res
         }
       } catch (error) {
-        console.error('同步使用者資料失敗:', error)
         throw error
       }
     },
 
-    async login(userData, { token, role }) {
+    async login(userData, { token, role, rememberMe }) {
       const payload = parseJwt(token)
       const exp = payload?.exp || 0
 
       // 將用戶資料儲存到Storage
-      Storage.set(USER_ROLE_KEY, role)
       Storage.set(TOKEN_KEY, token)
+      Storage.set(USER_ROLE_KEY, role)
       Storage.set('EXPIRY_TIME', exp)
-      // this.startTokenCountdown(token)
+      Storage.set('REMEMBER_ME', rememberMe)
 
       // 更新State
+      this.token = token
       this.user = {
         username: userData.username,
         isLogin: true,
-        // rememberMe: loginData.rememberMe || false,
+        rememberMe: rememberMe,
       }
       this.role = role
+      this.expiryTimestamp = exp
 
       // 啟動倒數
       this.startTokenCountdown()
@@ -91,10 +92,10 @@ export const useUserStore = defineStore('userStore', {
       this.stopTokenCountdown()
 
       // 取得最新的過期時間
-      const exp = this.expiryTimestamp || Storage.get('EXPIRY_TIME')
+      const exp =
+        this.expiryTimestamp || Storage.get('EXPIRY_TIME') || Storage.sessionGet('EXPIRY_TIME')
       if (!exp) return
 
-      // 定義一個更新函數
       const update = () => {
         const now = Math.floor(Date.now() / 1000)
         const diff = exp - now
@@ -108,7 +109,7 @@ export const useUserStore = defineStore('userStore', {
         }
       }
 
-      update() // 先執行一次防止畫面閃爍
+      update()
       this.timer = setInterval(update, 1000) // 每一秒「比對」一次
     },
 
@@ -126,8 +127,8 @@ export const useUserStore = defineStore('userStore', {
      * 初始化使用者 (主要用於 F5 重新整理時)
      */
     initUser() {
-      const token = Storage.get(TOKEN_KEY)
-      const exp = Storage.get('EXPIRY_TIME')
+      const token = Storage.get(TOKEN_KEY) || Storage.sessionGet(TOKEN_KEY)
+      const exp = Storage.get('EXPIRY_TIME') || Storage.sessionGet('EXPIRY_TIME')
 
       if (token && exp) {
         this.expiryTimestamp = exp
@@ -138,7 +139,7 @@ export const useUserStore = defineStore('userStore', {
           this.role = Storage.get(USER_ROLE_KEY) || 'USER'
           this.startTokenCountdown()
         } else {
-          this.logout() // Token 過期直接踢出去
+          this.logout()
         }
       }
     },
@@ -150,20 +151,43 @@ export const useUserStore = defineStore('userStore', {
       if (isLoggingOut) return
       isLoggingOut = true
       this.stopTokenCountdown()
-      this.role = 'GUEST'
-      this.user.isLogin = false
-      Storage.remove(USER_ROLE_KEY)
-      Storage.remove(TOKEN_KEY)
-      Storage.remove('EXPIRY_TIME')
-      this.remainingTime = 0
 
-      ElMessageBox.alert('您的登入已過期，請重新登入。', '提示', {
-        confirmButtonText: '確定',
-        callback: () => {
-          isLogggingOut = false
-          window.location.href = '/login' // 強制跳轉，最乾淨
-        },
-      })
+      // 清除狀態
+      this.role = 'GUEST'
+      this.user = { username: '', isLogin: false, rememberMe: false }
+
+      const keys = [USER_ROLE_KEY, TOKEN_KEY, 'EXPIRY_TIME']
+      Storage.remove(...keys)
+      Storage.sessionRemove(...keys)
+      if (window.location.pathname !== '/login') {
+        ElMessageBox.alert('您的登入已過期，請重新登入。', '提示', {
+          // confirmButtonText: '確定',
+          // callback: () => {
+          //   isLoggingOut = false
+          //   window.location.href = '/login'
+          // },
+        })
+      } else {
+        isLoggingOut = false
+      }
+    },
+    /**
+     * 跨視窗同步狀態
+     */
+    syncStatus() {
+      const token = Storage.get(TOKEN_KEY) || Storage.sessionGet(TOKEN_KEY)
+      const role = Storage.get(USER_ROLE_KEY) || Storage.sessionGet(USER_ROLE_KEY)
+      const exp = Storage.get('EXPIRY_TIME') || Storage.sessionGet('EXPIRY_TIME')
+
+      if (token && exp) {
+        this.user.isLogin = true
+        this.role = role || 'USER'
+        this.expiryTimestamp = exp
+        this.startTokenCountdown()
+      } else {
+        // 如果 Token 沒了（表示另一個視窗登出了）
+        this.logout()
+      }
     },
   },
 

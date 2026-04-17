@@ -26,6 +26,24 @@ const Storage = {
   clear() {
     localStorage.clear()
   },
+
+  sessionSet(key, value) {
+    sessionStorage.setItem(key, JSON.stringify(value))
+  },
+  sessionGet(key, defaultValue = null) {
+    const item = sessionStorage.getItem(key)
+    try {
+      return item ? JSON.parse(item) : defaultValue
+    } catch {
+      return defaultValue
+    }
+  },
+  sessionRemove(...keys) {
+    keys.forEach((key) => sessionStorage.removeItem(key))
+  },
+  sessionClear() {
+    sessionStorage.clear()
+  },
 }
 
 // 定義專用 key，避免硬編碼

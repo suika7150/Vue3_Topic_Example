@@ -19,7 +19,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:8080', // 指向你的 Spring Boot 後端
-        changeOrigin: true,
+        // changeOrigin: true,
         // 如果你的 Spring Boot Controller 本身「沒有」寫 @RequestMapping("/api")
         // 則必須取消下面這行的註解，把 /api 拿掉再轉發
         // rewrite: (path) => path.replace(/^\/api/, '')
