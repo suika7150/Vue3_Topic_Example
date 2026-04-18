@@ -46,7 +46,7 @@ apiService.interceptors.response.use(
 
     const res = response.data
     // 檢查代碼是否為成功
-    if (res.code !== '0000') {
+    if (String(res.code) !== '0000') {
       toast.error(res.msg || '發生錯誤')
       return Promise.reject(res)
     }

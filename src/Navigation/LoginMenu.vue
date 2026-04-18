@@ -58,7 +58,7 @@
         </template>
       </el-dropdown>
 
-      <el-button link class="user-menu-btn order-btn" @click="goOrderList">
+      <el-button link class="user-menu-btn" @click="goOrderList">
         <span class="btn-text">我的訂單</span>
       </el-button>
 
@@ -68,12 +68,6 @@
           <font-awesome-icon :icon="['fas', 'user']" />
           歡迎 {{ user.fullName }}
         </div>
-
-        <span v-if="remaining > 0" class="timer">
-          Token 將於
-          <strong>{{ $formatSecondsToHHMMSS(remaining) }}</strong>
-          後過期
-        </span>
       </div>
 
       <el-button class="user-menu-btn logout" @click="logout"> 登出 </el-button>
@@ -82,7 +76,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onDeactivated } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/store/userStore'
@@ -97,10 +91,9 @@ const router = useRouter()
 const sidebarStore = useSidebarStore()
 const showCartDrawer = ref(false)
 const userStore = useUserStore()
-const isLogin = computed(() => !!userStore.user?.isLogin)
-const user = computed(() => userStore.user || {})
-const { remainingTime: remaining } = storeToRefs(userStore)
 
+const { user } = storeToRefs(userStore)
+const isLogin = computed(() => !!user.value?.isLogin)
 const { goTo, goOrderList } = useNavigation()
 
 const handleNavigate = (target) => {
@@ -162,10 +155,15 @@ const openCartDrawer = () => {
   display: flex;
   align-items: center;
   margin-left: auto;
+  gap: 2px;
 }
 
 /* 共用按鈕 */
 .user-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   background: transparent;
   color: white;
   border: none;
@@ -173,22 +171,9 @@ const openCartDrawer = () => {
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
   transition: background-color 0.3s;
 }
-/* 訂單按鈕 */
-.order-btn {
-  margin-right: 10px;
-  font-size: 14px; /* 比通知圖示稍微小一點點，讓層次分明 */
-}
-/* 訂單按鈕 */
-.order-btn .el-icon {
-  margin-right: 4px;
-  font-size: 18px;
-}
+
 /* 訂單按鈕 */
 .btn-text {
   font-size: 13px;
@@ -214,21 +199,27 @@ const openCartDrawer = () => {
 .info {
   display: flex;
   flex-direction: column;
-  font-size: 10px;
-  color: #e6eaf2;
-  overflow: hidden;
+  justify-content: center;
+  margin: 0 2px;
+  padding: 0 2px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2); /* 加一條淡淡的分隔線 */
+  line-height: 1.1;
 }
 
-.info div,
-.info .timer {
+/* 使用者資訊 */
+.info div {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #e6eaf2;
   white-space: nowrap;
 }
 
-/* token */
-.timer {
-  color: #e67e22;
-  font-weight: bold;
-  font-size: 10px;
+/* 使用者資訊 */
+.info .fa-user {
+  margin-right: 5px;
+  filter: drop-shadow(0 0 2px rgba(112, 224, 235, 0.5));
 }
 
 /* 下拉選單 */

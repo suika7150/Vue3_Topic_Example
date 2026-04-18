@@ -9,6 +9,7 @@ export const useUserStore = defineStore('userStore', {
   state: () => ({
     user: {
       username: '',
+      fullName: '',
       rememberMe: false,
       isLogin: false,
     },
@@ -32,17 +33,24 @@ export const useUserStore = defineStore('userStore', {
     async fetchUserInfo() {
       try {
         const res = await api.user()
-        if (res) {
-          // 同步 DB 狀態到前端畫面
-          this.user = {
-            ...this.user,
-            ...res,
-            isLogin: true,
-          }
-          this.role = res.role || Storage.get(USER_ROLE_KEY)
+        const userList = res.result || []
+        if (Array.isArray(userList)) {
+          const currentUsername = this.user.username || Storage.get('username')
 
-          if (res.fullName) {
-            Storage.set('fullName', res.fullName)
+          const currentUser = userList.find((u) => u.username === currentUsername)
+          if (currentUser) {
+            // 同步資料到 Pinia
+            this.user = {
+              ...this.user,
+              ...currentUser,
+              isLogin: true,
+            }
+            this.role = currentUser.role || this.role
+
+            // 寫入 Storage
+            Storage.set('fullName', currentUser.fullName)
+            Storage.set('username', currentUser.username)
+            return currentUser
           }
           return res
         }
@@ -125,9 +133,16 @@ export const useUserStore = defineStore('userStore', {
 
       // 清除狀態
       this.role = 'GUEST'
-      this.user = { username: '', isLogin: false, rememberMe: false }
+      this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
 
-      const keys = [USER_ROLE_KEY, TOKEN_KEY, 'REMEMBER_ME', 'SESSION_ACTIVE']
+      const keys = [
+        USER_ROLE_KEY,
+        TOKEN_KEY,
+        'REMEMBER_ME',
+        'SESSION_ACTIVE',
+        // 'username',
+        'fullName',
+      ]
       Storage.remove(...keys)
       Storage.sessionRemove(...keys)
 
@@ -160,8 +175,8 @@ export const useUserStore = defineStore('userStore', {
           this.role = Storage.get(USER_ROLE_KEY) || 'GUEST'
 
           // 同步使用者名稱：確保 B 頁面知道是誰登入
-          if (savedUsername) {
-            this.user.username = savedUsername
+          if (saveUsername) {
+            this.user.username = saveUsername
           }
 
           // 如果是非保持登入，B 分頁要自動在自己的 Session 補上生命週期鎖

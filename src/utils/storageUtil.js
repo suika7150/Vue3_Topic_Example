@@ -49,6 +49,7 @@ const Storage = {
 // 定義專用 key，避免硬編碼
 export const CART_KEY = 'shopping_cart'
 export const USER_KEY = 'username'
+export const FULL_NAME_KEY = 'fullName'
 export const TOKEN_KEY = 'token'
 export const OPTIONS_KEY = 'optionsCache'
 export const USER_ROLE_KEY = 'user_role'

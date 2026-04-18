@@ -219,7 +219,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // 資料同步邏輯
-  if (isLoggedIn && !userStore.user.username) {
+  if ((isLoggedIn && !userStore.user.username) || !userStore.user.fullName) {
     try {
       // 同步使用者資料
       await Promise.all([userStore.fetchUserInfo(), cartStore.fetchCartList()])
