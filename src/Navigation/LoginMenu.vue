@@ -66,7 +66,7 @@
       <div class="info">
         <div>
           <font-awesome-icon :icon="['fas', 'user']" />
-          歡迎 {{ user.username }}
+          歡迎 {{ user.fullName }}
         </div>
 
         <span v-if="remaining > 0" class="timer">

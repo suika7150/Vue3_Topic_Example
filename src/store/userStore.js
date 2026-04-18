@@ -35,10 +35,15 @@ export const useUserStore = defineStore('userStore', {
         if (res) {
           // 同步 DB 狀態到前端畫面
           this.user = {
+            ...this.user,
             ...res,
             isLogin: true,
           }
           this.role = res.role || Storage.get(USER_ROLE_KEY)
+
+          if (res.fullName) {
+            Storage.set('fullName', res.fullName)
+          }
           return res
         }
       } catch (error) {
@@ -69,6 +74,7 @@ export const useUserStore = defineStore('userStore', {
       // this.token = token
       this.user = {
         username: userData.username,
+        fullName: userData.fullName,
         isLogin: true,
         rememberMe: rememberMe,
       }
@@ -94,6 +100,18 @@ export const useUserStore = defineStore('userStore', {
         // 否則，恢復登入狀態
         this.user.isLogin = true
         this.role = Storage.get(USER_ROLE_KEY) || 'GUEST'
+      }
+    },
+
+    async updateUserInfo(payload) {
+      this.user = {
+        ...this.user,
+        ...payload, // 這裡會包含新的 fullName
+      }
+
+      // 同步到 LocalStorage
+      if (payload.fullName) {
+        Storage.set('fullName', payload.fullName)
       }
     },
 
@@ -130,12 +148,15 @@ export const useUserStore = defineStore('userStore', {
     syncStatus() {
       const token = Storage.get(TOKEN_KEY)
       const rememberMe = Storage.get('REMEMBER_ME')
-      const savedUsername = Storage.get('username')
+      const saveUsername = Storage.get('username')
+      const saveFullName = Storage.get('fullName')
 
       if (token) {
         if (!this.user.isLogin) {
           this.user.isLogin = true
           this.user.rememberMe = rememberMe
+          this.user.username = saveUsername || ''
+          this.user.fullName = saveFullName || ''
           this.role = Storage.get(USER_ROLE_KEY) || 'GUEST'
 
           // 同步使用者名稱：確保 B 頁面知道是誰登入

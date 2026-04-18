@@ -2,7 +2,7 @@
   <div class="profile-container">
     <el-card class="profile-card" shadow="never">
       <div class="profile-header">
-        <h2 class="title">個人資料維護</h2>
+        <h2 class="title">個人資料</h2>
       </div>
 
       <el-form :model="form" :rules="rules" ref="profileForm" label-position="top">
@@ -61,10 +61,12 @@ import { User } from '@element-plus/icons-vue'
 import api from '@/service/api'
 import { useNavigation } from '@/composables/useNavigation'
 import Storage, { TOKEN_KEY } from '@/utils/storageUtil'
+import { useUserStore } from '@/store/userStore'
 
 const { goLogin } = useNavigation()
 const profileForm = ref()
 const loading = ref(false)
+const userStore = useUserStore()
 
 const form = ref({
   username: '',
@@ -135,6 +137,11 @@ const handleUpdate = async () => {
 
     loading.value = true
     await api.updateProfile({ ...form.value })
+
+    userStore.updateUserInfo({
+      fullName: form.value.fullName,
+    })
+
     ElMessage.success('資料更新成功！')
   } catch (err) {
     ElMessage.error(err.message || '更新失敗，請稍後再試')
