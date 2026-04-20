@@ -52,14 +52,27 @@
         >
           <el-card class="product-card">
             <div class="card-image-wrapper" @click="showProductDetail(product)">
-              <!-- <el-tooltip :content="product.description" placement="bottom"> -->
               <img
                 :src="API_ROUTES.PRODUCT_IMAGE(product.id)"
                 loading="lazy"
                 class="card-image"
                 @error="handleImageError"
+                @click="showProductDetail(product)"
               />
-              <!-- </el-tooltip> -->
+              <div class="image-overlay">
+                <div class="overlay-actions">
+                  <el-tooltip content="查看詳情" placement="top">
+                    <div class="action-icon is-detail" @click.stop="showProductDetail(product)">
+                      <el-icon><ZoomIn /></el-icon>
+                    </div>
+                  </el-tooltip>
+                  <el-tooltip content="加入購物車" placement="top">
+                    <div class="action-icon is-cart" @click.stop="addToCart(product)">
+                      <el-icon><ShoppingCart /></el-icon>
+                    </div>
+                  </el-tooltip>
+                </div>
+              </div>
             </div>
             <div class="card-body">
               <h3 class="product-name">{{ product.name }}</h3>
@@ -75,14 +88,6 @@
                   <el-icon><Star v-if="!product.isWishlisted" /><StarFilled v-else /></el-icon>
                 </div>
               </div>
-              <el-button
-                type="primary"
-                size="small"
-                class="add-to-cart-button"
-                @click="addToCart(product)"
-              >
-                加入購物車
-              </el-button>
             </div>
           </el-card>
         </el-col>
@@ -123,7 +128,7 @@ import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
 import throttle from 'lodash/throttle'
-import { Loading, Star, StarFilled } from '@element-plus/icons-vue'
+import { Loading, Star, StarFilled, ShoppingCart, ZoomIn } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const { goProducts, goProductDetail } = useNavigation()
@@ -325,19 +330,12 @@ const clearSearch = () => {
 
 .product-card {
   border: none;
-  border-radius: 16px;
+  border-radius: 0;
   overflow: hidden;
+  background: transparent;
+  box-shadow: none;
   height: 100%;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+  transition: all 0.3s ease;
 }
 
 .product-card :deep(.el-card__body) {
@@ -345,23 +343,37 @@ const clearSearch = () => {
 }
 
 .card-image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  width: 100%;
-  height: 240px;
   overflow: hidden;
-  background-color: #f5f5f7;
+  width: 100%;
+  /* height: 240px; */
+  aspect-ratio: 1 / 1;
   cursor: pointer;
+  background-color: #fff;
+}
+
+.card-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 加上一個非常細的 1px 內縮邊框，色調選比白色深一點點的淺灰 */
+  /* border: 1px solid rgba(0, 0, 0, 0.04); */
+  pointer-events: none; /* 確保不影響點擊 */
+  z-index: 1;
 }
 
 .card-image {
-  width: 100%;
-  height: 100%;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  margin: -1px;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.product-card:hover .card-image {
-  transform: scale(1.08);
+  display: block;
 }
 
 .card-body {
@@ -369,6 +381,75 @@ const clearSearch = () => {
   text-align: left;
 }
 
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* 淡淡的黑遮罩 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-image-wrapper:hover .image-overlay {
+  opacity: 1;
+}
+
+.card-image-wrapper:hover .overlay-actions {
+  transform: translateY(0);
+}
+
+/* --- 遮罩內的按鈕容器 --- */
+.overlay-actions {
+  display: flex;
+  gap: 15px;
+  transform: translateY(10px);
+  transition: transform 0.3s ease;
+}
+
+/* --- 遮罩內的按鈕樣式 --- */
+.action-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 46px;
+  height: 46px;
+  font-size: 26px;
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- 遮罩內的按鈕(查看詳情) --- */
+.action-icon.is-detail {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1d1d1f;
+}
+
+/* --- 遮罩內的按鈕(查看詳情) --- */
+.action-icon.is-detail:hover {
+  background: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* --- 遮罩內的按鈕(購物車) --- */
+.action-icon.is-cart {
+  background: rgba(29, 29, 31, 0.9);
+  color: #ffffff;
+}
+
+/* --- 遮罩內的按鈕(購物車) --- */
+.action-icon.is-cart:hover {
+  background: #000000;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
 .product-category {
   font-size: 12px;
   text-transform: uppercase;

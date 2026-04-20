@@ -177,6 +177,10 @@ export const useUserStore = defineStore('userStore', {
       const saveUsername = Storage.get(USER_KEY)
       const saveFullName = Storage.get(FULL_NAME_KEY)
 
+      if (this.user.isLogin && saveFullName && saveFullName !== this.user.fullName) {
+        this.user.fullName = saveFullName
+      }
+
       if (token) {
         if (!this.user.isLogin) {
           this.user.isLogin = true

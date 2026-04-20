@@ -6,6 +6,7 @@ import { Icon } from '@iconify/vue'
 
 //樣式、配置
 import 'element-plus/dist/index.css'
+import 'vue-cropper/dist/index.css'
 import './assets/main.css'
 
 //專案內元件、插件

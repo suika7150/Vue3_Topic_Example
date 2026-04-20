@@ -88,6 +88,7 @@ onMounted(async () => {
 
   try {
     const res = await api.findUser()
+    console.log('後端回傳的原始資料:', res.result)
     if (res && res.result) {
       form.value = { ...form.value, ...res.result }
     }
@@ -129,6 +130,7 @@ const rules = {
 }
 
 const handleUpdate = async () => {
+  console.log('送出前的表單內容：', form.value)
   if (!profileForm.value) return
 
   try {

@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "dev:sit": "vite --mode sit",
-    "dev:uat": "vite --mode uat",
-    "dev:prod": "vite --mode prod",
-    "dev:hotspot": "vite --mode hotspot",
+    "dev": "vite --host",
+    "dev:sit": "vite --mode sit --host",
+    "dev:uat": "vite --mode uat --host",
+    "dev:prod": "vite --mode prod --host",
+    "dev:hotspot": "vite --mode hotspot --host",
     "serve": "vite --host",
     "build": "vite build",
     "build:sit": "vite build --mode sit",
@@ -35,6 +35,7 @@
     "plus": "^0.1.0",
     "qrcode.vue": "^3.6.0",
     "vue": "^3.5.13",
+    "vue-cropper": "^1.1.4",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {

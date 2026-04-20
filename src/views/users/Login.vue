@@ -124,7 +124,6 @@ const handleLogin = async () => {
   // 發送請求與處理結果
   try {
     const res = await api.login(loginData)
-    console.log('後端登入回傳的原始資料:', res.result)
     toast.success('登入成功')
 
     // 從後端回傳結果中解構出 token 和 role

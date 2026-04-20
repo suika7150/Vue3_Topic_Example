@@ -1,100 +1,120 @@
 <template>
   <div class="list-container">
     <div class="list-header">
-      <h2 class="title text-2xl font-bold">編輯商品資訊</h2>
+      <h2 class="title">編輯商品資訊</h2>
     </div>
 
-    <el-form :model="form" label-width="120px" :rules="rules" ref="formRef">
-      <div class="list-item">
-        <el-form-item label="商品名稱" prop="name">
-          <el-input v-model="form.name" placeholder="請輸入商品名稱" />
-        </el-form-item>
-      </div>
+    <div class="main-content-wrapper">
+      <el-form :model="form" :rules="rules" ref="formRef" class="form-leftside">
+        <div class="list-item">
+          <el-form-item label="商品名稱" prop="name">
+            <el-input v-model="form.name" placeholder="請輸入商品名稱" />
+          </el-form-item>
+        </div>
 
-      <div class="list-item">
-        <el-form-item label="分類" prop="category">
-          <el-select v-model="form.category" placeholder="請選擇分類">
-            <el-option label="電子產品" value="電子產品" />
-            <el-option label="生活用品" value="生活用品" />
-            <el-option label="服飾配件" value="服飾配件" />
-            <el-option label="加工食品" value="加工食品" />
-            <el-option label="交通工具" value="交通工具" />
-            <el-option label="清潔用品" value="清潔用品" />
-            <el-option label="影音娛樂" value="影音娛樂" />
-          </el-select>
-        </el-form-item>
-      </div>
+        <div class="list-item">
+          <el-form-item label="類別" prop="category">
+            <el-select v-model="form.category" placeholder="請選擇類別">
+              <el-option label="電子產品" value="電子產品" />
+              <el-option label="生活用品" value="生活用品" />
+              <el-option label="服飾配件" value="服飾配件" />
+              <el-option label="加工食品" value="加工食品" />
+              <el-option label="交通工具" value="交通工具" />
+              <el-option label="清潔用品" value="清潔用品" />
+              <el-option label="影音娛樂" value="影音娛樂" />
+            </el-select>
+          </el-form-item>
+        </div>
 
-      <div class="list-item">
-        <el-form-item label="銷售價格" prop="price">
-          <el-input-number v-model="form.price" :min="0" :step="100" />
-        </el-form-item>
-      </div>
+        <div class="list-item">
+          <el-form-item label="銷售價格" prop="price">
+            <el-input-number v-model="form.price" :min="0" :step="100" />
+          </el-form-item>
+        </div>
 
-      <div class="list-item">
-        <el-form-item label="庫存數量" prop="stock">
-          <el-input-number v-model="form.stock" :min="0" :step="1" placeholder="請輸入庫存數量" />
-        </el-form-item>
-      </div>
+        <div class="list-item">
+          <el-form-item label="庫存數量" prop="stock">
+            <el-input-number v-model="form.stock" :min="0" :step="1" placeholder="請輸入庫存數量" />
+          </el-form-item>
+        </div>
 
-      <div class="list-item">
-        <el-form-item label="商品狀態" prop="states">
-          <el-select v-model="form.states" placeholder="請選擇狀態">
-            <el-option
-              v-for="(state, index) in states"
-              :key="index"
-              :label="state.label"
-              :value="state.value"
+        <div class="list-item">
+          <el-form-item label="商品狀態" prop="states">
+            <el-select v-model="form.states" placeholder="請選擇狀態">
+              <el-option
+                v-for="(state, index) in states"
+                :key="index"
+                :label="state.label"
+                :value="state.value"
+              />
+            </el-select>
+          </el-form-item>
+        </div>
+
+        <div class="list-item">
+          <el-form-item label="詳細描述">
+            <el-input
+              v-model="form.description"
+              type="textarea"
+              :rows="3"
+              placeholder="簡要描述商品..."
             />
-          </el-select>
-        </el-form-item>
-      </div>
+          </el-form-item>
+        </div>
 
-      <div class="list-item">
-        <el-form-item label="詳細描述">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            :rows="3"
-            placeholder="簡要描述商品..."
-          />
-        </el-form-item>
-      </div>
+        <div class="list-item noborder">
+          <el-form-item label="上傳圖片">
+            <input type="file" accept="image/*" @change="handleFileChange" />
+          </el-form-item>
+        </div>
 
-      <div class="list-item noborder">
-        <el-form-item label="上傳圖片">
-          <input type="file" accept="image/*" @change="handleFileChange" />
-          <div v-if="imagePreview" class="mt-2">
-            <img :src="imagePreview" class="h-32 rounded border" />
-            <el-button type="danger" @click="removeImage" text>刪除圖片</el-button>
+        <div class="list-footer">
+          <el-form-item>
+            <el-button type="primary" @click="submitForm">更新商品</el-button>
+            <el-button @click="resetForm" type="default">重設</el-button>
+            <el-button @click="cancelEdit" type="success">取消變更</el-button>
+          </el-form-item>
+        </div>
+      </el-form>
+
+      <div class="right-preview-aside">
+        <div class="sticky-image-container">
+          <p class="preview-title-text">圖片預覽</p>
+          <img v-if="imagePreview" :src="imagePreview" class="main-preview-img rounded shadow-sm" />
+          <div v-else class="empty-preview">
+            <div class="text-gray-400">尚未上傳圖片</div>
           </div>
-        </el-form-item>
+          <el-button
+            v-if="imagePreview"
+            type="danger"
+            @click="removeImage"
+            class="delete-btn"
+            plain
+          >
+            刪除圖片
+          </el-button>
+        </div>
       </div>
-
-      <div class="list-footer">
-        <el-form-item>
-          <el-button type="primary" @click="submitForm">更新商品</el-button>
-          <el-button @click="resetForm" type="default">重設</el-button>
-          <el-button @click="cancelEdit" type="success">取消變更</el-button>
-        </el-form-item>
-      </div>
-    </el-form>
+    </div>
   </div>
+
+  <ImageCropper ref="cropperRef" @on-crop="handleCropped" />
 </template>
 
 <script setup>
 import { useNavigation } from '@/composables/useNavigation'
 import api from '@/service/api'
 import { ElMessage } from 'element-plus'
-import { onMounted, reactive, ref, inject } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import InputSelect from '@/components/InputSelect.vue'
-
-const productId = ref(null) // 新增一個 ref 來儲存 id
+import ImageCropper from '@/components/ImageCropper.vue'
 
 const route = useRoute()
 const { goTo } = useNavigation()
+const productId = ref(route.params?.id)
 const formRef = ref()
+const cropperRef = ref(null)
+
 const form = reactive({
   name: '',
   category: '',
@@ -102,12 +122,10 @@ const form = reactive({
   stock: 0,
   states: '',
   description: '',
-  imageBase64: '', // 改成 Base64 字串
+  imageBase64: '',
 })
-const imagePreview = ref(null)
 
-const states = ref([])
-const category = ref([])
+const imagePreview = ref(null)
 
 const rules = {
   name: [{ required: true, message: '請輸入商品名稱', trigger: 'blur' }],
@@ -120,38 +138,23 @@ const rules = {
   imageBase64: [{ required: true, message: '請上傳圖片', trigger: 'change' }],
 }
 
-// 圖片縮放
-function resizeImage(img, fileType, targetWidth, targetHeight) {
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
+const states = ref([
+  { label: '上架', value: 'ONSALE' },
+  { label: '下架', value: 'OFFSALE' },
+])
 
-  // 設定 Canvas 的固定尺寸
-  canvas.width = targetWidth
-  canvas.height = targetHeight
-
-  let width = img.width
-  let height = img.height
-
-  // 計算縮放比例，以確保圖片能完整顯示在目標尺寸內
-  const scale = Math.min(targetWidth / width, targetHeight / height)
-  const newWidth = width * scale
-  const newHeight = height * scale
-
-  // 計算繪製的起始位置，讓圖片置中
-  const xOffset = (targetWidth - newWidth) / 2
-  const yOffset = (targetHeight - newHeight) / 2
-
-  // 繪製圖片到 Canvas，不足的部分會是透明（留白）
-  ctx.drawImage(img, xOffset, yOffset, newWidth, newHeight)
-
-  return canvas.toDataURL(fileType)
+// 選項過濾邏輯
+const filterOptions = (options, listName) => {
+  // 檢查傳入的 options 是否為有效陣列
+  if (!options || !Array.isArray(options)) {
+    return []
+  }
+  return options
+    .filter((option) => option.listName === listName)
+    .map((option) => ({ label: option.key, value: option.value }))
 }
 
-/**
- * 處理檔案選擇變化
- * @param {InputEvent} event - Input 事件
- * @description 讀取檔案， resize 圖片，將結果 set 到 form.imageBase64
- */
+// 圖片處理邏輯(Cropper)
 function handleFileChange(event) {
   const file = event.target.files[0]
   if (!file) return
@@ -159,53 +162,36 @@ function handleFileChange(event) {
   const reader = new FileReader()
   reader.readAsDataURL(file)
   reader.onload = () => {
-    const img = new Image()
-    img.src = reader.result
-    img.onload = () => {
-      const MAX_WIDTH = 200
-      const MAX_HEIGHT = 150
-      const resizedImage = resizeImage(img, file.type, MAX_WIDTH, MAX_HEIGHT)
-      form.imageBase64 = resizedImage
-      form.imageType = file.type
-      imagePreview.value = resizedImage
-    }
+    // 呼叫妳的裁切器組件
+    cropperRef.value.open(reader.result)
   }
 }
 
-/**
- * 移除圖片
- * @description 將 form.imageBase64 清空
- * @description 將 imagePreview.value 清空
- * @description 清空 input[type=file]
- */
+function handleCropped(blob) {
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onloadend = () => {
+    form.imageBase64 = reader.result
+    imagePreview.value = reader.result
+    ElMessage.success('圖片裁切完成')
+  }
+}
+
 function removeImage() {
   form.imageBase64 = ''
   imagePreview.value = null
-  document.querySelector('input[type="file"]').value = ''
+  const fileInput = document.querySelector('input[type="file"]')
+  if (fileInput) fileInput.value = ''
 }
 
+// 表單操作邏輯
 function resetForm() {
-  form.name = ''
-  form.category = ''
-  form.price = null
-  form.stock = 0
-  form.states = ''
-  form.description = ''
-  form.imageBase64 = ''
-  imagePreview.value = null
   formRef.value.resetFields()
+  imagePreview.value = null
 }
 
 function cancelEdit() {
   goTo('productManage')
-}
-
-const filterOptions = (allOptions, listNamen) => {
-  return allOptions
-    .filter((option) => option.listName === listNamen)
-    .map((option) => {
-      return { label: option.key, value: option.value }
-    })
 }
 
 /**
@@ -214,21 +200,15 @@ const filterOptions = (allOptions, listNamen) => {
  *
  */
 onMounted(async () => {
-  productId.value = route.params?.id
   if (productId.value) {
     try {
-      const allOptions = inject('allOptions')
-      states.value = filterOptions(allOptions, 'order_status')
-      category.value = filterOptions(allOptions, 'category')
-
       const res = await api.getProductById(productId.value)
       if (res.code === '0000') {
-        const product = res.result
-        // 載入資料到表單
-        Object.assign(form, product)
-        imagePreview.value = product.imageBase64
+        Object.assign(form, res.result)
+        imagePreview.value = res.result.imageBase64
       }
     } catch (error) {
+      console.error('載入失敗:', error)
       ElMessage.error('載入商品資料失敗')
     }
   }
@@ -238,28 +218,41 @@ onMounted(async () => {
  * 表單提交
  * @description 當表單驗證通過時，執行更新操作
  */
-function submitForm() {
-  formRef.value.validate(async (valid) => {
-    if (!valid) return
-    try {
-      await api.updateProduct(productId.value, form)
-      ElMessage.success('商品更新成功！')
-      goTo('productManage')
-    } catch (error) {
-      ElMessage.error('更新失敗，請稍後再試')
-    }
-  })
+async function submitForm() {
+  const valid = await formRef.value.validate()
+  if (!valid) return
+
+  try {
+    await api.updateProduct(productId.value, form)
+    ElMessage.success('商品更新成功！')
+    goTo('productManage')
+  } catch (error) {
+    ElMessage.error('更新失敗')
+  }
 }
 </script>
 <style scoped>
-/* 保持與 Manage 一致的容器寬度與邊距 */
 .list-container {
   max-width: 1200px;
   margin: 20px 120px;
   background-color: #fff;
+  padding: 30px;
 }
 
-/* 標題樣式統一 */
+.main-content-wrapper {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+.form-leftside :deep(.el-form-item__label) {
+  width: 120px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+
+/* 頁面標題 */
 .list-header {
   display: flex;
   justify-content: space-between;
@@ -275,17 +268,17 @@ function submitForm() {
   color: #303133;
 }
 
-/* 清單項目樣式 */
+/* --- 左側表單 --- */
+.form-leftside {
+  flex: 1;
+}
+
+/* 清單項目 */
 .list-item {
-  padding: 20px 0;
-  border-bottom: 1px solid #f2f6fc;
+  padding: 12px 0;
 }
 
-.noborder {
-  border-bottom: none;
-}
-
-/* 讓輸入框寬度適中，不要橫跨全螢幕 */
+/* 輸入框 (名稱、類別、狀態、描述) */
 :deep(.el-input),
 :deep(.el-select),
 :deep(.el-textarea) {
@@ -293,24 +286,27 @@ function submitForm() {
   width: 100%;
 }
 
-/* 圖片預覽部分 */
-.img-preview-container {
-  margin-top: 10px;
-  display: flex;
-  align-items: flex-end;
-  gap: 15px;
+/* 輸入框 (價格、庫存) */
+:deep(.el-input-number) {
+  width: 200px;
 }
 
-.preview-img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid #dcdfe6;
+/* 表單標籤 */
+:deep(.el-form-item__label) {
+  font-weight: bold;
+  color: #606266;
 }
 
-/* 底部按鈕區 */
+/* 移除 ElementPlus 原生項目間距 */
+:deep(.el-form-item) {
+  margin-bottom: 0;
+}
+
+/* 表單底部按鈕 */
 .list-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 40px;
   padding-top: 20px;
   border-top: 1px solid #ebeef5;
@@ -318,14 +314,153 @@ function submitForm() {
   gap: 12px;
 }
 
-/* 標籤字體加粗，對應後台質感 */
-:deep(.el-form-item__label) {
-  font-weight: bold;
-  color: #606266;
+/* 表單底部按鈕 */
+.list-footer :deep(.el-form-item) {
+  width: 100%;
 }
 
-/* 移除 Form Item 預設底邊距，改由 list-item 控制 */
-:deep(.el-form-item) {
-  margin-bottom: 0;
+/* 表單底部按鈕 */
+.list-footer :deep(.el-form-item__content) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* 圖片預覽區塊 */
+.right-preview-aside {
+  width: 450px;
+}
+
+/* 圖片預覽容器 */
+.sticky-image-container {
+  position: sticky;
+  top: 120px;
+  padding: 15px;
+  text-align: center;
+}
+
+/* 圖片預覽標題文字 */
+.preview-title-text {
+  display: block;
+  position: relative;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #303133;
+}
+
+/* 主預覽圖片 */
+.main-preview-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* 尚未上傳圖片狀態 */
+.empty-preview {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #f5f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #dcdfe6;
+}
+
+/* 刪除圖片按鈕 */
+.delete-btn {
+  margin-top: 20px;
+  width: 30%;
+  letter-spacing: 1px;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+/* --- RWD  --- */
+@media (max-width: 1024px) {
+  .list-container {
+    margin: 20px 0px;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .main-content-wrapper {
+    flex-direction: column-reverse;
+    gap: 30px;
+  }
+
+  .form-leftside,
+  .right-preview-aside {
+    width: 100%;
+  }
+
+  .sticky-image-container {
+    position: static;
+    padding: 0;
+  }
+
+  .main-preview-img,
+  .empty-preview {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  :deep(.el-form-item) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transform: translateX(-30px);
+  }
+
+  /* 表單標籤 */
+  :deep(.el-form-item__label) {
+    display: flex;
+    text-align: left;
+    width: 100%;
+    margin-right: 15px;
+  }
+
+  :deep(.el-form-item__content) {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* 所有輸入框 */
+  :deep(.el-input),
+  :deep(.el-select),
+  :deep(.el-textarea) {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  :deep(.el-input-number) {
+    width: 80%;
+  }
+
+  /* 表單底部按鈕 */
+  .list-footer :deep(.el-form-item__content) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .list-footer :deep(.el-form-item) {
+    transform: translateX(0);
+  }
+
+  .list-footer .el-button {
+    margin-left: 0;
+    width: auto;
+    padding: 10px 20px;
+  }
 }
 </style>
