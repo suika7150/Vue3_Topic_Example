@@ -30,7 +30,7 @@
 
           <div class="form-options">
             <el-checkbox v-model="form.rememberUsername">記住帳號</el-checkbox>
-            <el-checkbox v-model="form.rememberMe">保持登入</el-checkbox>
+            <el-checkbox v-model="form.isPersistent">保持登入</el-checkbox>
           </div>
 
           <el-button class="login-btn" @click="handleLogin"> 登入 </el-button>
@@ -55,7 +55,7 @@ import { useRoute } from 'vue-router'
 import { useNavigation } from '@/composables/useNavigation'
 import LoginAd from '@/components/LoginAd.vue'
 import { useUserStore } from '@/store/userStore'
-import Storage, { TOKEN_KEY, USER_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
+import Storage, { USER_KEY, REMEMBER_ME_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
 import { ResultCode, getMsgByCode } from '@/utils/resultCode'
 
@@ -67,7 +67,7 @@ const loginForm = ref()
 const form = ref({
   username: '',
   password: '',
-  rememberMe: false,
+  isPersistent: false,
   rememberUsername: false,
 })
 
@@ -91,7 +91,7 @@ const rules = {
 
 onMounted(() => {
   //載入記住的帳號，讀取token
-  const rememberUsername = Storage.get(USER_KEY)
+  const rememberUsername = Storage.get(REMEMBER_ME_KEY)
   if (rememberUsername) {
     form.value.username = rememberUsername
     form.value.rememberUsername = true
@@ -117,38 +117,26 @@ const handleLogin = async () => {
   const loginData = {
     username: form.value.username,
     password: form.value.password,
-    rememberMe: form.value.rememberMe,
+    isPersistent: form.value.isPersistent,
     isLogin: true,
   }
 
   // 發送請求與處理結果
   try {
     const res = await api.login(loginData)
+    console.log('後端登入回傳的原始資料:', res.result)
     toast.success('登入成功')
 
     // 從後端回傳結果中解構出 token 和 role
     const { token, role } = res.result
 
     //存入 Pinia
-    await userStore.login(loginData, { token, role, rememberMe: form.value.rememberMe })
-    // userStore.startTokenCountdown(token)
-
-    if (form.value.rememberMe) {
-      //存入 localStorage
-      Storage.set(TOKEN_KEY, token)
-      Storage.set(USER_ROLE_KEY, role)
-    } else {
-      //存入 localStorage
-      Storage.sessionSet(TOKEN_KEY, token)
-      Storage.sessionSet(USER_ROLE_KEY, role)
-    }
-
-    //記住帳號
-    if (form.value.rememberUsername) {
-      Storage.set(USER_KEY, form.value.username)
-    } else {
-      Storage.remove(USER_KEY)
-    }
+    await userStore.login(res.result, {
+      token: res.result.token,
+      role: res.result.role,
+      isPersistent: form.value.isPersistent,
+      rememberMe: form.value.rememberUsername,
+    })
 
     // 如果網址有 ?redirect=/checkout，就去結帳頁，否則才回首頁
     const targetPath = route.query.redirect || '/'
