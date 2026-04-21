@@ -10,6 +10,7 @@ import Storage, {
   IS_PERSISTENT_KEY,
   SESSION_ACTIVE_KEY,
 } from '@/utils/storageUtil'
+import { toast } from '@/utils/message'
 
 let isLoggingOut = false
 
@@ -119,12 +120,12 @@ export const useUserStore = defineStore('userStore', {
       this.role = 'GUEST'
 
       if (window.location.pathname !== '/login') {
-        ElMessageBox.alert('您的登入已過期，請重新登入。', '提示', {
-          confirmButtonText: '確定',
-          callback: () => {
-            isLoggingOut = false
-          },
-        })
+        toast.warning('您的登入已過期，請重新登入。')
+
+        // 延遲重置，防止短時間內重複觸發
+        setTimeout(() => {
+          isLoggingOut = false
+        }, 500)
       } else {
         isLoggingOut = false
       }

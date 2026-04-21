@@ -26,18 +26,20 @@ body {
 .el-message.glow-toast-error,
 .el-message.glow-toast-info {
   border: none !important;
-  border-radius: 12px !important;
+  border-radius: 10px !important;
   padding: 12px 20px !important;
   display: flex !important;
   align-items: center !important;
   width: auto !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* 內容文字樣式 */
+/* Toast 內容文字樣式 */
 .el-message__content {
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   color: #1d1d1f !important;
-  font-size: 15px;
+  font-size: 14px;
+  letter-spacing: 0.5px;
 }
 
 /* --- Checkout 對話框美化 --- */
@@ -204,7 +206,6 @@ body .el-message-box.checkout-confirm-dialog {
   }
 }
 
-/* RWD:1024px */
 @media (max-width: 1024px) {
   body .el-message-box.checkout-confirm-dialog {
     width: 90% !important;
