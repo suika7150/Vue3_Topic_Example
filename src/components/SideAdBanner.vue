@@ -1,3 +1,4 @@
+/* 側邊欄懸浮廣告組件 */
 <template>
   <div
     class="side-ad"
@@ -5,7 +6,7 @@
     v-if="isVisible"
     :style="adStyles"
   >
-    <button class="close-btn" @click="isVisible = false" title="關閉廣告">×</button>
+    <button class="close-btn" @click="isVisible = false" title="關閉廣告"></button>
     <a :href="link" target="_blank" class="ad-link">
       <img :src="image" :alt="title" />
     </a>
@@ -42,7 +43,7 @@ const adStyles = computed(() => {
     transform: `translateY(${yOffset}px)`,
     // 確保 transition 包含 left 屬性，這樣推開時才有動畫
     transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-    zIndex: 9999, // 建議比 Drawer 低，以免穿透
+    zIndex: 9999,
   }
 })
 
@@ -80,11 +81,9 @@ onUnmounted(() => {
   top: 250px;
   width: 12vw;
   height: 25vw;
-
   max-width: 180px;
   min-width: 100px;
-
-  border-radius: 20px;
+  border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   will-change: transform;
@@ -108,38 +107,58 @@ onUnmounted(() => {
 }
 
 .side-ad img {
+  display: block;
+  object-fit: cover;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
 }
 
 .close-btn {
   position: absolute;
+  cursor: pointer;
+  border: none;
   top: 10px;
   right: 10px;
-  height: 24px;
-  width: 24px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
-  cursor: pointer;
   background: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 101;
-  font-size: 20px;
+}
+
+.close-btn::before,
+.close-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 2px;
+  background-color: white;
+  border-radius: 1px;
+}
+
+.close-btn::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close-btn::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .close-btn:hover {
   background: rgba(0, 0, 0, 0.7);
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1024px) {
   .side-ad {
-    /* display: none; */
-    top: 50%;
+    height: 200px;
+    border-radius: 12px;
+    top: 40%;
+  }
+  .close-btn {
+    right: 4px;
+    top: 5px;
   }
 }
 </style>
