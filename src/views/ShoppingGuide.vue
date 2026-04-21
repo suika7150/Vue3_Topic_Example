@@ -3,9 +3,9 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <h1>
+          <h2>
             <el-icon><ShoppingBag /></el-icon> 購買須知
-          </h1>
+          </h2>
         </div>
       </template>
 
@@ -69,5 +69,11 @@ import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
   margin-left: 20px;
   line-height: 2;
   color: #606266;
+}
+@media (max-width: 1024px) {
+  .page-container {
+    width: 100%;
+    margin: 0 0;
+  }
 }
 </style>

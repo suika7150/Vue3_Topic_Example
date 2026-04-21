@@ -22,13 +22,12 @@ const props = defineProps({
   image: { type: String, default: '' },
   link: { type: String, default: '#' },
   title: { type: String, default: '活動廣告' },
-  //推開
   shift: { type: Number, default: 0 },
 })
 
 const isVisible = ref(true)
 const isScrolling = ref(false)
-const scrollDirection = ref(0) //方向
+const scrollDirection = ref(0)
 let lastScrollY = window.scrollY
 let scrollTimer = null
 

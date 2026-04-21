@@ -30,7 +30,7 @@
 
           <div class="form-options">
             <el-checkbox v-model="form.rememberUsername">記住帳號</el-checkbox>
-            <el-checkbox v-model="form.isPersistent">保持登入</el-checkbox>
+            <el-checkbox v-model="form.rememberMe">保持登入</el-checkbox>
           </div>
 
           <el-button class="login-btn" @click="handleLogin"> 登入 </el-button>
@@ -55,7 +55,7 @@ import { useRoute } from 'vue-router'
 import { useNavigation } from '@/composables/useNavigation'
 import LoginAd from '@/components/LoginAd.vue'
 import { useUserStore } from '@/store/userStore'
-import Storage, { USER_KEY, REMEMBER_ME_KEY } from '@/utils/storageUtil'
+import Storage, { REMEMBER_USERNAME_KEY, REMEMBER_ME_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
 import { ResultCode, getMsgByCode } from '@/utils/resultCode'
 
@@ -67,7 +67,7 @@ const loginForm = ref()
 const form = ref({
   username: '',
   password: '',
-  isPersistent: false,
+  rememberMe: false,
   rememberUsername: false,
 })
 
@@ -91,7 +91,7 @@ const rules = {
 
 onMounted(() => {
   //載入記住的帳號，讀取token
-  const rememberUsername = Storage.get(REMEMBER_ME_KEY)
+  const rememberUsername = Storage.get(REMEMBER_USERNAME_KEY)
   if (rememberUsername) {
     form.value.username = rememberUsername
     form.value.rememberUsername = true
@@ -117,7 +117,7 @@ const handleLogin = async () => {
   const loginData = {
     username: form.value.username,
     password: form.value.password,
-    isPersistent: form.value.isPersistent,
+    rememberMe: form.value.rememberMe,
     isLogin: true,
   }
 
@@ -133,8 +133,8 @@ const handleLogin = async () => {
     await userStore.login(res.result, {
       token: res.result.token,
       role: res.result.role,
-      isPersistent: form.value.isPersistent,
-      rememberMe: form.value.rememberUsername,
+      rememberUsername: form.value.rememberUsername,
+      rememberMe: form.value.rememberMe,
     })
 
     // 如果網址有 ?redirect=/checkout，就去結帳頁，否則才回首頁

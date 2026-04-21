@@ -362,9 +362,7 @@ const clearSearch = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  /* 加上一個非常細的 1px 內縮邊框，色調選比白色深一點點的淺灰 */
-  /* border: 1px solid rgba(0, 0, 0, 0.04); */
-  pointer-events: none; /* 確保不影響點擊 */
+  pointer-events: none;
   z-index: 1;
 }
 
