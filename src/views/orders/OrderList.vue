@@ -23,13 +23,12 @@
           <div v-for="order in orders" :key="order.id" class="wide-order-card">
             <div class="card-header">
               <div class="order-meta">
-                <span class="order-date">{{ orders.createdAt }}</span>
                 <span class="order-id">訂單編號：#{{ order.merchantTradeNo || order.id }}</span>
               </div>
 
               <div class="order-time-info">
                 <span class="label">訂單時間：</span>
-                <span class="time">{{ formatDate(order.createAt, 'minute') }}</span>
+                <span class="time">{{ order.createdAt }}</span>
               </div>
               <div class="order-status-group">
                 <el-tag :type="getStatusTag(order.paymentStatus)" effect="plain" class="status-tag">
