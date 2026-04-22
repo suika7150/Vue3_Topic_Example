@@ -210,8 +210,10 @@ router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
   const cartStore = useCartStore()
 
-  const token = Storage.get(TOKEN_KEY) || Storage.sessionGet(TOKEN_KEY)
+  const token = Storage.get(TOKEN_KEY)
   const isLoggedIn = !!token
+
+  // userStore.initUser()
 
   // 處理排除項：如果是去登入頁且已經登入，直接回首頁
   if (to.path === '/login' && isLoggedIn) {

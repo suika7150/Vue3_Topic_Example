@@ -83,7 +83,7 @@
                 <el-input v-model="shippingForm.phone" placeholder="請輸入聯絡電話" />
               </el-form-item>
 
-              <el-form-item label="聯絡地址" prop="address">
+              <!-- <el-form-item label="聯絡地址" prop="address">
                 <div class="address-fields">
                   <div class="address-selects">
                     <el-select
@@ -119,7 +119,7 @@
                     :rows="1"
                   />
                 </div>
-              </el-form-item>
+              </el-form-item> -->
 
               <el-form-item label="配送方式" prop="shippingMethod">
                 <div class="shipping-method-grid">
@@ -144,7 +144,7 @@
               </el-form-item>
 
               <div class="shipping-detail-box">
-                <template v-if="shippingForm.shippingMethod === 'home_delivery'">
+                <template v-if="shippingForm.shippingMethod === 'HOME_DELIVERY'">
                   <el-form-item label="配送地址" required>
                     <div class="address-fields">
                       <div class="address-selects">
@@ -190,25 +190,21 @@
                 <template
                   v-else-if="['CVS_711', 'CVS_FAMILY'].includes(shippingForm.shippingMethod)"
                 >
-                  <el-form-item
-                    :label="shippingForm.shippingMethod === 'CVS_711' ? '7-11 門市' : '全家門市'"
-                  >
+                  <el-form-item label="超商門市">
                     <el-button type="primary" plain @click="openCvsMap"
                       >開啟電子地圖選取門市</el-button
                     >
                     <div v-if="shippingForm.cvsStore" class="mt-2 text-blue-500">
-                      已選門市：{{ shippingForm.cvsStore.storeName }} ({{
-                        shippingForm.cvsStore.storeAddress
-                      }})
+                      已選門市：{{ shippingForm.cvsStore.storeName }}
                     </div>
                   </el-form-item>
                 </template>
 
-                <template v-else-if="shippingForm.shippingMethod === 'store_pickup'">
+                <template v-else-if="shippingForm.shippingMethod === 'STORE_PICKUP'">
                   <el-form-item label="取貨門市">
-                    <el-select v-model="shippingForm.pickupStoreId" placeholder="請選擇店家">
-                      <el-option label="台北總店 - 台北市信義區..." value="001" />
-                      <el-option label="台中分店 - 台中市西屯區..." value="002" />
+                    <el-select v-model="shippingForm.pickupStoreId" placeholder="請選擇取貨地點">
+                      <el-option label="台北總店" value="001" />
+                      <el-option label="台中分店" value="002" />
                     </el-select>
                   </el-form-item>
                 </template>
@@ -418,18 +414,13 @@ const updateStorage = (val, itemId) => {
 const shippingForm = ref({
   name: '',
   phone: '',
-  shippingMethod: 'home_delivery', // 預設宅配
+  shippingMethod: 'HOME_DELIVERY', // 預設宅配
 
   //基本資料
   city: '',
   district: '',
   address: '',
 
-  // 宅配專用
-  deliveryCity: '',
-  deliveryDistrict: '',
-  deliveryAddress: '',
-  deliveryProvider: 't-cat', // 預設黑貓
   // 超商專用
   cvsStore: null, // 儲存選擇的門市資訊
   //自取專用
@@ -528,11 +519,12 @@ const shippingFee = computed(() => {
   }
   // 根據選擇的配送方式計算運費
   switch (shippingForm.value.shippingMethod) {
-    case 'cvs':
+    case 'CVS_711':
+    case 'CVS_FAMILY':
       return 60
-    case 'home_delivery':
+    case 'HOME_DELIVERY':
       return 80
-    case 'store_pickup':
+    case 'STORE_PICKUP':
       return 0
     default:
       return shippingForm.value.shippingMethod === 'express' ? 100 : 60
@@ -576,6 +568,9 @@ const submitOrder = async () => {
       phone: shippingForm.value.phone,
       address: finalAddress, // 使用組裝的地址
       shippingMethod: shippingForm.value.shippingMethod,
+      shippingFee: shippingFee.value, // 運費
+      discount: discount.value, // 折扣金額
+      couponCode: couponCode.value, // 優惠券代碼
       notes: shippingForm.value.notes,
       paymentMethod: paymentMethod.value,
       total: total.value,

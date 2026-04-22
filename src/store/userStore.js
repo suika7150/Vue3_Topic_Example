@@ -7,9 +7,9 @@ import Storage, {
   REMEMBER_ME_KEY, // 保持登入功能
   USER_ROLE_KEY,
   FULL_NAME_KEY,
-  SESSION_ACTIVE_KEY,
 } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
+import { remove } from 'lodash'
 
 let isLoggingOut = false
 
@@ -48,15 +48,6 @@ export const useUserStore = defineStore('userStore', {
       Storage.set(USER_KEY, userData.username)
       Storage.set(REMEMBER_ME_KEY, rememberMe)
       Storage.set(FULL_NAME_KEY, userData.fullName)
-
-      // 如果是一般登入，種下一顆「生命種子」在 SessionStorage
-      // 關閉瀏覽器時，這顆種子會消失，initUser 就能判斷要登出
-      if (!rememberMe) {
-        // 一般登入
-        Storage.sessionSet(SESSION_ACTIVE_KEY, true)
-      } else {
-        Storage.sessionRemove(SESSION_ACTIVE_KEY)
-      }
 
       // 更新State
       this.user = {
@@ -100,14 +91,7 @@ export const useUserStore = defineStore('userStore', {
       isLoggingOut = true
 
       // 清除狀態
-      const keys = [
-        USER_KEY,
-        TOKEN_KEY,
-        FULL_NAME_KEY,
-        USER_ROLE_KEY,
-        REMEMBER_ME_KEY,
-        SESSION_ACTIVE_KEY,
-      ]
+      const keys = [USER_KEY, TOKEN_KEY, FULL_NAME_KEY, USER_ROLE_KEY, REMEMBER_ME_KEY]
       Storage.remove(...keys)
       Storage.sessionRemove(...keys)
 
@@ -133,22 +117,11 @@ export const useUserStore = defineStore('userStore', {
     initUser() {
       const token = Storage.get(TOKEN_KEY)
       const rememberMe = Storage.get(REMEMBER_ME_KEY)
-      const isSessionActive = Storage.sessionGet(SESSION_ACTIVE_KEY)
 
       // 如果沒勾保持登入且Session 標記消失了
       if (!token) {
         this.logout()
         return
-      }
-
-      if (!rememberMe && !isSessionActive) {
-        if (token) {
-          Storage.sessionSet(SESSION_ACTIVE_KEY, true)
-        } else {
-          console.warn('[Auth] Session 已失效，執行自動登出')
-          this.logout()
-          return
-        }
       }
 
       // 否則，恢復登入狀態
@@ -199,14 +172,8 @@ export const useUserStore = defineStore('userStore', {
             this.user.username = saveUsername
           }
 
-          // 如果是非保持登入，B 分頁要自動在自己的 Session 補上生命週期鎖
-          if (!rememberMe && !Storage.sessionGet(SESSION_ACTIVE_KEY)) {
-            Storage.sessionSet(SESSION_ACTIVE_KEY, true)
-          }
           this.fetchUserInfo() // 同步最新使用者資料
         }
-      } else if (this.user.isLogin) {
-        this.logout()
       }
     },
   },
@@ -215,6 +182,6 @@ export const useUserStore = defineStore('userStore', {
   persist: {
     enabled: true,
     storage: localStorage,
-    paths: ['user.username', 'user.isLogin', 'user.rememberMe', 'role'], // 持久化狀態
+    paths: ['user.username', 'user.rememberMe', 'role'], // 持久化狀態
   },
 })

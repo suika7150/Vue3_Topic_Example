@@ -30,7 +30,7 @@ app.use(pinia)
 
 //執行Store初始化
 const userStore = useUserStore()
-userStore.initUser() //初始化登入狀態並啟動倒數
+userStore.initUser() //初始化登入狀態
 
 // 跨視窗狀態同步監聽
 window.addEventListener('storage', (event) => {
@@ -45,7 +45,7 @@ window.addEventListener('storage', (event) => {
     }
   } else if (event.key === TOKEN_KEY && !event.newValue) {
     if (userStore.user.isLogin) {
-      userStore.logout()
+      // userStore.logout()
       if (router.currentRoute.value.path !== '/login') {
         router.push('/')
       }

@@ -55,6 +55,5 @@ export const TOKEN_KEY = 'token'
 export const OPTIONS_KEY = 'optionsCache'
 export const USER_ROLE_KEY = 'user_role'
 export const REMEMBER_ME_KEY = 'ecs_remember_me' // 保持登入
-export const SESSION_ACTIVE_KEY = 'sessionActive'
 
 export default Storage
