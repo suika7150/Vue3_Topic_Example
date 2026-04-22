@@ -142,9 +142,13 @@ export const useUserStore = defineStore('userStore', {
       }
 
       if (!rememberMe && !isSessionActive) {
-        console.warn('[Auth] Session 已失效，執行自動登出')
-        this.logout()
-        return
+        if (token) {
+          Storage.sessionSet(SESSION_ACTIVE_KEY, true)
+        } else {
+          console.warn('[Auth] Session 已失效，執行自動登出')
+          this.logout()
+          return
+        }
       }
 
       // 否則，恢復登入狀態
