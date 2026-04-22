@@ -39,7 +39,7 @@ export const useUserStore = defineStore('userStore', {
       if (rememberUsername) {
         Storage.set(REMEMBER_USERNAME_KEY, userData.username)
       } else {
-        Storage.remove(REMEMBER_USERNAME_KEY)
+        Storage.remove(REMEMBER_USERNAME_KEY, userData.username)
       }
 
       // Token 統一存 Local，解決跨分頁同步問題
@@ -53,7 +53,9 @@ export const useUserStore = defineStore('userStore', {
       // 關閉瀏覽器時，這顆種子會消失，initUser 就能判斷要登出
       if (!rememberMe) {
         // 一般登入
-        Storage.set(SESSION_ACTIVE_KEY, true)
+        Storage.sessionSet(SESSION_ACTIVE_KEY, true)
+      } else {
+        Storage.sessionRemove(SESSION_ACTIVE_KEY)
       }
 
       // 更新State
@@ -129,12 +131,18 @@ export const useUserStore = defineStore('userStore', {
      * 初始化使用者 (主要用於 F5 重新整理時)
      */
     initUser() {
-      const token = Storage.sessionGet(TOKEN_KEY) || Storage.get(TOKEN_KEY)
+      const token = Storage.get(TOKEN_KEY)
       const rememberMe = Storage.get(REMEMBER_ME_KEY)
       const isSessionActive = Storage.sessionGet(SESSION_ACTIVE_KEY)
 
       // 如果沒勾保持登入且Session 標記消失了
-      if (!token || (!rememberMe && !isSessionActive)) {
+      if (!token) {
+        this.logout()
+        return
+      }
+
+      if (!rememberMe && !isSessionActive) {
+        console.warn('[Auth] Session 已失效，執行自動登出')
         this.logout()
         return
       }
@@ -144,6 +152,7 @@ export const useUserStore = defineStore('userStore', {
       this.user.rememberMe = !!rememberMe
       this.role = Storage.get(USER_ROLE_KEY)
       this.user.username = Storage.get(USER_KEY)
+      this.user.fullName = Storage.get(FULL_NAME_KEY)
 
       this.fetchUserInfo()
     },
