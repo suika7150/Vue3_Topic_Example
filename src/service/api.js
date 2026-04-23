@@ -21,6 +21,11 @@ const api = {
    */
   login: (data) => apiService.post(API_ROUTES.LOGIN, data),
 
+  /** * 取得當前使用者資料 (Cookie 模式下的身分驗證關鍵)
+   * 用於 App 初始化或頁面重整時，確認 Cookie 是否有效
+   */
+  getCurrentAuth: () => apiService.get(API_ROUTES.USER),
+
   /** 取得當前使用者資料 */
   user: () => apiService.get(API_ROUTES.USER),
 

@@ -9,7 +9,6 @@ import Storage, {
   FULL_NAME_KEY,
 } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
-import { remove } from 'lodash'
 
 let isLoggingOut = false
 
@@ -19,7 +18,7 @@ export const useUserStore = defineStore('userStore', {
       username: '', // 帳號
       fullName: '', // 顯示用名稱
       isLogin: false, // 是否已登入
-      rememberMe: false, // 是否勾選了「保持登入」
+      rememberMe: false, // 是否勾選了保持登入
     },
     role: 'GUEST',
   }),
@@ -42,11 +41,10 @@ export const useUserStore = defineStore('userStore', {
         Storage.remove(REMEMBER_USERNAME_KEY, userData.username)
       }
 
-      // Token 統一存 Local，解決跨分頁同步問題
-      Storage.set(TOKEN_KEY, token)
+      // 存入非敏感的基本資料
       Storage.set(USER_ROLE_KEY, role)
       Storage.set(USER_KEY, userData.username)
-      Storage.set(REMEMBER_ME_KEY, rememberMe)
+      // Storage.set(REMEMBER_ME_KEY, rememberMe)
       Storage.set(FULL_NAME_KEY, userData.fullName)
 
       // 更新State
@@ -86,27 +84,26 @@ export const useUserStore = defineStore('userStore', {
     /**
      * 登出
      */
-    logout() {
+    async logout() {
       if (isLoggingOut) return
       isLoggingOut = true
 
-      // 清除狀態
-      const keys = [USER_KEY, TOKEN_KEY, FULL_NAME_KEY, USER_ROLE_KEY, REMEMBER_ME_KEY]
-      Storage.remove(...keys)
-      Storage.sessionRemove(...keys)
+      try {
+        await api.logout().catch(() => {})
+      } finally {
+        // 清除狀態
+        const keys = [USER_KEY, TOKEN_KEY, FULL_NAME_KEY, USER_ROLE_KEY, REMEMBER_ME_KEY]
+        Storage.remove(...keys)
 
-      // 重置 Pinia 狀態
-      this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
-      this.role = 'GUEST'
+        // 重置 Pinia 狀態
+        this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
+        this.role = 'GUEST'
 
-      if (window.location.pathname !== '/login') {
-        toast.warning('您的登入已過期，請重新登入。')
+        // 非登入頁面才顯示提醒
+        if (window.location.pathname !== '/login') {
+          toast.warning('您的登入已過期，請重新登入。')
+        }
 
-        // 延遲重置，防止短時間內重複觸發
-        setTimeout(() => {
-          isLoggingOut = false
-        }, 500)
-      } else {
         isLoggingOut = false
       }
     },
@@ -114,33 +111,36 @@ export const useUserStore = defineStore('userStore', {
     /**
      * 初始化使用者 (主要用於 F5 重新整理時)
      */
-    initUser() {
-      const token = Storage.get(TOKEN_KEY)
-      const rememberMe = Storage.get(REMEMBER_ME_KEY)
+    async initUser() {
+      try {
+        const res = await api.user()
+        if (res && res.result) {
+          this.user.isLogin = true
 
-      // 如果沒勾保持登入且Session 標記消失了
-      if (!token) {
-        this.logout()
-        return
-      }
+          // 從本地緩存先抓基本資料
+          this.role = Storage.get(USER_ROLE_KEY)
+          this.user.username = Storage.get(USER_KEY)
 
-      // 否則，恢復登入狀態
-      this.user.isLogin = true
-      this.user.rememberMe = !!rememberMe
-      this.role = Storage.get(USER_ROLE_KEY)
-      this.user.username = Storage.get(USER_KEY)
-      this.user.fullName = Storage.get(FULL_NAME_KEY)
+          // 如果 API 有回傳詳細清單，更新顯示名稱
+          const currentUser = res.result.find?.((u) => u.username === this.user.username)
+          if (currentUser) {
+            this.user.fullName = currentUser.fullName
+          }
+        }
+      } catch (error) {}
 
-      this.fetchUserInfo()
+      // apiService 的攔截器會處理 401 並自動執行 logout()
+      console.debug('[Auth] Session invalid, initialized as Guest.')
     },
 
     async updateUserInfo(payload) {
+      // 更新 Pinia State (觸發 UI 更新)
       this.user = {
         ...this.user,
         ...payload, // 這裡會包含新的 fullName
       }
 
-      // 同步到 LocalStorage
+      // 同步到 LocalStorage (用於頁面重整後恢復顯示)
       if (payload.fullName) {
         Storage.set(FULL_NAME_KEY, payload.fullName)
       }

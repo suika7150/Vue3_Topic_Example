@@ -127,11 +127,10 @@ const handleLogin = async () => {
     toast.success('登入成功')
 
     // 從後端回傳結果中解構出 token 和 role
-    const { token, role } = res.result
+    const { role, username } = res.result
 
     //存入 Pinia
     await userStore.login(res.result, {
-      token: res.result.token,
       role: res.result.role,
       rememberUsername: form.value.rememberUsername,
       rememberMe: form.value.rememberMe,
