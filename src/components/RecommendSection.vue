@@ -26,10 +26,6 @@ const recommendedProducts = ref([
   { id: 101, name: '質感陶瓷杯', price: 350, image: 'https://via.placeholder.com/60' },
   { id: 102, name: '極簡筆記本', price: 120, image: 'https://via.placeholder.com/60' },
 ])
-
-const addToCart = (product) => {
-  console.log('加入購物車:', product.name)
-}
 </script>
 
 <style scoped>

@@ -15,7 +15,7 @@ export function isWhiteListed(url, baseURL) {
     const isWhiteListed = whiteList.some((path) => pathname.startsWith(path))
     return isWhiteListed
   } catch (e) {
-    console.warn('無法解析 URL：', url)
+    console.debug('無法解析 URL：', url)
     return false
   }
 }

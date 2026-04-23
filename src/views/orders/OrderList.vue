@@ -159,7 +159,7 @@ const fetchOrders = async (tabName = 'all') => {
       if (backendStatus) {
         params.status = backendStatus
       } else {
-        console.error(`statusMap 找不到 key: ${tabName}`)
+        console.debug(`[訂單] 找不到「${tabName}」`)
       }
     }
 
@@ -169,7 +169,7 @@ const fetchOrders = async (tabName = 'all') => {
       orders.value = response.result || []
     }
   } catch (error) {
-    console.error('獲取列表失敗:', error)
+    console.debug('獲取列表失敗:', error)
   } finally {
     loading.value = false
   }
@@ -210,7 +210,7 @@ const getStatusText = (status) => {
     expired: '已失效',
   }
   if (!textMap[statusCode] && statusCode !== '') {
-    console.warn(`⚠️ 狀態轉換失敗！收到未知的狀態碼: "${statusCode}"`)
+    console.debug(`狀態轉換失敗！收到未知的狀態碼: "${statusCode}"`)
   }
   return textMap[statusCode] || status
 }

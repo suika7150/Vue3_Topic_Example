@@ -103,8 +103,6 @@ const submitForm = async (formEl) => {
   // 觸發表單驗證
   await formEl.validate(async (valid, fields) => {
     if (!valid) {
-      // 驗證失敗
-      console.log('表單驗證失敗！', fields)
       ElMessage({
         message: '請檢查表單內容是否有誤。',
         type: 'error',

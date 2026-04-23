@@ -32,7 +32,6 @@ const orderId = ref('')
 onMounted(() => {
   // 從網址路徑 /checkout/success/:orderId 取得 ID
   orderId.value = route.params.orderId
-  console.log('當前完成的訂單 ID:', orderId.value)
 })
 
 const goOrderList = () => {

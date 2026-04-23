@@ -47,7 +47,7 @@ const processPayment = async () => {
     await nextTick()
     ecpayForm.value.submit()
   } catch (error) {
-    console.error('金流啟動失敗', error)
+    console.debug('金流啟動失敗', error)
   }
 }
 

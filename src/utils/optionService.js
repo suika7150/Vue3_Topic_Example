@@ -13,13 +13,11 @@ export async function getAndCacheOptions() {
 
   // 檢查緩存是否存在且未過期
   if (cachedData && now - cachedData.timestamp < CACHE_EXPIRY_MS) {
-    console.log('Using cached options data.')
     return cachedData.data
   }
 
   // 緩存無效，發送 API 請求
   try {
-    console.log('Fetching fresh options data from API...')
     const response = await api.getOptions()
     const newData = response.result
 
@@ -33,7 +31,7 @@ export async function getAndCacheOptions() {
     )
     return newData
   } catch (err) {
-    console.error('Failed to load options:', err)
+    console.debug('載入選項資料失敗:', err)
     return {} // 失敗時返回空物件
   }
 }

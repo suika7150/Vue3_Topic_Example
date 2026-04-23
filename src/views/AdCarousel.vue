@@ -22,12 +22,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useBreakpoint } from '@/composables/useBreakpoint'
-import { watch } from 'vue'
 const { isMobile } = useBreakpoint()
-
-watch(isMobile, (newVal) => {
-  console.log('現在是否為手機模式:', newVal, '寬度:', window.innerWidth)
-})
 
 const adBanners = [
   {

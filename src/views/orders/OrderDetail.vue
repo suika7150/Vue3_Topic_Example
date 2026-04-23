@@ -111,8 +111,7 @@ const activeStep = computed(() => {
 })
 
 onMounted(async () => {
-  const id = route.params.orderId // 這裡要對應 index.js 的 :orderId
-  console.log('--- 開始讀取訂單資料，ID:', id)
+  const id = route.params.orderId // 對應 index.js 的 :orderId
 
   try {
     const res = await api.getOrderDetail(id)
@@ -121,7 +120,7 @@ onMounted(async () => {
       orderItems.value = res.result.items || []
     }
   } catch (err) {
-    console.error('API 呼叫失敗，請檢查 API 定義與後端連線:', err)
+    console.debug('API 呼叫失敗，請檢查 API 定義與後端連線:', err)
   }
 })
 

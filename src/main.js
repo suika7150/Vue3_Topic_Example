@@ -57,7 +57,7 @@ const start = async () => {
     app.mount('#app')
   } catch (error) {
     if (import.meta.env.DEV) {
-      console.error('[啟動攔截]:', error)
+      console.debug('[啟動攔截]:', error)
     }
   }
 }

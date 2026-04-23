@@ -127,7 +127,7 @@ const fetchProductDetail = async () => {
       ElMessage.warning(`找不到 ID 為 ${productId} 的商品。`)
     }
   } catch (err) {
-    console.error('載入商品詳情失敗:', err)
+    console.debug('載入商品詳情失敗:', err)
     ElMessage.error('載入商品詳情失敗，請稍後再試。')
     product.value = null
   } finally {

@@ -109,9 +109,7 @@ const handleMenuSelect = (index) => {
       }
       break
   }
-  console.log('現在的 userRole 是：', userRole.value)
 }
-console.log('現在的 userRole 是：', userRole.value)
 </script>
 
 <style scoped>

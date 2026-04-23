@@ -143,7 +143,7 @@ const handleLogin = async () => {
     // 這裡的 error 是 apiService 拋出的 response.data
     const code = error.code
 
-    console.debug('[Auth] Login failed:', error)
+    console.debug('[認證] 登入失敗細節:', error)
 
     const message = getMsgByCode(code)
     if (code === ResultCode.FAIL) {

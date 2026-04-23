@@ -121,7 +121,7 @@ const deleteOption = async (optionId) => {
     }
   } catch (err) {
     if (err !== 'cancel') {
-      console.error('刪除商品失敗:', err)
+      console.debug('刪除商品失敗:', err)
       ElMessage.error('刪除商品失敗，請稍後再試。')
     }
   }

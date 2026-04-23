@@ -208,7 +208,7 @@ onMounted(async () => {
         imagePreview.value = res.result.imageBase64
       }
     } catch (error) {
-      console.error('載入失敗:', error)
+      console.debug('載入失敗:', error)
       ElMessage.error('載入商品資料失敗')
     }
   }

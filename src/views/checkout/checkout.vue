@@ -501,10 +501,6 @@ watch(
     shippingForm.value.district = ''
   },
 )
-const handleShippingChange = ({ value, option, additionalCost }) => {
-  console.log('配送方式:', option.name)
-  console.log('額外費用:', additionalCost)
-}
 
 // 商品小計
 const subtotal = computed(() => {
@@ -601,7 +597,7 @@ const submitOrder = async () => {
       goCheckoutSuccess(merchantTradeNo)
     }
   } catch (error) {
-    console.error('訂單建立失敗:', error)
+    console.debug('訂單建立失敗:', error)
     toast.error('訂單建立失敗，請稍後再試')
   } finally {
     submitting.value = false

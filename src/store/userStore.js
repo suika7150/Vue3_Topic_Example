@@ -131,7 +131,7 @@ export const useUserStore = defineStore('userStore', {
       } catch (error) {}
 
       // apiService 的攔截器會處理 401 並自動執行 logout()
-      console.debug('[Auth] Session invalid, initialized as Guest.')
+      console.debug('[權限] 找不到登入狀態，目前以訪客權限執行。')
     },
 
     async updateUserInfo(payload) {
@@ -175,7 +175,7 @@ export const useUserStore = defineStore('userStore', {
           }
         }
       } catch (e) {
-        console.error('同步失敗', e)
+        console.debug('同步失敗', e)
       }
     },
 
