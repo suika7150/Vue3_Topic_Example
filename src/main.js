@@ -19,7 +19,6 @@ import setupFontAwesome from './plugins/fontawesome'
 //工具
 import { formatSecondsToHHMMSS } from './utils/format'
 import { getAndCacheOptions } from './utils/optionService'
-import { TOKEN_KEY } from './utils/storageUtil'
 import { useUserStore } from '@/store/userStore'
 
 //初始化、Pinia
@@ -31,27 +30,7 @@ app.use(pinia)
 //執行Store初始化
 const userStore = useUserStore()
 userStore.initUser() //初始化登入狀態
-
-// 跨視窗狀態同步監聽
-window.addEventListener('storage', (event) => {
-  // 當 userStore 發生變化（代表另一個分頁登入或登出了）
-  if (event.key === 'userStore') {
-    if (event.oldValue === event.newValue) return
-
-    // 執行同步，把最新的資料從 localStorage 抓回 Pinia
-    userStore.syncStatus()
-    if (userStore.isLoggedIn && router.currentRoute.value.path === '/login') {
-      router.push('/')
-    }
-  } else if (event.key === TOKEN_KEY && !event.newValue) {
-    if (userStore.user.isLogin) {
-      // userStore.logout()
-      if (router.currentRoute.value.path !== '/login') {
-        router.push('/')
-      }
-    }
-  }
-})
+userStore.setupTabSync() // 啟動跨分頁同步監聽
 
 //啟動應用
 const start = async () => {

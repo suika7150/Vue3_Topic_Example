@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import api from '@/service/api.js'
+import router from '@/router'
 import Storage, {
   TOKEN_KEY,
   USER_KEY, // 目前登入的帳號 (登出會刪)
@@ -147,33 +148,76 @@ export const useUserStore = defineStore('userStore', {
     },
 
     /**
-     * 跨視窗同步狀態
+     * 跨視窗狀態同步狀態
      */
-    syncStatus() {
-      const token = Storage.get(TOKEN_KEY)
-      const rememberMe = Storage.get(REMEMBER_ME_KEY)
-      const saveUsername = Storage.get(USER_KEY)
-      const saveFullName = Storage.get(FULL_NAME_KEY)
+    syncStatus(newValue) {
+      try {
+        const parsed = JSON.parse(newValue)
 
-      if (this.user.isLogin && saveFullName && saveFullName !== this.user.fullName) {
-        this.user.fullName = saveFullName
-      }
+        // 取得同步前的登入狀態，用來比對
+        const wasLoggedIn = this.user.isLogin
 
-      if (token) {
-        if (!this.user.isLogin) {
-          this.user.isLogin = true
-          this.user.rememberMe = rememberMe
-          this.user.username = saveUsername || ''
-          this.user.fullName = saveFullName || ''
-          this.role = Storage.get(USER_ROLE_KEY) || 'GUEST'
+        if (parsed.user) {
+          this.user = { ...this.user, ...parsed.user }
+          this.role = parsed.role || 'GUEST'
 
-          // 同步使用者名稱：確保 B 頁面知道是誰登入
-          if (saveUsername) {
-            this.user.username = saveUsername
+          // 如果從未登入變已登入
+          if (!wasLoggedIn && this.user.isLogin) {
+            // 強制重整頁面，Cookie 與所有狀態重新讀取
+            // window.location.reload();
+
+            // 做法 B：重新執行初始化 API，確保後端認可這個分頁的身份
+            this.initUser().then(() => {
+              if (router.currentRoute.value.path === '/login') {
+                router.push('/')
+              }
+            })
           }
-
-          this.fetchUserInfo() // 同步最新使用者資料
         }
+      } catch (e) {
+        console.error('同步失敗', e)
+      }
+    },
+
+    /**
+     * 跨視窗狀態同步監聽
+     */
+    setupTabSync() {
+      window.addEventListener('storage', (event) => {
+        // 監聽 Pinia 持久化的 key
+        if (event.key === 'userStore') {
+          // 如果新值為空，代表另一個分頁執行了登出
+          if (!event.newValue) {
+            this.handlePassiveLogout()
+            return
+          }
+          // 如果新值存在，嘗試同步資料
+          this.syncStatus(event.newValue)
+        }
+
+        // 2. 處理 Token 消失（如果還有手動清除 TOKEN_KEY 的話）
+        if (event.key === 'token-key' && !event.newValue) {
+          this.logout()
+        }
+      })
+    },
+
+    /**
+     * 處理被動登出 (由其他分頁觸發)
+     */
+    handlePassiveLogout() {
+      // 重置狀態
+      this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
+      this.role = 'GUEST'
+
+      // 2. 清除相關 Storage (除了記住帳號以外的)
+      const keys = [USER_KEY, FULL_NAME_KEY, USER_ROLE_KEY, REMEMBER_ME_KEY]
+      Storage.remove(...keys)
+
+      // 3. 跳轉頁面
+      if (router.currentRoute.value.path !== '/login') {
+        router.push('/login')
+        toast.warning('您已在其他視窗登出')
       }
     },
   },
@@ -182,6 +226,6 @@ export const useUserStore = defineStore('userStore', {
   persist: {
     enabled: true,
     storage: localStorage,
-    paths: ['user.username', 'user.rememberMe', 'role'], // 持久化狀態
+    paths: ['user.username', 'user.rememberMe', 'user.isLogin', 'role'], // 持久化狀態
   },
 })

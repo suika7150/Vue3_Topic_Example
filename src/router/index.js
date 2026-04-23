@@ -210,12 +210,9 @@ router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
   const cartStore = useCartStore()
 
-  const token = Storage.get(TOKEN_KEY)
-  const isLoggedIn = !!token
+  const isLoggedIn = userStore.user.isLogin
 
-  // userStore.initUser()
-
-  // 處理排除項：如果是去登入頁且已經登入，直接回首頁
+  // 如果是去登入頁且已經登入，直接回首頁
   if (to.path === '/login' && isLoggedIn) {
     return next('/')
   }
@@ -226,11 +223,7 @@ router.beforeEach(async (to, from, next) => {
       // 同步使用者資料
       await Promise.all([userStore.fetchUserInfo(), cartStore.fetchCartList()])
     } catch (error) {
-      Storage.remove(TOKEN_KEY)
-      Storage.sessionRemove(TOKEN_KEY)
-      Storage.remove(USER_ROLE_KEY)
-      Storage.sessionRemove(USER_ROLE_KEY)
-
+      userStore.logout()
       return next('/login')
     } finally {
       hideLoading()
