@@ -690,14 +690,16 @@ const applyCoupon = async () => {
     applyingCoupon.value = true
     const response = await api.validateCoupon(code)
 
+    const data = response.result
+
     // 測試用
     // 假設後端回傳格式為 { valid: true, discountAmount: 100, message: '成功' }
-    if (response.valid) {
-      discount.value = response.discountAmount //更新折扣金額
-      toast.success(response.message || '優惠券套用成功！')
+    if (data && data.valid) {
+      discount.value = data.discountAmount //更新折扣金額
+      toast.success(response.msg || '優惠券套用成功！')
     } else {
       discount.value = 0 // 清空折扣金額
-      toast.error(response.message || '優惠券無效或已過期')
+      toast.error(response.msg || '優惠券無效或已過期')
     }
   } catch (error) {
     toast.error('優惠券驗證失敗', error)
