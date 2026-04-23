@@ -21,70 +21,74 @@
       </el-steps>
     </section>
 
-    <section class="detail-section info-grid">
-      <div class="info-column">
-        <h3 class="list-label">👤 收件資訊</h3>
-        <ul class="clean-list">
-          <li>
-            <span class="label">收件人</span><span class="value">{{ orderDetail.name }}</span>
-          </li>
-          <li>
-            <span class="label">聯絡電話</span><span class="value">{{ orderDetail.phone }}</span>
-          </li>
-          <li>
-            <span class="label">配送地址</span><span class="value">{{ orderDetail.address }}</span>
-          </li>
-        </ul>
+    <div class="main-content-layout">
+      <div class="left-column">
+        <section class="detail-section items-box card-style">
+          <h3 class="list-label">🛒 商品清單</h3>
+          <div v-for="item in orderItems" :key="item.name" class="product-item">
+            <el-image :src="item.productImage" class="item-img" fit="cover" lazy />
+            <div class="item-info">
+              <h4 class="item-name">{{ item.name }}</h4>
+              <p class="item-spec">優質選物</p>
+            </div>
+            <div class="item-price-qty">
+              <span class="unit-price"
+                >${{ item.price?.toLocaleString() }} x {{ item.quantity }}</span
+              >
+              <span class="item-total">${{ (item.price * item.quantity).toLocaleString() }}</span>
+            </div>
+          </div>
+        </section>
       </div>
-      <div class="info-column">
-        <h3 class="list-label">💳 付款資訊</h3>
-        <ul class="clean-list">
-          <li>
-            <span class="label">付款方式</span
-            ><span class="value">{{ orderDetail.paymentMethod }}</span>
-          </li>
-          <li>
-            <span class="label">備註事項</span
-            ><span class="value">{{ orderDetail.notes || '無' }}</span>
-          </li>
-        </ul>
-      </div>
-    </section>
 
-    <section class="detail-section items-box">
-      <h3 class="list-label">🛒 商品清單</h3>
-      <div v-for="item in orderItems" :key="item.name" class="product-item">
-        <el-image :src="item.productImage" class="item-img" fit="cover" lazy />
-        <div class="item-info">
-          <h4 class="item-name">{{ item.name }}</h4>
-          <!-- <p class="item-spec">優質商品</p> -->
-        </div>
-        <div class="item-price-qty">
-          <span class="unit-price">${{ item.price?.toLocaleString() }} x {{ item.quantity }}</span>
-          <span class="item-total">${{ (item.price * item.quantity).toLocaleString() }}</span>
-        </div>
-      </div>
-    </section>
+      <div class="right-column">
+        <section class="info-card card-style">
+          <h3 class="list-label">👤 收件資訊</h3>
+          <ul class="vertical-clean-list">
+            <li>
+              <span class="label">收件人</span><span class="value">{{ orderDetail.name }}</span>
+            </li>
+            <li>
+              <span class="label">聯絡電話</span><span class="value">{{ orderDetail.phone }}</span>
+            </li>
+            <li>
+              <span class="label">配送地址</span
+              ><span class="value text-right">{{ orderDetail.address }}</span>
+            </li>
+          </ul>
+        </section>
 
-    <footer class="order-footer">
-      <div class="summary-list">
-        <div class="summary-item">
-          <span>小計</span>
-          <span>${{ orderDetail.total?.toLocaleString() }}</span>
-        </div>
-        <div class="summary-item">
-          <span>運費</span>
-          <span>$0</span>
-        </div>
-        <div class="summary-item grand-total">
-          <span>總計金額</span>
-          <span class="total-price">NT$ {{ orderDetail.total?.toLocaleString() }}</span>
-        </div>
+        <section class="info-card card-style">
+          <h3 class="list-label">💳 付款資訊</h3>
+          <ul class="vertical-clean-list">
+            <li>
+              <span class="label">付款方式</span
+              ><span class="value">{{ orderDetail.paymentMethod }}</span>
+            </li>
+            <li>
+              <span class="label">備註事項</span
+              ><span class="value">{{ orderDetail.notes || '無' }}</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="summary-card card-style">
+          <div class="summary-item">
+            <span>小計</span><span>${{ orderDetail.total?.toLocaleString() }}</span>
+          </div>
+          <div class="summary-item"><span>運費</span><span>$0</span></div>
+          <el-divider />
+          <div class="summary-item grand-total">
+            <span>總計</span>
+            <span class="total-price">NT$ {{ orderDetail.total?.toLocaleString() }}</span>
+          </div>
+        </section>
       </div>
-      <div class="action-bar">
-        <el-button size="large" @click="goOrderList">返回訂單列表</el-button>
-        <el-button type="primary" size="large" plain>聯繫客服</el-button>
-      </div>
+    </div>
+
+    <footer class="action-bar">
+      <el-button size="large" @click="goOrderList">返回訂單列表</el-button>
+      <el-button type="primary" size="large">聯繫客服</el-button>
     </footer>
   </div>
 </template>
@@ -131,10 +135,12 @@ const goOrderList = () => {
 
 <style scoped>
 .order-detail-wrapper {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 60px auto;
-  padding: 0 40px;
+  padding: 40px 60px;
   background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(149, 157, 165, 0.1);
 }
 
 /* 頂部樣式 */
@@ -161,6 +167,49 @@ const goOrderList = () => {
 .detail-section {
   margin-bottom: 50px;
 }
+
+/* 左右佈局 */
+.main-content-layout {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* 卡片風格 */
+.card-style {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  margin-bottom: 20px;
+}
+
+.vertical-clean-list {
+  list-style: none;
+  padding: 0;
+}
+.vertical-clean-list li {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column; /* 改為標題在上內容在下，適合窄空間 */
+  gap: 4px;
+}
+.vertical-clean-list .label {
+  font-size: 14px;
+  color: #909399;
+}
+.vertical-clean-list .value {
+  font-size: 16px;
+  color: #303133;
+  font-weight: 500;
+}
+
+.text-right {
+  text-align: left;
+}
+
 .list-label {
   font-size: 20px;
   font-weight: 600;
@@ -194,13 +243,14 @@ const goOrderList = () => {
   color: #303133;
 }
 
-/* 商品條列式樣式 (取代 Table) */
+/* 商品清單 */
 .product-item {
   display: flex;
   align-items: center;
   padding: 20px 0;
   border-bottom: 1px solid #f2f6fc;
 }
+
 .item-img {
   width: 100px;
   height: 100px;
@@ -252,8 +302,10 @@ const goOrderList = () => {
   font-weight: bold;
   font-size: 22px;
 }
+
 .total-price {
   font-size: 30px;
+
   color: #f56c6c;
 }
 

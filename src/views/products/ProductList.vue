@@ -157,13 +157,13 @@ const showProductDetail = (product) => {
 const fetchProducts = async () => {
   isLoading.value = true
   try {
-    // 這裡就是從網址抓關鍵字的地方
+    // 這裡是從網址抓關鍵字的地方
     const currentKeyword = route.query.keyword
 
     // 呼叫後端 API
     const res = await api.getProducts({ keyword: currentKeyword || undefined })
 
-    if (res.code === '0000') {
+    if (res && res.code === '0000') {
       products.value = res.result
       visibleCount.value = loadMoreCount // 搜尋後重置載入筆數
 
@@ -172,6 +172,9 @@ const fetchProducts = async () => {
         selectedCategory.value = ''
       }
     }
+  } catch (error) {
+    console.error('抓取商品發生錯誤:', error)
+    products.value = []
   } finally {
     isLoading.value = false
   }
