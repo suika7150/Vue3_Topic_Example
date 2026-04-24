@@ -711,6 +711,10 @@ onMounted(() => {
   align-items: start;
 }
 
+.main-content {
+  grid-column: 1 / 3;
+}
+
 /* 進度條外框 */
 .modern-steps {
   display: flex;
@@ -822,13 +826,10 @@ onMounted(() => {
   transform: translateX(0);
 }
 
-.checkout-step {
-  padding: 32px;
-  border-radius: 16px;
-  margin-bottom: 24px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+.step-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
 }
 
 /* 共用卡片 */
@@ -844,12 +845,12 @@ onMounted(() => {
   background-color: #fff;
   width: 100%;
 }
-/* hover */
+
 .option-card:hover {
   background-color: #f5f5f7;
 }
 
-/* 選中狀態 */
+/* 卡片選中狀態 */
 :deep(.el-radio.is-checked.option-card) {
   border-color: #0071e3;
   background-color: #f5faff;
@@ -860,7 +861,7 @@ onMounted(() => {
   display: none;
 }
 
-/* 內容 */
+/* 卡片內容 */
 .option-content {
   display: flex;
   justify-content: space-between;
@@ -887,6 +888,15 @@ onMounted(() => {
   right: 16px;
 }
 
+.checkout-step {
+  padding: 32px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -896,16 +906,6 @@ onMounted(() => {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.main-content {
-  grid-column: 1 / 3;
-}
-
-.step-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 16px;
 }
 
 /* 訂單明細 */
@@ -953,7 +953,6 @@ onMounted(() => {
 }
 
 .quantity-label {
-  /* align-items: center; */
   color: #6b7280;
 }
 /* +-按鈕 */
