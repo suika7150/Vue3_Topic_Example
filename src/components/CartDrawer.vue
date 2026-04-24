@@ -7,6 +7,7 @@
       :size="drawerSize"
       @close="handleClose"
       :lock-scroll="false"
+      append-to-body
     >
       <div v-if="cart.length" class="cart-content">
         <el-table v-if="!isMobile" :data="cart" style="width: 100%">
@@ -110,7 +111,7 @@
         </div>
       </template>
     </el-drawer>
-    <CheckoutConfirmModal v-model="showConfirmModal" title="確認結帳清單">
+    <CheckoutConfirmModal v-model="showConfirmModal" title="確認結帳清單" append-to-body>
       <div class="confirm-list-wrapper">
         <div v-for="item in cart" :key="item.id" class="confirm-item">
           <div class="item-info">

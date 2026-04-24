@@ -1,5 +1,5 @@
 <template>
-  <div class="top-bar">
+  <div class="top-bar" :class="{ 'header-hidden': isHidden }">
     <div class="topbar-left">
       <router-link to="/" class="logo"
         ><img src="/Logo/Logo.png" alt="Logo" class="logo-img"
@@ -10,7 +10,7 @@
       <LoginMenu :small="true" />
     </div>
   </div>
-  <div class="menu-bar">
+  <div class="menu-bar" :class="{ 'header-hidden': isHidden }">
     <div class="topbar-main">
       <!-- 主下拉選單 -->
       <CenterDropdown />
@@ -19,8 +19,41 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import LoginMenu from './LoginMenu.vue'
 import CenterDropdown from './CenterDropdown.vue'
+
+// 控制 Topbar 是否隱藏
+const isHidden = ref(false)
+let lastScrollTop = 0
+
+const handleScroll = () => {
+  const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+  // 滾動差值大於 5 才執行
+  if (Math.abs(currentScrollTop - lastScrollTop) <= 30) return
+
+  if (currentScrollTop > 100) {
+    // 如果目前位置 > 上次位置 = 正在下滑
+    if (currentScrollTop > lastScrollTop) {
+      isHidden.value = true // 下滑收起
+    } else {
+      isHidden.value = false // 上滑顯示
+    }
+  } else {
+    isHidden.value = false
+  }
+
+  lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 
 const props = defineProps({
   bannerOn: {
@@ -39,7 +72,7 @@ const props = defineProps({
   left: 0;
   width: 100%;
   height: 110px;
-  background-color: #000000fb;
+  background-color: #000000;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
@@ -84,15 +117,16 @@ const props = defineProps({
   font-size: 100px;
   color: #fff;
   text-decoration: none;
+  transition: opacity 0.3s ease;
 }
 
 .logo-img {
   display: block;
   width: 100%;
-  height: 170px;
+  height: 100px;
   max-height: 100%;
   padding-top: 0px;
-  transform: translateY(40px);
+  margin-top: 20px;
 }
 
 .topbar-right {
@@ -110,6 +144,29 @@ const props = defineProps({
   top: 100%;
   right: 0;
   margin-top: 4px;
+}
+
+/* 1. 確保原本的元件都有 transition，動畫才會順暢 */
+.top-bar,
+.menu-bar {
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease;
+}
+
+/* 2. 定義隱藏時的狀態 */
+/* 因為你有兩個 bar，top-bar 在上方，menu-bar 在下方，
+   直接整塊往上移出畫面即可 */
+.top-bar.header-hidden {
+  transform: translateY(-150px); /* 對應你的 top-bar 高度 */
+  opacity: 0;
+  pointer-events: none; /* 隱藏時點不到 */
+}
+
+.menu-bar.header-hidden {
+  transform: translateY(-250px); /* 讓下方的 bar 也跟著推上去 */
+  opacity: 0;
+  pointer-events: none;
 }
 
 @media (max-width: 1024px) {

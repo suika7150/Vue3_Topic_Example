@@ -12,6 +12,7 @@
       :lock-scroll="false"
       direction="ltr"
       size="300px"
+      append-to-body
     >
       <SidebarMenu
         :is-login="isLogin"

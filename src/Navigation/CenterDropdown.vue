@@ -140,7 +140,7 @@ const {
 .topbar-btn:focus {
   outline: none;
   border: none;
-  background-color: rgba(255, 255, 255, 0.1);
+  /* background-color: rgba(255, 255, 255, 0.1); */
 }
 
 .caret-icon {

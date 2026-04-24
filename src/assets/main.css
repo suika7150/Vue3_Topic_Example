@@ -8,13 +8,14 @@
 
 html,
 body {
-  overflow-x: hidden;
+  overflow-x: hidden; /* 防止橫向捲軸 */
   overflow-y: auto;
   scroll-behavior: smooth; /* 讓所有的捲動動作都帶有平滑動畫 */
   padding-right: 0 !important;
   margin-right: 0 !important;
 }
 
+/* 修正 Element Plus 彈窗開啟時，背景鎖定導致的位移問題 */
 .el-popup-parent--hidden {
   padding-right: 0 !important;
   overflow: hidden !important;
