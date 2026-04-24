@@ -198,7 +198,7 @@ const proceedToCheckout = () => {
   setTimeout(() => {
     goTo('checkout')
     sidebarStore.setCollapse(true)
-    toast.success('正在前往結帳頁面...')
+    toast.success('正在前往結帳頁面')
   }, 300)
 }
 
