@@ -17,10 +17,14 @@
                 },
               ]"
             >
+              <div class="step-icon">
+                <el-icon v-if="currentStep > index"><Check /></el-icon>
+                <span v-else>{{ index + 1 }}</span>
+              </div>
               <span class="step-text">{{ step }}</span>
             </div>
 
-            <div v-if="index < 3" :class="['step-line', { active: currentStep > index }]"></div>
+            <div v-if="index < 2" :class="['step-line', { active: currentStep > index }]"></div>
           </div>
         </div>
       </div>
@@ -80,27 +84,24 @@
               </el-form-item>
 
               <el-form-item label="配送方式">
-                <div class="modern-selector-group">
-                  <div
+                <el-radio-group v-model="shippingForm.shippingMethod">
+                  <el-radio
                     v-for="opt in shippingOptions"
                     :key="opt.value"
-                    :class="[
-                      'modern-option-item',
-                      { active: shippingForm.shippingMethod === opt.value },
-                    ]"
-                    @click="shippingForm.shippingMethod = opt.value"
+                    :label="opt.value"
+                    class="option-card"
                   >
                     <div class="option-content">
                       <div>
                         <span class="option-label">{{ opt.label }}</span>
                         <span class="option-hint">{{ opt.desc }}</span>
                       </div>
-                      <span class="option-price">{{
-                        opt.price === 0 ? '免費' : `NT$ ${opt.price}`
-                      }}</span>
+                      <span class="option-price">
+                        {{ opt.price === 0 ? '免費' : `NT$ ${opt.price}` }}
+                      </span>
                     </div>
-                  </div>
-                </div>
+                  </el-radio>
+                </el-radio-group>
               </el-form-item>
 
               <div class="shipping-detail-box">
@@ -180,28 +181,31 @@
               </el-form-item>
             </el-form>
             <h2 class="step-title">付款方式</h2>
-            <el-radio-group v-model="paymentMethod" class="space-y-4">
-              <el-radio label="credit_card" class="payment-option-card">
-                <div class="payment-option-content">
-                  <div class="payment-text">
-                    <div class="payment-name">信用卡付款</div>
-                    <div class="payment-description">支援 Visa、Mastercard、JCB</div>
+            <el-radio-group v-model="paymentMethod">
+              <el-radio label="credit_card" class="option-card">
+                <div class="option-content">
+                  <div>
+                    <div class="option-label">信用卡付款</div>
+                    <div class="option-hint">支援 Visa、Mastercard、JCB</div>
                   </div>
-                  <div class="card-icons"></div>
                 </div>
               </el-radio>
 
-              <el-radio label="bank_transfer" class="payment-option-card">
-                <div class="payment-text">
-                  <div class="payment-name">銀行轉帳</div>
-                  <div class="payment-description">轉帳後請上傳轉帳證明</div>
+              <el-radio label="bank_transfer" class="option-card">
+                <div class="option-content">
+                  <div>
+                    <div class="option-label">銀行轉帳</div>
+                    <div class="option-hint">轉帳後請上傳證明</div>
+                  </div>
                 </div>
               </el-radio>
 
-              <el-radio label="cash_on_delivery" class="payment-option-card">
-                <div class="payment-text">
-                  <div class="payment-name">貨到付款</div>
-                  <div class="payment-description">收到商品後再付款（需加收手續費 NT$ 30）</div>
+              <el-radio label="cash_on_delivery" class="option-card">
+                <div class="option-content">
+                  <div>
+                    <div class="option-label">貨到付款</div>
+                    <div class="option-hint">需加收 NT$30</div>
+                  </div>
                 </div>
               </el-radio>
             </el-radio-group>
@@ -335,6 +339,7 @@ import { ref, computed, onMounted } from 'vue'
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/service/api'
+import { Check } from '@element-plus/icons-vue'
 import taiwanData from '@/assets/data/AllData.json'
 import { toast } from '@/utils/message'
 import RecommendSection from '@/components/RecommendSection.vue'
@@ -385,17 +390,10 @@ const shippingForm = ref({
 })
 
 const shippingOptions = [
-  { label: '宅配到府', value: 'HOME_DELIVERY', price: 80 },
-  { label: '7-11 取貨', value: 'CVS_711', price: 60 },
-  { label: '全家取貨', value: 'CVS_FAMILY', price: 60 },
-  { label: '到店自取', value: 'STORE_PICKUP', price: 0 },
-]
-
-// 物流廠商選項
-const deliveryProviders = [
-  { label: '黑貓宅急便', value: 't-cat' },
-  { label: '新竹物流', value: 'hct' },
-  { label: '大榮貨運', value: 'ktj' },
+  { label: '宅配到府', value: 'HOME_DELIVERY', price: 80, desc: '黑貓宅急便，約 1-3 個工作天送達' },
+  { label: '7-11 取貨', value: 'CVS_711', price: 60, desc: '寄出後約 2-3 天到指定門市' },
+  { label: '全家取貨', value: 'CVS_FAMILY', price: 60, desc: '寄出後約 2-3 天到指定門市' },
+  { label: '到店自取', value: 'STORE_PICKUP', price: 0, desc: '實體門市取貨 免運費' },
 ]
 
 const shippingFormRef = ref()
@@ -704,7 +702,6 @@ onMounted(() => {
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
-  padding: 32px 16px;
 }
 
 .checkout-grid {
@@ -747,7 +744,6 @@ onMounted(() => {
 .step-item {
   display: flex;
   align-items: center;
-  /* gap: 10px; */
   padding: 6px 0px;
   border-radius: 30px;
   transition: all 0.4s ease;
@@ -759,10 +755,6 @@ onMounted(() => {
   font-size: 14px;
   color: #86868b;
   white-space: nowrap;
-}
-
-.step-indicator {
-  margin-bottom: 32px;
 }
 
 /* 進度條圓圈 */
@@ -839,6 +831,62 @@ onMounted(() => {
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* 共用卡片 */
+.option-card {
+  display: flex;
+  align-items: center;
+  padding: 50px 50px;
+  min-height: 100px;
+  border: 2px solid #e5e5e7;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-color: #fff;
+  width: 100%;
+}
+/* hover */
+.option-card:hover {
+  background-color: #f5f5f7;
+}
+
+/* 選中狀態 */
+:deep(.el-radio.is-checked.option-card) {
+  border-color: #0071e3;
+  background-color: #f5faff;
+}
+
+/* 隱藏原生 radio */
+:deep(.el-radio__input) {
+  display: none;
+}
+
+/* 內容 */
+.option-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.option-label {
+  font-weight: 500;
+  color: #1d1d1f;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.option-hint {
+  font-size: 13px;
+  color: #86868b;
+  line-height: 2;
+}
+
+.option-price {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -854,21 +902,10 @@ onMounted(() => {
   grid-column: 1 / 3;
 }
 
-.sidebar {
-  position: static;
-  grid-column: 1 / 2;
-  width: 100%;
-}
-
 .step-title {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 16px;
-}
-
-/* Item Card */
-.space-y-4 > * + * {
-  margin-top: 16px;
 }
 
 /* 訂單明細 */
@@ -1029,155 +1066,12 @@ onMounted(() => {
   border-bottom-color: #f56c6c !important;
 }
 
-.sub-provider-select {
-  margin-top: 12px;
-  margin-left: 28px; /* 避開 radio 圓點 */
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.sub-label {
-  font-size: 12px;
-  color: #86868b;
-  margin-bottom: 8px;
-}
-
 /* 簡約質感配送/付款選項 */
-.modern-selector-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-
-.modern-option-item {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  border: 1px solid #e5e5e7;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.modern-option-item:hover {
-  background-color: #f5f5f7;
-}
-
-/* 選中狀態：用粗黑邊框或品牌色 */
-.modern-option-item.active {
-  border-color: #000; /* 或者 #0071e3 */
-  background-color: #fff;
-}
-
-/* 模擬單選點點（更簡約） */
-.modern-option-item::before {
-  content: '';
-  width: 18px;
-  height: 18px;
-  border: 2px solid #d2d2d7;
-  border-radius: 50%;
-  margin-right: 12px;
-  transition: all 0.2s ease;
-}
-
-.modern-option-item.active::before {
-  border-color: #0071e3;
-  border-width: 5px; /* 變成選中點點 */
-}
-
-.option-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-}
-
-.option-label {
-  font-weight: 500;
-  color: #1d1d1f;
-}
-
-.option-hint {
-  font-size: 13px;
-  color: #86868b;
-  margin-left: 8px;
-}
-
-.option-price {
-  font-weight: 600;
-  color: #1d1d1f;
-}
-
-/* 配送方式網格 */
-.shipping-method-grid {
+.modern-selector-group,
+.el-radio-group {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 20px;
-  width: 100%;
-}
-
-.method-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1px 10px;
-  /* min-height: 90px; */
-  background: #ffffff;
-  border: 1.5px solid #e5e5e7;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-align: center;
-}
-
-.method-card:hover {
-  border-color: #d2d2d7;
-  background: #fbfbfd;
-}
-
-/* 選中狀態 */
-.method-card.active {
-  border-color: #0071e3;
-  background: #f5faff;
-  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.1);
-}
-
-/* 配送方式圖示選中時的文字與圖示顏色變化 */
-.method-card.active .method-icon {
-  transform: translateY(-2px);
-}
-
-/* 配送方式圖示 */
-.method-icon {
-  font-size: 24px;
-  margin-bottom: 0px;
-}
-
-.method-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1d1d1f;
-  margin-bottom: 4px;
-}
-
-.method-price {
-  font-size: 12px;
-  color: #86868b;
-}
-
-.method-card.active .method-price {
-  color: #0071e3;
-  font-weight: 500;
-}
-
-.shipping-method-grid :deep(.el-input__wrapper) {
-  border-bottom: none !important;
+  grid-template-columns: repeat(2, 1fr); /* 一排兩個 */
+  gap: 16px;
 }
 
 /* 配送地址 */
@@ -1191,35 +1085,6 @@ onMounted(() => {
 .address-selects {
   display: flex;
   gap: 8px;
-}
-
-.shipping-option {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.shipping-name {
-  font-weight: 500;
-}
-
-.shipping-price {
-  color: #ea580c;
-  font-weight: 500;
-}
-
-/* 付款方式 */
-.payment-option-card {
-  display: flex;
-  align-items: center; /* 垂直置中 */
-  padding: 16px;
-  margin-bottom: 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  width: 100%;
-  height: auto;
-  transition: all 0.3s ease;
 }
 
 :deep(.el-radio.payment-option-card) {
@@ -1250,10 +1115,6 @@ onMounted(() => {
 .card-icons {
   display: flex;
   gap: 8px;
-}
-
-.card-icon {
-  height: 24px;
 }
 
 .credit-card-form-container {
@@ -1318,10 +1179,6 @@ onMounted(() => {
   font-size: 18px;
 }
 
-.summary-total-line.summary-total-price {
-  color: #f97316;
-}
-
 .tax-info {
   font-size: 12px;
   color: #6b7280;
@@ -1368,76 +1225,5 @@ onMounted(() => {
 :deep(.recommend-column) {
   position: sticky;
   top: 20px;
-}
-
-/* --- RWD --- */
-@media (-width: 1024px) {
-  .checkout-grid {
-    /* 變回單欄佈局 */
-    grid-template-columns: 1fr;
-  }
-
-  .main-content,
-  .sidebar {
-    /* 全部佔滿第一欄 */
-    grid-column: 1 / 2;
-  }
-
-  .sidebar {
-    position: static; /* 手機版取消固定 */
-  }
-
-  .address-selects {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .item-card {
-    gap: 12px;
-    padding: 12px;
-  }
-
-  .item-image {
-    width: 70px;
-    height: 85px;
-  }
-
-  .item-details {
-    margin-left: 8px;
-    flex: 1;
-  }
-
-  .item-name {
-    font-size: 15px;
-  }
-
-  .item-quantity-control {
-    width: 100%;
-    order: 2;
-    justify-content: flex-start;
-    margin-top: 4px;
-    padding-top: 8px;
-    border-top: 1px dashed #f0f0f0;
-  }
-
-  .item-price-info {
-    flex: 1;
-    order: 3;
-    text-align: left;
-    margin-top: 4px;
-  }
-
-  .item-total-price {
-    font-size: 18px;
-  }
-
-  .delete-btn {
-    order: 4;
-    padding: 6px 12px;
-    font-size: 13px;
-  }
-
-  .address-fields {
-    width: 100%;
-  }
 }
 </style>
