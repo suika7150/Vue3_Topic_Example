@@ -110,7 +110,7 @@
                     <div class="address-fields">
                       <div class="address-selects">
                         <el-select
-                          v-model="shippingForm.deliveryCity"
+                          v-model="shippingForm.city"
                           placeholder="請選擇縣市"
                           class="flex-1"
                         >
@@ -123,7 +123,7 @@
                         </el-select>
 
                         <el-select
-                          v-model="shippingForm.deliveryDistrict"
+                          v-model="shippingForm.district"
                           placeholder="請選擇區域"
                           class="flex-1"
                           :disabled="!shippingForm.city"
@@ -138,7 +138,7 @@
                       </div>
 
                       <el-input
-                        v-model="shippingForm.deliveryAddress"
+                        v-model="shippingForm.address"
                         placeholder="請輸詳細地址"
                         type="textarea"
                         :rows="1"
@@ -479,9 +479,6 @@ const shippingFee = computed(() => {
     default:
       return shippingForm.value.shippingMethod === 'express' ? 100 : 60
   }
-
-  // 根據選擇的配送方式計算運費
-  return shippingForm.value.shippingMethod === 'express' ? 100 : 60
 })
 
 // 總計
@@ -505,8 +502,8 @@ const submitOrder = async () => {
     // 根據選擇的配送方式組裝地址
     let finalAddress = ''
     const method = shippingForm.value.shippingMethod
-    if (shippingForm.value.shippingMethod === 'home_delivery') {
-      finalAddress = `${shippingForm.value.deliveryCity}${shippingForm.value.deliveryDistrict}${shippingForm.value.deliveryAddress}`
+    if (shippingForm.value.shippingMethod === 'HOME_DELIVERY') {
+      finalAddress = `${shippingForm.value.city}${shippingForm.value.district}${shippingForm.value.address}`
     } else if (['CVS_711', 'CVS_FAMILY'].includes(method)) {
       finalAddress = `[超商取貨] ${shippingForm.value.cvsStore?.storeName} - ${shippingForm.value.cvsStore?.storeAddress}`
     } else {
