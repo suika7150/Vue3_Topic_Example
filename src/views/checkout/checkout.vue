@@ -163,7 +163,11 @@
 
                 <template v-else-if="shippingForm.shippingMethod === 'STORE_PICKUP'">
                   <el-form-item label="取貨門市">
-                    <el-select v-model="shippingForm.pickupStoreId" placeholder="請選擇取貨地點">
+                    <el-select
+                      v-model="shippingForm.pickupStoreId"
+                      placeholder="請選擇取貨地點"
+                      class="pickup-select"
+                    >
                       <el-option label="台北總店" value="001" />
                       <el-option label="台中分店" value="002" />
                     </el-select>
@@ -179,6 +183,79 @@
                   placeholder="有任何特殊需求請在此註明"
                 />
               </el-form-item>
+              <div class="invoice-section mt-8">
+                <h2 class="step-title">發票資訊</h2>
+                <div class="invoice-box">
+                  <el-radio-group v-model="shippingForm.invoiceType" class="modern-selector-group">
+                    <el-radio label="DIGITAL" class="option-card">
+                      <div class="option-content">
+                        <span class="option-label">雲端發票 (個人)</span>
+                      </div>
+                    </el-radio>
+                    <el-radio label="COMPANY" class="option-card">
+                      <div class="option-content">
+                        <span class="option-label">公司用 (三聯式)</span>
+                      </div>
+                    </el-radio>
+                  </el-radio-group>
+
+                  <div v-if="shippingForm.invoiceType === 'DIGITAL'" class="carrier-options mt-4">
+                    <el-select
+                      v-model="shippingForm.invoiceCarrier"
+                      placeholder="請選擇載具類型"
+                      style="width: 100%; max-width: 400px"
+                    >
+                      <el-option label="會員載具 (中獎自動通知)" value="MEMBER" />
+                      <el-option label="手機條碼載具" value="PHONE" />
+                      <el-option label="自然人憑證" value="CERT" />
+                    </el-select>
+
+                    <div class="mt-4">
+                      <el-form-item
+                        v-if="shippingForm.invoiceCarrier === 'PHONE'"
+                        prop="phoneCarrier"
+                        label="載具條碼"
+                      >
+                        <el-input
+                          v-model="shippingForm.phoneCarrier"
+                          placeholder="/ABC1234 (需含斜線)"
+                          class="narrow-item"
+                        />
+                      </el-form-item>
+
+                      <el-form-item
+                        v-if="shippingForm.invoiceCarrier === 'CERT'"
+                        prop="certCarrier"
+                        label="憑證編號"
+                      >
+                        <el-input
+                          v-model="shippingForm.certCarrier"
+                          placeholder="兩碼大寫英文+14碼數字"
+                          class="narrow-item"
+                        />
+                      </el-form-item>
+                    </div>
+                  </div>
+
+                  <div v-if="shippingForm.invoiceType === 'COMPANY'" class="company-fields mt-4">
+                    <el-form-item label="統一編號" prop="companyTaxId">
+                      <el-input
+                        v-model="shippingForm.companyTaxId"
+                        placeholder="請輸入 8 碼統一編號"
+                        maxlength="8"
+                        class="narrow-item"
+                      />
+                    </el-form-item>
+                    <el-form-item label="公司抬頭" prop="companyTitle">
+                      <el-input
+                        v-model="shippingForm.companyTitle"
+                        placeholder="請輸入公司完整名稱"
+                        class="narrow-item"
+                      />
+                    </el-form-item>
+                  </div>
+                </div>
+              </div>
             </el-form>
             <h2 class="step-title">付款方式</h2>
             <el-radio-group v-model="paymentMethod">
@@ -376,6 +453,12 @@ const shippingForm = ref({
   name: '',
   phone: '',
   shippingMethod: 'HOME_DELIVERY', // 預設宅配
+  invoiceType: 'DIGITAL', // DIGITAL, PAPER, COMPANY
+  invoiceCarrier: 'MEMBER', // MEMBER (會員), PHONE (手機), CERT (自然人)
+  phoneCarrier: '', // 手機載具條碼 (需以 / 開頭)
+  certCarrier: '', // 自然人憑證
+  companyTaxId: '', // 統一編號
+  companyTitle: '', // 公司抬頭
 
   //基本資料
   city: '',
@@ -417,6 +500,17 @@ const shippingRules = {
   phone: [{ required: true, message: '請輸入聯絡電話', trigger: 'blur' }],
   address: [{ required: true, message: '請輸入配送地址', trigger: 'blur' }],
   shippingMethod: [{ required: true, message: '請選擇配送方式', trigger: 'change' }],
+
+  // 發票資訊
+  companyTaxId: [
+    { required: true, message: '請輸入統一編號', trigger: 'blur' },
+    { pattern: /^\d{8}$/, message: '請輸入正確的 8 碼統一編號', trigger: 'blur' },
+  ],
+  companyTitle: [{ required: true, message: '請輸入公司抬頭', trigger: 'blur' }],
+  phoneCarrier: [
+    { required: true, message: '請輸入手機載具', trigger: 'blur' },
+    { pattern: /^\/[0-9A-Z+.]{7}$/, message: '格式應為 / 加上 7 碼大寫英數', trigger: 'blur' },
+  ],
 }
 
 const creditCardRules = {
@@ -866,11 +960,28 @@ onMounted(() => {
   width: 100%;
 }
 
-.option-label {
-  font-weight: 500;
-  color: #1d1d1f;
-  display: block;
-  margin-bottom: 4px;
+/* 自取選單 */
+.pickup-select {
+  width: 30%;
+}
+
+/* 發票資訊 */
+.invoice-box {
+  padding: 20px;
+  background-color: #f9f9fb;
+  border-radius: 12px;
+  border: 1px dashed #dcdfe6;
+}
+
+/* 發票資訊 */
+.carrier-options,
+.company-fields {
+  animation: fadeIn 0.3s ease;
+}
+
+/* 發票資訊 */
+.modern-selector-group {
+  margin-bottom: 16px;
 }
 
 .option-hint {
