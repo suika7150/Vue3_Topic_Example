@@ -68,7 +68,7 @@ const adShift = computed(() => {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1002;
+  z-index: 1100;
 }
 
 .app-wrapper {

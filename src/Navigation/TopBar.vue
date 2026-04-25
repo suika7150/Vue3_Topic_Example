@@ -25,26 +25,34 @@ import CenterDropdown from './CenterDropdown.vue'
 
 // 控制 Topbar 是否隱藏
 const isHidden = ref(false)
+const threshold = 30
+let ticking = false
 let lastScrollTop = 0
 
 const handleScroll = () => {
-  const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const currentScrollTop = window.pageYOffset
 
-  // 滾動差值大於 5 才執行
-  if (Math.abs(currentScrollTop - lastScrollTop) <= 30) return
-
-  if (currentScrollTop > 100) {
-    // 如果目前位置 > 上次位置 = 正在下滑
-    if (currentScrollTop > lastScrollTop) {
-      isHidden.value = true // 下滑收起
-    } else {
-      isHidden.value = false // 上滑顯示
-    }
-  } else {
+  // 最上方強制顯示
+  if (currentScrollTop <= 0) {
     isHidden.value = false
+    lastScrollTop = 0
+    return
   }
 
-  lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      if (currentScrollTop - lastScrollTop > threshold && currentScrollTop > 50) {
+        isHidden.value = true
+      } else if (lastScrollTop - currentScrollTop > threshold) {
+        isHidden.value = false
+      }
+
+      lastScrollTop = currentScrollTop
+      ticking = false
+    })
+
+    ticking = true
+  }
 }
 
 onMounted(() => {
@@ -126,7 +134,6 @@ const props = defineProps({
   height: 100px;
   max-height: 100%;
   padding-top: 0px;
-  margin-top: 20px;
 }
 
 .topbar-right {
@@ -146,27 +153,22 @@ const props = defineProps({
   margin-top: 4px;
 }
 
-/* 1. 確保原本的元件都有 transition，動畫才會順暢 */
 .top-bar,
 .menu-bar {
   transition:
-    transform 0.3s ease-in-out,
+    transform 0.25s ease-in-out,
     opacity 0.3s ease;
 }
 
-/* 2. 定義隱藏時的狀態 */
-/* 因為你有兩個 bar，top-bar 在上方，menu-bar 在下方，
-   直接整塊往上移出畫面即可 */
 .top-bar.header-hidden {
-  transform: translateY(-150px); /* 對應你的 top-bar 高度 */
+  transform: translateY(-100%);
   opacity: 0;
-  pointer-events: none; /* 隱藏時點不到 */
+  pointer-events: none;
 }
 
 .menu-bar.header-hidden {
-  transform: translateY(-250px); /* 讓下方的 bar 也跟著推上去 */
-  opacity: 0;
-  pointer-events: none;
+  transform: translateY(-60%);
+  opacity: 0.4;
 }
 
 @media (max-width: 1024px) {

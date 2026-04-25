@@ -968,7 +968,7 @@ onMounted(() => {
 /* 發票資訊 */
 .invoice-box {
   padding: 20px;
-  background-color: #f9f9fb;
+  background-color: #ffffff;
   border-radius: 12px;
   border: 1px dashed #dcdfe6;
 }
@@ -1123,13 +1123,13 @@ onMounted(() => {
   width: 100%;
 }
 
-/* 統一限制表單項目的寬度，這樣右側邊界就會對齊 */
+/* 統一限制表單項目的寬度 */
 .minimalist-form :deep(.narrow-item) {
   max-width: 400px;
 }
 
 .minimalist-from :deep(.wide-item) {
-  max-width: 700px; /* 比較寬的項目可以有更大的寬度 */
+  max-width: 700px;
 }
 
 .minimalist-form :deep(.el-textarea__inner) {
