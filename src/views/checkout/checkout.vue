@@ -1168,16 +1168,16 @@ onMounted(() => {
   padding-bottom: 4px;
 }
 
-/* 錯誤提示時的底線顏色 */
+/* 錯誤提示的底線顏色 */
 .minimalist-form :deep(.el-form-item.is-error .el-input__wrapper) {
   border-bottom-color: #f56c6c !important;
 }
 
-/* 簡約質感配送/付款選項 */
+/* 付款選項 */
 .modern-selector-group,
 .el-radio-group {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 一排兩個 */
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 
@@ -1207,7 +1207,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 8px; /* 離開 radio 圓點一點點 */
+  margin-left: 8px;
 }
 
 .payment-name {

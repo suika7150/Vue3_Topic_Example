@@ -25,7 +25,7 @@ import CenterDropdown from './CenterDropdown.vue'
 
 // 控制 Topbar 是否隱藏
 const isHidden = ref(false)
-const threshold = 30
+const threshold = 5
 let ticking = false
 let lastScrollTop = 0
 

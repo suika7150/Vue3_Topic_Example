@@ -94,7 +94,7 @@
                     :type="getShippingTagType(order.shippingMethod)"
                     effect="light"
                     >配送方式 :
-                    {{ order.shippingMethod || '宅配到府' }}
+                    {{ getShippingMethodText(order.shippingMethod) }}
                   </el-tag>
                   <span class="item-count">
                     共 {{ order.items?.reduce((sum, i) => sum + i.quantity, 0) || 0 }} 項商品
@@ -146,6 +146,19 @@ const statusMap = {
   processing: 'paid', // 處理中
   shipped: 'shipped', // 已出貨
   completed: 'completed', // 已完成
+}
+
+// 訂單配送方式 checkout.vue 內定義
+const shippingMethodMap = {
+  HOME_DELIVERY: '宅配到府',
+  CVS_711: '7-11 取貨',
+  CVS_FAMILY: '全家取貨',
+  STORE_PICKUP: '到店自取',
+}
+
+// 轉換配送方式顯示文字
+const getShippingMethodText = (method) => {
+  return shippingMethodMap[method] || method || '宅配到府'
 }
 
 // 取得訂單資料
@@ -351,31 +364,35 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 
+/* 單個商品項目 */
 .product-row {
-  display: flex;
-  gap: 20px;
-  flex-wrap: nowrap; /* 確保商品橫向排列不換行 */
-  overflow-x: auto; /* 若商品太多可橫向滾動 */
-  padding-bottom: 10px; /* 留給滾動條的空間 */
-}
-
-.product-item {
   display: flex;
   align-items: center;
   gap: 16px;
-  min-width: 250px;
+  flex-wrap: nowrap;
+}
+
+/* 單個商品項目 */
+.product-item {
+  display: flex;
+  align-items: center;
+  overflow-x: visible;
+  gap: 10px;
+  min-width: 240px;
   flex: 0 0 auto;
 }
 
+/* 商品圖片 */
 .product-img {
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   border-radius: 12px;
   flex-shrink: 0;
   object-fit: cover;
   border: 1px solid #eee;
 }
 
+/* 商品信息 */
 .image-slot {
   display: flex;
   justify-content: center;
@@ -386,31 +403,33 @@ onMounted(() => {
   color: #a8abb2;
 }
 
+/* 商品信息 */
 .item-info .name {
   font-size: 15px;
   font-weight: 500;
   color: #1d1d1f;
   margin: 0 0 5px 0;
-  display: -webkit-box; /* 限制兩行 */
+  display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+/* 商品信息 */
 .item-info .qty {
   font-size: 13px;
   color: #86868b;
   margin: 0;
 }
 
-/* 更多商品卡片 */
+/* 查看更多商品 */
 .more-items-card {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 120px;
+  width: 70px;
+  height: 64px;
   border-radius: 8px;
   background-color: #f8f9fa;
   color: #86868b;
@@ -419,16 +438,19 @@ onMounted(() => {
   transition: all 0.2s;
 }
 
+/* 查看更多商品 */
 .more-items-card:hover {
   background-color: #edf2f7;
   border-color: #cbd5e1;
 }
 
+/* 查看更多商品 */
 .more-items-card .count {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
 }
 
+/* 查看更多商品 */
 .more-items-card .label {
   font-size: 12px;
 }
@@ -444,7 +466,6 @@ onMounted(() => {
 
 .price-item {
   display: flex;
-  /* justify-content: space-between; */
   width: 220px;
   font-size: 14px;
   color: #86868b;
@@ -498,6 +519,30 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+/* 配送方式 */
+.shipping-info .el-tag {
+  font-size: 14px;
+  padding: 8px 16px;
+  height: auto;
+  font-weight: 500;
+  border-width: 1.5px;
+  border-radius: 8px;
+}
+
+/* 配送方式 */
+.shipping-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+/* 配送方式 */
+.item-count {
+  font-size: 15px;
+  color: #636e72;
 }
 
 .item-count {
