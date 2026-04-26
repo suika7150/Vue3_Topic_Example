@@ -30,12 +30,23 @@ let ticking = false
 let lastScrollTop = 0
 
 const handleScroll = () => {
+  // 取得當前捲動位置
   const currentScrollTop = window.pageYOffset
+
+  // 取得整份文件的總高度
+  const scrollHeight = document.documentElement.scrollHeight
+  // 取得視窗的高度
+  const windowHeight = window.innerHeight
 
   // 最上方強制顯示
   if (currentScrollTop <= 0) {
     isHidden.value = false
     lastScrollTop = 0
+    return
+  }
+
+  // 如果捲動位置已經快到最底部了，就不執行隱藏/顯示的邏輯
+  if (currentScrollTop + windowHeight >= scrollHeight - 10) {
     return
   }
 
@@ -153,22 +164,15 @@ const props = defineProps({
   margin-top: 4px;
 }
 
+/* 隱藏滑動 */
 .top-bar,
 .menu-bar {
-  transition:
-    transform 0.25s ease-in-out,
-    opacity 0.3s ease;
+  transition: transform 0.3s ease-in-out;
 }
 
-.top-bar.header-hidden {
-  transform: translateY(-100%);
-  opacity: 0;
-  pointer-events: none;
-}
-
+/* 隱藏 Menu */
 .menu-bar.header-hidden {
-  transform: translateY(-60%);
-  opacity: 0.4;
+  transform: translateY(-100%);
 }
 
 @media (max-width: 1024px) {
