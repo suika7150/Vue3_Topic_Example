@@ -1,60 +1,60 @@
 <template>
-  <el-menu default-active="1" class="menu-in-drawer" @select="handleMenuSelect">
-    <div class="sidebar-header-title">導航選單</div>
+  <div class="sidebar-container">
     <el-divider style="margin: 0" />
-    <el-menu-item index="news" class="main-link">最新消息</el-menu-item>
-    <el-menu-item index="about" class="main-link">關於我們</el-menu-item>
-    <el-menu-item index="home" class="main-link">回首頁</el-menu-item>
-    <el-menu-item index="guide" class="main-link">購買須知</el-menu-item>
-    <el-menu-item index="qa" class="main-link">常見問題 Q&A</el-menu-item>
+    <el-menu default-active="1" class="menu-in-drawer" @select="handleMenuSelect">
+      <el-menu-item index="news" class="main-link">最新消息</el-menu-item>
+      <el-menu-item index="about" class="main-link">關於我們</el-menu-item>
+      <el-menu-item index="home" class="main-link">回首頁</el-menu-item>
+      <el-menu-item index="guide" class="main-link">購買須知</el-menu-item>
+      <el-menu-item index="qa" class="main-link">常見問題 Q&A</el-menu-item>
 
-    <el-divider v-if="menuData.length > 0" />
+      <el-divider v-if="menuData.length > 0" />
 
-    <template v-for="category in menuData" :key="category.name">
-      <el-sub-menu v-if="category.subs && category.subs.length > 0" :index="category.name">
-        <template #title>
-          <div class="category-title">
-            <el-icon><component :is="category.icon" /></el-icon>
-            <span>{{ category.label }}</span>
-          </div>
-        </template>
+      <template v-for="category in menuData" :key="category.name">
+        <el-sub-menu v-if="category.subs && category.subs.length > 0" :index="category.name">
+          <template #title>
+            <div class="category-title">
+              <el-icon><component :is="category.icon" /></el-icon>
+              <span>{{ category.label }}</span>
+            </div>
+          </template>
 
-        <template v-for="sub in category.subs" :key="sub.name">
-          <!-- <div class="category-title"> -->
-          <el-menu-item v-if="sub.route" :index="sub.route">
-            <el-icon><component :is="sub.icon" /></el-icon>
-            {{ sub.label }}
-          </el-menu-item>
-
-          <el-sub-menu
-            v-else-if="sub.subs && sub.subs.length > 0"
-            :index="`${category.name}-${sub.name}`"
-          >
-            <template #title>
+          <template v-for="sub in category.subs" :key="sub.name">
+            <!-- <div class="category-title"> -->
+            <el-menu-item v-if="sub.route" :index="sub.route">
               <el-icon><component :is="sub.icon" /></el-icon>
-              <span>{{ sub.label }}</span>
-            </template>
-            <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.route">
-              <el-icon><component :is="subSub.icon" /></el-icon>
-              {{ subSub.label }}
+              {{ sub.label }}
             </el-menu-item>
-          </el-sub-menu>
-          <!-- </div> -->
-        </template>
-      </el-sub-menu>
-    </template>
 
-    <el-divider />
+            <el-sub-menu
+              v-else-if="sub.subs && sub.subs.length > 0"
+              :index="`${category.name}-${sub.name}`"
+            >
+              <template #title>
+                <el-icon><component :is="sub.icon" /></el-icon>
+                <span>{{ sub.label }}</span>
+              </template>
+              <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.route">
+                <el-icon><component :is="subSub.icon" /></el-icon>
+                {{ subSub.label }}
+              </el-menu-item>
+            </el-sub-menu>
+          </template>
+        </el-sub-menu>
+      </template>
 
-    <el-menu-item index="cart" class="main-link">購物車</el-menu-item>
-    <el-menu-item index="profile" class="main-link">個人資料維護</el-menu-item>
-    <el-menu-item index="setting" class="main-link">設定</el-menu-item>
+      <el-divider />
 
-    <template v-if="!isLogin">
-      <el-menu-item index="login" divided class="main-link">登入</el-menu-item>
-      <el-menu-item index="register" divided class="main-link">註冊</el-menu-item>
-    </template>
-  </el-menu>
+      <el-menu-item index="cart" class="main-link">購物車</el-menu-item>
+      <el-menu-item index="profile" class="main-link">個人資料維護</el-menu-item>
+      <el-menu-item index="setting" class="main-link">設定</el-menu-item>
+
+      <template v-if="!isLogin">
+        <el-menu-item index="login" divided class="main-link">登入</el-menu-item>
+        <el-menu-item index="register" divided class="main-link">註冊</el-menu-item>
+      </template>
+    </el-menu>
+  </div>
 </template>
 
 <script setup>
@@ -113,17 +113,6 @@ const handleMenuSelect = (index) => {
 </script>
 
 <style scoped>
-.sidebar-header-title {
-  display: flex;
-  /* justify-content: center; */
-  /* align-content: center; */
-  padding-bottom: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #303133;
-  background-color: #fff;
-}
-
 .menu-in-drawer {
   border-right: none;
 }

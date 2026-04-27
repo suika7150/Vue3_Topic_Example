@@ -12,6 +12,7 @@
     </el-badge>
 
     <el-drawer
+      class="nav-sidebar-drawer"
       :model-value="!sidebarStore.isCollapsed"
       :before-close="sidebarStore.toggleCollapse"
       :lock-scroll="false"
@@ -19,6 +20,10 @@
       size="300px"
       append-to-body
     >
+      <template #header>
+        <span class="sidebar-header-title">導航選單</span>
+      </template>
+
       <SidebarMenu
         :is-login="isLogin"
         @navigate="handleNavigate"
@@ -182,6 +187,16 @@ const openCartDrawer = () => {
   transition: background-color 0.3s;
 }
 
+/* 導航選單標題文字樣式 */
+.sidebar-header-title {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #303133;
+  letter-spacing: 1px;
+}
+
 /* 購物車按鈕圓圈 */
 .cart-badge :deep(.el-badge__content) {
   display: flex;
@@ -288,11 +303,5 @@ const openCartDrawer = () => {
   transition: none; /* 不要拿掉，強制取消動畫 */
   top: 10px;
   left: 15px;
-}
-
-:deep(.el-drawer__header) {
-  margin-bottom: 0;
-  padding: 16px 20px;
-  color: #303133;
 }
 </style>

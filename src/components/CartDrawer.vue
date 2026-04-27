@@ -3,12 +3,36 @@
     <el-drawer
       :model-value="drawerVisible"
       @update:model-value="emit('update:drawerVisible', $event)"
-      title="🛒 購物車內容"
       :size="drawerSize"
       @close="handleClose"
       :lock-scroll="false"
       append-to-body
     >
+      <template #header>
+        <div class="drawer-header">
+          <div class="title">
+            <el-icon><ShoppingCart /></el-icon>
+            <span>購物車</span>
+            <el-tag size="small" type="info" class="count">
+              {{ cartStore.totalQuantity }}
+            </el-tag>
+          </div>
+
+          <div class="actions">
+            <el-popconfirm
+              title="確定清空購物車？"
+              confirm-button-text="確定"
+              cancel-button-text="取消"
+              @confirm="cartStore.clearCart()"
+            >
+              <template #reference>
+                <el-button link type="danger"> 清空購物車 </el-button>
+              </template>
+            </el-popconfirm>
+          </div>
+        </div>
+      </template>
+
       <div v-if="cart.length" class="cart-content">
         <el-table v-if="!isMobile" :data="cart" style="width: 100%">
           <el-table-column label="操作" width="60" align="center">
@@ -214,6 +238,32 @@ const removeItem = (productId) => {
   flex-grow: 1;
 }
 
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.count {
+  font-size: 12px;
+  color: #999;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .pc-thumb {
   width: 50px;
   height: 50px;
@@ -225,13 +275,11 @@ const removeItem = (productId) => {
   line-height: 1.3;
 }
 
-/* 1. 縮減單元格內邊距，釋放空間給 + 號 */
 :deep(.el-table .cell) {
   padding-left: 10px !important;
   padding-right: 4px !important;
 }
 
-/* 2. 稍微縮小輸入框寬度 (預設 small 約 135px，我們降到 110px-120px) */
 :deep(.el-table .el-input-number--small) {
   width: 80px !important;
 }
