@@ -5,6 +5,11 @@
     <el-button link class="user-menu-btn" @click="sidebarStore.toggleCollapse">
       <el-icon><Fold /></el-icon>
     </el-button>
+    <el-badge :value="totalQuantity" :hidden="totalQuantity === 0" class="cart-badge">
+      <el-button link class="user-menu-btn" @click="openCartDrawer">
+        <el-icon><ShoppingCart /></el-icon>
+      </el-button>
+    </el-badge>
 
     <el-drawer
       :model-value="!sidebarStore.isCollapsed"
@@ -82,18 +87,20 @@ import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from '@/store/sidebarStore'
+import { useCartStore } from '@/store/cartStore'
 import { useNavigation } from '@/composables/useNavigation'
 import CartDrawer from '@/components/CartDrawer.vue'
 import SearchInput from './SearchInput.vue'
 import SidebarMenu from './SidebarMenu.vue'
-import { Fold, UserFilled } from '@element-plus/icons-vue'
+import { Fold, UserFilled, ShoppingCart } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const sidebarStore = useSidebarStore()
 const showCartDrawer = ref(false)
 const userStore = useUserStore()
-
+const cartStore = useCartStore()
 const { user } = storeToRefs(userStore)
+const { totalQuantity } = storeToRefs(cartStore)
 const isLogin = computed(() => !!user.value?.isLogin)
 const { goTo, goOrderList } = useNavigation()
 
@@ -173,6 +180,19 @@ const openCartDrawer = () => {
   padding: 8px 12px;
   font-size: 18px;
   transition: background-color 0.3s;
+}
+
+/* 購物車按鈕 */
+.cart-badge :deep(.el-badge__content) {
+  top: 8px;
+  right: 10px;
+  background-color: #ff4757; /* 漂亮的紅色 */
+  border: none;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  height: 16px;
+  line-height: 16px;
+  padding: 0 4px;
 }
 
 /* 訂單按鈕 */
