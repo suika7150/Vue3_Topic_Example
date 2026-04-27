@@ -54,13 +54,9 @@
                   </div>
                   <div class="item-unit-price">單價: NT$ {{ item.price.toLocaleString() }}</div>
                 </div>
-                <el-button
-                  type="danger"
-                  :icon="Delete"
-                  @click="removeItem(item.id)"
-                  class="delete-btn"
-                >
-                  刪除
+                <el-button type="danger" @click="removeItem(item.id)" class="delete-btn">
+                  <el-icon><Delete /></el-icon>
+                  <span>刪除</span>
                 </el-button>
               </div>
             </div>
@@ -416,7 +412,7 @@ import { ref, computed, onMounted } from 'vue'
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/service/api'
-import { Check } from '@element-plus/icons-vue'
+import { Check, Delete } from '@element-plus/icons-vue'
 import taiwanData from '@/assets/data/AllData.json'
 import { toast } from '@/utils/message'
 import RecommendSection from '@/components/RecommendSection.vue'
@@ -1128,7 +1124,7 @@ onMounted(() => {
   max-width: 400px;
 }
 
-.minimalist-from :deep(.wide-item) {
+.minimalist-form :deep(.wide-item) {
   max-width: 700px;
 }
 

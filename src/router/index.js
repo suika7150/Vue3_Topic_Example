@@ -1,8 +1,3 @@
-/*
-*
-meta.title搭配BreadCrumb.vue的title顯示在麵包屑上
-*
-*/
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/userStore'

@@ -11,7 +11,7 @@
     >
       <div v-if="cart.length" class="cart-content">
         <el-table v-if="!isMobile" :data="cart" style="width: 100%">
-          <el-table-column label="操作" width="60" :align="center">
+          <el-table-column label="操作" width="60" align="center">
             <template #default="scope">
               <el-button
                 type="danger"
@@ -24,7 +24,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="商品" width="80" :align="center">
+          <el-table-column label="商品" width="80" align="center">
             <template #default="scope">
               <el-image
                 :src="scope.row.imageBase64"
@@ -35,19 +35,19 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="名稱" min-width="80" :align="center">
+          <el-table-column label="名稱" min-width="80" align="center">
             <template #default="scope">
               <span class="product-name">{{ scope.row.name }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="價格" width="80" :align="center">
+          <el-table-column label="價格" width="80" align="center">
             <template #default="scope">
               <span class="cart-price">${{ scope.row.price }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="數量" width="100" :align="center">
+          <el-table-column label="數量" width="100" align="center">
             <template #default="scope">
               <el-input-number
                 v-model="scope.row.quantity"
@@ -111,7 +111,7 @@
         </div>
       </template>
     </el-drawer>
-    <CheckoutConfirmModal v-model="showConfirmModal" title="確認結帳清單" append-to-body>
+    <CheckoutConfirmModal v-model="showConfirmModal" title="確認結帳清單">
       <div class="confirm-list-wrapper">
         <div v-for="item in cart" :key="item.id" class="confirm-item">
           <div class="item-info">
