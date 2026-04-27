@@ -410,8 +410,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import api from '@/service/api'
+import { storeToRefs } from 'pinia'
 import { Check, Delete } from '@element-plus/icons-vue'
 import taiwanData from '@/assets/data/AllData.json'
 import { toast } from '@/utils/message'
@@ -424,7 +425,9 @@ import Storage, { CART_KEY } from '@/utils/storageUtil'
 const cartStore = useCartStore()
 
 const { goTo, goCheckoutSuccess } = useNavigation()
+const { cart } = storeToRefs(cartStore) // 同步購物車
 const modalStore = useModalStore()
+const router = useRouter()
 const route = useRoute()
 
 const currentStep = ref(0) // 當前步驟
@@ -437,6 +440,21 @@ const discount = ref(0) // 優惠金額，預設為 0
 const FREE_SHIPPING_THRESHOLD = 1000 // 滿額免運門檻
 
 const cartItems = computed(() => cartStore.cart)
+
+// 監聽購物車內容變動
+watch(
+  cart,
+  (newCart) => {
+    // 如果購物車變空了
+    // 且目前還在結帳步驟中
+    if (newCart.length === 0 && currentStep.value < 2) {
+      setTimeout(() => {
+        router.push('/')
+      }, 1500)
+    }
+  },
+  { deep: true },
+)
 
 const updateStorage = (val, itemId) => {
   cartStore.updateQuantity(itemId, val) // 更新 store 中的數據

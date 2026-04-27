@@ -21,6 +21,9 @@ export const useCartStore = defineStore('cartStore', {
     },
   },
   actions: {
+    syncCart(newCart) {
+      this.cart = Array.isArray(newCart) ? newCart : []
+    },
     async fetchCartList() {
       const savedCart = Storage.get(CART_KEY)
       if (Array.isArray(savedCart)) {
@@ -78,3 +81,17 @@ export const useCartStore = defineStore('cartStore', {
     },
   },
 })
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event) => {
+    if (event.key === CART_KEY) {
+      try {
+        const cartStore = useCartStore()
+        const newCart = event.newValue ? JSON.parse(event.newValue) : []
+        cartStore.syncCart(newCart)
+      } catch (e) {
+        console.debug('跨分頁購物車同步失敗:', e)
+      }
+    }
+  })
+}
