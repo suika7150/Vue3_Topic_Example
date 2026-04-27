@@ -135,16 +135,20 @@ const fetchProductDetail = async () => {
   }
 }
 
-/**
- * 將商品加入購物車
- */
+/* 將商品加入購物車 */
 const addToCart = (productToAdd) => {
+  //檢查是否已經有該商品
   const existingItem = cartStore.cart.find((item) => item.id === productToAdd.id)
+
   if (existingItem) {
-    existingItem.quantity += 1
+    // 如果存在，加上使用者目前選擇的購買數量
+    existingItem.quantity += buyQty.value
     ElMessage.success(`${productToAdd.name} 數量已更新為 ${existingItem.quantity}`)
   } else {
-    cartStore.addProduct(productToAdd)
+    cartStore.addProduct({
+      ...productToAdd,
+      quantity: buyQty.value,
+    })
     ElMessage.success(`${productToAdd.name} 已加入購物車`)
   }
   cartStore.drawerVisible = true // 開啟購物車抽屜
