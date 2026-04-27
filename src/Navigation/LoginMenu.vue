@@ -182,17 +182,22 @@ const openCartDrawer = () => {
   transition: background-color 0.3s;
 }
 
-/* 購物車按鈕 */
+/* 購物車按鈕圓圈 */
 .cart-badge :deep(.el-badge__content) {
-  top: 8px;
-  right: 10px;
-  background-color: #ff4757; /* 漂亮的紅色 */
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff4757;
   font-family: Arial, sans-serif;
+  border: none;
+  top: 8px;
+  right: 15px;
   font-size: 10px;
-  height: 16px;
-  line-height: 16px;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
   padding: 0 4px;
+  border-radius: 50%;
 }
 
 /* 訂單按鈕 */
