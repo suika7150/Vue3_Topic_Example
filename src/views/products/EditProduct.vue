@@ -39,13 +39,13 @@
         </div>
 
         <div class="list-item">
-          <el-form-item label="商品狀態" prop="states">
-            <el-select v-model="form.states" placeholder="請選擇狀態">
+          <el-form-item label="商品狀態" prop="status">
+            <el-select v-model="form.status" placeholder="請選擇狀態">
               <el-option
-                v-for="(state, index) in states"
+                v-for="(status, index) in statusOptions"
                 :key="index"
-                :label="state.label"
-                :value="state.value"
+                :label="status.label"
+                :value="status.value"
               />
             </el-select>
           </el-form-item>
@@ -120,7 +120,7 @@ const form = reactive({
   category: '',
   price: 0,
   stock: 0,
-  states: '',
+  status: '',
   description: '',
   imageBase64: '',
 })
@@ -135,12 +135,13 @@ const rules = {
     { required: true, message: '請輸入庫存數量', trigger: 'blur' },
     { type: 'number', min: 0, message: '庫存數量不能為負數', trigger: 'blur' },
   ],
+  status: [{ required: true, message: '請選擇狀態', trigger: 'change' }],
   imageBase64: [{ required: true, message: '請上傳圖片', trigger: 'change' }],
 }
 
-const states = ref([
-  { label: '上架', value: 'ONSALE' },
-  { label: '下架', value: 'OFFSALE' },
+const statusOptions = ref([
+  { label: '上架', value: 'ON_SALE' },
+  { label: '下架', value: 'OFF_SALE' },
 ])
 
 // 選項過濾邏輯

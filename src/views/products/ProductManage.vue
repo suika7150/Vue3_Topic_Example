@@ -70,7 +70,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="!isTablet" prop="states" label="狀態" width="100" sortable />
+        <el-table-column v-if="!isTablet" prop="status" label="狀態" width="100" sortable />
 
         <el-table-column label="操作" :width="isMobile ? 110 : 180" align="center">
           <template #default="{ row }">

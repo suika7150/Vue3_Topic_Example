@@ -39,13 +39,13 @@
         </div>
 
         <div class="list-item">
-          <el-form-item label="商品狀態" prop="states">
-            <el-select v-model="form.states" placeholder="請選擇狀態">
+          <el-form-item label="商品狀態" prop="status">
+            <el-select v-model="form.status" placeholder="請選擇狀態">
               <el-option
-                v-for="(state, index) in states"
+                v-for="(status, index) in statusOptions"
                 :key="index"
-                :label="state.label"
-                :value="state.value"
+                :label="status.label"
+                :value="status.value"
               />
             </el-select>
           </el-form-item>
@@ -120,9 +120,9 @@ const successDialogVisible = ref(false)
 const imagePreview = ref(null)
 const cropperRef = ref(null)
 
-const states = ref([
-  { label: '上架', value: 'ONSALE' },
-  { label: '下架', value: 'OFFSALE' },
+const statusOptions = ref([
+  { label: '上架', value: 'ON_SALE' },
+  { label: '下架', value: 'OFF_SALE' },
 ])
 
 const form = reactive({
@@ -130,6 +130,7 @@ const form = reactive({
   category: '', //分類
   price: '', //價格
   stock: 0, //庫存
+  status: '', //狀態
   description: '', //描述
   imageBase64: '', //圖片
   imageType: '', //圖片類型
@@ -143,6 +144,7 @@ const rules = {
     { required: true, message: '請輸入庫存數量', trigger: 'blur' },
     { type: 'number', min: 0, message: '庫存數量不能為負數', trigger: 'blur' },
   ],
+  status: [{ required: true, message: '請選擇狀態', trigger: 'change' }],
   imageBase64: [{ required: true, message: '請上傳圖片', trigger: 'change' }],
 }
 
@@ -212,6 +214,7 @@ function resetForm() {
   form.category = ''
   form.price = null
   form.stock = 0
+  form.status = ''
   form.description = ''
   form.imageBase64 = ''
   imagePreview.value = null
