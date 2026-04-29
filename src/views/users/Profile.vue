@@ -27,9 +27,9 @@
 
         <el-form-item label="性別" prop="gender">
           <el-radio-group v-model="form.gender">
-            <el-radio label="M">男</el-radio>
-            <el-radio label="F">女</el-radio>
-            <el-radio label="O">其他</el-radio>
+            <el-radio value="M">男</el-radio>
+            <el-radio value="F">女</el-radio>
+            <el-radio value="O">其他</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -60,7 +60,6 @@ import { ElMessage } from 'element-plus'
 import { User } from '@element-plus/icons-vue'
 import api from '@/service/api'
 import { useNavigation } from '@/composables/useNavigation'
-import Storage, { TOKEN_KEY } from '@/utils/storageUtil'
 import { useUserStore } from '@/store/userStore'
 
 const { goLogin } = useNavigation()
@@ -78,21 +77,14 @@ const form = ref({
 })
 
 onMounted(async () => {
-  const token = Storage.get(TOKEN_KEY)
-
-  if (!token) {
-    ElMessage.error('請先登入')
-    goLogin()
-    return
-  }
-
   try {
     const res = await api.findUser()
     if (res && res.result) {
       form.value = { ...form.value, ...res.result }
+      console.log('findUser res:', res)
     }
   } catch (error) {
-    ElMessage.error('獲取資料失敗')
+    ElMessage.error('獲取個人資料失敗，請重新登入')
   }
 })
 
