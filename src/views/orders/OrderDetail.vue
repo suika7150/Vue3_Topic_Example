@@ -62,7 +62,7 @@
           <ul class="vertical-clean-list">
             <li>
               <span class="label">付款方式</span
-              ><span class="value">{{ orderDetail.paymentMethod }}</span>
+              ><span class="value">{{ getPaymentMethodText(orderDetail.paymentMethod) }}</span>
             </li>
             <li>
               <span class="label">備註事項</span
@@ -112,6 +112,17 @@ const activeStep = computed(() => {
   }
   return map[status] || 1
 })
+
+// 付款方式
+const paymentMethodMap = {
+  credit_card: '信用卡付款',
+  bank_transfer: '銀行轉帳',
+  cash_on_delivery: '貨到付款',
+}
+
+const getPaymentMethodText = (method) => {
+  return paymentMethodMap[method] || method || '未提供'
+}
 
 onMounted(async () => {
   const id = route.params.orderId // 對應 index.js 的 :orderId
