@@ -29,7 +29,6 @@
             <el-image :src="item.productImage" class="item-img" fit="cover" lazy />
             <div class="item-info">
               <h4 class="item-name">{{ item.name }}</h4>
-              <p class="item-spec">優質選物</p>
             </div>
             <div class="item-price-qty">
               <span class="unit-price"

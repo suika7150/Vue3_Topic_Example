@@ -109,7 +109,7 @@
 
                   <div class="delivery-info-inline" v-if="order.paymentStatus !== 'completed'">
                     <el-icon><Calendar /></el-icon>
-                    <span>預計到貨日：{{ getEstimatedArrival(order.createTime) }}</span>
+                    <span>預計到貨日：{{ getEstimatedArrival(order) }}</span>
                   </div>
                 </div>
               </div>
@@ -192,13 +192,26 @@ const handleTabChange = (tabName) => {
   fetchOrders(tabName)
 }
 
-// 模擬計算預計到貨日 (例如：下單後 3-5 天)
-const getEstimatedArrival = (createTime) => {
-  if (!createTime) return '計算中...'
-  const date = new Date(createTime)
-  if (isNaN(date.getTime())) return '待確認' // 防呆
-  date.setDate(date.getDate() + 3) // 假設固定 3 天後
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+// 訂單配送天數
+const deliveryDayMap = {
+  HOME_DELIVERY: 5,
+  CVS_711: 7,
+  CVS_FAMILY: 7,
+  STORE_PICKUP: 2,
+}
+
+// 預計到貨日
+const getEstimatedArrival = (order) => {
+  const createdAt = order.createdAt
+  if (!createdAt) return '計算中...'
+
+  const date = new Date(createdAt)
+  if (Number.isNaN(date.getTime())) return '待確認'
+
+  const deliveryDayDays = deliveryDayMap[order.shippingMethod] || 3
+  date.setDate(date.getDate() + deliveryDayDays)
+
+  return formatDate(date)
 }
 
 const getStatusTag = (status) => {
@@ -270,7 +283,6 @@ onMounted(() => {
   margin-top: 10px;
 }
 
-/* --- 大尺寸狀態標籤 --- */
 .modern-tabs :deep(.el-tabs__item) {
   font-size: 16px;
   font-weight: 500;
@@ -291,7 +303,7 @@ onMounted(() => {
   margin-bottom: 30px;
 }
 
-/* --- 訂單卡片 --- */
+/* 訂單卡片 */
 .wide-order-card {
   background: #fff;
   border-radius: 16px;

@@ -102,7 +102,7 @@ export const useUserStore = defineStore('userStore', {
 
         // 非登入頁面才顯示提醒
         if (window.location.pathname !== '/login') {
-          toast.warning('您的登入已過期，請重新登入。')
+          toast.warning('您已登出，請重新登入。')
         }
 
         isLoggingOut = false
