@@ -66,7 +66,9 @@
             </li>
             <li>
               <span class="label">備註事項</span
-              ><span class="value">{{ orderDetail.notes || '無' }}</span>
+              ><span class="value">{{
+                orderDetail.notes === 'None' ? '無' : orderDetail.notes
+              }}</span>
             </li>
           </ul>
         </section>
