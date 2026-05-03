@@ -1,7 +1,14 @@
 <template>
-  <div class="campaign-shell">
+  <div class="campaign-shell" :class="[bgClass, { full }]">
     <!-- 氛圍背景層 -->
-    <div class="campaign-bg"></div>
+    <div
+      class="campaign-bg"
+      :style="{
+        backgroundImage: props.bgImage
+          ? `url(${props.bgImage})`
+          : 'radial-gradient(circle at top, #1a1a1a, #000)',
+      }"
+    ></div>
 
     <!-- 上層內容 -->
     <div class="campaign-content">
@@ -12,7 +19,7 @@
 
       <!-- 主內容 -->
       <section class="campaign-main">
-        <slot name="default" />
+        <slot />
       </section>
     </div>
   </div>
@@ -20,16 +27,22 @@
 <script setup>
 import { computed } from 'vue'
 
-const bgClass = computed(() => {
-  return `theme-${props.theme}`
-})
-
-defineProps({
+const props = defineProps({
   theme: {
     type: String,
     default: 'dark',
   },
+  full: {
+    type: Boolean,
+    default: false,
+  },
+  bgImage: {
+    type: String,
+    default: '',
+  },
 })
+
+const bgClass = computed(() => `theme-${props.theme}`)
 </script>
 <style scoped>
 .campaign-shell {
@@ -38,19 +51,47 @@ defineProps({
   overflow: hidden;
 }
 
-/* 氛圍背景（很重要） */
+/* 背景*/
 .campaign-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top, #1a1a1a, #000);
   z-index: 0;
+
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* 內容層 */
+.campaign-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 0, 0, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(255, 200, 0, 0.1), transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(255, 0, 100, 0.08), transparent 60%);
+}
+
+.campaign-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.75));
+}
+
+/* 內容 */
 .campaign-content {
   position: relative;
+  padding: 80px 20px;
+  margin: 0 auto;
   z-index: 1;
-  padding: 40px 20px;
+}
+
+/* 活動模式 */
+.campaign-shell.full .campaign-content {
+  max-width: none;
+  width: 100%;
 }
 
 /* Hero 區 */

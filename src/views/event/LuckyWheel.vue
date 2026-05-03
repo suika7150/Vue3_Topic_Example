@@ -1,66 +1,46 @@
 <template>
-  <div class="lucky-wheel-container">
-    <h2 class="wheel-title">幸運大轉盤</h2>
+  <CampaignShell theme="dark" bgImage="/campaigns/campaign-double-eleven.png">
+    <div class="light-wheel-page">
+      <!-- HERO -->
+      <div class="hero-block">
+        <h2 class="title">幸運抽獎機</h2>
+        <p>燈光停下來的那一格，就是你的獎</p>
+      </div>
 
-    <div class="wheel-wrapper">
-      <div class="wheel-pointer"></div>
-
-      <div class="wheel-main" :style="wheelStyle">
+      <!-- GRID -->
+      <div class="grid">
         <div
-          v-for="(prize, index) in prizes"
+          v-for="(item, index) in prizes"
           :key="index"
-          class="prize-item"
-          :style="getItemStyle(index)"
+          class="cell"
+          :class="{ active: index === activeIndex }"
         >
-          <span class="prize-text">{{ prize.name }}</span>
+          {{ item }}
         </div>
       </div>
+
+      <!-- BUTTON -->
+      <el-button type="danger" class="spin-btn" :loading="isSpinning" @click="startSpin">
+        {{ isSpinning ? '抽獎中...' : '開始抽獎' }}
+      </el-button>
+
+      <!-- RESULT -->
+      <div v-if="result" class="result">
+        🎉 恭喜獲得：<span>{{ result }}</span>
+      </div>
     </div>
-
-    <el-button
-      type="danger"
-      size="large"
-      class="spin-button"
-      :loading="isSpinning"
-      @click="startSpin"
-    >
-      {{ isSpinning ? '抽獎中...' : '開始抽獎' }}
-    </el-button>
-
-    <p v-if="result" class="result-msg">
-      恭喜獲得：<span>{{ result }}</span>
-    </p>
-  </div>
+  </CampaignShell>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import CampaignShell from '@/views/event/CampaignShell.vue'
 
-const prizes = [
-  { name: '9折券', color: '#1a1a1a' },
-  { name: '免運券', color: '#2c2c2c' },
-  { name: '50元', color: '#1a1a1a' },
-  { name: '85折', color: '#2c2c2c' },
-  { name: '100元', color: '#1a1a1a' },
-  { name: '再接再厲', color: '#d62828' },
-]
+const prizes = ['9折券', '免運券', '50元', '85折', '100元', '再接再厲']
 
+const activeIndex = ref(0)
 const isSpinning = ref(false)
-const rotation = ref(0)
 const result = ref('')
-
-const wheelStyle = computed(() => ({
-  transform: `rotate(${rotation.value}deg)`,
-  transition: isSpinning.value ? 'transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
-}))
-
-const getItemStyle = (index) => {
-  const angle = 360 / prizes.length
-  return {
-    transform: `rotate(${index * angle}deg) skewY(${90 - angle}deg)`,
-    backgroundColor: prizes[index].color,
-  }
-}
 
 const startSpin = () => {
   if (isSpinning.value) return
@@ -68,163 +48,94 @@ const startSpin = () => {
   isSpinning.value = true
   result.value = ''
 
-  // 隨機旋轉 5~10 圈 + 隨機角度
-  const randomDeg = Math.floor(Math.random() * 360)
-  const totalDeg = rotation.value + 360 * 8 + randomDeg
-  rotation.value = totalDeg
+  const totalSteps = 30 + Math.floor(Math.random() * 15)
+  let step = 0
 
-  setTimeout(() => {
-    isSpinning.value = false
-    // 計算中獎結果
-    const actualDeg = totalDeg % 360
-    const step = 360 / prizes.length
-    const offset = step / 2
-    const index = Math.floor(((360 - actualDeg + 210 + offset) % 360) / step)
-    result.value = prizes[index].name
+  const timer = setInterval(() => {
+    activeIndex.value = step % prizes.length
+    step++
 
-    alert(`恭喜！您獲得了 ${result.value}`)
-  }, 4000)
+    if (step > totalSteps) {
+      clearInterval(timer)
+      isSpinning.value = false
+      result.value = prizes[activeIndex.value]
+    }
+  }, 80)
 }
 </script>
 
 <style scoped>
-.lucky-wheel-container {
+.light-wheel-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: 200px 20px;
-  width: 100%;
-  min-height: 86vh;
-  margin-top: -80px;
-  /* background: radial-gradient(circle, #2c2c2c 0%, #000000 100%); */
+  padding: 120px 20px;
+  color: white;
 }
 
-.wheel-title {
-  color: #f1c40f;
-  font-size: 32px;
+/* HERO */
+.hero-block {
+  text-align: center;
   margin-bottom: 40px;
-  text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
 }
 
-.wheel-wrapper {
-  position: relative;
-  width: 450px;
-  height: 450px;
-  border: 12px solid #333;
-  border-radius: 50%;
-  box-shadow:
-    0 0 30px rgba(0, 0, 0, 0.8),
-    0 0 10px #f1c40f;
+.title {
+  font-size: 34px;
+  font-weight: bold;
+  color: #fff;
 }
 
-.wheel-main {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  position: relative;
-  overflow: hidden;
-  border: 2px solid #444;
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 110px);
+  gap: 15px;
+  margin-bottom: 40px;
 }
 
-.prize-item {
-  position: absolute;
-  width: 50%;
-  height: 50%;
-  left: 50%;
-  top: 50%;
-  font-size: 30px;
-  transform-origin: 0 0;
+/* CELL */
+.cell {
+  width: 110px;
+  height: 110px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.1);
-}
 
-.prize-text {
-  position: absolute;
-  left: 20px;
-  top: 40px;
-  width: 100px;
-  color: #fff;
   font-weight: bold;
-  transform: skewY(-30deg) rotate(30deg);
-  text-align: center;
+  transition: 0.2s;
 }
 
-.wheel-pointer {
-  position: absolute;
-  border: #d62828 solid 8px;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 40px;
-  background: #d62828;
-  clip-path: polygon(50% 100%, 0 0, 100% 0);
-  z-index: 10;
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+/* ACTIVE LIGHT */
+.cell.active {
+  background: #f1c40f;
+  color: #000;
+
+  transform: scale(1.08);
+  box-shadow: 0 0 25px #f1c40f;
 }
 
-.spin-button {
-  text-align: center;
-  margin-top: 60px;
-  padding: 40px 60px;
-  font-size: 30px;
-  font-weight: bold;
-  letter-spacing: 15px;
-  background: linear-gradient(135deg, #d62828 0%, #a81c1c 100%);
-  border: none;
-  box-shadow: 0 5px 15px rgba(214, 40, 40, 0.4);
-}
-
-.result-msg {
-  margin-top: 30px;
-  color: #fff;
-  font-size: 24px;
+/* BUTTON */
+.spin-btn {
+  margin-top: 10px;
+  padding: 18px 50px;
+  font-size: 18px;
   font-weight: bold;
 }
-.result-msg span {
+
+/* RESULT */
+.result {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+.result span {
   color: #f1c40f;
   font-weight: bold;
-}
-
-@media (max-width: 1024px) {
-  .lucky-wheel-container {
-    padding: 100px 0px;
-  }
-
-  .wheel-title {
-    font-size: 24px;
-    margin-bottom: 30px;
-  }
-
-  .wheel-wrapper {
-    width: 300px;
-    height: 300px;
-    border-width: 8px;
-  }
-
-  .prize-text {
-    left: 10px;
-    top: 35px;
-    width: 80px;
-    font-size: 13px;
-  }
-
-  .wheel-pointer {
-    width: 30px;
-    height: 30px;
-    top: -10px;
-  }
-
-  .spin-button {
-    margin-top: 30px;
-    padding: 30px 40px;
-    width: 200px;
-    font-size: 20px;
-  }
-
-  .result-msg {
-    font-size: 18px;
-  }
 }
 </style>
