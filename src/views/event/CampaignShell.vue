@@ -1,6 +1,5 @@
 <template>
   <div class="campaign-shell" :class="[bgClass, { full }]">
-    <!-- 氛圍背景層 -->
     <div
       class="campaign-bg"
       :style="{
@@ -10,14 +9,11 @@
       }"
     ></div>
 
-    <!-- 上層內容 -->
     <div class="campaign-content">
-      <!-- Hero 區 -->
       <section class="campaign-hero">
         <slot name="hero" />
       </section>
 
-      <!-- 主內容 -->
       <section class="campaign-main">
         <slot />
       </section>
