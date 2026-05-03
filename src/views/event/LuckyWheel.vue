@@ -1,13 +1,11 @@
 <template>
   <CampaignShell theme="dark" bgImage="/campaigns/campaign-double-eleven.png">
     <div class="light-wheel-page">
-      <!-- HERO -->
       <div class="hero-block">
         <h2 class="title">幸運抽獎機</h2>
         <p>燈光停下來的那一格，就是你的獎</p>
       </div>
 
-      <!-- GRID -->
       <div class="grid">
         <div
           v-for="(item, index) in prizes"
@@ -19,12 +17,10 @@
         </div>
       </div>
 
-      <!-- BUTTON -->
       <el-button type="danger" class="spin-btn" :loading="isSpinning" @click="startSpin">
         {{ isSpinning ? '抽獎中...' : '開始抽獎' }}
       </el-button>
 
-      <!-- RESULT -->
       <div v-if="result" class="result">
         🎉 恭喜獲得：<span>{{ result }}</span>
       </div>
@@ -73,7 +69,6 @@ const startSpin = () => {
   color: white;
 }
 
-/* HERO */
 .hero-block {
   text-align: center;
   margin-bottom: 40px;
@@ -85,7 +80,6 @@ const startSpin = () => {
   color: #fff;
 }
 
-/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 110px);
@@ -93,7 +87,6 @@ const startSpin = () => {
   margin-bottom: 40px;
 }
 
-/* CELL */
 .cell {
   width: 110px;
   height: 110px;
@@ -111,7 +104,6 @@ const startSpin = () => {
   transition: 0.2s;
 }
 
-/* ACTIVE LIGHT */
 .cell.active {
   background: #f1c40f;
   color: #000;
@@ -120,7 +112,6 @@ const startSpin = () => {
   box-shadow: 0 0 25px #f1c40f;
 }
 
-/* BUTTON */
 .spin-btn {
   margin-top: 10px;
   padding: 18px 50px;
@@ -128,7 +119,6 @@ const startSpin = () => {
   font-weight: bold;
 }
 
-/* RESULT */
 .result {
   margin-top: 20px;
   font-size: 20px;

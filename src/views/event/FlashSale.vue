@@ -12,7 +12,7 @@
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front green-card">
-              <h3>⚡ 距離特惠結束還剩</h3>
+              <h3>距離特惠結束還剩</h3>
 
               <div class="countdown-box">
                 <el-countdown
@@ -26,7 +26,7 @@
             </div>
 
             <div class="flip-card-back green-card">
-              <h3>🎁 每日隨機禮</h3>
+              <h3>每日隨機禮</h3>
               <p>消費滿額即贈多重好禮！</p>
               <el-button type="warning" plain>立即抽獎</el-button>
             </div>
@@ -36,13 +36,13 @@
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front orange-card">
-              <h3>🔥 每日隨機票券</h3>
+              <h3>每日隨機票券</h3>
               <p>領取一張多重抵薪！</p>
               <el-button type="primary" plain>立即領取</el-button>
             </div>
 
             <div class="flip-card-back orange-card">
-              <h3>✨ 會員專屬</h3>
+              <h3>會員專屬</h3>
               <p>登入會員，享更多優惠！</p>
               <el-button type="info" plain>前往登入</el-button>
             </div>
