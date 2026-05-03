@@ -20,10 +20,10 @@
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goAnime">動漫聯名款</el-dropdown-item>
-          <el-dropdown-item @click="goMovie">電影大聯盟</el-dropdown-item>
-          <el-dropdown-item @click="goDesigner">設計師聯名款</el-dropdown-item>
-          <el-dropdown-item @click="goLimited">全球限量版</el-dropdown-item>
+          <el-dropdown-item @click="goCrossover('anime')">動漫聯名款</el-dropdown-item>
+          <el-dropdown-item @click="goCrossover('movie')">電影大聯盟</el-dropdown-item>
+          <el-dropdown-item @click="goCrossover('designer')">設計師聯名款</el-dropdown-item>
+          <el-dropdown-item @click="goCrossover('limited')">全球限量版</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -98,16 +98,7 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElIcon } from 'el
 import { ArrowDown, CaretBottom } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'
 
-const {
-  goShoppingGuide,
-  goQA,
-  goFlashSale,
-  goLuckyWheel,
-  goAnime,
-  goMovie,
-  goDesigner,
-  goLimited,
-} = useNavigation()
+const { goShoppingGuide, goQA, goFlashSale, goLuckyWheel, goCrossover } = useNavigation()
 </script>
 
 <style scoped>

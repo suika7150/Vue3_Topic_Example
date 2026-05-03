@@ -109,28 +109,10 @@ const routes = [
     meta: { title: '活動專區' },
   },
   {
-    path: '/crossover/anime',
-    name: 'anime',
-    component: () => import('@/views/crossover/Anime.vue'),
-    meta: { title: '動漫聯名款' },
-  },
-  {
-    path: '/crossover/movie',
-    name: 'movie',
-    component: () => import('@/views/crossover/Movie.vue'),
-    meta: { title: '電影大聯盟' },
-  },
-  {
-    path: '/crossover/designer',
-    name: 'designer',
-    component: () => import('@/views/crossover/Designer.vue'),
-    meta: { title: '設計師聯名款' },
-  },
-  {
-    path: '/crossover/limited',
-    name: 'limited',
-    component: () => import('@/views/crossover/LimitedEdition.vue'),
-    meta: { title: '全球限量版' },
+    path: '/crossover/:type',
+    name: 'crossover',
+    component: () => import('@/views/crossover/CrossoverView.vue.vue'),
+    meta: { title: '聯名專區', requiresAuth: false },
   },
   {
     path: '/checkout',

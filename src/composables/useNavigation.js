@@ -58,26 +58,6 @@ export function useNavigation() {
     router.push({ name: 'luckyWheel' })
   }
 
-  //動漫聯名款
-  const goAnime = () => {
-    router.push({ name: 'anime' })
-  }
-
-  //電影大聯盟
-  const goMovie = () => {
-    router.push({ name: 'movie' })
-  }
-
-  //設計師聯名款
-  const goDesigner = () => {
-    router.push({ name: 'designer' })
-  }
-
-  //全球限量版
-  const goLimited = () => {
-    router.push({ name: 'limited' })
-  }
-
   //購物指南
   const goShoppingGuide = () => {
     router.push({ name: 'shoppingGuide' })
@@ -114,6 +94,14 @@ export function useNavigation() {
     router.push({ name: 'notFound' })
   }
 
+  // 聯名專區
+  const goCrossover = (type) => {
+    router.push({
+      name: 'crossover',
+      params: { type },
+    })
+  }
+
   //跳轉到指定路由
   const goTo = (target, params = {}, query = {}) => {
     if (typeof target === 'string' && target.startsWith('/')) {
@@ -123,22 +111,13 @@ export function useNavigation() {
     }
   }
 
-  //替換到指定路由
-  // const replaceTo = (target, params = {}, query = {}) => {
-  //   if (typeof target === 'string' && target.startsWith('/')) {
-  //     router.replace({ path: target, query })
-  //   } else {
-  //     router.replace({ name: target, params, query })
-  //   }
-  // }
-
   return {
     goTo,
-    // replaceTo,
     goNews,
     goAbout,
     goHome,
     goLogin,
+    goCrossover,
     goProducts,
     goProductDetail,
     goCheckout,
@@ -149,10 +128,6 @@ export function useNavigation() {
     goQA,
     goFlashSale,
     goLuckyWheel,
-    goAnime,
-    goMovie,
-    goDesigner,
-    goLimited,
     goRegister,
     goSetting,
     goNotFound,
