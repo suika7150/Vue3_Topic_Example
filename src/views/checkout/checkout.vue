@@ -615,13 +615,13 @@ const submitOrder = async () => {
     } else if (['CVS_711', 'CVS_FAMILY'].includes(method)) {
       finalAddress = `[超商取貨] ${shippingForm.value.cvsStore?.storeName} - ${shippingForm.value.cvsStore?.storeAddress}`
     } else {
-      finalAddress = `[門市自取] 門市ID: ${shippingForm.value.pickupStoreId}`
+      finalAddress = `[門市自取] 門市地址: ${shippingForm.value.pickupStoreId}`
     }
     // 建立訂單資料
     const orderData = {
       name: shippingForm.value.name,
       phone: shippingForm.value.phone,
-      address: finalAddress, // 使用組裝的地址
+      address: finalAddress, // 地址
       shippingMethod: shippingForm.value.shippingMethod,
       shippingFee: shippingFee.value, // 運費
       discount: discount.value, // 折扣金額

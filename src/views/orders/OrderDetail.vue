@@ -310,9 +310,12 @@ const goOrderList = () => {
   font-size: 18px;
 }
 .grand-total {
+  display: flex;
+  align-items: center;
   margin-top: 15px;
   font-weight: bold;
   font-size: 22px;
+  gap: 10px;
 }
 
 .total-price {
