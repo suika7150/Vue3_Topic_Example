@@ -27,16 +27,15 @@ import {
 export function getNavMenu(userRole) {
   const categories = [
     {
-      name: 'products',
-      label: '商品相關',
-      icon: Monitor,
+      name: 'doubleeleven',
+      label: '雙11週年盛典',
+      icon: Odometer,
       clickable: false,
       subs: [
-        { name: 'overview', label: '商品總覽', icon: Cpu, route: '/products' },
-        { name: 'productManage', label: '商品管理', icon: Cpu, route: '/products/manage' },
+        { name: 'rewards', label: '年度特選回饋', icon: Sell, route: '/doubleeleven/rewards' },
+        { name: 'gifts', label: '滿額加碼驚喜', icon: MagicStick, route: '/doubleeleven/gifts' },
       ],
     },
-
     {
       name: 'event',
       label: '活動專區',
@@ -45,6 +44,16 @@ export function getNavMenu(userRole) {
       subs: [
         { name: 'flashSale', label: '本週特惠', icon: Odometer, route: '/event/flashsale' },
         { name: 'luckyWheel', label: '幸運輪盤', icon: Present, route: '/event/luckywheel' },
+      ],
+    },
+    {
+      name: 'products',
+      label: '商品相關',
+      icon: Monitor,
+      clickable: false,
+      subs: [
+        { name: 'overview', label: '商品總覽', icon: Cpu, route: '/products' },
+        { name: 'productManage', label: '商品管理', icon: Cpu, route: '/products/manage' },
       ],
     },
     {
@@ -100,16 +109,7 @@ export function getNavMenu(userRole) {
         { name: 'seasonalTravel', label: '出遊推薦', icon: Compass, route: '/seasonal/travel' },
       ],
     },
-    {
-      name: 'doubleeleven',
-      label: '雙11週年盛典',
-      icon: Odometer,
-      clickable: false,
-      subs: [
-        { name: 'rewards', label: '年度特選回饋', icon: Sell, route: '/doubleeleven/rewards' },
-        { name: 'gifts', label: '滿額加碼驚喜', icon: MagicStick, route: '/doubleeleven/gifts' },
-      ],
-    },
+
     {
       name: 'settings',
       label: '管理相關',

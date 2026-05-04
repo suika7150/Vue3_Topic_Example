@@ -94,6 +94,16 @@ export function useNavigation() {
     router.push({ name: 'notFound' })
   }
 
+  // 滿額加碼驚喜頁面
+  const goDoubleElevenRewards = () => {
+    router.push({ name: 'rewards' })
+  }
+
+  // 滿額加碼禮品頁面
+  const goDoubleElevenGifts = () => {
+    router.push({ name: 'gifts' })
+  }
+
   // 聯名專區
   const goCrossover = (type) => {
     router.push({
@@ -117,6 +127,8 @@ export function useNavigation() {
     goAbout,
     goHome,
     goLogin,
+    goDoubleElevenRewards,
+    goDoubleElevenGifts,
     goCrossover,
     goProducts,
     goProductDetail,

@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/store/userStore'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
-import { hideLoading } from '@/utils/loadingService'
+import { showLoading, hideLoading } from '@/utils/loadingService'
 
 const routes = [
   { path: '/', name: 'home', component: () => import('@/views/Home.vue'), meta: { title: '首頁' } },
@@ -83,7 +83,6 @@ const routes = [
     component: () => import('@/views/products/EditProduct.vue'),
     meta: { title: '商品編輯' },
   },
-  // 開發中
   {
     path: '/product/:id',
     name: 'ProductDetail',
@@ -95,6 +94,18 @@ const routes = [
     name: 'OptionsManage',
     component: () => import('@/views/settings/OptionsManage.vue'),
     meta: { title: '選項管理', requiresAuth: true, role: ['ADMIN', 'USER'] },
+  },
+  {
+    path: '/doubleeleven/rewards',
+    name: 'rewards',
+    component: () => import('@/views/doubleeleven/rewards.vue'),
+    meta: { title: '年度特選回饋' },
+  },
+  {
+    path: '/doubleeleven/gifts',
+    name: 'gifts',
+    component: () => import('@/views/doubleeleven/gifts.vue'),
+    meta: { title: '滿額加碼驚喜' },
   },
   {
     path: '/event/flashsale',
@@ -111,7 +122,7 @@ const routes = [
   {
     path: '/crossover/:type',
     name: 'crossover',
-    component: () => import('@/views/crossover/CrossoverView.vue.vue'),
+    component: () => import('@/views/crossover/CrossoverView.vue'),
     meta: { title: '聯名專區', requiresAuth: false },
   },
   {
@@ -184,6 +195,8 @@ const router = createRouter({
 
 // 路由守衛，權限驗證
 router.beforeEach(async (to, from, next) => {
+  showLoading()
+
   const userStore = useUserStore()
   const cartStore = useCartStore()
 

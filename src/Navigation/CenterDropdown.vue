@@ -1,5 +1,18 @@
 <template>
   <div class="topbar-dropdowns">
+    <!-- 雙11大優惠 -->
+    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
+      <el-button class="topbar-btn">
+        雙11周年慶典 <el-icon class="caret-icon"><CaretBottom /></el-icon>
+      </el-button>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="goDoubleElevenRewards">年度特選回饋</el-dropdown-item>
+          <el-dropdown-item @click="goDoubleElevenGifts">滿額加碼驚喜</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+
     <!-- 活動專區 -->
     <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
       <el-button class="topbar-btn"
@@ -55,19 +68,6 @@
       </template>
     </el-dropdown>
 
-    <!-- 雙11大優惠 -->
-    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
-      <el-button class="topbar-btn">
-        雙11周年慶典 <el-icon class="caret-icon"><CaretBottom /></el-icon>
-      </el-button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="">年度特選回饋</el-dropdown-item>
-          <el-dropdown-item @click="">滿額加碼驚喜</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
     <!-- 更多活動 -->
     <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
       <el-button class="topbar-btn">
@@ -98,7 +98,15 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElIcon } from 'el
 import { ArrowDown, CaretBottom } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'
 
-const { goShoppingGuide, goQA, goFlashSale, goLuckyWheel, goCrossover } = useNavigation()
+const {
+  goShoppingGuide,
+  goQA,
+  goDoubleElevenRewards,
+  goDoubleElevenGifts,
+  goFlashSale,
+  goLuckyWheel,
+  goCrossover,
+} = useNavigation()
 </script>
 
 <style scoped>
