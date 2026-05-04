@@ -73,13 +73,8 @@ const openDetails = (item) => {
 
 <style scoped>
 .news-container {
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  min-height: 100vh;
-  background-color: #0a0a0a;
-  padding: 80px 20px;
-  color: #fff;
+  padding: 40px 20px; /* 保留內容間距即可 */
   box-sizing: border-box;
 }
 

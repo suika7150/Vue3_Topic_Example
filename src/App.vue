@@ -50,7 +50,7 @@ const adShift = computed(() => {
         title="年終狂歡節"
       />
 
-      <div class="content">
+      <div class="content" :class="$route.name">
         <router-view />
       </div>
     </div>
@@ -112,6 +112,18 @@ const adShift = computed(() => {
   box-sizing: border-box;
   width: 100%;
   background: transparent;
+}
+
+/* 最新消息頁面 */
+.content.news {
+  background: #0a0a0a;
+  min-height: 100vh;
+}
+
+/* 關於我們頁面 */
+.content.canvas,
+.content.about {
+  padding-top: 0;
 }
 
 .backtotop {
