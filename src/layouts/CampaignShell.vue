@@ -43,13 +43,13 @@ const bgClass = computed(() => `theme-${props.theme}`)
 <style scoped>
 .campaign-shell {
   min-height: 100vh;
+  min-width: 100%;
   position: relative;
-  overflow: hidden;
 }
 
 /* 背景*/
 .campaign-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
 

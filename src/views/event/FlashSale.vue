@@ -57,7 +57,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import CampaignShell from '@/views/event/CampaignShell.vue'
+import CampaignShell from '@/layouts/CampaignShell.vue'
 import ProductList from '@/views/products/ProductList.vue'
 
 // 公式：1000ms * 60s * 60m * 2小時

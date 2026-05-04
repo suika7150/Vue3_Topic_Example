@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import CampaignShell from '@/views/event/CampaignShell.vue'
+import CampaignShell from '@/layouts/CampaignShell.vue'
 
 const prizes = ['9折券', '免運券', '50元', '85折', '100元', '再接再厲']
 
