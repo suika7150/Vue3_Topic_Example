@@ -21,8 +21,8 @@ body {
   overflow: hidden !important;
 }
 
-/* --- 全域 Toast 訊息樣式 --- */
-/* --- 定義三種訊息框共通的視覺規格 --- */
+/* 全域 Toast 訊息樣式 */
+/* 定義三種訊息框共通的視覺規格 */
 .el-message.glow-toast-success,
 .el-message.glow-toast-error,
 .el-message.glow-toast-info {
@@ -43,7 +43,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* --- Checkout 對話框美化 --- */
+/* Checkout 對話框美化 */
 body .el-message-box.checkout-confirm-dialog {
   border: none !important;
   border-radius: 20px !important;
@@ -81,18 +81,18 @@ body .el-message-box.checkout-confirm-dialog {
   border-radius: 10px;
 }
 
-/* --- 物流車 Loading 動畫 --- */
+/* 物流車 Loading 動畫 */
 
 .el-loading-mask.rpg-loading-mask {
   background-color: rgba(18, 18, 20, 0.9) !important;
 }
 
+/* 車子行駛上下震動 */
 .rpg-loading-mask .el-loading-spinner {
   background: none !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  /* 車子行駛上下震動 */
   animation: truck-vibration 0.3s infinite linear;
   will-change: transform;
 }
@@ -110,13 +110,13 @@ body .el-message-box.checkout-confirm-dialog {
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
 }
 
+/* 線條向後飛過的動畫 */
 .rpg-loading-mask .el-loading-spinner::after {
   content: '';
   width: 40px;
   height: 3px;
   background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.6), transparent);
   border-radius: 2px;
-  /* 線條向後飛過的動畫 */
   animation: road-line-move 0.5s infinite linear;
   margin-bottom: 20px;
 }

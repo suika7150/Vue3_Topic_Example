@@ -111,6 +111,7 @@ const adShift = computed(() => {
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;
+  background: transparent;
 }
 
 .backtotop {
@@ -134,7 +135,6 @@ const adShift = computed(() => {
   /* 主內容區 */
   .content {
     padding-top: 139px;
-    background-color: white;
   }
 
   .topbar-ad-banner {
