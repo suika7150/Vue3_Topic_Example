@@ -1,4 +1,4 @@
-/* 共用頁面版型 */
+/* 聯名頁面共用頁面版型 */
 
 <template>
   <div class="hero-banner">

@@ -1,3 +1,5 @@
+/* 活動頁面共用頁面版型 */
+
 <template>
   <div class="campaign-shell" :class="[bgClass, { full }]">
     <div
@@ -67,13 +69,6 @@ const bgClass = computed(() => `theme-${props.theme}`)
     radial-gradient(circle at 20% 20%, rgba(255, 0, 0, 0.15), transparent 40%),
     radial-gradient(circle at 80% 30%, rgba(255, 200, 0, 0.1), transparent 50%),
     radial-gradient(circle at 50% 80%, rgba(255, 0, 100, 0.08), transparent 60%);
-}
-
-.campaign-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.75));
 }
 
 /* 內容 */

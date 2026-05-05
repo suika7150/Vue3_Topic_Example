@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
-import HeroLayout from '@/layouts/HeroLayout.vue'
+import HeroLayout from '@/layouts/CrossoverLayout.vue'
 import ProductList from '@/views/products/ProductList.vue'
 
 const route = useRoute()
