@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import HeroLayout from '@/layouts/HeroLayout.vue'
-import ProductList from '@/views/products/list.vue'
+import ProductList from '@/views/products/ProductList.vue'
 
 const route = useRoute()
 const type = computed(() => route.params.type)

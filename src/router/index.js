@@ -9,7 +9,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/static/Home.vue'),
+    component: () => import('@/views/Home.vue'),
     meta: { title: '首頁' },
   },
   {
@@ -27,31 +27,31 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    component: () => import('@/views/static/About.vue'),
+    component: () => import('@/views/About.vue'),
     meta: { title: '關於我們' },
   },
   {
     path: '/news',
     name: 'news',
-    component: () => import('@/views/static/News.vue'),
+    component: () => import('@/views/News.vue'),
     meta: { title: '新聞資訊' },
   },
   {
     path: '/setting',
     name: 'setting',
-    component: () => import('@/views/static/Setting.vue'),
+    component: () => import('@/views/Setting.vue'),
     meta: { title: '設定' },
   },
   {
     path: '/shoppingguide',
     name: 'shoppingGuide',
-    component: () => import('@/views/static/ShoppingGuide.vue'),
+    component: () => import('@/views/ShoppingGuide.vue'),
     meta: { title: '購物指南' },
   },
   {
     path: '/qa',
     name: 'qa',
-    component: () => import('@/views/static/QA.vue'),
+    component: () => import('@/views/QA.vue'),
     meta: { title: '常見問題' },
   },
   {
@@ -63,7 +63,7 @@ const routes = [
   {
     path: '/products',
     name: 'overview',
-    component: () => import('@/views/products/list.vue'),
+    component: () => import('@/views/products/ProductList.vue'),
     meta: { title: '商品總覽' },
   },
   {
@@ -75,7 +75,7 @@ const routes = [
   {
     path: '/products/manage',
     name: 'productManage',
-    component: () => import('@/views/products/manage.vue'),
+    component: () => import('@/views/products/ProductManage.vue'),
     meta: {
       title: '商品管理',
       requiresAuth: true,
@@ -91,7 +91,7 @@ const routes = [
   {
     path: '/product/:id',
     name: 'ProductDetail',
-    component: () => import('@/views/products/detail.vue'),
+    component: () => import('@/views/products/ProductDetail.vue'),
     meta: { title: '商品詳情' },
   },
   {
@@ -133,7 +133,7 @@ const routes = [
   {
     path: '/checkout',
     name: 'checkout',
-    component: () => import('@/views/checkout/index.vue'),
+    component: () => import('@/views/checkout/CheckoutPage.vue'),
     meta: { title: '結帳', requiresAuth: true, role: ['USER', 'ADMIN'] },
     beforeEnter: (to, from, next) => {
       // 檢查「購物車是否有東西」
@@ -150,7 +150,7 @@ const routes = [
   {
     path: '/checkout/success/:orderId',
     name: 'checkoutSuccess',
-    component: () => import('@/views/checkout/success.vue'),
+    component: () => import('@/views/checkout/CheckoutSuccess.vue'),
     meta: { title: '結帳成功' },
     // 防止直接輸入網址進入結帳成功頁面
     beforeEnter: (to, from, next) => {
