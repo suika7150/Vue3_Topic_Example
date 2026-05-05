@@ -1,101 +1,57 @@
 <template>
   <div class="topbar-dropdowns">
-    <!-- 雙11大優惠 -->
-    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
+    <!-- dropdown -->
+    <el-dropdown
+      v-for="menu in navigationMenu.filter((m) => m.type === 'dropdown')"
+      :key="menu.key"
+      trigger="hover"
+      popper-class="refined-dropdown"
+    >
       <el-button class="topbar-btn">
-        雙11周年慶典 <el-icon class="caret-icon"><CaretBottom /></el-icon>
+        {{ menu.label }}
+        <el-icon class="caret-icon"><CaretBottom /></el-icon>
       </el-button>
+
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="goDoubleElevenRewards">年度特選回饋</el-dropdown-item>
-          <el-dropdown-item @click="goDoubleElevenGifts">滿額加碼驚喜</el-dropdown-item>
+          <el-dropdown-item
+            v-for="sub in menu.subs"
+            :key="sub.label"
+            @click="handleClick(sub.route)"
+          >
+            {{ sub.label }}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
 
-    <!-- 活動專區 -->
-    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
-      <el-button class="topbar-btn"
-        >活動專區<el-icon class="caret-icon"><CaretBottom /></el-icon
-      ></el-button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="goFlashSale">本週特惠</el-dropdown-item>
-          <el-dropdown-item @click="goLuckyWheel">幸運輪盤</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
-    <!-- 聯名專區 -->
-    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
-      <el-button class="topbar-btn">
-        聯名專區 <el-icon class="caret-icon"><CaretBottom /></el-icon>
-      </el-button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="goCrossover('anime')">動漫聯名款</el-dropdown-item>
-          <el-dropdown-item @click="goCrossover('movie')">電影大聯盟</el-dropdown-item>
-          <el-dropdown-item @click="goCrossover('designer')">設計師聯名款</el-dropdown-item>
-          <el-dropdown-item @click="goCrossover('limited')">全球限量版</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
-    <!-- 品牌專區 -->
-    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
-      <el-button class="topbar-btn">
-        品牌專區 <el-icon class="caret-icon"><CaretBottom /></el-icon>
-      </el-button>
-      <template #dropdown>
-        <el-dropdown-menu class="center-menu-dropdown">
-          <el-dropdown-item @click="">食品飲品</el-dropdown-item>
-          <el-dropdown-item @click="">汽機車用品</el-dropdown-item>
-          <el-dropdown-item @click="">居家生活</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
-    <!-- 季節限定 -->
-    <el-dropdown trigger="hover" popper-class="refined-dropdown" :show-timeout="50">
-      <el-button class="topbar-btn"
-        >季節限定<el-icon class="caret-icon"><CaretBottom /></el-icon
-      ></el-button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item @click="goSeasonFeatured">季節精選</el-dropdown-item>
-          <el-dropdown-item @click="goTravelPicks">出遊推薦</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-
-    <!-- 最新活動 -->
-    <div class="hover">
-      <el-button class="topbar-btn" @click=""> 最新活動 </el-button>
-    </div>
-
-    <!-- 購買須知 -->
-    <div class="hover">
-      <el-button class="topbar-btn" @click="goShoppingGuide"> 購買須知 </el-button>
-    </div>
+    <!-- button -->
+    <el-button
+      v-for="item in navigationMenu.filter((m) => m.type === 'button')"
+      :key="item.label"
+      class="topbar-btn"
+      @click="handleClick(item.route)"
+    >
+      {{ item.label }}
+    </el-button>
   </div>
 </template>
 
 <script setup>
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElIcon } from 'element-plus'
 import { ArrowDown, CaretBottom } from '@element-plus/icons-vue'
+import { navigationMenu } from '@/data/navigationMenu'
 import { useNavigation } from '@/composables/useNavigation'
 
-const {
-  goShoppingGuide,
-  goQA,
-  goDoubleElevenRewards,
-  goDoubleElevenGifts,
-  goFlashSale,
-  goLuckyWheel,
-  goCrossover,
-  goSeasonFeatured,
-  goTravelPicks,
-} = useNavigation()
+const { goTo } = useNavigation()
+
+const handleClick = (route) => {
+  if (typeof route === 'object') {
+    goTo(route.name, route.params)
+  } else {
+    goTo(route)
+  }
+}
 </script>
 
 <style scoped>
