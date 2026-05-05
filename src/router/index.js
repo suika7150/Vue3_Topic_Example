@@ -131,6 +131,17 @@ const routes = [
     meta: { title: '聯名專區', requiresAuth: false },
   },
   {
+    path: '/seasonal/featured',
+    name: 'seasonFeatured',
+    component: () => import('@/views/seasonal/SeasonFeatured.vue'),
+    meta: { title: '季節限定' },
+  },
+  {
+    path: '/seasonal/travel',
+    name: 'TravelPicks',
+    component: () => import('@/views/seasonal/TravelPicks.vue'),
+  },
+  {
     path: '/checkout',
     name: 'checkout',
     component: () => import('@/views/checkout/CheckoutPage.vue'),
