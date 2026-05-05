@@ -103,7 +103,7 @@
 
 <script setup>
 import { useNavigation } from '@/composables/useNavigation'
-import api from '@/service/api'
+import api from '@/services/api'
 import { ElMessage } from 'element-plus'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'

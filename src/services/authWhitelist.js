@@ -1,4 +1,4 @@
-import { API_ROUTES } from '@/service/apiRoutes'
+import { API_ROUTES } from '@/services/apiRoutes'
 const { LOGIN, REGISTER, USER } = API_ROUTES
 //  定義不需要攜帶 token 的 API 路徑（可自由擴充）
 const whiteList = [LOGIN, REGISTER, USER]

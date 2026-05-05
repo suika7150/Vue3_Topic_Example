@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import api from '@/service/api.js'
+import api from '@/services/api.js'
 import router from '@/router'
 import Storage, {
   TOKEN_KEY,

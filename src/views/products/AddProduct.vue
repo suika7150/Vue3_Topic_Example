@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import api from '@/service/api'
+import api from '@/services/api'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue'

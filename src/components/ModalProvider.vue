@@ -11,7 +11,7 @@
 
 <script setup>
 import { useModalStore } from '@/store/modalStore'
-import Modal from '@/components/Modal.vue'
+import Modal from '@/components/ui/Modal.vue'
 
 const modalStore = useModalStore()
 </script>

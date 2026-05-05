@@ -19,10 +19,10 @@
   </div>
 </template>
 <script setup>
-import BrandList from '@/components/Brand/BrandList.vue'
+import BrandList from '@/components/brand/BrandList.vue'
 import AdCarousel from '@/views/AdCarousel.vue'
-import ProductList from '@/views/products/ProductList.vue'
-import AdModal from '@/components/AdModal.vue'
+import ProductList from '@/views/products/list.vue'
+import AdModal from '@/components/ad/AdModal.vue'
 </script>
 <style scoped>
 .carousel-section {

@@ -55,7 +55,7 @@
 
 <script setup>
 import { ref, reactive, onMounted, computed, handleError } from 'vue'
-import api from '@/service/api'
+import api from '@/services/api'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Open, Close } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'

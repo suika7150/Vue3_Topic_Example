@@ -163,7 +163,7 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import api from '@/service/api'
+import api from '@/services/api'
 import { ResultCode, getMsgByCode } from '@/utils/resultCode'
 import { toast } from '@/utils/message'
 import { useNavigation } from '@/composables/useNavigation'

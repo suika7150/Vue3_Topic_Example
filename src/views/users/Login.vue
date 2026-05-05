@@ -50,10 +50,10 @@
 <script setup>
 import { ref } from 'vue'
 import { onMounted } from 'vue'
-import api from '@/service/api'
+import api from '@/services/api'
 import { useRoute } from 'vue-router'
 import { useNavigation } from '@/composables/useNavigation'
-import LoginAd from '@/components/LoginAd.vue'
+import LoginAd from '@/components/ad/LoginAd.vue'
 import { useUserStore } from '@/store/userStore'
 import Storage, { REMEMBER_USERNAME_KEY, REMEMBER_ME_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'

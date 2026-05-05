@@ -97,8 +97,8 @@
 import { ref, computed } from 'vue'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { API_ROUTES } from '@/service/apiRoutes'
-import api from '@/service/api'
+import { API_ROUTES } from '@/services/apiRoutes'
+import api from '@/services/api'
 
 const route = useRoute()
 const orderItems = ref([])

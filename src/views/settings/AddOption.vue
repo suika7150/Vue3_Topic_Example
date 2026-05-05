@@ -48,7 +48,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import api from '@/service/api'
+import api from '@/services/api'
 
 const optionFormRef = ref(null)
 

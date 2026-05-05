@@ -103,12 +103,12 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import api from '@/service/api'
+import api from '@/services/api'
 import { useNavigation } from '@/composables/useNavigation'
 import { useBreakpoint } from '@/composables/useBreakpoint'
 import { Edit, Delete, Plus } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { API_ROUTES } from '@/service/apiRoutes'
+import { API_ROUTES } from '@/services/apiRoutes'
 
 const { goTo } = useNavigation()
 const { isMobile, isTablet } = useBreakpoint()

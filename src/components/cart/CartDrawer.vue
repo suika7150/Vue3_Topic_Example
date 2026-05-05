@@ -169,7 +169,7 @@ import { useBreakpoint } from '@/composables/useBreakpoint'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
 import { useSidebarStore } from '@/store/sidebarStore'
-import CheckoutConfirmModal from '@/components/CheckoutConfirmModal.vue'
+import CheckoutConfirmModal from '@/views/checkout/CheckoutConfirmModal.vue'
 import { toast } from '@/utils/message'
 import { Delete, ShoppingCart, Picture } from '@element-plus/icons-vue'
 

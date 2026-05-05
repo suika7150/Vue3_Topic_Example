@@ -58,7 +58,7 @@
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { User } from '@element-plus/icons-vue'
-import api from '@/service/api'
+import api from '@/services/api'
 import { useNavigation } from '@/composables/useNavigation'
 import { useUserStore } from '@/store/userStore'
 

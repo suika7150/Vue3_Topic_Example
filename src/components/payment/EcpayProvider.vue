@@ -7,7 +7,7 @@
 
 <script setup>
 import { ref, nextTick } from 'vue'
-import api from '@/service/api'
+import api from '@/services/api'
 
 const props = defineProps({
   paymentId: { type: String, required: true },

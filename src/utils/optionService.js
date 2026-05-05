@@ -1,4 +1,4 @@
-import api from '../service/api'
+import api from '../services/api'
 import Storage, { OPTIONS_KEY } from './storageUtil'
 
 const CACHE_EXPIRY_MS = 3600 * 1000 // 緩存 1 小時

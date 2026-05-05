@@ -130,7 +130,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useNavigation } from '@/composables/useNavigation'
-import api from '@/service/api'
+import api from '@/services/api'
 import { formatDate } from '@/utils/format'
 import { Ship, Calendar, Picture } from '@element-plus/icons-vue'
 import format from '@/plugins/format'

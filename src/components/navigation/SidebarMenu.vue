@@ -59,7 +59,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { getNavMenu } from '@/Navigation/getNavMenu'
+import { getNavMenu } from '@/utils/navMenu'
 import { useUserStore } from '@/store/userStore'
 import { ElDivider } from 'element-plus'
 

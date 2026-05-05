@@ -21,7 +21,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import LoginMenu from './LoginMenu.vue'
-import CenterDropdown from './CenterDropdown.vue'
+import CenterDropdown from '../ui/CenterDropdown.vue'
 
 // 控制 Topbar 是否隱藏
 const isHidden = ref(false)

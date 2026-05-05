@@ -12,7 +12,7 @@ import './assets/main.css'
 // 專案內元件、插件
 import App from './App.vue'
 import router from './router'
-import AlertBox from './components/AlertBox.vue'
+import AlertBox from './components/ui/AlertBox.vue'
 import FormatPlugin from './plugins/format'
 import setupFontAwesome from './plugins/fontawesome'
 

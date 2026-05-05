@@ -1,5 +1,5 @@
 import { inject } from 'vue'
-import { AppContextKey } from '../provide/context-key'
+import { AppContextKey } from '../context/context-key'
 
 export function useAppContext() {
   const context = inject(AppContextKey)

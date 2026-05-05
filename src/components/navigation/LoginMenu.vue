@@ -94,9 +94,9 @@ import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from '@/store/sidebarStore'
 import { useCartStore } from '@/store/cartStore'
 import { useNavigation } from '@/composables/useNavigation'
-import CartDrawer from '@/components/CartDrawer.vue'
-import SearchInput from './SearchInput.vue'
-import SidebarMenu from './SidebarMenu.vue'
+import CartDrawer from '@/components/cart/CartDrawer.vue'
+import SearchInput from '../ui/SearchInput.vue'
+import SidebarMenu from '../components/navigation/SidebarMenu.vue'
 import { Fold, UserFilled, ShoppingCart } from '@element-plus/icons-vue'
 
 const router = useRouter()
