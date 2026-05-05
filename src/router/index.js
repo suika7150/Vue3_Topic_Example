@@ -103,13 +103,13 @@ const routes = [
   {
     path: '/doubleeleven/rewards',
     name: 'rewards',
-    component: () => import('@/views/doubleeleven/rewards.vue'),
+    component: () => import('@/views/doubleeleven/Rewards.vue'),
     meta: { title: '年度特選回饋' },
   },
   {
     path: '/doubleeleven/gifts',
     name: 'gifts',
-    component: () => import('@/views/doubleeleven/gifts.vue'),
+    component: () => import('@/views/doubleeleven/Gifts.vue'),
     meta: { title: '滿額加碼驚喜' },
   },
   {

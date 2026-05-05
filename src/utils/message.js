@@ -27,7 +27,7 @@ export const toast = {
       type: 'error',
       plain: true,
       center: true,
-      duration: 4000, // 錯誤多停一下
+      duration: 4000,
       showClose: true,
       //grouping: true,
       customClass: 'glow-toast-error',

@@ -419,7 +419,7 @@ const removeItem = (productId) => {
 
   .mobile-name {
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 最多顯示兩行 */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
