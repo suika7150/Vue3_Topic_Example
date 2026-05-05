@@ -7,7 +7,6 @@ import BottomFooter from './components/navigation/BottomFooter.vue'
 import TopBar from './components/navigation/TopBar.vue'
 import TopBarAdBanner from './components/navigation/TopBarAdBanner.vue'
 import BackToTop from './components/navigation/BackToTop.vue'
-import { getNavMenu } from './utils/navMenu'
 import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from './store/sidebarStore'
 import ModalProvider from './components/ModalProvider.vue'
@@ -17,9 +16,6 @@ const userStore = useUserStore()
 const cartStore = useCartStore()
 
 const userRole = computed(() => userStore.userRole)
-const navMenu = computed(() => {
-  return getNavMenu(userRole.value)
-})
 
 const adShift = computed(() => {
   return !sidebarStore.isCollapsed ? 300 : 0

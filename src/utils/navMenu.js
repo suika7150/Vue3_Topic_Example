@@ -32,8 +32,8 @@ export function getNavMenu(userRole) {
       icon: Odometer,
       clickable: false,
       subs: [
-        { name: 'rewards', label: '年度特選回饋', icon: Sell, route: '/doubleeleven/rewards' },
-        { name: 'gifts', label: '滿額加碼驚喜', icon: MagicStick, route: '/doubleeleven/gifts' },
+        { routeName: 'rewards', label: '年度特選回饋', icon: Sell },
+        { routeName: 'gifts', label: '滿額加碼驚喜', icon: MagicStick },
       ],
     },
     {
@@ -42,8 +42,8 @@ export function getNavMenu(userRole) {
       icon: Calendar,
       clickable: false,
       subs: [
-        { name: 'flashSale', label: '本週特惠', icon: Odometer, route: '/event/flashsale' },
-        { name: 'luckyWheel', label: '幸運輪盤', icon: Present, route: '/event/luckywheel' },
+        { routeName: 'flashSale', label: '本週特惠', icon: Odometer },
+        { routeName: 'luckyWheel', label: '幸運輪盤', icon: Present },
       ],
     },
     {
@@ -52,8 +52,8 @@ export function getNavMenu(userRole) {
       icon: Monitor,
       clickable: false,
       subs: [
-        { name: 'overview', label: '商品總覽', icon: Cpu, route: '/products' },
-        { name: 'productManage', label: '商品管理', icon: Cpu, route: '/products/manage' },
+        { routeName: 'overview', label: '商品總覽', icon: Cpu },
+        { routeName: 'productManage', label: '商品管理', icon: Cpu },
       ],
     },
     {
@@ -63,24 +63,29 @@ export function getNavMenu(userRole) {
       clickable: false,
       subs: [
         {
-          name: 'anime',
+          key: 'anime',
+          routeName: { name: 'crossover', params: { type: 'anime' } },
           label: '動漫聯名款',
           icon: VideoCameraFilled,
-          route: '/crossover/anime',
         },
         {
-          name: 'movie',
+          key: 'movie',
+          routeName: { name: 'crossover', params: { type: 'movie' } },
           label: '電影大聯盟',
           icon: Flag,
-          route: '/crossover/movie',
         },
         {
-          name: 'designer',
-          label: '設計師聯名款',
+          key: 'designer',
+          routeName: { name: 'crossover', params: { type: 'designer' } },
+          label: '設計師聯名',
           icon: Brush,
-          route: '/crossover/designer',
         },
-        { name: 'limited', label: '全球限量版', icon: Star, route: '/crossover/limited' },
+        {
+          key: 'limited',
+          routeName: { name: 'crossover', params: { type: 'limited' } },
+          label: '全球限量',
+          icon: Star,
+        },
       ],
     },
     {
@@ -89,9 +94,9 @@ export function getNavMenu(userRole) {
       icon: GoodsFilled,
       clickable: false,
       subs: [
-        { name: 'brandFood', label: '食品飲品', icon: IceDrink, route: 'brands/food' },
-        { name: 'brandVehicle', label: '汽機車用品', icon: Van, route: 'brands/vehicle' },
-        { name: 'brandLiving', label: '居家生活', icon: House, route: 'brands/living' },
+        { routeName: 'brandFood', label: '食品飲品', icon: IceDrink },
+        { routeName: 'brandVehicle', label: '汽機車用品', icon: Van },
+        { routeName: 'brandLiving', label: '居家生活', icon: House },
       ],
     },
     {
@@ -101,12 +106,11 @@ export function getNavMenu(userRole) {
       clickable: false,
       subs: [
         {
-          name: 'seasonalFeatured',
+          routeName: 'seasonalFeatured',
           label: '季節精選',
           icon: Timer,
-          route: '/seasonal/featured',
         },
-        { name: 'TravelPicks', label: '出遊推薦', icon: Compass, route: '/seasonal/travel' },
+        { routeName: 'travelPicks', label: '出遊推薦', icon: Compass },
       ],
     },
 
@@ -115,7 +119,7 @@ export function getNavMenu(userRole) {
       label: '管理相關',
       icon: Odometer,
       clickable: false,
-      subs: [{ name: 'options', label: '選項管理', icon: Cpu }],
+      subs: [{ routeName: 'options', label: '選項管理', icon: Cpu }],
     },
   ]
 
@@ -128,15 +132,7 @@ export function getNavMenu(userRole) {
   if (userRole === 'GUEST') {
     return categories
       .map((category) => {
-        if (category.name === 'products') {
-          return {
-            ...category,
-            subs: category.subs.filter((sub) => sub.name !== 'list'), //移除商品管理
-          }
-        }
-        if (category.name === 'settings') {
-          return null //移除管理相關
-        }
+        if (category.name === 'settings') return null
         return category
       })
       .filter(Boolean)

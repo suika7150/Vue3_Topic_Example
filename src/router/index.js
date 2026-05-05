@@ -68,7 +68,7 @@ const routes = [
   },
   {
     path: '/products/add',
-    name: 'AddProduct',
+    name: 'addProduct',
     component: () => import('@/views/products/AddProduct.vue'),
     meta: { title: '新增商品' },
   },
@@ -90,13 +90,13 @@ const routes = [
   },
   {
     path: '/product/:id',
-    name: 'ProductDetail',
+    name: 'productDetail',
     component: () => import('@/views/products/ProductDetail.vue'),
     meta: { title: '商品詳情' },
   },
   {
     path: '/settings/options',
-    name: 'OptionsManage',
+    name: 'optionsManage',
     component: () => import('@/views/settings/OptionsManage.vue'),
     meta: { title: '選項管理', requiresAuth: true, role: ['ADMIN', 'USER'] },
   },
@@ -138,8 +138,15 @@ const routes = [
   },
   {
     path: '/seasonal/travel',
-    name: 'TravelPicks',
+    name: 'travelPicks',
     component: () => import('@/views/seasonal/TravelPicks.vue'),
+    meta: { title: '旅遊推薦' },
+  },
+  {
+    path: '/latestNews',
+    name: 'latestNews',
+    component: () => import('@/views/LatestNews.vue'),
+    meta: { title: '最新活動' },
   },
   {
     path: '/checkout',

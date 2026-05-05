@@ -5,7 +5,7 @@
       <el-menu-item index="news" class="main-link">最新消息</el-menu-item>
       <el-menu-item index="about" class="main-link">關於我們</el-menu-item>
       <el-menu-item index="home" class="main-link">回首頁</el-menu-item>
-      <el-menu-item index="guide" class="main-link">購買須知</el-menu-item>
+      <el-menu-item index="shoppingGuide" class="main-link">購買須知</el-menu-item>
       <el-menu-item index="qa" class="main-link">常見問題 Q&A</el-menu-item>
 
       <el-divider v-if="menuData.length > 0" />
@@ -20,21 +20,18 @@
           </template>
 
           <template v-for="sub in category.subs" :key="sub.name">
-            <!-- <div class="category-title"> -->
-            <el-menu-item v-if="sub.route" :index="sub.route">
+            <el-menu-item v-if="!sub.subs" :index="sub.key || sub.routeName">
               <el-icon><component :is="sub.icon" /></el-icon>
               {{ sub.label }}
             </el-menu-item>
 
-            <el-sub-menu
-              v-else-if="sub.subs && sub.subs.length > 0"
-              :index="`${category.name}-${sub.name}`"
-            >
+            <el-sub-menu v-else :index="sub.name">
               <template #title>
                 <el-icon><component :is="sub.icon" /></el-icon>
                 <span>{{ sub.label }}</span>
               </template>
-              <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.route">
+
+              <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.routeName">
                 <el-icon><component :is="subSub.icon" /></el-icon>
                 {{ subSub.label }}
               </el-menu-item>
@@ -59,10 +56,14 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { getNavMenu } from '@/utils/navMenu'
 import { useUserStore } from '@/store/userStore'
+import { useSidebarStore } from '@/store/sidebarStore'
 import { ElDivider } from 'element-plus'
 
+const router = useRouter()
+const sidebarStore = useSidebarStore()
 const userStore = useUserStore()
 const isLogin = computed(() => !!userStore.user?.isLogin)
 const userRole = computed(() => userStore.role || 'GUEST')
@@ -71,44 +72,25 @@ const menuData = computed(() => getNavMenu(userRole.value))
 
 const emit = defineEmits(['navigate', 'open-cart'])
 
-const handleMenuSelect = (index) => {
-  switch (index) {
-    case 'home':
-      emit('navigate', 'home')
-      break
-    case 'guide':
-      emit('navigate', 'shoppingGuide')
-      break
-    case 'qa':
-      emit('navigate', 'qa')
-      break
-    case 'news':
-      emit('navigate', 'news')
-      break
-    case 'about':
-      emit('navigate', 'about')
-      break
-    case 'cart':
-      emit('open-cart') // 觸發購物車
-      break
-    case 'profile':
-      emit('navigate', 'profile')
-      break
-    case 'setting':
-      emit('navigate', 'setting')
-      break
-    case 'login':
-      emit('navigate', 'login')
-      break
-    case 'register':
-      emit('navigate', 'register')
-      break
-    default:
-      if (index.startsWith('/')) {
-        emit('navigate-route', index)
-      }
-      break
+const handleMenuSelect = (item) => {
+  if (!item) return
+
+  if (item === 'cart') {
+    emit('open-cart')
+    sidebarStore.setCollapse(true)
+    return
   }
+
+  // crossover 特別處理
+  const crossoverTypes = ['anime', 'movie', 'designer', 'limited']
+
+  if (crossoverTypes.includes(item)) {
+    router.push({ name: 'crossover', params: { type: item } })
+  } else {
+    router.push({ name: item })
+  }
+
+  sidebarStore.setCollapse(true)
 }
 </script>
 
