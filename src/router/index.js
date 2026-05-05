@@ -132,7 +132,7 @@ const routes = [
   },
   {
     path: '/seasonal/featured',
-    name: 'seasonFeatured',
+    name: 'seasonalFeatured',
     component: () => import('@/views/seasonal/SeasonFeatured.vue'),
     meta: { title: '季節限定' },
   },

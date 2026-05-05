@@ -106,7 +106,7 @@ export function getNavMenu(userRole) {
           icon: Timer,
           route: '/seasonal/featured',
         },
-        { name: 'seasonalTravel', label: '出遊推薦', icon: Compass, route: '/seasonal/travel' },
+        { name: 'TravelPicks', label: '出遊推薦', icon: Compass, route: '/seasonal/travel' },
       ],
     },
 

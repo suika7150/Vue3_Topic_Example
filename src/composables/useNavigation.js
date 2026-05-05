@@ -33,6 +33,16 @@ export function useNavigation() {
     router.push({ name: 'news' })
   }
 
+  //購物指南
+  const goShoppingGuide = () => {
+    router.push({ name: 'shoppingGuide' })
+  }
+
+  //常見問題
+  const goQA = () => {
+    router.push({ name: 'qa' })
+  }
+
   //商品總覽
   const goProducts = () => {
     router.push({ name: 'overview' })
@@ -43,9 +53,14 @@ export function useNavigation() {
     router.push({ name: 'ProductDetail', params: { id } })
   }
 
-  //結帳
-  const goCheckout = () => {
-    router.push({ name: 'checkout' })
+  // 滿額加碼驚喜頁面
+  const goDoubleElevenRewards = () => {
+    router.push({ name: 'rewards' })
+  }
+
+  // 滿額加碼禮品頁面
+  const goDoubleElevenGifts = () => {
+    router.push({ name: 'gifts' })
   }
 
   //本週特惠
@@ -58,14 +73,26 @@ export function useNavigation() {
     router.push({ name: 'luckyWheel' })
   }
 
-  //購物指南
-  const goShoppingGuide = () => {
-    router.push({ name: 'shoppingGuide' })
+  // 聯名專區
+  const goCrossover = (type) => {
+    router.push({
+      name: 'crossover',
+      params: { type },
+    })
   }
 
-  //常見問題
-  const goQA = () => {
-    router.push({ name: 'qa' })
+  //季節精選
+  const goSeasonFeatured = () => {
+    router.push({ name: 'seasonalFeatured' })
+  }
+
+  //出遊推薦
+  const goTravelPicks = () => {
+    router.push({ name: 'TravelPicks' })
+  }
+  //結帳
+  const goCheckout = () => {
+    router.push({ name: 'checkout' })
   }
 
   // 結帳成功跳轉
@@ -94,24 +121,6 @@ export function useNavigation() {
     router.push({ name: 'notFound' })
   }
 
-  // 滿額加碼驚喜頁面
-  const goDoubleElevenRewards = () => {
-    router.push({ name: 'rewards' })
-  }
-
-  // 滿額加碼禮品頁面
-  const goDoubleElevenGifts = () => {
-    router.push({ name: 'gifts' })
-  }
-
-  // 聯名專區
-  const goCrossover = (type) => {
-    router.push({
-      name: 'crossover',
-      params: { type },
-    })
-  }
-
   //跳轉到指定路由
   const goTo = (target, params = {}, query = {}) => {
     if (typeof target === 'string' && target.startsWith('/')) {
@@ -130,6 +139,8 @@ export function useNavigation() {
     goDoubleElevenRewards,
     goDoubleElevenGifts,
     goCrossover,
+    goSeasonFeatured,
+    goTravelPicks,
     goProducts,
     goProductDetail,
     goCheckout,

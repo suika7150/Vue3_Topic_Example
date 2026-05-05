@@ -62,8 +62,8 @@
       ></el-button>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="">季節精選</el-dropdown-item>
-          <el-dropdown-item @click="">出遊推薦</el-dropdown-item>
+          <el-dropdown-item @click="goSeasonFeatured">季節精選</el-dropdown-item>
+          <el-dropdown-item @click="goTravelPicks">出遊推薦</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -106,6 +106,8 @@ const {
   goFlashSale,
   goLuckyWheel,
   goCrossover,
+  goSeasonFeatured,
+  goTravelPicks,
 } = useNavigation()
 </script>
 
