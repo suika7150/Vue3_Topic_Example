@@ -1,5 +1,5 @@
 <template>
-  <CampaignShell theme="dark" bgImage="/campaigns/campaign-double-eleven.png">
+  <CampaignShell theme="dark" bgImage="/layoutImages/campaign-double-eleven.png">
     <div class="light-wheel-page">
       <div class="hero-block">
         <h2 class="title">幸運抽獎機</h2>
@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import CampaignShell from '@/layouts/CampaignShell.vue'
+import CampaignShell from '@/layouts/EventLayout.vue'
 
 const prizes = ['9折券', '免運券', '50元', '85折', '100元', '再接再厲']
 

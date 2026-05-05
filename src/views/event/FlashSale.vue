@@ -1,5 +1,5 @@
 <template>
-  <CampaignShell theme="dark" :full="true" bgImage="/campaigns/campaign-double-eleven.png">
+  <CampaignShell theme="dark" :full="true" bgImage="/layoutImages/campaign-double-eleven.png">
     <template #hero>
       <div class="hero-block">
         <el-tag type="danger" effect="dark" size="large">限時下殺</el-tag>
@@ -57,7 +57,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import CampaignShell from '@/layouts/CampaignShell.vue'
+import CampaignShell from '@/layouts/EventLayout.vue'
 import ProductList from '@/views/products/ProductList.vue'
 
 // 公式：1000ms * 60s * 60m * 2小時

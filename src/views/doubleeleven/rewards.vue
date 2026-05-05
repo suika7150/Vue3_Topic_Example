@@ -1,5 +1,5 @@
 <template>
-  <CampaignShell theme="dark" :full="true" bgImage="/campaigns/campaign-double-eleven.png">
+  <CampaignShell theme="dark" :full="true" bgImage="/layoutImages/campaign-double-eleven.png">
     <template #hero>
       <div class="hero">
         <h1>年度特選回饋</h1>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import CampaignShell from '@/layouts/CampaignShell.vue'
+import CampaignShell from '@/layouts/EventLayout.vue'
 
 const bgImage = '/images/double11-bg.jpg'
 </script>
