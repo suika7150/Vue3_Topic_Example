@@ -6,7 +6,7 @@
           <button class="close-btn" @click="close">&times;</button>
 
           <a href="/promo-link">
-            <img src="/Banner/ShoppingFestival.png" alt="大促銷廣告" />
+            <img src="/banner/shopping-festival.png" alt="大促銷廣告" />
           </a>
         </div>
       </div>

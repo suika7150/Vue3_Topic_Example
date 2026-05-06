@@ -4,7 +4,7 @@
     <header class="header-original">
       <div class="top">
         <router-link to="/" class="logo">
-          <img src="/Logo/Logo.png" />
+          <img src="/logo/logo.png" />
         </router-link>
         <LoginMenu />
       </div>
@@ -17,7 +17,7 @@
     <header v-if="isScrolled" class="header-sticky">
       <div class="top-mini">
         <router-link to="/" class="logo-mini">
-          <img src="/Logo/Logo.png" />
+          <img src="/logo/logo.png" />
         </router-link>
         <LoginMenu />
       </div>

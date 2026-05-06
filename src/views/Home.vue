@@ -28,7 +28,7 @@ import AdModal from '@/components/ad/AdModal.vue'
 .carousel-section {
   position: relative;
   width: 100%;
-  height: auto;
+  height: 85vh;
   overflow: hidden;
 }
 

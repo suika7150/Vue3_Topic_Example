@@ -60,7 +60,7 @@ const handleSidebarNavigate = () => {
       <SideAdBanner
         position="left"
         :shift="adShift"
-        image="/Banner/SideAdBanner.png"
+        image="/banner/side-ad-banner.png"
         link="/promo/double-11"
         title="年終狂歡節"
       />
