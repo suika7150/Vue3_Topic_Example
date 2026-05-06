@@ -85,7 +85,6 @@ const bgClass = computed(() => `theme-${props.theme}`)
   width: 100%;
 }
 
-/* Hero 區 */
 .campaign-hero {
   margin-bottom: 30px;
 }

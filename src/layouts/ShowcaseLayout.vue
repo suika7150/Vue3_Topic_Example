@@ -53,6 +53,5 @@ defineProps({
   position: relative;
   z-index: 2;
   min-height: 100vh;
-  /* color: white; */
 }
 </style>

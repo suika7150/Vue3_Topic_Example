@@ -1,8 +1,5 @@
 <template>
   <ShowcaseLayout bg="/layoutImages/seasonal/autumn.jpg">
-    <!-- <div class="seasonal-header"></div> -->
-
-    <!-- 🎠 主視覺輪播 -->
     <el-carousel
       height="1100px"
       indicator-position="outside"
@@ -31,20 +28,14 @@ const banners = [
   {
     id: 1,
     img: '/seasonal/seasonal-sale.png',
-    // title: '春日限定甜點',
-    // desc: '櫻花 × 草莓季節限定',
   },
   {
     id: 2,
     img: '/layoutImages/seasonal/spring2.jpg',
-    title: '春季輕食系列',
-    desc: '清爽健康新選擇',
   },
   {
     id: 3,
     img: '/layoutImages/seasonal/spring3.jpg',
-    title: '戶外踏青推薦',
-    desc: '春遊必備好物',
   },
 ]
 </script>
