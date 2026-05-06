@@ -69,7 +69,7 @@
         </template>
       </el-dropdown>
 
-      <el-button link class="user-menu-btn" @click="goOrderList">
+      <el-button link class="user-menu-btn" @click="goTo('orderList')">
         <span class="btn-text">我的訂單</span>
       </el-button>
 
@@ -107,7 +107,7 @@ const cartStore = useCartStore()
 const { user } = storeToRefs(userStore)
 const { totalQuantity } = storeToRefs(cartStore)
 const isLogin = computed(() => !!user.value?.isLogin)
-const { goTo, goOrderList } = useNavigation()
+const { goTo } = useNavigation()
 
 const handleNavigate = (target) => {
   if (typeof target === 'string' && target.startsWith('/')) {

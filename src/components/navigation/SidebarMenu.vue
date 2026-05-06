@@ -1,54 +1,38 @@
 <template>
   <div class="sidebar-container">
-    <el-divider style="margin: 0" />
-    <el-menu default-active="1" class="menu-in-drawer" @select="handleMenuSelect">
-      <el-menu-item index="news" class="main-link">最新消息</el-menu-item>
-      <el-menu-item index="about" class="main-link">關於我們</el-menu-item>
-      <el-menu-item index="home" class="main-link">回首頁</el-menu-item>
-      <el-menu-item index="shoppingGuide" class="main-link">購買須知</el-menu-item>
-      <el-menu-item index="qa" class="main-link">常見問題 Q&A</el-menu-item>
+    <el-divider />
 
-      <el-divider v-if="menuData.length > 0" />
+    <el-menu class="menu-in-drawer" @select="handleMenuSelect">
+      <template v-for="item in menuData" :key="item.key">
+        <el-divider v-if="item.key === 'cart'" />
 
-      <template v-for="category in menuData" :key="category.name">
-        <el-sub-menu v-if="category.subs && category.subs.length > 0" :index="category.name">
+        <el-menu-item
+          v-if="item.type === 'button'"
+          :index="item.route.name || item.key"
+          class="main-link"
+        >
+          {{ item.label }}
+        </el-menu-item>
+
+        <el-divider v-if="item.key === 'qa'" />
+
+        <el-sub-menu v-else-if="item.type === 'dropdown'" :index="item.key">
           <template #title>
             <div class="category-title">
-              <el-icon><component :is="category.icon" /></el-icon>
-              <span>{{ category.label }}</span>
+              <el-icon v-if="item.icon">
+                <component :is="item.icon" />
+              </el-icon>
+              <span>{{ item.label }}</span>
             </div>
           </template>
 
-          <template v-for="sub in category.subs" :key="sub.name">
-            <el-menu-item v-if="!sub.subs" :index="sub.key || sub.routeName">
-              <el-icon><component :is="sub.icon" /></el-icon>
-              {{ sub.label }}
-            </el-menu-item>
-
-            <el-sub-menu v-else :index="sub.name">
-              <template #title>
-                <el-icon><component :is="sub.icon" /></el-icon>
-                <span>{{ sub.label }}</span>
-              </template>
-
-              <el-menu-item v-for="subSub in sub.subs" :key="subSub.name" :index="subSub.routeName">
-                <el-icon><component :is="subSub.icon" /></el-icon>
-                {{ subSub.label }}
-              </el-menu-item>
-            </el-sub-menu>
-          </template>
+          <el-menu-item v-for="sub in item.subs" :key="sub.label" :index="getSubIndex(sub)">
+            <el-icon v-if="sub.icon">
+              <component :is="sub.icon" />
+            </el-icon>
+            {{ sub.label }}
+          </el-menu-item>
         </el-sub-menu>
-      </template>
-
-      <el-divider />
-
-      <el-menu-item index="cart" class="main-link">購物車</el-menu-item>
-      <el-menu-item index="profile" class="main-link">個人資料維護</el-menu-item>
-      <el-menu-item index="setting" class="main-link">設定</el-menu-item>
-
-      <template v-if="!isLogin">
-        <el-menu-item index="login" divided class="main-link">登入</el-menu-item>
-        <el-menu-item index="register" divided class="main-link">註冊</el-menu-item>
       </template>
     </el-menu>
   </div>
@@ -57,51 +41,112 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getNavMenu } from '@/utils/navMenu'
+import { getNavMenu } from '@/services/navigationService'
 import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from '@/store/sidebarStore'
-import { ElDivider } from 'element-plus'
+import { useCartStore } from '@/store/cartStore'
 
 const router = useRouter()
-const sidebarStore = useSidebarStore()
 const userStore = useUserStore()
-const isLogin = computed(() => !!userStore.user?.isLogin)
+const sidebarStore = useSidebarStore()
+const cartStore = useCartStore()
+
 const userRole = computed(() => userStore.role || 'GUEST')
 
-const menuData = computed(() => getNavMenu(userRole.value))
+const menuData = computed(() => {
+  const role = userRole.value
 
-const emit = defineEmits(['navigate', 'open-cart'])
+  const result = getNavMenu(role, { includeSystem: true, usage: 'sidebar' })
 
-const handleMenuSelect = (item) => {
-  if (!item) return
+  return result
+})
 
-  if (item === 'cart') {
-    emit('open-cart')
-    sidebarStore.setCollapse(true)
-    return
+const getSubIndex = (sub) => {
+  if (typeof sub.route === 'string') return sub.route
+
+  if (sub.route?.name) {
+    return `${sub.route.name}__${sub.label}`
   }
 
-  // crossover 特別處理
-  const crossoverTypes = ['anime', 'movie', 'designer', 'limited']
+  return sub.label
+}
 
-  if (crossoverTypes.includes(item)) {
-    router.push({ name: 'crossover', params: { type: item } })
-  } else {
-    router.push({ name: item })
+const handleMenuSelect = (index) => {
+  if (!index) return
+  for (const item of menuData.value) {
+    if (item.key === 'cart') {
+      if (index === (item.route?.name || item.key)) {
+        cartStore.setDrawerVisible(true)
+        sidebarStore.setCollapse(true)
+        return
+      }
+    }
+
+    if (item.type === 'button') {
+      const itemIndex = item.route?.name || item.key
+      if (itemIndex === index) {
+        router.push(item.route)
+        sidebarStore.setCollapse(true)
+        return
+      }
+    }
+
+    if (item.type === 'dropdown') {
+      for (const sub of item.subs || []) {
+        if (getSubIndex(sub) === index) {
+          router.push(sub.route)
+          sidebarStore.setCollapse(true)
+          return
+        }
+      }
+    }
   }
-
-  sidebarStore.setCollapse(true)
 }
 </script>
 
 <style scoped>
 .menu-in-drawer {
+  font-family: 'Inter', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+  font-size: 14px;
+  color: #2b2f36;
   border-right: none;
+  padding: 8px 0;
 }
+
+:deep(.el-divider) {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin: 16px 0;
+  opacity: 1;
+}
+
+/* 主選單 */
 .main-link {
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  color: #1f2329;
 }
+
+.main-link:hover {
+  background: #f5f7fa;
+}
+
+/* 分類標題 */
 .category-title {
-  font-weight: bold;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  letter-spacing: 0.4px;
+  gap: 6px;
+  padding: 6px 0;
+}
+
+/* 子選單 */
+:deep(.el-sub-menu .el-menu-item) {
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 65px !important;
+  color: #303133;
 }
 </style>

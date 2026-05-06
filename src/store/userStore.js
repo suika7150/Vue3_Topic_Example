@@ -42,8 +42,6 @@ export const useUserStore = defineStore('userStore', {
         Storage.remove(REMEMBER_USERNAME_KEY, userData.username)
       }
 
-      // 存入非敏感的基本資料
-      Storage.set(USER_ROLE_KEY, role)
       Storage.set(USER_KEY, userData.username)
       // Storage.set(REMEMBER_ME_KEY, rememberMe)
       Storage.set(FULL_NAME_KEY, userData.fullName)
@@ -55,6 +53,7 @@ export const useUserStore = defineStore('userStore', {
         isLogin: true,
         rememberMe: rememberMe,
       }
+      Storage.set(USER_ROLE_KEY, role)
       this.role = role
       await this.fetchUserInfo() // 登入後立即抓取使用者資料
     },
@@ -93,12 +92,13 @@ export const useUserStore = defineStore('userStore', {
         await api.logout().catch(() => {})
       } finally {
         // 清除狀態
-        const keys = [USER_KEY, TOKEN_KEY, FULL_NAME_KEY, USER_ROLE_KEY, REMEMBER_ME_KEY]
+        const keys = [USER_KEY, TOKEN_KEY, FULL_NAME_KEY, REMEMBER_ME_KEY]
         Storage.remove(...keys)
 
         // 重置 Pinia 狀態
         this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
         this.role = 'GUEST'
+        Storage.set(USER_ROLE_KEY, 'GUEST')
 
         // 非登入頁面才顯示提醒
         if (window.location.pathname !== '/login') {
@@ -119,7 +119,7 @@ export const useUserStore = defineStore('userStore', {
           this.user.isLogin = true
 
           // 從本地緩存先抓基本資料
-          this.role = Storage.get(USER_ROLE_KEY)
+          this.role = Storage.get(USER_ROLE_KEY) || 'GUEST'
           this.user.username = Storage.get(USER_KEY)
 
           // 如果 API 有回傳詳細清單，更新顯示名稱
@@ -226,6 +226,6 @@ export const useUserStore = defineStore('userStore', {
   persist: {
     enabled: true,
     storage: localStorage,
-    paths: ['user.username', 'user.rememberMe', 'user.isLogin', 'role'], // 持久化狀態
+    paths: ['user.username', 'user.rememberMe', 'user.isLogin'], // 持久化狀態
   },
 })

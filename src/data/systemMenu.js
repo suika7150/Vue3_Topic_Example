@@ -1,0 +1,42 @@
+export const SYSTEM_MENU = [
+  {
+    type: 'button',
+    key: 'cart',
+    label: '購物車',
+    route: { name: 'cart' },
+    roles: ['USER', 'GUEST', 'ADMIN'],
+    usage: ['sidebar'],
+  },
+  {
+    type: 'button',
+    key: 'profile',
+    label: '個人資料維護',
+    route: { name: 'profile' },
+    roles: ['USER', 'GUEST', 'ADMIN'],
+    usage: ['sidebar'],
+  },
+  {
+    type: 'button',
+    key: 'setting',
+    label: '設定',
+    route: { name: 'setting' },
+    roles: ['USER', 'GUEST', 'ADMIN'],
+    usage: ['sidebar'],
+  },
+  {
+    type: 'button',
+    key: 'login',
+    label: '登入',
+    route: { name: 'login' },
+    roles: ['GUEST'],
+    usage: ['sidebar'],
+  },
+  {
+    type: 'button',
+    key: 'register',
+    label: '註冊',
+    route: { name: 'register' },
+    roles: ['GUEST'],
+    usage: ['sidebar'],
+  },
+]
