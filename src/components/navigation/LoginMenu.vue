@@ -11,29 +11,6 @@
       </el-button>
     </el-badge>
 
-    <el-drawer
-      class="nav-sidebar-drawer"
-      :model-value="!sidebarStore.isCollapsed"
-      :before-close="sidebarStore.toggleCollapse"
-      :lock-scroll="false"
-      direction="ltr"
-      size="300px"
-      append-to-body
-    >
-      <template #header>
-        <span class="sidebar-header-title">導航選單</span>
-      </template>
-
-      <SidebarMenu
-        :is-login="isLogin"
-        @navigate="handleNavigate"
-        @navigate-route="handleNavigate"
-        @open-cart="openCartDrawer"
-      />
-    </el-drawer>
-
-    <CartDrawer v-model:drawerVisible="showCartDrawer" />
-
     <!-- 未登入 -->
     <el-button v-if="!isLogin" class="user-menu-btn login" @click="goLoginFromTopbar">
       <el-icon><UserFilled /></el-icon>
@@ -101,7 +78,6 @@ import { Fold, UserFilled, ShoppingCart } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const sidebarStore = useSidebarStore()
-const showCartDrawer = ref(false)
 const userStore = useUserStore()
 const cartStore = useCartStore()
 const { user } = storeToRefs(userStore)
@@ -159,7 +135,7 @@ const onDropdownToggle = (visible) => {
 
 // 打開購物車抽屜
 const openCartDrawer = () => {
-  showCartDrawer.value = true
+  cartStore.setDrawerVisible(true)
 }
 </script>
 
@@ -185,16 +161,6 @@ const openCartDrawer = () => {
   padding: 8px 12px;
   font-size: 18px;
   transition: background-color 0.3s;
-}
-
-/* 導航選單標題文字樣式 */
-.sidebar-header-title {
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-  font-weight: 600;
-  color: #303133;
-  letter-spacing: 1px;
 }
 
 /* 購物車按鈕圓圈 */

@@ -121,19 +121,19 @@ const handleMenuSelect = (index) => {
 
 /* 主選單 */
 .main-link {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.3px;
-  color: #1f2329;
+  color: #1d1d1f;
 }
 
 .main-link:hover {
-  background: #f5f7fa;
+  background: #f5f5f7;
 }
 
 /* 分類標題 */
 .category-title {
-  font-weight: 700;
+  font-weight: 600;
   display: flex;
   align-items: center;
   font-size: 16px;

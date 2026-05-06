@@ -10,6 +10,7 @@ import BackToTop from './components/navigation/BackToTop.vue'
 import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from './store/sidebarStore'
 import ModalProvider from './components/ModalProvider.vue'
+import SidebarMenu from '@/components/navigation/SidebarMenu.vue'
 
 const sidebarStore = useSidebarStore()
 const userStore = useUserStore()
@@ -17,14 +18,35 @@ const cartStore = useCartStore()
 
 const userRole = computed(() => userStore.userRole)
 
+const isLogin = computed(() => !!userStore.user?.isLogin)
+
 const adShift = computed(() => {
   return !sidebarStore.isCollapsed ? 300 : 0
 })
+
+const handleSidebarNavigate = () => {
+  sidebarStore.setCollapse(true)
+}
 </script>
 
 <template>
   <div class="app-wrapper">
     <ModalProvider />
+
+    <el-drawer
+      class="nav-sidebar-drawer"
+      :model-value="!sidebarStore.isCollapsed"
+      @close="sidebarStore.setCollapse(true)"
+      :lock-scroll="false"
+      direction="ltr"
+      size="300px"
+      append-to-body
+    >
+      <template #header>
+        <span class="sidebar-header-title">導航選單</span>
+      </template>
+      <SidebarMenu :is-login="isLogin" @navigate="handleSidebarNavigate" />
+    </el-drawer>
 
     <CartDrawer v-model:drawerVisible="cartStore.drawerVisible" />
 
@@ -81,18 +103,6 @@ const adShift = computed(() => {
   box-sizing: border-box;
 }
 
-/* 側邊欄 */
-/* .el-menu-vertical-demo {
-  display: flex;
-  position: sticky;
-  top: 0px;
-  height: 70px;
-  background-color: white;
-  box-shadow: 2px 0 5px rgba(245, 240, 240, 0.05);
-  transition: all 0.3s;
-  padding: 90px 0 0;
-} */
-
 /* 主內容區 */
 .content {
   display: flex;
@@ -104,6 +114,16 @@ const adShift = computed(() => {
   box-sizing: border-box;
   width: 100%;
   background: transparent;
+}
+
+/* 導航選單 */
+.sidebar-header-title {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #303133;
+  letter-spacing: 1px;
 }
 
 /* 最新消息頁面 */

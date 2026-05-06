@@ -18,9 +18,6 @@
       <div class="product-list-header">
         <h2 class="header-title">商品列表</h2>
         <div class="header-controls">
-          <!-- <div class="breadcrumb-bar">
-            <Breadcrumb />
-          </div> -->
           <el-select
             v-model="selectedCategory"
             placeholder="選擇分類"
