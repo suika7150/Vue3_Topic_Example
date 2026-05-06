@@ -1,20 +1,27 @@
 <template>
-  <div class="top-bar" :class="{ 'header-hidden': isHidden }">
-    <div class="topbar-left">
-      <router-link to="/" class="logo"
-        ><img src="/Logo/Logo.png" alt="Logo" class="logo-img"
-      /></router-link>
-    </div>
-    <!-- 登入選單 -->
-    <div class="topbar-right">
-      <LoginMenu :small="true" />
-    </div>
-  </div>
-  <div class="menu-bar" :class="{ 'header-hidden': isHidden }">
-    <div class="topbar-main">
-      <!-- 主下拉選單 -->
-      <CenterDropdown />
-    </div>
+  <div class="topbar-wrapper">
+    <!-- 原始 TopBar -->
+    <header class="header-original">
+      <div class="top">
+        <router-link to="/" class="logo">
+          <img src="/Logo/Logo.png" />
+        </router-link>
+        <LoginMenu />
+      </div>
+      <div class="menu">
+        <CenterDropdown />
+      </div>
+    </header>
+
+    <!-- 迷你 TopBar -->
+    <header v-if="isScrolled" class="header-sticky">
+      <div class="top-mini">
+        <router-link to="/" class="logo-mini">
+          <img src="/Logo/Logo.png" />
+        </router-link>
+        <LoginMenu />
+      </div>
+    </header>
   </div>
 </template>
 
@@ -23,204 +30,81 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import LoginMenu from './LoginMenu.vue'
 import CenterDropdown from '../ui/CenterDropdown.vue'
 
-// 控制 Topbar 是否隱藏
-const isHidden = ref(false)
-const threshold = 5
-let ticking = false
-let lastScrollTop = 0
+const isScrolled = ref(false)
 
 const handleScroll = () => {
-  // 取得當前捲動位置
-  const currentScrollTop = window.pageYOffset
-
-  // 取得整份文件的總高度
-  const scrollHeight = document.documentElement.scrollHeight
-  // 取得視窗的高度
-  const windowHeight = window.innerHeight
-
-  // 最上方強制顯示
-  if (currentScrollTop <= 0) {
-    isHidden.value = false
-    lastScrollTop = 0
-    return
-  }
-
-  // 如果捲動位置已經快到最底部了，就不執行隱藏/顯示的邏輯
-  if (currentScrollTop + windowHeight >= scrollHeight - 10) {
-    return
-  }
-
-  if (!ticking) {
-    window.requestAnimationFrame(() => {
-      if (currentScrollTop - lastScrollTop > threshold && currentScrollTop > 50) {
-        isHidden.value = true
-      } else if (lastScrollTop - currentScrollTop > threshold) {
-        isHidden.value = false
-      }
-
-      lastScrollTop = currentScrollTop
-      ticking = false
-    })
-
-    ticking = true
-  }
+  isScrolled.value = window.scrollY > 190
 }
-
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
-
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
-})
-
-const props = defineProps({
-  bannerOn: {
-    type: [String, Boolean, Number],
-    default: false,
-  },
 })
 </script>
 
 <style scoped>
-.top-bar {
-  flex-direction: row;
-  position: fixed;
-  display: flex;
+/* 原始 Header 樣式 */
+.header-original {
+  position: absolute;
   top: 40px;
   left: 0;
   width: 100%;
-  height: 110px;
-  background-color: #000000;
+  z-index: 2000;
+  background: #000;
+}
+
+.top {
+  height: 70px;
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  overflow: visible;
-  z-index: 1002;
 }
-.menu-bar {
-  flex-direction: row;
-  position: fixed;
+
+.menu {
+  height: 110px;
   display: flex;
-  top: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  height: 130px;
+  transform: translateY(40px);
+  display: block;
+}
+
+/* 迷你版 Header */
+.header-sticky {
+  position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 120px;
-  background-color: #000000fb;
-  justify-content: center;
-  align-items: center;
-  overflow: visible;
-  z-index: 1001;
+  z-index: 2100;
+  background: #000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  animation: slideDown 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.topbar-main {
-  flex-direction: row;
+.top-mini {
+  height: 60px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding-right: 0px;
-  margin-left: 50px;
-  flex-shrink: 1;
-  min-width: auto;
-  justify-content: center;
+  padding: 0 20px;
 }
 
-.topbar-left {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  flex-shrink: 0;
-}
-
-.logo {
-  font-size: 100px;
-  color: #fff;
-  text-decoration: none;
-  transition: opacity 0.3s ease;
-}
-
-.logo-img {
+.logo-mini img {
+  height: 40px;
   display: block;
-  width: 100%;
-  height: 100px;
-  max-height: 100%;
-  padding-top: 0px;
 }
 
-.topbar-right {
-  display: flex;
-  justify-content: flex-end;
-  overflow: visible;
-  flex-shrink: 0;
-  min-width: 0;
-  height: 100%;
-  padding-bottom: 50px;
-}
-
-.dropdown-below {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 4px;
-}
-
-/* 隱藏滑動 */
-.top-bar,
-.menu-bar {
-  transition: transform 0.3s ease-in-out;
-}
-
-/* 隱藏 Menu */
-.menu-bar.header-hidden {
-  transform: translateY(-100%);
-}
-
-@media (max-width: 1024px) {
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    position: fixed;
-    height: 110px;
-    background-color: #000000fb;
-    padding: 10px 0;
-    z-index: 1002;
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
   }
-
-  .topbar-main {
-    display: none;
-  }
-
-  .menu-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    flex-direction: row;
-    top: 0px;
-    left: 0;
-    height: 100px;
-    width: 100%;
-    height: 100px;
-    background-color: #000000fb;
-
-    overflow: visible;
-    z-index: 1001;
-  }
-
-  .logo-img {
-    display: block;
-    width: auto;
-    height: 90px;
-    transform: translateX(0px);
-  }
-  .topbar-right {
-    display: flex;
-    align-items: center;
-    padding-bottom: 0;
-    flex-shrink: 1;
-    min-width: 0;
+  to {
+    transform: translateY(0);
   }
 }
 </style>

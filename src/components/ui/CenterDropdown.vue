@@ -1,6 +1,5 @@
 <template>
   <div class="center-dropdowns">
-    <!-- dropdown -->
     <el-dropdown
       v-for="menu in dropdownMenus"
       :key="menu.key"
@@ -91,6 +90,8 @@ const handleClick = (route) => {
   border-radius: 10px;
   height: 40px;
   border: none;
+  outline: none;
+  box-shadow: none;
   cursor: pointer;
   background-color: transparent;
   color: white;

@@ -27,15 +27,12 @@ const adShift = computed(() => {
     <ModalProvider />
 
     <CartDrawer v-model:drawerVisible="cartStore.drawerVisible" />
-    <header>
-      <div class="topbar-ad-banner">
-        <TopBarAdBanner />
-      </div>
 
-      <div>
-        <TopBar bannerOn />
-      </div>
-    </header>
+    <div class="topbar-ad-banner">
+      <TopBarAdBanner />
+    </div>
+
+    <TopBar bannerOn />
 
     <div class="sidebar-layout">
       <SideAdBanner
@@ -59,10 +56,9 @@ const adShift = computed(() => {
 
 <style scoped>
 .topbar-ad-banner {
-  position: fixed;
+  position: absolute;
   display: flex;
   top: 0;
-  left: 0;
   width: 100%;
   z-index: 1100;
 }
