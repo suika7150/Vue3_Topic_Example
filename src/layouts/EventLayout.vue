@@ -51,7 +51,7 @@ const bgClass = computed(() => `theme-${props.theme}`)
 
 /* 背景*/
 .campaign-bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
 

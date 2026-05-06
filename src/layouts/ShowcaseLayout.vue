@@ -23,10 +23,14 @@ defineProps({
 .showcase {
   position: relative;
   min-height: 100vh;
+  width: 100%;
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* 背景層 */
+/* 背景 */
 .background {
   position: absolute;
   inset: 0;
@@ -36,7 +40,7 @@ defineProps({
   z-index: 0;
 }
 
-/* 遮罩（控制可讀性） */
+/* 遮罩 */
 .overlay {
   position: absolute;
   inset: 0;
@@ -44,11 +48,11 @@ defineProps({
   z-index: 1;
 }
 
-/* 內容層 */
+/* 內容 */
 .content {
   position: relative;
   z-index: 2;
-  padding: 80px 20px;
-  color: white;
+  min-height: 100vh;
+  /* color: white; */
 }
 </style>
