@@ -4,7 +4,6 @@
     <el-carousel
       :key="isMobile"
       :interval="4000"
-      type=""
       height="85vh"
       width="100%"
       indicator-position="inside"
@@ -190,7 +189,7 @@ const adBanners = [
   font-size: 18px;
   color: #fff;
 }
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .carousel-container,
   :deep(.el-carousel),
   .ad-content {

@@ -21,7 +21,7 @@ const props = defineProps({
 
 const iconPath = computed(() => {
   if (props.brand.icon) {
-    return `Brands/${props.brand.icon}`
+    return `brands/${props.brand.icon}`
   }
   return ''
 })
