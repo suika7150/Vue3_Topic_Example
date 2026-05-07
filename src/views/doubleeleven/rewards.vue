@@ -15,7 +15,7 @@
 
       <div class="card">
         <h2>活動期間</h2>
-        <p>11/1 - 11/30</p>
+        <p>11/1 - 11/11</p>
       </div>
     </div>
   </CampaignShell>
