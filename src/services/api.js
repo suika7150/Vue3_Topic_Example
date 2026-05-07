@@ -66,7 +66,7 @@ const api = {
   getManageProducts: () => apiService.get(API_ROUTES.PRODUCT_MANAGE_LIST),
 
   /** 刪除商品*/
-  deleteProduct: (id) => apiService.put(API_ROUTES.PRODUCT_DELETE(id)),
+  deleteProducts: (id) => apiService.put(API_ROUTES.PRODUCT_DELETE(id)),
 
   /* ===== 選項相關 API ===== */
 
