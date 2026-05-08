@@ -7,7 +7,7 @@
     :style="adStyles"
   >
     <button class="close-btn" @click="isVisible = false" title="關閉廣告"></button>
-    <a :href="link" target="_blank" class="ad-link">
+    <a :href="link" target="_self" class="ad-link">
       <img :src="image" :alt="title" />
     </a>
   </div>
