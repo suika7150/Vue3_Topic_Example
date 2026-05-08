@@ -5,7 +5,7 @@
         <div class="modal-content">
           <button class="close-btn" @click="close">&times;</button>
 
-          <a href="/promo-link">
+          <a href="/products" target="_self">
             <img src="/banner/shopping-festival.png" alt="大促銷廣告" />
           </a>
         </div>
