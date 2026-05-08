@@ -16,23 +16,10 @@
 
     <template v-else-if="filteredProducts.length > 0">
       <div class="product-list-header">
-        <h2 class="header-title">商品列表</h2>
         <div class="header-controls">
-          <el-select
-            v-model="selectedCategory"
-            placeholder="選擇分類"
-            clearable
-            class="category-select"
-          >
-            <el-option label="全部" value="" />
-            <el-option
-              v-for="category in categories"
-              :key="category"
-              :label="category"
-              :value="category"
-            />
-          </el-select>
-          <el-button @click="openCartDrawer" type="primary">購物車</el-button>
+          <div class="toolbar-wrapper">
+            <ProductToolbar v-model="filters" :categories="categories" />
+          </div>
         </div>
       </div>
 
@@ -119,6 +106,7 @@ import { useRoute } from 'vue-router'
 import { API_ROUTES } from '@/services/apiRoutes'
 import CartDrawer from '@/components/cart/CartDrawer.vue'
 import Breadcrumb from '@/components/navigation/Breadcrumb.vue'
+import ProductToolbar from '@/components/navigation/ProductToolbar.vue'
 import api from '@/services/api'
 import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
@@ -136,9 +124,16 @@ const isLoading = ref(true)
 const loadMoreCount = 4
 const visibleCount = ref(loadMoreCount)
 const isLoadMoreLoading = ref(false)
-const dialogVisible = ref(false)
 const drawerVisible = ref(false)
 const currentProduct = ref({})
+
+const filters = ref({
+  category: '',
+  sort: '',
+  minPrice: null,
+  maxPrice: null,
+  keyword: route.query.keyword || '',
+})
 
 const props = defineProps({
   forcedCategory: {
@@ -147,30 +142,37 @@ const props = defineProps({
   },
 })
 
+const visibleProducts = computed(() => filteredProducts.value.slice(0, visibleCount.value))
+
+const filteredProducts = computed(() => {
+  return products.value.filter((p) => {
+    const matchCategory = filters.value.category ? p.category === filters.value.category : true
+
+    const matchKeyword = filters.value.keyword ? p.name.includes(filters.value.keyword) : true
+
+    return matchCategory && matchKeyword
+  })
+})
+
 const showProductDetail = (product) => {
   goProductDetail(product.id)
 }
 
 const fetchProducts = async () => {
   isLoading.value = true
+
   try {
-    // 這裡是從網址抓關鍵字的地方
-    const currentKeyword = route.query.keyword
+    const res = await api.getProducts({
+      keyword: filters.value.keyword || undefined,
+    })
 
-    // 呼叫後端 API
-    const res = await api.getProducts({ keyword: currentKeyword || undefined })
-
-    if (res && res.code === '0000') {
+    if (res?.code === '0000') {
       products.value = res.result
-      visibleCount.value = loadMoreCount // 搜尋後重置載入筆數
-
-      //如果正在搜尋，就手動把分類下拉選單清空
-      if (currentKeyword) {
-        selectedCategory.value = ''
-      }
+    } else {
+      products.value = []
     }
-  } catch (error) {
-    console.error('抓取商品發生錯誤:', error)
+  } catch (err) {
+    console.error(err)
     products.value = []
   } finally {
     isLoading.value = false
@@ -178,17 +180,24 @@ const fetchProducts = async () => {
 }
 
 watch(
-  () => route.query.keyword,
+  filters,
   () => {
-    fetchProducts() // 只要網址 keyword 變了，就去後端撈新資料
+    fetchProducts()
+  },
+  { deep: true },
+)
+
+watch(
+  () => route.query.keyword,
+  (val) => {
+    filters.value.keyword = val || ''
   },
 )
-const selectedCategory = ref(props.forcedCategory || '')
 
 watch(
   () => props.forcedCategory,
   (newVal) => {
-    selectedCategory.value = newVal || ''
+    filters.value.category = newVal || ''
     visibleCount.value = loadMoreCount
   },
 )
@@ -201,7 +210,7 @@ onMounted(async () => {
   }
 
   if (props.forcedCategory) {
-    selectedCategory.value = props.forcedCategory
+    filters.value.category = props.forcedCategory
   }
 
   Storage.get(CART_KEY)
@@ -232,7 +241,7 @@ function handleScroll() {
 
   // 檢查是否接近底部 (距離底部 < 100px)
   if (scrolly + visibleHeight >= pageHeight - 200) {
-    if (visibleCount.value < products.value.length) {
+    if (visibleCount.value < filteredProducts.value.length) {
       loadMore()
     }
   }
@@ -243,15 +252,6 @@ const handleScrollThrottled = throttle(handleScroll, 500)
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScrollThrottled)
 })
-
-const filteredProducts = computed(() => {
-  const filtered = selectedCategory.value
-    ? products.value.filter((p) => p.category === selectedCategory.value)
-    : products.value
-  return filtered
-})
-
-const visibleProducts = computed(() => filteredProducts.value.slice(0, visibleCount.value))
 
 const addToCart = (product) => {
   const existingItem = cartStore.cart.find((item) => item.id === product.id)
@@ -276,12 +276,14 @@ const toggleWishlist = (product) => {
   }
 }
 
-const openCartDrawer = () => {
-  drawerVisible.value = true
-}
-
 const clearSearch = () => {
-  selectedCategory.value = ''
+  filters.value = {
+    category: '',
+    sort: '',
+    minPrice: null,
+    maxPrice: null,
+    keyword: '',
+  }
   visibleCount.value = loadMoreCount
   goProducts()
 }
@@ -309,6 +311,13 @@ const clearSearch = () => {
 .header-controls {
   display: flex;
   align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+
+.toolbar-wrapper {
+  flex: 1;
+  min-width: 0;
 }
 
 .product-col {
