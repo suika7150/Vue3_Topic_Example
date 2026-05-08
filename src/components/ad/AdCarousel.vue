@@ -27,6 +27,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useBreakpoint } from '@/composables/useBreakpoint'
+
 const { isMobile } = useBreakpoint()
 
 const adBanners = [
@@ -35,49 +36,49 @@ const adBanners = [
     subtitle: '速度與激情',
     tag: 'HOT SALE',
     image: '/banner/kawasaki.jpg',
-    link: '/category/life/travel',
+    link: '/products',
   },
   {
     title: 'Kawasaki Z H2',
     subtitle: '超增壓猛獸來襲',
     tag: 'NEW',
     image: '/banner/kawasaki-z-h2.jpg',
-    link: '/category/life/travel',
+    link: '/products',
   },
   {
     title: 'Kawasaki Z900 RS',
     subtitle: '男子漢的浪漫',
     tag: 'NEW',
     image: '/banner/kawasaki-z900-rs.jpg',
-    link: '/category/life/travel',
+    link: '/products',
   },
   {
     title: 'Kawasaki Ninja 400RR',
     subtitle: '狂放不羈',
     tag: 'NEW',
     image: '/banner/kawasaki-ninja-400rr.jpg',
-    link: '/category/life/food',
+    link: '/products',
   },
   {
     title: '飲食大放送',
     subtitle: '限時美食優惠',
     tag: 'SALE',
     image: '/banner/double-eleven.jpg',
-    link: '/category/life/food',
+    link: '/products',
   },
   {
     title: '遊戲機大放送',
     subtitle: '極致遊戲體驗',
     tag: 'SALE',
     image: '/banner/frontend.jpeg',
-    link: '/category/tech/frontend',
+    link: '/products',
   },
   {
     title: '旅遊景點大放送',
     subtitle: '熱門景點優惠',
     tag: 'SALE',
     image: '/banner/travel.jpeg',
-    link: '/category/life/travel',
+    link: '/products',
   },
 ]
 </script>
