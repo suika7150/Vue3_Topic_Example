@@ -68,6 +68,9 @@ const api = {
   /** 刪除商品*/
   deleteProducts: (id) => apiService.put(API_ROUTES.PRODUCT_DELETE(id)),
 
+  /** 篩選商品*/
+  getCategories: () => apiService.get(API_ROUTES.CATEGORY_LIST),
+
   /* ===== 選項相關 API ===== */
 
   /** 取得選項列表*/
