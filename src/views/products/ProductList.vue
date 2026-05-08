@@ -311,13 +311,13 @@ const clearSearch = () => {
 .header-controls {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   width: 100%;
   gap: 12px;
 }
 
 .toolbar-wrapper {
-  flex: 1;
-  min-width: 0;
+  flex: unset;
 }
 
 .product-col {

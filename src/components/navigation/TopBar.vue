@@ -80,7 +80,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 2100;
+  z-index: 1100;
   background: #000;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   animation: slideDown 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);

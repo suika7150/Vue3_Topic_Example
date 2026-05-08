@@ -136,7 +136,7 @@ watch(
 <style scoped>
 .toolbar {
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   color: #333;
   display: flex;
   align-items: center;
@@ -147,7 +147,7 @@ watch(
 
 .filter-item {
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   display: flex;
   align-items: center;
