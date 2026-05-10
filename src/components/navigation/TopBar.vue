@@ -44,13 +44,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* 原始 Header 樣式 */
+/* 原始 TopBar  */
 .header-original {
   position: absolute;
   top: 40px;
   left: 0;
   width: 100%;
-  z-index: 2000;
   background: #000;
 }
 
@@ -74,7 +73,7 @@ onUnmounted(() => {
   display: block;
 }
 
-/* 迷你版 Header */
+/* 迷你版 TopBar */
 .header-sticky {
   position: fixed;
   top: 0;
