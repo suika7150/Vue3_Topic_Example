@@ -82,9 +82,7 @@
           <el-icon class="is-loading"><Loading /></el-icon>
           <span>載入中...</span>
         </div>
-        <el-button v-else-if="visibleCount < filteredProducts.length" @click="loadMore" plain>
-          載入更多
-        </el-button>
+        <el-button v-else-if="hasMore" @click="loadMore" plain> 載入更多 </el-button>
       </div>
     </template>
 
@@ -99,57 +97,44 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { watch } from 'vue'
-import { onMounted, onBeforeUnmount } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { API_ROUTES } from '@/services/apiRoutes'
 import CartDrawer from '@/components/cart/CartDrawer.vue'
 import Breadcrumb from '@/components/navigation/Breadcrumb.vue'
 import ProductToolbar from '@/components/navigation/ProductToolbar.vue'
 import api from '@/services/api'
 import { useNavigation } from '@/composables/useNavigation'
+import { useProductFilter } from '@/composables/useProductFilter'
+import { useProductPagination } from '@/composables/useProductPagination'
+import { useProductSearch } from '@/composables/useProductSearch'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
-import throttle from 'lodash/throttle'
 import { Loading, Star, StarFilled, ShoppingCart, ZoomIn } from '@element-plus/icons-vue'
 
-const route = useRoute()
+const { keyword } = useProductSearch()
 const { goProducts, goProductDetail } = useNavigation()
 const cartStore = useCartStore()
 const products = ref([])
-const categories = ref([])
 const isLoading = ref(true)
-const loadMoreCount = 4
-const visibleCount = ref(loadMoreCount)
-const isLoadMoreLoading = ref(false)
 const drawerVisible = ref(false)
-const currentProduct = ref({})
+const { filters, categories, filteredProducts, resetFilters } = useProductFilter(products)
 
-const filters = ref({
-  category: '',
-  sort: '',
-  minPrice: null,
-  maxPrice: null,
-  keyword: route.query.keyword || '',
-})
+// 使用分頁邏輯元件
+const {
+  visibleItems: visibleProducts,
+  loadMore,
+  loadingMore: isLoadMoreLoading,
+  handleScroll,
+  reset,
+  hasMore,
+} = useProductPagination(filteredProducts)
 
 const props = defineProps({
   forcedCategory: {
     type: String,
     default: '',
   },
-})
-
-const visibleProducts = computed(() => filteredProducts.value.slice(0, visibleCount.value))
-
-const filteredProducts = computed(() => {
-  return products.value.filter((p) => {
-    const matchCategory = filters.value.category ? p.category === filters.value.category : true
-
-    return matchCategory
-  })
 })
 
 const showProductDetail = (product) => {
@@ -161,16 +146,15 @@ const fetchProducts = async () => {
 
   try {
     const res = await api.getProducts({
-      keyword: filters.value.keyword || undefined,
+      keyword: keyword.value || undefined,
     })
 
     if (res?.code === '0000') {
       products.value = res.result
+      reset()
     } else {
       products.value = []
     }
-    console.log('🔍 keyword:', filters.value.keyword)
-    console.log('📦 API result:', res.result)
   } catch (err) {
     console.error(err)
     products.value = []
@@ -179,83 +163,31 @@ const fetchProducts = async () => {
   }
 }
 
+watch(keyword, async () => {
+  await fetchProducts()
+  reset()
+})
+
+// 當篩選條件改變時，自動重置分頁
 watch(
   filters,
   () => {
-    fetchProducts()
+    reset()
   },
   { deep: true },
-)
-
-watch(
-  () => route.query.keyword,
-  (val) => {
-    filters.value.keyword = val || ''
-  },
 )
 
 watch(
   () => props.forcedCategory,
   (newVal) => {
     filters.value.category = newVal || ''
-    visibleCount.value = loadMoreCount
+    reset()
   },
 )
-
-watch(filteredProducts, (val) => {
-  console.log('🧠 filteredProducts:', val)
-})
-
-onMounted(async () => {
-  await fetchProducts()
-
-  if (products.value.length > 0 && categories.value.length === 0) {
-    categories.value = [...new Set(products.value.map((p) => p.category))]
-  }
-
-  if (props.forcedCategory) {
-    filters.value.category = props.forcedCategory
-  }
-
-  Storage.get(CART_KEY)
-  window.addEventListener('scroll', handleScrollThrottled)
-})
 
 const handleImageError = (e) => {
   e.target.src = 'https://via.placeholder.com/300x200?text=無法載入'
 }
-
-const loadMore = () => {
-  if (isLoadMoreLoading.value) return // 如果正在載入，則不執行
-
-  isLoadMoreLoading.value = true
-
-  // 模擬網路延遲，讓使用者能看到載入動畫
-  setTimeout(() => {
-    visibleCount.value += loadMoreCount
-    isLoadMoreLoading.value = false
-  }, 1500) // 延遲 1.5 秒
-}
-
-//自動載入更多商品
-function handleScroll() {
-  const scrolly = window.scrollY
-  const visibleHeight = window.innerHeight
-  const pageHeight = document.documentElement.scrollHeight
-
-  // 檢查是否接近底部 (距離底部 < 100px)
-  if (scrolly + visibleHeight >= pageHeight - 200) {
-    if (visibleCount.value < filteredProducts.value.length) {
-      loadMore()
-    }
-  }
-}
-
-const handleScrollThrottled = throttle(handleScroll, 500)
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScrollThrottled)
-})
 
 const addToCart = (product) => {
   const existingItem = cartStore.cart.find((item) => item.id === product.id)
@@ -270,7 +202,7 @@ const addToCart = (product) => {
 }
 
 const toggleWishlist = (product) => {
-  // 切換狀態 (實際開發時這裡會呼叫後端 API)
+  // 切換狀態
   product.isWishlisted = !product.isWishlisted
 
   if (product.isWishlisted) {
@@ -281,16 +213,24 @@ const toggleWishlist = (product) => {
 }
 
 const clearSearch = () => {
-  filters.value = {
-    category: '',
-    sort: '',
-    minPrice: null,
-    maxPrice: null,
-    keyword: '',
-  }
-  visibleCount.value = loadMoreCount
+  resetFilters()
+  reset()
   goProducts()
 }
+
+onMounted(async () => {
+  await fetchProducts()
+
+  if (props.forcedCategory) {
+    filters.value.category = props.forcedCategory
+  }
+
+  window.addEventListener('scroll', handleScroll)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped>
