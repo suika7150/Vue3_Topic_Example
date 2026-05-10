@@ -49,6 +49,7 @@
       <ProductFilterBar
         :model-value="local"
         @update:model-value="(val) => Object.assign(local, val)"
+        @close="showFilter = false"
         :categories="categories"
       />
     </el-dialog>

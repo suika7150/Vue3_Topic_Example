@@ -39,7 +39,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'close'])
 
 const local = reactive({
   category: '',
@@ -71,6 +71,7 @@ const apply = () => {
   if (emittedLocal.minPrice === 0) emittedLocal.minPrice = null
   if (emittedLocal.maxPrice === 100000) emittedLocal.maxPrice = null
   emit('update:modelValue', emittedLocal)
+  emit('close')
 }
 
 const reset = () => {
