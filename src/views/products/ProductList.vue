@@ -148,9 +148,7 @@ const filteredProducts = computed(() => {
   return products.value.filter((p) => {
     const matchCategory = filters.value.category ? p.category === filters.value.category : true
 
-    const matchKeyword = filters.value.keyword ? p.name.includes(filters.value.keyword) : true
-
-    return matchCategory && matchKeyword
+    return matchCategory
   })
 })
 
@@ -171,6 +169,8 @@ const fetchProducts = async () => {
     } else {
       products.value = []
     }
+    console.log('🔍 keyword:', filters.value.keyword)
+    console.log('📦 API result:', res.result)
   } catch (err) {
     console.error(err)
     products.value = []
@@ -201,6 +201,10 @@ watch(
     visibleCount.value = loadMoreCount
   },
 )
+
+watch(filteredProducts, (val) => {
+  console.log('🧠 filteredProducts:', val)
+})
 
 onMounted(async () => {
   await fetchProducts()
@@ -394,7 +398,7 @@ const clearSearch = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3); /* 淡淡的黑遮罩 */
+  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
