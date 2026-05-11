@@ -33,7 +33,6 @@ defineProps({
   overflow: hidden;
   min-height: 110vh;
   width: 100%;
-  margin-top: -80px;
 }
 
 .video-background {
