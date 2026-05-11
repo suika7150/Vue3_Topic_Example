@@ -155,6 +155,11 @@ watch(
   gap: 4px;
   border-radius: 6px;
   transition: 0.2s;
+  outline: none;
+}
+
+.filter-item:focus-visible {
+  outline: none;
 }
 
 .clear-btn {
