@@ -1,5 +1,5 @@
 <template>
-  <div class="canvas-container">
+  <div class="canvas-container" ref="container">
     <canvas ref="canvas"></canvas>
 
     <div class="content-layer">
@@ -13,18 +13,23 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const canvas = ref(null)
+const container = ref(null)
 const ctx = ref(null)
 let animationId = null
 let particles = []
-let mouse = { x: 0, y: 0, tx: 0, ty: 0 }
+let mouse = { x: -1000, y: -1000, tx: -1000, ty: -1000 } // 預設在畫面外，避免初始化時推開左上角粒子
 
 // 粒子數
 function initParticles(num = 150) {
   particles = []
+  // 確保粒子分佈在當前 Canvas 的範圍內，而不是整個視窗
+  const w = canvas.value?.width || window.innerWidth
+  const h = canvas.value?.height || window.innerHeight
+
   for (let i = 0; i < num; i++) {
     particles.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
+      x: Math.random() * w,
+      y: Math.random() * h,
       dx: (Math.random() - 0.5) * 1.2,
       dy: (Math.random() - 0.5) * 1.2,
     })
@@ -32,13 +37,18 @@ function initParticles(num = 150) {
 }
 
 const handleMouse = (e) => {
-  mouse.tx = e.clientX
-  mouse.ty = e.clientY
+  if (!canvas.value) return
+  // 核心修正：取得 Canvas 在網頁上的實際位置，並計算出相對坐標
+  const rect = canvas.value.getBoundingClientRect()
+  mouse.tx = e.clientX - rect.left
+  mouse.ty = e.clientY - rect.top
 }
 
 const resize = () => {
-  canvas.value.width = window.innerWidth
-  canvas.value.height = window.innerHeight
+  if (!container.value) return
+  // 改為抓取父容器的寬高，而不是 window
+  canvas.value.width = container.value.clientWidth
+  canvas.value.height = container.value.clientHeight
 }
 
 // 主動畫
@@ -131,11 +141,10 @@ onUnmounted(() => {
 
 <style scoped>
 .canvas-container {
-  top: 0;
-  left: 0;
+  position: relative; /* 確保 canvas 定位在此容器內 */
   width: 100%;
-  height: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 220px); /* 扣掉 TopBar 的高度 */
+  overflow: hidden; /* 防止粒子跑出去 */
   background: radial-gradient(circle at center, #eaf2ff 0%, #dbeafe 40%, #c7d2fe 100%);
 }
 

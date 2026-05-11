@@ -133,8 +133,7 @@ const handleSidebarNavigate = () => {
 }
 
 /* 關於我們頁面 */
-.content.canvas,
-.content.about {
+.content.canvas {
   padding-top: 0;
 }
 
