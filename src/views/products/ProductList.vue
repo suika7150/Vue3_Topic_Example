@@ -113,7 +113,7 @@ import { toast } from '@/utils/message'
 import { Loading, Star, StarFilled, ShoppingCart, ZoomIn } from '@element-plus/icons-vue'
 
 const { keyword } = useProductSearch()
-const { goProducts, goProductDetail } = useNavigation()
+const { goTo } = useNavigation()
 const cartStore = useCartStore()
 const products = ref([])
 const isLoading = ref(true)
@@ -138,7 +138,7 @@ const props = defineProps({
 })
 
 const showProductDetail = (product) => {
-  goProductDetail(product.id)
+  goTo('productDetail', { id: product.id })
 }
 
 const fetchProducts = async () => {
@@ -213,9 +213,10 @@ const toggleWishlist = (product) => {
 }
 
 const clearSearch = () => {
+  keyword.value = ''
   resetFilters()
   reset()
-  goProducts()
+  goTo('overview')
 }
 
 onMounted(async () => {
