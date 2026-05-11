@@ -81,7 +81,9 @@ const handleSidebarNavigate = () => {
   position: absolute;
   display: flex;
   top: 0;
+  left: 0;
   width: 100%;
+  max-width: 100vw;
   z-index: 1100;
 }
 
@@ -100,13 +102,13 @@ const handleSidebarNavigate = () => {
   justify-content: stretch;
   flex: 1;
   width: 100%;
+  max-width: 100vw;
   box-sizing: border-box;
 }
 
 /* 主內容區 */
 .content {
   display: flex;
-  justify-content: center;
   flex-direction: column;
   flex: 1;
   padding-top: 220px;
@@ -157,7 +159,7 @@ const handleSidebarNavigate = () => {
 
   /* 主內容區 */
   .content {
-    padding-top: 139px;
+    padding-top: 110px;
   }
 
   .topbar-ad-banner {
@@ -166,6 +168,9 @@ const handleSidebarNavigate = () => {
     top: 0;
     left: 0;
     width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow: hidden;
     background-color: rgb(19, 204, 170);
     z-index: 1003;
   }

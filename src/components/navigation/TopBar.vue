@@ -90,7 +90,6 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
 }
 
 .logo-mini img {
@@ -104,6 +103,15 @@ onUnmounted(() => {
   }
   to {
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .logo img {
+    display: none;
+  }
+  .menu {
+    display: none;
   }
 }
 </style>

@@ -271,9 +271,10 @@ onBeforeUnmount(() => {
 <style scoped>
 .product-list-container {
   max-width: 1200px;
-  padding: 60px 0px;
+  padding: 60px 20px;
   margin: 0 auto;
   width: 100%; /* 不要拿掉，確保在小螢幕上也能撐滿 */
+  box-sizing: border-box;
 }
 
 .breadcrumb-strip {
@@ -326,17 +327,14 @@ onBeforeUnmount(() => {
   transition: all 0.3s ease;
 }
 
-/* --- 提升骨架屏質感 --- */
+/* Skeleton Screen 樣式 */
 :deep(.el-skeleton) {
-  /* 使用 Slate 色系，讓橫條深色一點且更有層次 */
-  --el-skeleton-color: #cbd5e1; /* 基礎灰 (較深) */
-  --el-skeleton-to-color: #94a3b8; /* 漸變灰 (深色) */
-  /* 讓動畫循環時間變長，看起來更柔和高級 */
+  --el-skeleton-color: #cbd5e1;
+  --el-skeleton-to-color: #94a3b8;
   --el-skeleton-animation-duration: 1.8s;
 }
 
 :deep(.el-skeleton__item) {
-  /* 橫條的圓角通常 4px 左右比較有文字感 */
   border-radius: 4px;
   margin-top: 6px;
 }
@@ -352,7 +350,6 @@ onBeforeUnmount(() => {
   position: relative;
   overflow: hidden;
   width: 100%;
-  /* height: 240px; */
   aspect-ratio: 1 / 1;
   cursor: pointer;
   background-color: #fff;
@@ -404,7 +401,7 @@ onBeforeUnmount(() => {
   transform: translateY(0);
 }
 
-/* --- 遮罩內的按鈕容器 --- */
+/* 遮罩內的按鈕容器 */
 .overlay-actions {
   display: flex;
   gap: 15px;
@@ -412,7 +409,7 @@ onBeforeUnmount(() => {
   transition: transform 0.3s ease;
 }
 
-/* --- 遮罩內的按鈕樣式 --- */
+/* 遮罩內的按鈕樣式 */
 .action-icon {
   display: flex;
   justify-content: center;
@@ -426,26 +423,26 @@ onBeforeUnmount(() => {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* --- 遮罩內的按鈕(查看詳情) --- */
+/* 遮罩內的按鈕(查看詳情) */
 .action-icon.is-detail {
   background: rgba(255, 255, 255, 0.9);
   color: #1d1d1f;
 }
 
-/* --- 遮罩內的按鈕(查看詳情) --- */
+/* 遮罩內的按鈕(查看詳情) */
 .action-icon.is-detail:hover {
   background: #ffffff;
   transform: translateY(-3px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* --- 遮罩內的按鈕(購物車) --- */
+/* 遮罩內的按鈕(購物車) */
 .action-icon.is-cart {
   background: rgba(29, 29, 31, 0.9);
   color: #ffffff;
 }
 
-/* --- 遮罩內的按鈕(購物車) --- */
+/* 遮罩內的按鈕(購物車) */
 .action-icon.is-cart:hover {
   background: #000000;
   transform: translateY(-3px);
@@ -591,7 +588,8 @@ onBeforeUnmount(() => {
 
 @media (max-width: 1024px) {
   .product-list-container {
-    padding: 20px 0px;
+    padding: 20px 15px;
+    width: 100%;
   }
   .card-image-wrapper {
     height: 180px;

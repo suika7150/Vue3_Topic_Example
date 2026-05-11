@@ -227,11 +227,13 @@ router.beforeEach(async (to, from, next) => {
 
   // 如果是去登入頁且已經登入，直接回首頁
   if (to.path === '/login' && isLoggedIn) {
+    hideLoading()
     return next('/')
   }
 
   // 資料同步邏輯
-  if ((isLoggedIn && !userStore.user.username) || !userStore.user.fullName) {
+  // 修正：只有在已登入的情況下，且缺少必要資料時才發送 API
+  if (isLoggedIn && (!userStore.user?.username || !userStore.user?.fullName)) {
     try {
       // 同步使用者資料
       await Promise.all([userStore.fetchUserInfo(), cartStore.fetchCartList()])
@@ -249,14 +251,16 @@ router.beforeEach(async (to, from, next) => {
   // 檢查是否需要登入權限
   if (to.meta.requiresAuth && !isLoggedIn) {
     ElMessage.error('請先登入會員')
-    //把當前想去的路徑 (to.fullPath) 傳給登入頁
+    hideLoading()
     return next({
       path: '/login',
       query: { redirect: to.fullPath },
     })
   }
+
   // 如果已登入，檢查角色權限
   if (to.meta.requiresAuth && !to.meta?.role?.includes(role)) {
+    hideLoading()
     return next('/accessDenied')
   }
 

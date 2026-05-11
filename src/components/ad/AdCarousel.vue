@@ -192,10 +192,18 @@ const adBanners = [
 }
 @media (max-width: 1024px) {
   .carousel-container,
-  :deep(.el-carousel),
-  .ad-content {
-    height: 50vh;
+  :deep(.el-carousel) {
+    height: 40vh !important; /* 降低手機版高度，避免佔據過多垂直空間 */
   }
+
+  :deep(.el-carousel__container) {
+    height: 40vh !important;
+  }
+
+  .ad-image {
+    object-position: center center; /* 手機版將圖片居中，減少裁切失真 */
+  }
+
   .ad-content {
     bottom: 10%;
   }

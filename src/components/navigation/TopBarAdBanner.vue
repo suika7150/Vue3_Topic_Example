@@ -67,16 +67,18 @@ watch(
   display: flex;
   justify-content: center;
   text-align: center;
-  white-space: nowrap;
   background-color: rgb(19, 204, 170);
   color: #fff;
   font-size: 14px;
   font-weight: 500;
   height: 40px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .marquee {
-  width: 100%;
+  flex: 1;
+  max-width: 100%;
   height: 100%;
   overflow: hidden;
   position: relative;
