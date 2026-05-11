@@ -8,8 +8,39 @@
         <h2 class="header-title">正在載入商品...</h2>
       </div>
       <el-row :gutter="20">
-        <el-col v-for="i in 4" :key="i" :span="6" class="product-col">
-          <el-skeleton animated :rows="5" />
+        <el-col
+          v-for="i in 4"
+          :key="i"
+          :span="6"
+          :xs="12"
+          :sm="12"
+          :md="8"
+          :lg="6"
+          class="product-col"
+        >
+          <el-skeleton animated>
+            <template #template>
+              <el-skeleton-item
+                variant="image"
+                style="width: 100%; aspect-ratio: 1/1; border-radius: 8px"
+              />
+              <div style="padding: 14px 0">
+                <el-skeleton-item variant="text" style="width: 30%; margin-bottom: 10px" />
+                <el-skeleton-item variant="h3" style="width: 80%; height: 24px" />
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 20px;
+                  "
+                >
+                  <el-skeleton-item variant="text" style="width: 40%; height: 20px" />
+                  <el-skeleton-item variant="circle" style="width: 28px; height: 28px" />
+                </div>
+              </div>
+            </template>
+          </el-skeleton>
         </el-col>
       </el-row>
     </template>
@@ -171,8 +202,11 @@ watch(keyword, async () => {
 // 當篩選條件改變時，自動重置分頁
 watch(
   filters,
-  () => {
+  async () => {
+    isLoading.value = true // 手動開啟載入狀態
     reset()
+    await new Promise((resolve) => setTimeout(resolve, 1000)) // 模擬短暫的延遲搭配 Skeleton Screen
+    isLoading.value = false
   },
   { deep: true },
 )
@@ -290,6 +324,21 @@ onBeforeUnmount(() => {
   box-shadow: none;
   height: 100%;
   transition: all 0.3s ease;
+}
+
+/* --- 提升骨架屏質感 --- */
+:deep(.el-skeleton) {
+  /* 使用 Slate 色系，讓橫條深色一點且更有層次 */
+  --el-skeleton-color: #cbd5e1; /* 基礎灰 (較深) */
+  --el-skeleton-to-color: #94a3b8; /* 漸變灰 (深色) */
+  /* 讓動畫循環時間變長，看起來更柔和高級 */
+  --el-skeleton-animation-duration: 1.8s;
+}
+
+:deep(.el-skeleton__item) {
+  /* 橫條的圓角通常 4px 左右比較有文字感 */
+  border-radius: 4px;
+  margin-top: 6px;
 }
 
 .product-card :deep(.el-card__body) {
