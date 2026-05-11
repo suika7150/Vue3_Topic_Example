@@ -6,7 +6,7 @@
       :interval="4000"
       height="85vh"
       width="100%"
-      indicator-position="inside"
+      indicator-position=""
       arrow="hover"
     >
       <el-carousel-item v-for="(ad, index) in adBanners" :key="index">
