@@ -78,8 +78,8 @@ const handleSidebarNavigate = () => {
 
 <style scoped>
 .topbar-ad-banner {
-  position: absolute;
   display: flex;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -163,14 +163,11 @@ const handleSidebarNavigate = () => {
   }
 
   .topbar-ad-banner {
-    position: fixed;
-    display: flex;
     top: 0;
     left: 0;
     width: 100%;
     max-width: 100vw;
     box-sizing: border-box;
-    overflow: hidden;
     background-color: rgb(19, 204, 170);
     z-index: 1003;
   }
