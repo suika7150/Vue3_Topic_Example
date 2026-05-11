@@ -203,10 +203,13 @@ watch(keyword, async () => {
 watch(
   filters,
   async () => {
-    isLoading.value = true // 手動開啟載入狀態
-    reset()
-    await new Promise((resolve) => setTimeout(resolve, 1000)) // 模擬短暫的延遲搭配 Skeleton Screen
-    isLoading.value = false
+    if (!isLoading.value) {
+      // 避免重複觸發
+      isLoading.value = true
+      reset()
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      isLoading.value = false
+    }
   },
   { deep: true },
 )
