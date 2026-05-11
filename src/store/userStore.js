@@ -128,10 +128,9 @@ export const useUserStore = defineStore('userStore', {
             this.user.fullName = currentUser.fullName
           }
         }
-      } catch (error) {}
-
-      // apiService 的攔截器會處理 401 並自動執行 logout()
-      console.debug('[權限] 找不到登入狀態，目前以訪客權限執行。')
+      } catch (error) {
+        console.debug('[權限] 初始化失敗（可能未登入或 token 過期）')
+      }
     },
 
     async updateUserInfo(payload) {
