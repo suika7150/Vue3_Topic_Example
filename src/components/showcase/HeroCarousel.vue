@@ -1,20 +1,23 @@
 <template>
   <div class="carousel-container">
-    <!-- 使用 Element Plus 的卡片式輪播 -->
     <el-carousel
       :key="isMobile"
       :interval="4000"
-      height="85vh"
+      height="100vh"
       width="100%"
       indicator-position=""
       arrow="hover"
     >
-      <el-carousel-item v-for="(ad, index) in adBanners" :key="index">
+      <el-carousel-item v-for="(ad, index) in banners" :key="index">
         <a :href="ad.link" target="_self" class="ad-link">
-          <img :src="ad.image" :alt="ad.title" class="ad-image" />
+          <div
+            class="hero-image"
+            :style="{ backgroundImage: `url(${ad.image})`, backgroundPosition: position }"
+          ></div>
+
           <div class="ad-overlay"></div>
           <div class="ad-content">
-            <span class="ad-tag">{{ ad.tag }}</span>
+            <!-- <span class="ad-tag">{{ ad.tag }}</span> -->
             <h2 class="ad-title">{{ ad.title }}</h2>
             <p class="ad-subtitle">{{ ad.subtitle }}</p>
           </div>
@@ -25,69 +28,27 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useBreakpoint } from '@/composables/useBreakpoint'
 
 const { isMobile } = useBreakpoint()
 
-const adBanners = [
-  {
-    title: 'Kawasaki車系大特賣',
-    subtitle: '速度與激情',
-    tag: 'HOT SALE',
-    image: '/banner/kawasaki.jpg',
-    link: '/products',
+defineProps({
+  banners: {
+    type: Array,
+    default: () => [],
   },
-  {
-    title: 'Kawasaki Z H2',
-    subtitle: '超增壓猛獸來襲',
-    tag: 'NEW',
-    image: '/banner/kawasaki-z-h2.jpg',
-    link: '/products',
+  position: {
+    type: String,
+    default: 'center 20%',
   },
-  {
-    title: 'Kawasaki Z900 RS',
-    subtitle: '男子漢的浪漫',
-    tag: 'NEW',
-    image: '/banner/kawasaki-z900-rs.jpg',
-    link: '/products',
-  },
-  {
-    title: 'Kawasaki Ninja 400RR',
-    subtitle: '狂放不羈',
-    tag: 'NEW',
-    image: '/banner/kawasaki-ninja-400rr.jpg',
-    link: '/products',
-  },
-  {
-    title: '飲食大放送',
-    subtitle: '限時美食優惠',
-    tag: 'SALE',
-    image: '/banner/double-eleven.jpg',
-    link: '/products',
-  },
-  {
-    title: '遊戲機大放送',
-    subtitle: '極致遊戲體驗',
-    tag: 'SALE',
-    image: '/banner/frontend.jpeg',
-    link: '/products',
-  },
-  {
-    title: '旅遊景點大放送',
-    subtitle: '熱門景點優惠',
-    tag: 'SALE',
-    image: '/banner/travel.jpeg',
-    link: '/products',
-  },
-]
+})
 </script>
 
 <style scoped>
 .carousel-container {
   position: relative;
   width: 100%;
-  height: 85vh;
+  height: 100vh;
   background-color: #000;
 }
 
@@ -96,7 +57,7 @@ const adBanners = [
 }
 
 :deep(.el-carousel) {
-  height: 85vh;
+  height: 100vh;
 }
 
 .ad-link {
@@ -105,12 +66,12 @@ const adBanners = [
   height: 100%;
 }
 
-.ad-image {
+.hero-image {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 10%;
+  inset: 0;
+
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .ad-overlay {
@@ -193,7 +154,7 @@ const adBanners = [
 @media (max-width: 1024px) {
   .carousel-container,
   :deep(.el-carousel) {
-    height: 40vh !important; /* 降低手機版高度，避免佔據過多垂直空間 */
+    height: 40vh !important;
   }
 
   :deep(.el-carousel__container) {
@@ -201,7 +162,7 @@ const adBanners = [
   }
 
   .ad-image {
-    object-position: center center; /* 手機版將圖片居中，減少裁切失真 */
+    object-position: center center;
   }
 
   .ad-content {
