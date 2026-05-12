@@ -131,6 +131,12 @@ const routes = [
     meta: { title: '聯名專區', requiresAuth: false },
   },
   {
+    path: '/brand/:type',
+    name: 'brand',
+    component: () => import('@/views/brands/BrandsView.vue'),
+    meta: { title: '品牌專區', requiresAuth: false },
+  },
+  {
     path: '/seasonal/featured',
     name: 'seasonalFeatured',
     component: () => import('@/views/seasonal/SeasonFeatured.vue'),

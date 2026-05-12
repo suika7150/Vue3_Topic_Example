@@ -106,9 +106,11 @@ export const NAVIGATION_SCHEMA = [
     roles: ['USER', 'GUEST', 'ADMIN'],
     usage: ['sidebar', 'topbar'],
     subs: [
-      { label: '食品飲品', route: { name: 'brandFood' } },
-      { label: '汽機車用品', route: { name: 'brandVehicle' } },
-      { label: '居家生活', route: { name: 'brandLiving' } },
+      { label: '3C 數位', route: { name: 'brand', params: { type: 'electronics' } } },
+      { label: '服飾配件', route: { name: 'brand', params: { type: 'apparel' } } },
+      { label: '食品飲品', route: { name: 'brand', params: { type: 'food' } } },
+      { label: '汽機車用品', route: { name: 'brand', params: { type: 'vehicle' } } },
+      { label: '居家生活', route: { name: 'brand', params: { type: 'lifeStyle' } } },
     ],
   },
   {
