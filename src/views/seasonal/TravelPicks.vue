@@ -1,5 +1,5 @@
 <template>
-  <HeroCarousel :banners="" position="" />
+  <HeroCarousel />
   <ProductList />
 </template>
 
