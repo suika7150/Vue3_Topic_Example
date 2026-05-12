@@ -1,18 +1,11 @@
 <template>
-  <ShowcaseLayout bg="/images/season/summer-travel.jpg">
-    <h1>🚗 出遊推薦</h1>
-
-    <div class="grid">
-      <div class="card" v-for="i in 6" :key="i">
-        <h3>推薦行程 {{ i }}</h3>
-        <p>輕旅行 / 週末放鬆 / 親子行程</p>
-      </div>
-    </div>
-  </ShowcaseLayout>
+  <HeroCarousel :banners="" position="" />
+  <ProductList />
 </template>
 
 <script setup>
-import ShowcaseLayout from '@/layouts/ShowcaseLayout.vue'
+import HeroCarousel from '@/components/showcase/HeroCarousel.vue'
+import ProductList from '@/views/products/ProductList.vue'
 </script>
 
 <style scoped>
