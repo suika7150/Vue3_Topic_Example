@@ -62,6 +62,18 @@ export const NAVIGATION_SCHEMA = [
   },
   {
     type: 'dropdown',
+    key: 'productMenu',
+    label: '商品選單',
+    icon: Sell,
+    roles: ['USER', 'GUEST', 'ADMIN'],
+    usage: ['sidebar'],
+    subs: [
+      { label: '商品總覽', route: { name: 'overview' } },
+      { label: '商品管理', route: { name: 'productManage' } },
+    ],
+  },
+  {
+    type: 'dropdown',
     key: 'doubleeleven',
     label: '雙11週年盛典',
     icon: Odometer,

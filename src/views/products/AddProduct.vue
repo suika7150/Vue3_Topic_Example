@@ -225,7 +225,7 @@ const successButtons = [
   {
     text: '返回列表',
     type: 'default',
-    onClick: () => goTo('ProductList'),
+    onClick: () => goTo('overview'),
   },
   {
     text: '繼續新增',

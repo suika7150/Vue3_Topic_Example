@@ -3,7 +3,7 @@
     <div class="header">
       <h2 class="title">商品管理</h2>
       <div class="header-actions">
-        <el-button @click="goTo('AddProduct')" type="primary">
+        <el-button @click="goTo('addProduct')" type="primary">
           <el-icon><Plus /></el-icon>
           <span v-if="!isMobile">新增商品</span>
         </el-button>

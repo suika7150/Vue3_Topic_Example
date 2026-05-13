@@ -58,7 +58,7 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: () => import('@/views/users/Profile.vue'),
-    meta: { requiresAuth: true, role: ['USER'] },
+    meta: { title: '個人資料', requiresAuth: true, role: ['USER'] },
   },
   {
     path: '/products',
@@ -244,8 +244,7 @@ router.beforeEach(async (to, from, next) => {
       // 同步使用者資料
       await Promise.all([userStore.fetchUserInfo(), cartStore.fetchCartList()])
     } catch (error) {
-      userStore.logout()
-      return next('/login')
+      console.error('初始化資料失敗:', error)
     } finally {
       hideLoading()
     }

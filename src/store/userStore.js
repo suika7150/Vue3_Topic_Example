@@ -118,18 +118,23 @@ export const useUserStore = defineStore('userStore', {
         if (res && res.result) {
           this.user.isLogin = true
 
-          // 從本地緩存先抓基本資料
-          this.role = Storage.get(USER_ROLE_KEY) || 'GUEST'
-          this.user.username = Storage.get(USER_KEY)
+          // 如果 Pinia 本身沒資料，才從 Storage 補
+          if (!this.user.username) {
+            this.user.username = Storage.get(USER_KEY)
+          }
 
-          // 如果 API 有回傳詳細清單，更新顯示名稱
           const currentUser = res.result.find?.((u) => u.username === this.user.username)
           if (currentUser) {
             this.user.fullName = currentUser.fullName
+            this.role = currentUser.role || Storage.get(USER_ROLE_KEY) || 'USER'
           }
         }
       } catch (error) {
-        console.debug('[權限] 初始化失敗（可能未登入或 token 過期）')
+        console.warn('[權限] 嘗試自動同步身分失敗:', error.response?.status || error.message)
+        // 如果是 401，代表 Cookie 已失效，此時才考慮執行 logout
+        if (error.response?.status === 401) {
+          // this.logout(); // 視需求開啟，避免多頁面同時被踢出
+        }
       }
     },
 
@@ -225,6 +230,6 @@ export const useUserStore = defineStore('userStore', {
   persist: {
     enabled: true,
     storage: localStorage,
-    paths: ['user.username', 'user.rememberMe', 'user.isLogin'], // 持久化狀態
+    paths: ['user.username', 'user.rememberMe', 'user.isLogin', 'user.fullName', 'role'],
   },
 })
