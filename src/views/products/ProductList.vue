@@ -140,6 +140,7 @@ import { useProductPagination } from '@/composables/useProductPagination'
 import { useProductSearch } from '@/composables/useProductSearch'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
+import { DEFAULT_PRODUCT_IMAGE } from '@/constants/productConstants'
 import { toast } from '@/utils/message'
 import { Loading, Star, StarFilled, ShoppingCart, ZoomIn } from '@element-plus/icons-vue'
 
@@ -223,7 +224,7 @@ watch(
 )
 
 const handleImageError = (e) => {
-  e.target.src = 'https://via.placeholder.com/300x200?text=無法載入'
+  e.target.src = DEFAULT_PRODUCT_IMAGE
 }
 
 const addToCart = (product) => {

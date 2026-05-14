@@ -15,13 +15,12 @@
         <div class="list-item">
           <el-form-item label="類別" prop="category">
             <el-select v-model="form.category" placeholder="請選擇類別">
-              <el-option label="電子產品" value="電子產品" />
-              <el-option label="生活用品" value="生活用品" />
-              <el-option label="服飾配件" value="服飾配件" />
-              <el-option label="加工食品" value="加工食品" />
-              <el-option label="交通工具" value="交通工具" />
-              <el-option label="清潔用品" value="清潔用品" />
-              <el-option label="影音娛樂" value="影音娛樂" />
+              <el-option
+                v-for="item in PRODUCT_CATEGORIES"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
             </el-select>
           </el-form-item>
         </div>
@@ -42,8 +41,8 @@
           <el-form-item label="商品狀態" prop="status">
             <el-select v-model="form.status" placeholder="請選擇狀態">
               <el-option
-                v-for="(status, index) in statusOptions"
-                :key="index"
+                v-for="status in PRODUCT_STATUS_OPTIONS"
+                :key="status.value"
                 :label="status.label"
                 :value="status.value"
               />
@@ -64,7 +63,7 @@
 
         <div class="list-item">
           <el-form-item label="上傳圖片" prop="imageBase64">
-            <input type="file" accept="image/*" @change="handleFileChange" />
+            <input type="file" accept="image/*" @change="handleFileChange" ref="fileInputRef" />
           </el-form-item>
         </div>
 
@@ -103,6 +102,8 @@
       message="商品已成功新增。請問您要繼續新增商品嗎？"
       :buttons="successButtons"
     />
+
+    <ImageCropper ref="cropperRef" @on-crop="handleCropped" />
   </div>
 </template>
 
@@ -110,115 +111,30 @@
 import api from '@/services/api'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
+import { PRODUCT_CATEGORIES, PRODUCT_STATUS_OPTIONS } from '@/constants/productConstants'
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 import { useNavigation } from '@/composables/useNavigation'
+import { useProductForm } from '@/composables/useProductForm'
 import ImageCropper from '@/components/ImageCropper.vue'
 
-const formRef = ref()
 const { goTo, goBack } = useNavigation()
+const {
+  form,
+  rules,
+  formRef,
+  fileInputRef,
+  cropperRef,
+  imagePreview,
+  handleFileChange,
+  handleCropped,
+  removeImage,
+  resetFormFields,
+} = useProductForm()
+
 const successDialogVisible = ref(false)
-const imagePreview = ref(null)
-const cropperRef = ref(null)
-
-const statusOptions = ref([
-  { label: '上架', value: 'ON_SALE' },
-  { label: '下架', value: 'OFF_SALE' },
-])
-
-const form = reactive({
-  name: '', //產品名稱
-  category: '', //分類
-  price: '', //價格
-  stock: 0, //庫存
-  status: '', //狀態
-  description: '', //描述
-  imageBase64: '', //圖片
-  imageType: '', //圖片類型
-})
-
-const rules = {
-  name: [{ required: true, message: '請輸入商品名稱', trigger: 'blur' }],
-  category: [{ required: true, message: '請選擇分類', trigger: 'change' }],
-  price: [{ required: true, message: '請輸入價格', trigger: 'blur' }],
-  stock: [
-    { required: true, message: '請輸入庫存數量', trigger: 'blur' },
-    { type: 'number', min: 0, message: '庫存數量不能為負數', trigger: 'blur' },
-  ],
-  status: [{ required: true, message: '請選擇狀態', trigger: 'change' }],
-  imageBase64: [{ required: true, message: '請上傳圖片', trigger: 'change' }],
-}
-
-// 圖片縮放
-function resizeImage(img, fileType, targetWidth, targetHeight) {
-  const canvas = document.createElement('canvas')
-  const ctx = canvas.getContext('2d')
-
-  // 設定 Canvas 的固定尺寸
-  canvas.width = targetWidth
-  canvas.height = targetHeight
-
-  let width = img.width
-  let height = img.height
-
-  // 計算縮放比例，以確保圖片能完整顯示在目標尺寸內
-  const scale = Math.min(targetWidth / width, targetHeight / height)
-  const newWidth = width * scale
-  const newHeight = height * scale
-
-  // 計算繪製的起始位置，讓圖片置中
-  const xOffset = (targetWidth - newWidth) / 2
-  const yOffset = (targetHeight - newHeight) / 2
-
-  // 繪製圖片到 Canvas，不足的部分會是透明（留白）
-  ctx.drawImage(img, xOffset, yOffset, newWidth, newHeight)
-
-  return canvas.toDataURL(fileType)
-}
-
-/**
- * 處理檔案選擇變化
- * @param {InputEvent} event - Input 事件
- * @description 讀取檔案， resize 圖片，將結果 set 到 form.imageBase64
- */
-function handleFileChange(event) {
-  const file = event.target.files[0]
-  if (!file) return
-
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onload = () => {
-    // 呼叫裁切組件並傳入原始圖片
-    cropperRef.value.open(reader.result)
-  }
-}
-
-// 接收裁切後的結果
-function handleCropped(blob) {
-  const reader = new FileReader()
-  reader.readAsDataURL(blob)
-  reader.onloadend = () => {
-    form.imageBase64 = reader.result
-    imagePreview.value = reader.result
-    ElMessage.success('圖片裁切完成')
-  }
-}
-
-function removeImage() {
-  form.imageBase64 = ''
-  imagePreview.value = null
-  document.querySelector('input[type="file"]').value = ''
-}
 
 function resetForm() {
-  form.name = ''
-  form.category = ''
-  form.price = null
-  form.stock = 0
-  form.status = ''
-  form.description = ''
-  form.imageBase64 = ''
-  imagePreview.value = null
-  formRef.value.resetFields()
+  resetFormFields()
 }
 
 const successButtons = [
@@ -241,12 +157,11 @@ function submitForm() {
     try {
       await api.addProduct(form)
       ElMessage.success('商品新增成功！')
-      // 成功後，呼叫獨立出來的處理函數
       successDialogVisible.value = true
     } catch (error) {
       ElMessage.error('新增失敗，請稍後再試')
     }
-    document.querySelector('input[type="file"]').value = ''
+    removeImage()
   })
 }
 

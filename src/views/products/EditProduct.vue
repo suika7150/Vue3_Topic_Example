@@ -15,13 +15,12 @@
         <div class="list-item">
           <el-form-item label="類別" prop="category">
             <el-select v-model="form.category" placeholder="請選擇類別">
-              <el-option label="電子產品" value="電子產品" />
-              <el-option label="生活用品" value="生活用品" />
-              <el-option label="服飾配件" value="服飾配件" />
-              <el-option label="加工食品" value="加工食品" />
-              <el-option label="交通工具" value="交通工具" />
-              <el-option label="清潔用品" value="清潔用品" />
-              <el-option label="影音娛樂" value="影音娛樂" />
+              <el-option
+                v-for="item in PRODUCT_CATEGORIES"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
             </el-select>
           </el-form-item>
         </div>
@@ -42,8 +41,8 @@
           <el-form-item label="商品狀態" prop="status">
             <el-select v-model="form.status" placeholder="請選擇狀態">
               <el-option
-                v-for="(status, index) in statusOptions"
-                :key="index"
+                v-for="status in PRODUCT_STATUS_OPTIONS"
+                :key="status.value"
                 :label="status.label"
                 :value="status.value"
               />
@@ -64,7 +63,7 @@
 
         <div class="list-item noborder">
           <el-form-item label="上傳圖片">
-            <input type="file" accept="image/*" @change="handleFileChange" />
+            <input type="file" accept="image/*" @change="handleFileChange" ref="fileInputRef" />
           </el-form-item>
         </div>
 
@@ -107,88 +106,29 @@ import api from '@/services/api'
 import { ElMessage } from 'element-plus'
 import { onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { PRODUCT_CATEGORIES, PRODUCT_STATUS_OPTIONS } from '@/constants/productConstants'
+import { useProductForm } from '@/composables/useProductForm'
 import ImageCropper from '@/components/ImageCropper.vue'
 
 const route = useRoute()
 const { goTo } = useNavigation()
 const productId = ref(route.params?.id)
-const formRef = ref()
-const cropperRef = ref(null)
-
-const form = reactive({
-  name: '',
-  category: '',
-  price: 0,
-  stock: 0,
-  status: '',
-  description: '',
-  imageBase64: '',
-})
-
-const imagePreview = ref(null)
-
-const rules = {
-  name: [{ required: true, message: '請輸入商品名稱', trigger: 'blur' }],
-  category: [{ required: true, message: '請選擇分類', trigger: 'change' }],
-  price: [{ required: true, message: '請輸入價格', trigger: 'blur' }],
-  stock: [
-    { required: true, message: '請輸入庫存數量', trigger: 'blur' },
-    { type: 'number', min: 0, message: '庫存數量不能為負數', trigger: 'blur' },
-  ],
-  status: [{ required: true, message: '請選擇狀態', trigger: 'change' }],
-  imageBase64: [{ required: true, message: '請上傳圖片', trigger: 'change' }],
-}
-
-const statusOptions = ref([
-  { label: '上架', value: 'ON_SALE' },
-  { label: '下架', value: 'OFF_SALE' },
-])
-
-// 選項過濾邏輯
-const filterOptions = (options, listName) => {
-  // 檢查傳入的 options 是否為有效陣列
-  if (!options || !Array.isArray(options)) {
-    return []
-  }
-  return options
-    .filter((option) => option.listName === listName)
-    .map((option) => ({ label: option.key, value: option.value }))
-}
-
-// 圖片處理邏輯(Cropper)
-function handleFileChange(event) {
-  const file = event.target.files[0]
-  if (!file) return
-
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onload = () => {
-    // 呼叫妳的裁切器組件
-    cropperRef.value.open(reader.result)
-  }
-}
-
-function handleCropped(blob) {
-  const reader = new FileReader()
-  reader.readAsDataURL(blob)
-  reader.onloadend = () => {
-    form.imageBase64 = reader.result
-    imagePreview.value = reader.result
-    ElMessage.success('圖片裁切完成')
-  }
-}
-
-function removeImage() {
-  form.imageBase64 = ''
-  imagePreview.value = null
-  const fileInput = document.querySelector('input[type="file"]')
-  if (fileInput) fileInput.value = ''
-}
+const {
+  form,
+  rules,
+  formRef,
+  fileInputRef,
+  cropperRef,
+  imagePreview,
+  handleFileChange,
+  handleCropped,
+  removeImage,
+  resetFormFields,
+} = useProductForm()
 
 // 表單操作邏輯
 function resetForm() {
-  formRef.value.resetFields()
-  imagePreview.value = null
+  resetFormFields()
 }
 
 function cancelEdit() {
