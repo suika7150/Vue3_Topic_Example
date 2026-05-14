@@ -40,8 +40,8 @@ const PROMOS = {
     qrUrl: 'https://your-store.com/promo/double-11',
   },
   new_user: {
-    title: '新會員專屬禮遇',
-    desc: '掃描領取開學季首購折價券',
+    title: '新會員專屬禮',
+    desc: '掃描領取首購折價券',
     bg: 'linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)',
     qrUrl: 'https://your-store.com/promo/welcome',
   },
