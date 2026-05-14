@@ -131,7 +131,7 @@ export const useUserStore = defineStore('userStore', {
         }
       } catch (error) {
         console.warn('[權限] 嘗試自動同步身分失敗:', error.response?.status || error.message)
-        // 如果是 401，代表 Cookie 已失效，此時才考慮執行 logout
+
         if (error.response?.status === 401) {
           // this.logout(); // 視需求開啟，避免多頁面同時被踢出
         }
