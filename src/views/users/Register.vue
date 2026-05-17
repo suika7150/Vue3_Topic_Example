@@ -16,31 +16,43 @@
           />
         </el-form-item>
 
-        <el-form-item label="Email" prop="email" :error="backendErrors.email">
+        <el-form-item label="Email" prop="email">
           <div class="email-wrapper">
             <el-input
               v-model="form.email"
+              :disabled="emailVerified"
               @input="backendErrors.email = ''"
-              placeholder="請輸入Email地址"
+              placeholder="請輸入Email"
               clearable
             />
             <el-button
               class="send-code-btn"
-              :disabled="emailCountdown > 0 || !form.email"
+              :disabled="emailCountdown > 0 || !form.email || emailVerified"
               @click="handleSendEmailCode"
             >
               {{ emailCountdown > 0 ? `${emailCountdown}s 重新發送` : '發送驗證碼' }}
             </el-button>
           </div>
+          <div v-if="emailCodeSent" class="email-send-tip">驗證碼已寄送至 {{ form.email }}</div>
         </el-form-item>
 
-        <el-form-item label="信箱驗證碼" prop="emailCode">
+        <el-form-item v-if="emailCodeSent" label="信箱驗證碼" prop="emailCode">
           <div class="verify-input-wrapper">
-            <el-input v-model="form.emailCode" placeholder="請輸入6位驗證碼" maxlength="6" />
-            <span class="mock-code-hint" v-if="mockCodeDisplay">
-              測試驗證碼: {{ mockCodeDisplay || '尚未發送' }}
-            </span>
+            <el-input
+              v-model="form.emailCode"
+              :disabled="emailVerified"
+              placeholder="請輸入驗證碼"
+              maxlength="6"
+            />
           </div>
+          <el-button
+            class="verify-btn"
+            :class="{ verified: emailVerified }"
+            :disabled="emailVerified"
+            @click="handleVerifyEmailCode"
+          >
+            {{ emailVerified ? '已驗證' : '確認驗證碼' }}
+          </el-button>
         </el-form-item>
 
         <el-form-item label="密碼" prop="password">
@@ -161,7 +173,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import api from '@/services/api'
 import { ResultCode, getMsgByCode } from '@/utils/resultCode'
@@ -175,6 +187,8 @@ const termsVisible = ref(false)
 const privacyVisible = ref(false)
 const emailCountdown = ref(0) // 信箱驗證碼倒數計時
 const mockCodeDisplay = ref('') // 顯示在按鈕旁的變數
+const emailVerified = ref(false) // 信箱驗證結果
+const emailCodeSent = ref(false) // 是否已發送過驗證碼
 
 const backendErrors = ref({
   username: '',
@@ -215,6 +229,22 @@ const validateEmail = (rule, value, callback) => {
     callback(new Error('請輸入有效的Email地址'))
   } else {
     callback()
+  }
+}
+
+const handleVerifyEmailCode = async () => {
+  try {
+    await api.verifyEmailCode({
+      email: form.value.email,
+      code: form.value.emailCode,
+      type: 'REGISTER',
+    })
+
+    emailVerified.value = true
+    toast.success('驗證成功')
+  } catch (error) {
+    emailVerified.value = false
+    toast.error('驗證失敗，請確認驗證碼')
   }
 }
 
@@ -288,12 +318,16 @@ const handleSendEmailCode = async () => {
       // 先清空舊的後端錯誤訊息
       backendErrors.value.email = ''
 
-      const res = await api.sendEmailCode(form.value.email)
+      const res = await api.sendEmailCode({
+        email: form.value.email,
+        type: 'REGISTER',
+      })
 
       const code = res.result || (res.data && res.data.result) || res
       if (code) {
         mockCodeDisplay.value = typeof code === 'object' ? code.result : code
         toast.success(`驗證碼已發送至您的信箱`)
+        emailCodeSent.value = true
       }
 
       // 倒數計時
@@ -327,6 +361,11 @@ const handleRegister = async () => {
   backendErrors.value.email = ''
   backendErrors.value.phone = ''
 
+  if (!emailVerified.value) {
+    toast.error('請先完成信箱驗證')
+    return
+  }
+
   try {
     const valid = await registerForm.value.validate()
     if (!valid) return
@@ -337,7 +376,6 @@ const handleRegister = async () => {
     toast.success('註冊成功！請登入您的帳號')
     goLogin()
   } catch (error) {
-    //獲取後端回傳的 code
     const code = error.code
     const message = getMsgByCode(code)
 
@@ -354,6 +392,13 @@ const handleRegister = async () => {
     loading.value = false
   }
 }
+
+watch(
+  () => form.value.email,
+  () => {
+    emailVerified.value = false
+  },
+)
 
 const showTerms = () => {
   termsVisible.value = true
@@ -410,6 +455,12 @@ const login = () => {
   width: 100%;
 }
 
+.email-send-tip {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #67c23a;
+}
+
 /** Email驗證碼區塊 */
 .send-code-btn {
   height: 44px;
@@ -433,6 +484,25 @@ const login = () => {
   width: 100%;
 }
 
+.verify-btn {
+  margin-top: 12px;
+  height: 40px;
+  width: 140px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+
+.verify-btn:hover {
+  background-color: #222;
+  color: #fff;
+}
+
+.verify-btn.verified {
+  background-color: #67c23a;
+  color: #fff;
+}
+
 /** Email驗證碼區塊 */
 .mock-code-hint {
   font-size: 12px;
@@ -441,7 +511,7 @@ const login = () => {
   background-color: #fef0f0;
   border: 1px dashed #f56c6c;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 8px;
   white-space: nowrap; /* 避免換行 */
   font-family: 'Courier New', Courier, monospace;
 }
