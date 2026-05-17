@@ -3,8 +3,8 @@ import api from '@/services/api.js'
 import router from '@/router'
 import Storage, {
   TOKEN_KEY,
-  USER_KEY, // 目前登入的帳號 (登出會刪)
-  REMEMBER_USERNAME_KEY, // 記住帳號功能 (登出不刪)
+  USER_KEY, // 目前登入的帳號
+  REMEMBER_USERNAME_KEY, // 記住帳號功能
   REMEMBER_ME_KEY, // 保持登入功能
   USER_ROLE_KEY,
   FULL_NAME_KEY,
@@ -43,7 +43,6 @@ export const useUserStore = defineStore('userStore', {
       }
 
       Storage.set(USER_KEY, userData.username)
-      // Storage.set(REMEMBER_ME_KEY, rememberMe)
       Storage.set(FULL_NAME_KEY, userData.fullName)
 
       // 更新State
@@ -100,8 +99,8 @@ export const useUserStore = defineStore('userStore', {
         this.role = 'GUEST'
         Storage.set(USER_ROLE_KEY, 'GUEST')
 
-        // 非登入頁面才顯示提醒
-        if (window.location.pathname !== '/login') {
+        // 只有手動登出且不在登入頁時才提示
+        if (router.currentRoute.value.path !== '/login') {
           toast.warning('您已登出，請重新登入。')
         }
 
@@ -133,13 +132,12 @@ export const useUserStore = defineStore('userStore', {
         console.warn('[權限] 嘗試自動同步身分失敗:', error.response?.status || error.message)
 
         if (error.response?.status === 401) {
-          // this.logout(); // 視需求開啟，避免多頁面同時被踢出
+          // this.logout();
         }
       }
     },
 
     async updateUserInfo(payload) {
-      // 更新 Pinia State (觸發 UI 更新)
       this.user = {
         ...this.user,
         ...payload, // 這裡會包含新的 fullName
@@ -199,7 +197,7 @@ export const useUserStore = defineStore('userStore', {
           this.syncStatus(event.newValue)
         }
 
-        // 2. 處理 Token 消失（如果還有手動清除 TOKEN_KEY 的話）
+        // 處理 Token 消失（
         if (event.key === 'token-key' && !event.newValue) {
           this.logout()
         }
@@ -214,14 +212,12 @@ export const useUserStore = defineStore('userStore', {
       this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
       this.role = 'GUEST'
 
-      // 2. 清除相關 Storage (除了記住帳號以外的)
+      // 清除相關 Storage (除了記住帳號以外的)
       const keys = [USER_KEY, FULL_NAME_KEY, USER_ROLE_KEY, REMEMBER_ME_KEY]
       Storage.remove(...keys)
 
-      // 3. 跳轉頁面
       if (router.currentRoute.value.path !== '/login') {
         router.push('/login')
-        toast.warning('您已在其他視窗登出')
       }
     },
   },
