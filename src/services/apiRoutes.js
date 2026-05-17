@@ -1,6 +1,7 @@
 export const API_ROUTES = {
   REGISTER: '/api/register',
   SEND_EMAIL_CODE: '/api/send-email-code', // 信箱驗證碼
+  VERIFY_EMAIL_CODE: '/api/verify-email-code', // 驗證信箱驗證碼
   LOGIN: '/api/login',
   USER: '/api/user',
   FINDUSER: '/api/finduser',

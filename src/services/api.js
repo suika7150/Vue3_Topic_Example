@@ -14,7 +14,10 @@ const api = {
   /** * 發送信箱驗證碼
    * @param {string} email - Email 地址
    */
-  sendEmailCode: (email) => apiService.post(API_ROUTES.SEND_EMAIL_CODE, { email: email }),
+  sendEmailCode: (data) => apiService.post(API_ROUTES.SEND_EMAIL_CODE, data),
+
+  /** 驗證信箱驗證碼 */
+  verifyEmailCode: (data) => apiService.post(API_ROUTES.VERIFY_EMAIL_CODE, data),
 
   /** 登入
    * @param {object} data - 登入資料{username, password}
