@@ -50,12 +50,10 @@ apiService.interceptors.response.use(
     // 處理 401 登入過期
     if (error.response?.status === 401) {
       const userStore = useUserStore()
-      toast.warning('登入逾時或身分無效，請重新登入')
 
-      // 只有當非登入頁發生 401 時才執行強制登出與提醒
-      if (router.currentRoute.value.path !== '/login') {
+      // 只有當「已登入」且「非登入頁」發生 401 時才執行強制登出清理
+      if (userStore.isLoggedIn && router.currentRoute.value.path !== '/login') {
         userStore.logout()
-        toast.warning('登入逾時或身分無效，請重新登入')
       }
     } else if (error.message !== 'canceled') {
       toast.error(error.response?.data?.msg || '網路錯誤，請稍後再試')
