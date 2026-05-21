@@ -6,7 +6,6 @@ export default function useFormat() {
   const global = instance.appContext.config.globalProperties
 
   return {
-    //搭配 plugin\format.js
     $formatPrice: global.$formatPrice,
     $formatDate: global.$formatDate,
   }

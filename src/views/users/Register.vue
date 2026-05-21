@@ -10,49 +10,77 @@
         <el-form-item label="帳號" prop="username" :error="backendErrors.username">
           <el-input
             v-model="form.username"
-            @input="backendErrors.username = ''"
+            @input="((backendErrors.username = ''), markFieldTouched('username'))"
             placeholder="請輸入帳號（3-20個字符）"
             clearable
-          />
+          >
+            <template #suffix>
+              <el-icon
+                v-if="fieldTouched.username"
+                :class="fieldValidStatus.username ? 'valid-icon' : 'invalid-icon'"
+              >
+                <Check v-if="fieldValidStatus.username" />
+                <Close v-else />
+              </el-icon>
+            </template>
+          </el-input>
         </el-form-item>
 
-        <el-form-item label="Email" prop="email">
+        <el-form-item label="Email" prop="email" :error="backendErrors.email">
           <div class="email-wrapper">
             <el-input
               v-model="form.email"
-              :disabled="emailVerified"
-              @input="backendErrors.email = ''"
+              :readonly="emailVerified"
+              @input="((backendErrors.email = ''), markFieldTouched('email'))"
               placeholder="請輸入Email"
               clearable
-            />
+            >
+              <template #suffix>
+                <el-icon
+                  v-if="fieldTouched.email || emailVerified"
+                  :class="emailVerified || fieldValidStatus.email ? 'valid-icon' : 'invalid-icon'"
+                >
+                  <Check v-if="emailVerified || fieldValidStatus.email" />
+                  <Close v-else />
+                </el-icon>
+              </template>
+            </el-input>
             <el-button
-              class="send-code-btn"
+              class="btn btn--primary btn--sm"
               :disabled="emailCountdown > 0 || !form.email || emailVerified"
               @click="handleSendEmailCode"
             >
-              {{ emailCountdown > 0 ? `${emailCountdown}s 重新發送` : '發送驗證碼' }}
+              {{
+                emailVerified
+                  ? '已驗證'
+                  : emailCountdown > 0
+                    ? `${emailCountdown}s 重新發送`
+                    : '發送驗證碼'
+              }}
             </el-button>
           </div>
           <div v-if="emailCodeSent" class="email-send-tip">驗證碼已寄送至 {{ form.email }}</div>
         </el-form-item>
 
         <el-form-item v-if="emailCodeSent" label="信箱驗證碼" prop="emailCode">
-          <div class="verify-input-wrapper">
+          <div class="verify-wrapper">
             <el-input
               v-model="form.emailCode"
-              :disabled="emailVerified"
+              :readonly="emailVerified"
               placeholder="請輸入驗證碼"
               maxlength="6"
+              class="verify-input"
             />
+
+            <el-button
+              class="btn btn--primary btn--sm verify-btn"
+              :class="{ verified: emailVerified }"
+              :disabled="emailVerified"
+              @click="handleVerifyEmailCode"
+            >
+              {{ emailVerified ? '已驗證' : '確認驗證碼' }}
+            </el-button>
           </div>
-          <el-button
-            class="verify-btn"
-            :class="{ verified: emailVerified }"
-            :disabled="emailVerified"
-            @click="handleVerifyEmailCode"
-          >
-            {{ emailVerified ? '已驗證' : '確認驗證碼' }}
-          </el-button>
         </el-form-item>
 
         <el-form-item label="密碼" prop="password">
@@ -62,7 +90,18 @@
             show-password
             placeholder="請輸入密碼（至少6個字符）"
             clearable
-          />
+            @input="markFieldTouched('password')"
+          >
+            <template #suffix>
+              <el-icon
+                v-if="fieldTouched.password"
+                :class="fieldValidStatus.password ? 'valid-icon' : 'invalid-icon'"
+              >
+                <Check v-if="fieldValidStatus.password" />
+                <Close v-else />
+              </el-icon>
+            </template>
+          </el-input>
         </el-form-item>
 
         <el-form-item label="確認密碼" prop="confirmPassword">
@@ -72,12 +111,23 @@
             show-password
             placeholder="請再次輸入密碼"
             clearable
+            @input="markFieldTouched('confirmPassword')"
             @keyup.enter="handleRegister"
-          />
+          >
+            <template #suffix>
+              <el-icon
+                v-if="fieldTouched.confirmPassword"
+                :class="fieldValidStatus.confirmPassword ? 'valid-icon' : 'invalid-icon'"
+              >
+                <Check v-if="fieldValidStatus.confirmPassword" />
+                <Close v-else />
+              </el-icon>
+            </template>
+          </el-input>
         </el-form-item>
 
         <el-form-item label="姓名" prop="fullName">
-          <el-input v-model="form.fullName" placeholder="請輸入真實姓名" clearable />
+          <el-input v-model="form.fullName" placeholder="請輸入姓名" clearable />
         </el-form-item>
 
         <el-form-item label="性別" prop="gender">
@@ -102,23 +152,33 @@
         <el-form-item label="手機號碼" prop="phone" :error="backendErrors.phone">
           <el-input
             v-model="form.phone"
-            @input="backendErrors.phone = ''"
+            @input="((backendErrors.phone = ''), markFieldTouched('phone'))"
             placeholder="請輸入手機號碼"
             clearable
-          />
+          >
+            <template #suffix>
+              <el-icon
+                v-if="fieldTouched.phone"
+                :class="fieldValidStatus.phone ? 'valid-icon' : 'invalid-icon'"
+              >
+                <Check v-if="fieldValidStatus.phone" />
+                <Close v-else />
+              </el-icon>
+            </template>
+          </el-input>
         </el-form-item>
 
-        <el-form-item class="agreement-section">
+        <el-form-item class="agreement-section" prop="agreeTerms">
           <el-checkbox v-model="form.agreeTerms" :true-label="true" :false-label="false">
             我已閱讀並同意
-            <el-link type="primary" @click="showTerms">《服務條款》</el-link>
+            <el-link type="primary" @click.stop="showTerms">《服務條款》</el-link>
             和
-            <el-link type="primary" @click="showPrivacy">《隱私政策》</el-link>
+            <el-link type="primary" @click.stop="showPrivacy">《隱私政策》</el-link>
           </el-checkbox>
         </el-form-item>
 
         <el-form-item>
-          <el-button class="register-btn" @click="handleRegister" :loading="loading">
+          <el-button class="btn btn--primary btn--full" @click="handleRegister" :loading="loading">
             註冊
           </el-button>
         </el-form-item>
@@ -173,247 +233,41 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { ElMessage } from 'element-plus'
-import api from '@/services/api'
-import { ResultCode, getMsgByCode } from '@/utils/resultCode'
-import { toast } from '@/utils/message'
-import { useNavigation } from '@/composables/useNavigation'
+import { useRegister } from '@/composables/useRegister'
+import { Check, Close } from '@element-plus/icons-vue'
 
-const { goLogin } = useNavigation()
-const registerForm = ref()
-const loading = ref(false)
-const termsVisible = ref(false)
-const privacyVisible = ref(false)
-const emailCountdown = ref(0) // 信箱驗證碼倒數計時
-const mockCodeDisplay = ref('') // 顯示在按鈕旁的變數
-const emailVerified = ref(false) // 信箱驗證結果
-const emailCodeSent = ref(false) // 是否已發送過驗證碼
+const {
+  registerForm,
+  loading,
 
-const backendErrors = ref({
-  username: '',
-  email: '',
-  phone: '',
-})
+  form,
+  rules,
 
-const form = ref({
-  username: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  fullName: '',
-  phone: '',
-  gender: '',
-  birthday: '',
-  emailCode: '',
-  agreeTerms: false,
-})
+  backendErrors,
 
-// 自定義驗證規則
-const validateUsername = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('請輸入帳號'))
-  } else if (value.length < 3 || value.length > 20) {
-    callback(new Error('帳號長度應在3-20個字符之間'))
-  } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-    callback(new Error('帳號只能包含字母、數字和下劃線'))
-  } else {
-    callback()
-  }
-}
+  fieldTouched,
+  fieldValidStatus,
+  markFieldTouched,
 
-const validateEmail = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('請輸入Email地址'))
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-    callback(new Error('請輸入有效的Email地址'))
-  } else {
-    callback()
-  }
-}
+  emailVerified,
+  emailCountdown,
+  emailCodeSent,
 
-const handleVerifyEmailCode = async () => {
-  try {
-    await api.verifyEmailCode({
-      email: form.value.email,
-      code: form.value.emailCode,
-      type: 'REGISTER',
-    })
+  termsVisible,
+  privacyVisible,
 
-    emailVerified.value = true
-    toast.success('驗證成功')
-  } catch (error) {
-    emailVerified.value = false
-    toast.error('驗證失敗，請確認驗證碼')
-  }
-}
+  handleSendEmailCode,
+  handleVerifyEmailCode,
+  handleRegister,
 
-const validatePassword = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('請輸入密碼'))
-  } else if (value.length < 6) {
-    callback(new Error('密碼至少需要6個字符'))
-  } else if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(value)) {
-    callback(new Error('密碼必須包含字母和數字'))
-  } else {
-    callback()
-  }
-}
-
-const validateConfirmPassword = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('請確認密碼'))
-  } else if (value !== form.value.password) {
-    callback(new Error('兩次輸入的密碼不一致'))
-  } else {
-    callback()
-  }
-}
-
-const validatePhone = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('請輸入手機號碼'))
-  } else if (!/^09\d{8}$/.test(value)) {
-    callback(new Error('請輸入有效的台灣手機號碼'))
-  } else {
-    callback()
-  }
-}
-
-const validateTerms = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('請同意服務條款和隱私政策'))
-  } else {
-    callback()
-  }
-}
-
-const rules = {
-  username: [{ validator: validateUsername, required: true, trigger: 'blur' }],
-  email: [{ validator: validateEmail, required: true, trigger: 'blur' }],
-  password: [{ validator: validatePassword, required: true, trigger: 'blur' }],
-  confirmPassword: [{ validator: validateConfirmPassword, required: true, trigger: 'blur' }],
-  fullName: [
-    { required: false, message: '請輸入姓名', trigger: 'blur' },
-    { min: 2, message: '姓名至少需要2個字符', trigger: 'blur' },
-  ],
-  phone: [{ validator: validatePhone, required: true, trigger: 'blur' }],
-  gender: [{ required: true, message: '請選擇性別', trigger: 'change' }],
-  birthday: [{ required: true, message: '請選擇生日', trigger: 'change' }],
-  emailCode: [
-    { required: true, message: '請輸入6位驗證碼', trigger: 'blur' },
-    { len: 6, message: '驗證碼長度應為 6 位', trigger: 'blur' },
-  ],
-  agreeTerms: [{ validator: validateTerms, trigger: 'change' }],
-}
-
-// 模擬信箱驗證碼倒數計時
-const handleSendEmailCode = async () => {
-  if (!form.value.email) return toast.error('請輸入Email地址')
-
-  // 僅驗證 Email 欄位，格式正確才發送 API
-  registerForm.value.validateField('email', async (valid) => {
-    if (!valid) return // 如果 Email 格式錯誤（如沒寫 .com），直接攔截
-    try {
-      // 先清空舊的後端錯誤訊息
-      backendErrors.value.email = ''
-
-      const res = await api.sendEmailCode({
-        email: form.value.email,
-        type: 'REGISTER',
-      })
-
-      const code = res.result || (res.data && res.data.result) || res
-      if (code) {
-        mockCodeDisplay.value = typeof code === 'object' ? code.result : code
-        toast.success(`驗證碼已發送至您的信箱`)
-        emailCodeSent.value = true
-      }
-
-      // 倒數計時
-      emailCountdown.value = 60
-      const timer = setInterval(() => {
-        emailCountdown.value--
-        if (emailCountdown.value <= 0) {
-          clearInterval(timer)
-          mockCodeDisplay.value = '' // 清除顯示的驗證碼
-        }
-      }, 1000)
-    } catch (error) {
-      // 處理「信箱已存在」或其他錯誤
-      const code = error.code
-      const message = getMsgByCode(code)
-
-      if (code === ResultCode.EMAIL_IS_EXIST) {
-        backendErrors.value.email = message
-      } else {
-        toast.error('發送驗證碼失敗，請稍後再試。')
-      }
-    }
-  })
-}
-
-const handleRegister = async () => {
-  if (!registerForm.value) return
-
-  // 每次註冊前先清空舊的後端錯誤
-  backendErrors.value.username = ''
-  backendErrors.value.email = ''
-  backendErrors.value.phone = ''
-
-  if (!emailVerified.value) {
-    toast.error('請先完成信箱驗證')
-    return
-  }
-
-  try {
-    const valid = await registerForm.value.validate()
-    if (!valid) return
-
-    loading.value = true
-
-    const res = await api.register(form.value)
-    toast.success('註冊成功！請登入您的帳號')
-    goLogin()
-  } catch (error) {
-    const code = error.code
-    const message = getMsgByCode(code)
-
-    // 根據 code 分流顯示錯誤
-    if (code === ResultCode.ACCOUNT_IS_EXIST) {
-      backendErrors.value.username = message // 帳號重複，紅字噴在帳號欄
-    } else if (code === ResultCode.EMAIL_IS_EXIST) {
-      backendErrors.value.email = message // Email 重複，紅字噴在 Email 欄
-    } else {
-      // 其他錯誤（如驗證碼錯誤、系統繁忙）用彈窗
-      toast.error(message)
-    }
-  } finally {
-    loading.value = false
-  }
-}
-
-watch(
-  () => form.value.email,
-  () => {
-    emailVerified.value = false
-  },
-)
-
-const showTerms = () => {
-  termsVisible.value = true
-}
-
-const showPrivacy = () => {
-  privacyVisible.value = true
-}
-
-const login = () => {
-  goLogin()
-}
+  showTerms,
+  showPrivacy,
+  login,
+} = useRegister()
 </script>
 
 <style scoped>
+/* Layout 容器 */
 .register-container {
   display: flex;
   justify-content: center;
@@ -422,6 +276,7 @@ const login = () => {
   padding: 20px;
 }
 
+/* 註冊卡片主體 */
 .register-card {
   width: 100%;
   max-width: 800px;
@@ -431,11 +286,17 @@ const login = () => {
   background: white;
 }
 
+.el-form-item {
+  margin-bottom: 30px;
+}
+
+/* Header 區塊 */
 .register-header {
   text-align: center;
   margin-bottom: 50px;
 }
 
+/* 標題 */
 .title {
   text-align: center;
   margin-bottom: 30px;
@@ -448,103 +309,76 @@ const login = () => {
   background-clip: text;
 }
 
-/** Email驗證碼區塊 */
-.email-wrapper {
-  display: flex;
-  gap: 12px;
+.btn {
+  height: 44px;
+  border-radius: 8px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0 14px;
+}
+
+/* 主色按鈕 */
+.btn--primary {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background-color: #222;
+}
+
+/* disabled */
+.btn:disabled {
+  background-color: #f5f7fa;
+  color: #a8abb2;
+  cursor: not-allowed;
+}
+
+/* 小尺寸按鈕 */
+.btn--sm {
+  height: 40px;
+  font-size: 14px;
+}
+
+/* 全寬按鈕 */
+.btn--full {
   width: 100%;
 }
 
+/* Email 外層 */
+.email-wrapper {
+  display: flex;
+  width: 100%;
+}
+
+/* 提示文字 */
 .email-send-tip {
-  margin-top: 8px;
+  position: absolute;
+  top: 40px;
+  left: 2px;
   font-size: 13px;
   color: #67c23a;
 }
 
-/** Email驗證碼區塊 */
-.send-code-btn {
-  height: 44px;
-  width: 120px;
-  background-color: #000;
-  color: #fff;
-  border: none;
-}
-
-/** Email驗證碼區塊 */
-.send-code-btn:disabled {
-  background-color: #f5f7fa;
-  color: #a8abb2;
-}
-
-/** Email驗證碼區塊*/
-.verify-input-wrapper {
+/* 驗證輸入區*/
+.verify-wrapper {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
+  align-items: flex-start;
 }
 
+/* 驗證輸入樣式 */
+.verify-input {
+  flex: 1;
+}
+
+/* 驗證按鈕 */
 .verify-btn {
-  margin-top: 12px;
-  height: 40px;
-  width: 140px;
-  background-color: #000;
-  color: #fff;
-  border: none;
+  white-space: nowrap;
 }
 
-.verify-btn:hover {
-  background-color: #222;
-  color: #fff;
-}
-
-.verify-btn.verified {
-  background-color: #67c23a;
-  color: #fff;
-}
-
-/** Email驗證碼區塊 */
-.mock-code-hint {
-  font-size: 12px;
-  font-weight: bold;
-  color: #f56c6c;
-  background-color: #fef0f0;
-  border: 1px dashed #f56c6c;
-  padding: 2px 8px;
-  border-radius: 8px;
-  white-space: nowrap; /* 避免換行 */
-  font-family: 'Courier New', Courier, monospace;
-}
-
-.el-form-item {
-  margin-bottom: 20px;
-}
-
-.agreement-section {
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-:deep(.agreement-section .el-form-item__content) {
-  margin-left: 0;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.register-btn {
-  font-size: 16px;
-  height: 44px;
-  width: 100%;
-  border-radius: 8px;
-  background-color: black;
-  color: white;
-  box-shadow: none;
-  padding: 8px 12px;
-}
-
+/* 立即登入區塊 */
 .register-links {
   display: flex;
   justify-content: center;
@@ -553,6 +387,33 @@ const login = () => {
   gap: 8px;
   margin-top: 20px;
   color: #666;
+}
+
+/* 條款區塊 */
+.agreement-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+:deep(.agreement-section .el-form-item__content) {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-left: 0;
+  width: 100%;
+}
+
+:deep(.agreement-section .el-form-item__error) {
+  position: absolute;
+  white-space: nowrap;
+  text-align: center;
+  top: 26px;
+  left: 50%;
+  margin: 0;
+  line-height: 1.4;
+  transform: translateX(-50%);
 }
 
 .el-input :deep(.el-input__inner) {
@@ -581,7 +442,30 @@ const login = () => {
   color: #666;
 }
 
-/** el-input 樣式 */
+/* 即時驗證圖標 */
+.valid-icon,
+.invalid-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 即時驗證圖標 */
+.valid-icon {
+  background-color: #67c23a;
+}
+
+/* 即時驗證圖標 */
+.invalid-icon {
+  background-color: #f56c6c;
+}
+
+/* input 外框 */
 :deep(.el-input__wrapper) {
   background-color: transparent;
   box-shadow: none;
@@ -592,14 +476,14 @@ const login = () => {
   transition: border-color 0.3s ease;
 }
 
-/** 滑過聚焦樣式 */
+/* 滑過聚焦樣式 */
 :deep(.el-input__wrapper:hover),
 :deep(.el-input__wrapper.is-focus),
 :deep(.el-form-item.is-error) .el-input__wrapper {
   border-bottom: 1px solid #000;
 }
 
-/** 輸入框內容樣式 */
+/* input 文字 */
 :deep(.el-input__inner) {
   font-size: 15px;
   font-weight: 500;
@@ -618,12 +502,25 @@ const login = () => {
   font-weight: 600;
   color: #333;
   font-size: 15px;
-  margin-bottom: 4px;
+  margin-bottom: 0px;
   padding: 0;
   line-height: 1;
 }
 
-/* 移除驗證失敗的紅框 */
+/** 統一將所有錯誤訊息顯示在輸入框下方，並靠左對齊 */
+:deep(.el-form-item__error) {
+  position: absolute; /* 改為絕對定位，不撐開父容器高度 */
+  top: 45px; /* 統一放在輸入框下方 */
+  left: 2px; /* 靠左對齊並稍微縮排 */
+  margin: 0;
+  line-height: 1.4;
+  text-align: left;
+  background: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* error 去紅框 */
 :deep(.el-form-item.is-error) .el-input__wrapper,
 :deep(.el-form-item.is-error) .el-input__wrapper:hover,
 :deep(.el-form-item.is-error) .el-input__wrapper.is-focus {
