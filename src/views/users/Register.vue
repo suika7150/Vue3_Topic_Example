@@ -127,7 +127,22 @@
         </el-form-item>
 
         <el-form-item label="姓名" prop="fullName">
-          <el-input v-model="form.fullName" placeholder="請輸入姓名" clearable />
+          <el-input
+            v-model="form.fullName"
+            placeholder="請輸入姓名"
+            clearable
+            @input="markFieldTouched('fullName')"
+          >
+            <template #suffix>
+              <el-icon
+                v-if="fieldTouched.fullName"
+                :class="fieldValidStatus.fullName ? 'valid-icon' : 'invalid-icon'"
+              >
+                <Check v-if="fieldValidStatus.fullName" />
+                <Close v-else />
+              </el-icon>
+            </template>
+          </el-input>
         </el-form-item>
 
         <el-form-item label="性別" prop="gender">
@@ -177,8 +192,12 @@
           </el-checkbox>
         </el-form-item>
 
-        <el-form-item>
-          <el-button class="btn btn--primary btn--full" @click="handleRegister" :loading="loading">
+        <el-form-item class="submit-section">
+          <el-button
+            class="btn btn--primary btn--submit"
+            @click="handleRegister"
+            :loading="loading"
+          >
             註冊
           </el-button>
         </el-form-item>
@@ -342,9 +361,20 @@ const {
   font-size: 14px;
 }
 
-/* 全寬按鈕 */
-.btn--full {
-  width: 100%;
+/* 註冊按鈕 */
+.submit-section {
+  margin-top: 10px;
+}
+
+/* 註冊按鈕 */
+.btn--submit {
+  width: 240px;
+  max-width: 100%;
+}
+
+:deep(.submit-section .el-form-item__content) {
+  display: flex;
+  justify-content: center;
 }
 
 /* Email 外層 */
@@ -550,6 +580,10 @@ const {
 
   .register-links {
     font-size: 14px;
+  }
+
+  .btn--submit {
+    width: 100%;
   }
 }
 </style>

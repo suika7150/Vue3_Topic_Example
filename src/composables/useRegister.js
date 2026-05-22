@@ -41,6 +41,7 @@ export function useRegister() {
     email: false,
     password: false,
     confirmPassword: false,
+    fullName: false,
     phone: false,
   })
 
@@ -60,6 +61,8 @@ export function useRegister() {
 
     confirmPassword:
       !!form.value.confirmPassword && form.value.confirmPassword === form.value.password,
+
+    fullName: form.value.fullName.trim().length >= 2,
 
     phone: /^09\d{8}$/.test(form.value.phone) && !backendErrors.value.phone,
   }))
@@ -169,7 +172,19 @@ export function useRegister() {
     if (!value) {
       callback(new Error('請確認密碼'))
     } else if (value !== form.value.password) {
-      callback(new Error('兩次輸入的密碼不一致'))
+      callback(new Error('輸入的密碼不一致'))
+    } else {
+      callback()
+    }
+  }
+
+  const validateFullName = (rule, value, callback) => {
+    const fullName = value?.trim() || ''
+
+    if (!fullName) {
+      callback(new Error('請輸入姓名'))
+    } else if (fullName.length < 2) {
+      callback(new Error('姓名至少需要2個字'))
     } else {
       callback()
     }
@@ -199,10 +214,7 @@ export function useRegister() {
     email: [{ validator: validateEmail, required: true, trigger: 'blur' }],
     password: [{ validator: validatePassword, required: true, trigger: 'blur' }],
     confirmPassword: [{ validator: validateConfirmPassword, required: true, trigger: 'blur' }],
-    fullName: [
-      { required: false, message: '請輸入姓名', trigger: 'blur' },
-      { min: 2, message: '姓名至少需要2個字符', trigger: 'blur' },
-    ],
+    fullName: [{ validator: validateFullName, required: true, trigger: 'blur' }],
     phone: [{ validator: validatePhone, required: true, trigger: 'blur' }],
     gender: [{ required: true, message: '請選擇性別', trigger: 'change' }],
     birthday: [{ required: true, message: '請選擇生日', trigger: 'change' }],
