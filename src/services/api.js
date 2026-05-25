@@ -24,6 +24,9 @@ const api = {
    */
   login: (data) => apiService.post(API_ROUTES.LOGIN, data),
 
+  /** 驗證登入信箱驗證碼 */
+  verifyLoginCode: (data) => apiService.post(API_ROUTES.VERIFY_LOGIN_CODE, data),
+
   /** * 取得當前使用者資料 (Cookie 模式下的身分驗證關鍵)
    * 用於 App 初始化或頁面重整時，確認 Cookie 是否有效
    */

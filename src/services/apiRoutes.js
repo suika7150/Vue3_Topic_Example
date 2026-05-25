@@ -1,20 +1,21 @@
 export const API_ROUTES = {
-  REGISTER: '/api/register',
+  REGISTER: '/api/register', // 註冊
   SEND_EMAIL_CODE: '/api/send-email-code', // 信箱驗證碼
   VERIFY_EMAIL_CODE: '/api/verify-email-code', // 驗證信箱驗證碼
-  LOGIN: '/api/login',
+  LOGIN: '/api/login', // 登入
   USER: '/api/user',
-  FINDUSER: '/api/finduser',
-  PROFILE: '/api/profile',
-  LOGOUT: '/api/logout',
-  PRODUCT_ADD: '/api/addProducts',
-  PRODUCT_LIST: '/api/products',
-  PRODUCT_GET: (id) => `/api/products/${id}`,
-  PRODUCT_IMAGE: (id) => `/api/products/${id}/image`,
-  PRODUCT_DETAIL: (id) => `/api/products/edit/${id}`,
-  PRODUCT_UPDATE: (id) => `/api/updateProducts/${id}`,
+  FINDUSER: '/api/finduser', // 找回密碼
+  PROFILE: '/api/profile', // 取得使用者資料
+  LOGOUT: '/api/logout', // 登出
+  VERIFY_LOGIN_CODE: '/api/login/verify-email-code', // 驗證登入信箱驗證碼
+  PRODUCT_ADD: '/api/addProducts', // 新增商品
+  PRODUCT_LIST: '/api/products', // 商品列表
+  PRODUCT_GET: (id) => `/api/products/${id}`, // 取得單一商品
+  PRODUCT_IMAGE: (id) => `/api/products/${id}/image`, // 取得商品圖片
+  PRODUCT_DETAIL: (id) => `/api/products/edit/${id}`, // 編輯商品
+  PRODUCT_UPDATE: (id) => `/api/updateProducts/${id}`, // 更新商品
   PRODUCT_MANAGE_LIST: `/api/products/list`,
-  PRODUCT_DELETE: (id) => `/api/deleteProducts/${id}`,
+  PRODUCT_DELETE: (id) => `/api/deleteProducts/${id}`, // 刪除商品
   CATEGORY_LIST: '/api/categories', // 篩選商品
   COUPON_VALIDATE: (code) => `/api/coupon/validate/${code}`, // 驗證優惠券
   ORDER_CREATE: '/api/orders', // 新增訂單
