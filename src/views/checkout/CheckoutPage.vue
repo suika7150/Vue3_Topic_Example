@@ -282,44 +282,6 @@
                 </div>
               </el-radio>
             </el-radio-group>
-
-            <div v-if="paymentMethod === 'credit_card'" class="credit-card-form-container">
-              <h3 class="form-title">信用卡資訊</h3>
-              <el-form :model="creditCardForm" :rules="creditCardRules" ref="creditCardFormRef">
-                <el-form-item label="卡號" prop="cardNumber">
-                  <el-input
-                    v-model="creditCardForm.cardNumber"
-                    placeholder="1234 5678 9012 3456"
-                    maxlength="19"
-                    @input="formatCardNumber"
-                  />
-                </el-form-item>
-
-                <div class="card-info-grid">
-                  <el-form-item label="有效期限" prop="expiryDate">
-                    <el-input
-                      v-model="creditCardForm.expiryDate"
-                      placeholder="MM/YY"
-                      maxlength="5"
-                      @input="formatExpiryDate"
-                    />
-                  </el-form-item>
-
-                  <el-form-item label="安全碼" prop="cvv">
-                    <el-input
-                      v-model="creditCardForm.cvv"
-                      placeholder="123"
-                      maxlength="4"
-                      type="password"
-                    />
-                  </el-form-item>
-                </div>
-
-                <el-form-item label="持卡人姓名" prop="cardholderName">
-                  <el-input v-model="creditCardForm.cardholderName" placeholder="如卡片上所示" />
-                </el-form-item>
-              </el-form>
-            </div>
           </div>
         </div>
 
@@ -1147,9 +1109,9 @@ onMounted(() => {
   max-width: 400px;
 }
 
-.minimalist-form :deep(.wide-item) {
+/* .minimalist-form :deep(.wide-item) {
   max-width: 700px;
-}
+} */
 
 .minimalist-form :deep(.el-textarea__inner) {
   max-width: 500px;
@@ -1215,51 +1177,6 @@ onMounted(() => {
 
 :deep(.el-radio.payment-option-card) {
   margin-right: 0;
-}
-
-.payment-option-content {
-  display: flex;
-  align-items: center;
-}
-
-.payment-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 8px;
-}
-
-.payment-name {
-  font-weight: 500;
-}
-
-.payment-description {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.card-icons {
-  display: flex;
-  gap: 8px;
-}
-
-.credit-card-form-container {
-  margin-top: 24px;
-  padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background-color: #ffffff;
-}
-
-.form-title {
-  font-weight: 500;
-  margin-bottom: 16px;
-}
-
-.card-info-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
 }
 
 /* 上一步 & 下一步 & 確認訂單 按鈕*/
