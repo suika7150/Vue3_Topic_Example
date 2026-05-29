@@ -176,14 +176,6 @@ const routes = [
     name: 'checkoutSuccess',
     component: () => import('@/views/checkout/CheckoutSuccess.vue'),
     meta: { title: '結帳成功' },
-    // 防止直接輸入網址進入結帳成功頁面
-    beforeEnter: (to, from, next) => {
-      if (from.name === 'checkout') {
-        next()
-      } else {
-        next({ name: 'notFound' })
-      }
-    },
   },
   {
     path: '/orders/list',

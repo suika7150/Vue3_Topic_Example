@@ -634,15 +634,13 @@ const submitOrder = async () => {
         productId: item.id,
         quantity: item.quantity,
       })),
-      // 如果是信用卡，可寫備註
-      ...(paymentMethod.value === 'credit_card' && {
-        paymentStatus: 'paid', // 先設為待付款，等綠界回傳才改為已付款
-      }),
     }
 
     // 呼叫後端建立訂單
     const response = await api.createOrder(orderData)
     const { ecpayParams, merchantTradeNo } = response.result
+
+    console.log('ECPAY PARAMS =', ecpayParams)
 
     if (paymentMethod.value === 'credit_card' && ecpayParams) {
       toast.info('正在導向支付頁面...')
@@ -708,27 +706,34 @@ const previousStep = () => {
   scrollToTop() // 置頂
 }
 
-// 實作跳轉函式
 const processEcpayPayment = (params) => {
-  // 建立一個隱藏的 form
+  const ecpayFields = [
+    'MerchantID',
+    'MerchantTradeNo',
+    'MerchantTradeDate',
+    'PaymentType',
+    'TotalAmount',
+    'TradeDesc',
+    'ItemName',
+    'ReturnURL',
+    'ChoosePayment',
+    'EncryptType',
+    'ClientBackURL',
+    'CheckMacValue',
+  ]
+
   const form = document.createElement('form')
   form.method = 'POST'
-  // 注意：測試環境網址是 https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5
-  // 正式環境網址不同，建議由後端回傳 action 網址或寫在 config
   form.action = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5'
 
-  // 將所有參數塞入 input
-  for (const key in params) {
-    if (Object.prototype.hasOwnProperty.call(params, key)) {
-      const input = document.createElement('input')
-      input.type = 'hidden'
-      input.name = key
-      input.value = params[key]
-      form.appendChild(input)
-    }
-  }
+  ecpayFields.forEach((key) => {
+    const input = document.createElement('input')
+    input.type = 'hidden'
+    input.name = key
+    input.value = params[key]
+    form.appendChild(input)
+  })
 
-  // 插入到 body 並執行送出
   document.body.appendChild(form)
   form.submit()
 }

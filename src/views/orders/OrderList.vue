@@ -220,7 +220,7 @@ const getStatusTag = (status) => {
     paid: 'success', // 已付款綠色
     shipped: 'warning', // 已出貨黃色
     completed: 'info', // 已完成灰色
-    expired: 'info', // 已失效灰色
+    cancelled: 'info', // 已取消灰色
   }
   return tagMap[status] || ''
 }
@@ -229,11 +229,11 @@ const getStatusTag = (status) => {
 const getStatusText = (status) => {
   const statusCode = status ? status.toLowerCase() : '' // 先轉小寫
   const textMap = {
-    pending: '未付款',
-    paid: '已付款',
+    pending: '待付款',
+    paid: '處理中',
     shipped: '已出貨',
     completed: '已完成',
-    expired: '已失效',
+    cancelled: '已取消',
   }
   if (!textMap[statusCode] && statusCode !== '') {
     console.debug(`狀態轉換失敗！收到未知的狀態碼: "${statusCode}"`)

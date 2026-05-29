@@ -24,14 +24,19 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useCartStore } from '@/store/cartStore'
+import Storage, { CART_KEY } from '@/utils/storageUtil'
 
 const route = useRoute()
 const router = useRouter()
 const orderId = ref('')
+const cartStore = useCartStore()
 
 onMounted(() => {
   // 從網址路徑 /checkout/success/:orderId 取得 ID
   orderId.value = route.params.orderId
+  cartStore.clearCart()
+  Storage.remove(CART_KEY)
 })
 
 const goOrderList = () => {
