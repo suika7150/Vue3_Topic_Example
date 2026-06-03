@@ -31,7 +31,7 @@ export const useCheckoutStore = defineStore('checkoutStore', {
     currentStep: 0,
     shippingForm: defaultShippingForm(),
 
-    paymentMethod: 'credit_card',
+    paymentMethod: 'CREDIT_CARD',
 
     couponCode: '',
     discount: 0,
@@ -50,7 +50,7 @@ export const useCheckoutStore = defineStore('checkoutStore', {
       this.currentStep = 0
       this.shippingForm = defaultShippingForm()
 
-      this.paymentMethod = 'credit_card'
+      this.paymentMethod = 'CREDIT_CARD'
       this.couponCode = ''
       this.discount = 0
     },

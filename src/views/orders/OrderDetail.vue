@@ -105,21 +105,18 @@ const orderItems = ref([])
 const orderDetail = ref({})
 
 const activeStep = computed(() => {
-  const status = orderDetail.value.paymentStatus
-  const map = {
-    pending: 1, // 已下單，待付款
-    paid: 2, // 已付款
-    shipped: 3, // 出貨中
-    completed: 4, // 已送達/完成
-  }
-  return map[status] || 1
+  if (orderDetail.value.orderStatus === 'PENDING_PAYMENT') return 1
+  if (orderDetail.value.orderStatus === 'PROCESSING') return 2
+  if (orderDetail.value.orderStatus === 'SHIPPED') return 3
+  if (orderDetail.value.orderStatus === 'COMPLETED') return 4
+  return 1
 })
 
 // 付款方式
 const paymentMethodMap = {
-  credit_card: '信用卡付款',
-  bank_transfer: '銀行轉帳',
-  cash_on_delivery: '貨到付款',
+  CREDIT_CARD: '信用卡付款',
+  ATM: 'ATM 轉帳',
+  COD: '貨到付款',
 }
 
 const getPaymentMethodText = (method) => {

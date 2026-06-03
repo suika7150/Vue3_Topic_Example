@@ -255,7 +255,7 @@
             </el-form>
             <h2 class="step-title">付款方式</h2>
             <el-radio-group v-model="paymentMethod">
-              <el-radio label="credit_card" class="option-card">
+              <el-radio label="CREDIT_CARD" class="option-card">
                 <div class="option-content">
                   <div>
                     <div class="option-label">信用卡付款</div>
@@ -264,7 +264,7 @@
                 </div>
               </el-radio>
 
-              <el-radio label="bank_transfer" class="option-card">
+              <el-radio label="ATM" class="option-card">
                 <div class="option-content">
                   <div>
                     <div class="option-label">銀行轉帳</div>
@@ -273,7 +273,7 @@
                 </div>
               </el-radio>
 
-              <el-radio label="cash_on_delivery" class="option-card">
+              <el-radio label="COD" class="option-card">
                 <div class="option-content">
                   <div>
                     <div class="option-label">貨到付款</div>
@@ -318,7 +318,7 @@
                 再買 NT$ {{ (FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString() }} 即可享免運！
               </div>
 
-              <div v-if="paymentMethod === 'cash_on_delivery'" class="summary-line">
+              <div v-if="paymentMethod === 'COD'" class="summary-line">
                 <span>貨到付款手續費</span>
                 <span>NT$ 30</span>
               </div>
@@ -458,7 +458,7 @@ const shippingOptions = [
 const shippingFormRef = ref()
 
 // 付款方式
-const paymentMethod = ref('credit_card')
+const paymentMethod = ref('CREDIT_CARD')
 
 // 信用卡表單
 const creditCardForm = ref({
@@ -557,7 +557,7 @@ const total = computed(() => {
   let totalAmount = subtotal.value + shippingFee.value - discount.value
 
   // 判斷是否需要外加貨到付款手續費
-  if (paymentMethod.value === 'cash_on_delivery') {
+  if (paymentMethod.value === 'COD') {
     totalAmount += 30 // 貨到付款手續費
   }
   return Math.max(0, totalAmount) // 確保總額不為負數
@@ -604,7 +604,7 @@ const submitOrder = async () => {
 
     console.log('ECPAY PARAMS =', ecpayParams)
 
-    if (paymentMethod.value === 'credit_card' && ecpayParams) {
+    if (paymentMethod.value === 'CREDIT_CARD' && ecpayParams) {
       toast.info('正在導向支付頁面...')
       processEcpayPayment(ecpayParams)
     } else {
@@ -653,7 +653,7 @@ const nextStep = async () => {
     if (!valid) return
   }
 
-  if (currentStep.value === 2 && paymentMethod.value === 'credit_card') {
+  if (currentStep.value === 2 && paymentMethod.value === 'CREDIT_CARD') {
     // 驗證信用卡表單
     const valid = await creditCardFormRef.value.validate().catch(() => false)
     if (!valid) return
@@ -730,30 +730,30 @@ const applyCoupon = async () => {
   }
 }
 
-const formatCardNumber = (value) => {
-  // 格式化信用卡號：1234 5678 9012 3456
-  const formatted = value.replace(/\s/g, '').replace(/[^0-9]/gi, '')
-  const matches = formatted.match(/\d{4,16}/g)
-  const match = (matches && matches[0]) || ''
-  const parts = []
+// const formatCardNumber = (value) => {
+//   // 格式化信用卡號：1234 5678 9012 3456
+//   const formatted = value.replace(/\s/g, '').replace(/[^0-9]/gi, '')
+//   const matches = formatted.match(/\d{4,16}/g)
+//   const match = (matches && matches[0]) || ''
+//   const parts = []
 
-  for (let i = 0, len = match.length; i < len; i += 4) {
-    parts.push(match.substring(i, i + 4))
-  }
+//   for (let i = 0, len = match.length; i < len; i += 4) {
+//     parts.push(match.substring(i, i + 4))
+//   }
 
-  // 如果有格式化後的號碼，就更新表單的值
-  if (parts.length) {
-    creditCardForm.value.cardNumber = parts.join(' ')
-  } else {
-    creditCardForm.value.cardNumber = formatted
-  }
-}
+//   // 如果有格式化後的號碼，就更新表單的值
+//   if (parts.length) {
+//     creditCardForm.value.cardNumber = parts.join(' ')
+//   } else {
+//     creditCardForm.value.cardNumber = formatted
+//   }
+// }
 
-const formatExpiryDate = (value) => {
-  // 格式化有效期限：MM/YY
-  const formatted = value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2')
-  creditCardForm.value.expiryDate = formatted
-}
+// const formatExpiryDate = (value) => {
+//   // 格式化有效期限：MM/YY
+//   const formatted = value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2')
+//   creditCardForm.value.expiryDate = formatted
+// }
 
 // 生命週期
 onMounted(() => {

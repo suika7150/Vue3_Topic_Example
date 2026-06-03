@@ -8,10 +8,10 @@
 
       <el-tabs v-model="activeTab" class="modern-tabs" @tab-change="handleTabChange">
         <el-tab-pane label="全部訂單" name="all" />
-        <el-tab-pane label="待付款" name="unpaid" />
         <el-tab-pane label="處理中" name="processing" />
         <el-tab-pane label="已出貨" name="shipped" />
         <el-tab-pane label="已完成" name="completed" />
+        <el-tab-pane label="已取消" name="cancelled" />
       </el-tabs>
 
       <div v-loading="loading" class="order-content">
@@ -31,8 +31,8 @@
                 <span class="time">{{ order.createdAt }}</span>
               </div>
               <div class="order-status-group">
-                <el-tag :type="getStatusTag(order.paymentStatus)" effect="plain" class="status-tag">
-                  {{ getStatusText(order.paymentStatus) }}
+                <el-tag :type="getStatusTag(order.orderStatus)" effect="plain" class="status-tag">
+                  {{ getStatusText(order.orderStatus) }}
                 </el-tag>
                 <el-link
                   v-if="order.trackingUrl"
@@ -50,9 +50,9 @@
               <div
                 class="delivery-estimate"
                 v-if="
-                  order.paymentStatus === 'pending' ||
-                  order.paymentStatus === 'paid' ||
-                  order.paymentStatus === 'shipped'
+                  order.paymentStatus === 'UNPAID' ||
+                  order.paymentStatus === 'PAID' ||
+                  order.orderStatus === 'SHIPPED'
                 "
               ></div>
 
@@ -107,7 +107,7 @@
                     <span class="price">NT$ {{ order.total.toLocaleString() }}</span>
                   </div>
 
-                  <div class="delivery-info-inline" v-if="order.paymentStatus !== 'completed'">
+                  <div class="delivery-info-inline" v-if="order.orderStatus !== 'COMPLETED'">
                     <el-icon><Calendar /></el-icon>
                     <span>預計到貨日：{{ getEstimatedArrival(order) }}</span>
                   </div>
@@ -115,7 +115,7 @@
               </div>
               <div class="action-buttons">
                 <el-button size="large" @click="goOrderDetail(order.id)">查看詳情</el-button>
-                <el-button v-if="order.paymentStatus === 'pending'" type="primary" size="large"
+                <el-button v-if="order.paymentStatus === 'UNPAID'" type="primary" size="large"
                   >立即付款</el-button
                 >
               </div>
@@ -142,10 +142,11 @@ const loading = ref(false)
 const orders = ref([])
 
 const statusMap = {
-  unpaid: 'pending', // 後端 createOrder 初始狀態
-  processing: 'paid', // 處理中
-  shipped: 'shipped', // 已出貨
-  completed: 'completed', // 已完成
+  unpaid: 'PENDING_PAYMENT',
+  processing: 'PROCESSING',
+  shipped: 'SHIPPED',
+  completed: 'COMPLETED',
+  cancelled: 'CANCELLED',
 }
 
 // 訂單配送方式 checkout.vue 內定義
@@ -216,29 +217,26 @@ const getEstimatedArrival = (order) => {
 
 const getStatusTag = (status) => {
   const tagMap = {
-    pending: 'danger', // 待付款紅色
-    paid: 'success', // 已付款綠色
-    shipped: 'warning', // 已出貨黃色
-    completed: 'info', // 已完成灰色
-    cancelled: 'info', // 已取消灰色
+    PENDING_PAYMENT: 'warning',
+    PROCESSING: 'primary',
+    SHIPPED: 'success',
+    COMPLETED: 'success',
+    CANCELLED: 'info',
   }
   return tagMap[status] || ''
 }
 
 // 將狀態碼轉換為中文顯示
 const getStatusText = (status) => {
-  const statusCode = status ? status.toLowerCase() : '' // 先轉小寫
   const textMap = {
-    pending: '待付款',
-    paid: '處理中',
-    shipped: '已出貨',
-    completed: '已完成',
-    cancelled: '已取消',
+    PENDING_PAYMENT: '待付款',
+    PROCESSING: '處理中',
+    SHIPPED: '已出貨',
+    COMPLETED: '已完成',
+    CANCELLED: '已取消',
   }
-  if (!textMap[statusCode] && statusCode !== '') {
-    console.debug(`狀態轉換失敗！收到未知的狀態碼: "${statusCode}"`)
-  }
-  return textMap[statusCode] || status
+
+  return textMap[status] || status
 }
 
 const getShippingTagType = (method) => {
