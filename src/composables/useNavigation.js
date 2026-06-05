@@ -40,23 +40,5 @@ export function useNavigation() {
     goCheckoutSuccess,
     goOrderDetail,
     goCrossover,
-    // goNews,
-    // goAbout,
-
-    // goDoubleElevenRewards,
-    // goDoubleElevenGifts,
-
-    // goSeasonFeatured,
-    // goTravelPicks,
-    // goProducts,
-
-    // goOrderList,
-    // goShoppingGuide,
-    // goQA,
-    // goFlashSale,
-    // goLuckyWheel,
-    // goRegister,
-    // goSetting,
-    // goNotFound,
   }
 }

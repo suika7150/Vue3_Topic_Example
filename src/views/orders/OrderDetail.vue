@@ -3,10 +3,12 @@
     <header class="order-header">
       <div class="header-main">
         <h1 class="page-title">訂單詳情</h1>
-        <el-tag effect="plain" size="large" type="success" class="status-badge">付款成功</el-tag>
+        <el-tag effect="plain" size="large" :type="getStatusTag(orderDetail.orderStatus)">
+          {{ getStatusText(orderDetail.orderStatus) }}
+        </el-tag>
       </div>
       <p class="order-meta">
-        訂單編號：<span>{{ route.params.orderId }}</span> / 下單時間：<span>{{
+        訂單編號：<span>{{ orderDetail.merchantTradeNo }}</span> / 下單時間：<span>{{
           orderDetail.createdAt || '讀取中...'
         }}</span>
       </p>
@@ -15,7 +17,6 @@
     <section class="detail-section steps-box">
       <el-steps :active="activeStep" align-center>
         <el-step title="已下單" />
-        <el-step title="已付款" />
         <el-step title="出貨中" />
         <el-step title="已送達" />
       </el-steps>
@@ -24,16 +25,15 @@
     <div class="main-content-layout">
       <div class="left-column">
         <section class="detail-section items-box card-style">
-          <h3 class="list-label">🛒 商品清單</h3>
+          <h3 class="list-label">商品清單</h3>
           <div v-for="item in orderItems" :key="item.name" class="product-item">
             <el-image :src="item.productImage" class="item-img" fit="cover" lazy />
             <div class="item-info">
               <h4 class="item-name">{{ item.name }}</h4>
+              <p class="item-qty">數量：{{ item.quantity }}</p>
             </div>
             <div class="item-price-qty">
-              <span class="unit-price"
-                >${{ item.price?.toLocaleString() }} x {{ item.quantity }}</span
-              >
+              <span class="unit-price">${{ item.price?.toLocaleString() }}</span>
               <span class="item-total">${{ (item.price * item.quantity).toLocaleString() }}</span>
             </div>
           </div>
@@ -42,7 +42,7 @@
 
       <div class="right-column">
         <section class="info-card card-style">
-          <h3 class="list-label">👤 收件資訊</h3>
+          <h3 class="list-label">收件資訊</h3>
           <ul class="vertical-clean-list">
             <li>
               <span class="label">收件人</span><span class="value">{{ orderDetail.name }}</span>
@@ -58,7 +58,7 @@
         </section>
 
         <section class="info-card card-style">
-          <h3 class="list-label">💳 付款資訊</h3>
+          <h3 class="list-label">付款資訊</h3>
           <ul class="vertical-clean-list">
             <li>
               <span class="label">付款方式</span
@@ -104,12 +104,47 @@ const route = useRoute()
 const orderItems = ref([])
 const orderDetail = ref({})
 
+const getStatusText = (status) => {
+  const map = {
+    PENDING_PAYMENT: '待付款',
+    PROCESSING: '處理中',
+    SHIPPED: '已出貨',
+    COMPLETED: '已完成',
+    CANCELLED: '已取消',
+  }
+  return map[status] || status
+}
+
+const getStatusTag = (status) => {
+  const map = {
+    PENDING_PAYMENT: 'warning',
+    PROCESSING: 'primary',
+    SHIPPED: 'success',
+    COMPLETED: 'success',
+    CANCELLED: 'info',
+  }
+  return map[status] || ''
+}
+
 const activeStep = computed(() => {
-  if (orderDetail.value.orderStatus === 'PENDING_PAYMENT') return 1
-  if (orderDetail.value.orderStatus === 'PROCESSING') return 2
-  if (orderDetail.value.orderStatus === 'SHIPPED') return 3
-  if (orderDetail.value.orderStatus === 'COMPLETED') return 4
-  return 1
+  const status = orderDetail.value.orderStatus
+
+  switch (status) {
+    case 'PENDING_PAYMENT':
+      return 0
+
+    case 'PROCESSING':
+      return 0
+
+    case 'SHIPPED':
+      return 0
+
+    case 'COMPLETED':
+      return 2
+
+    default:
+      return 0
+  }
 })
 
 // 付款方式
@@ -124,7 +159,7 @@ const getPaymentMethodText = (method) => {
 }
 
 onMounted(async () => {
-  const id = route.params.orderId // 對應 index.js 的 :orderId
+  const id = route.params.orderId
 
   try {
     const res = await api.getOrderDetail(id)
@@ -202,7 +237,7 @@ const goOrderList = () => {
 .vertical-clean-list li {
   margin-bottom: 15px;
   display: flex;
-  flex-direction: column; /* 改為標題在上內容在下，適合窄空間 */
+  flex-direction: column;
   gap: 4px;
 }
 .vertical-clean-list .label {

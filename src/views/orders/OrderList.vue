@@ -23,7 +23,7 @@
           <div v-for="order in orders" :key="order.id" class="wide-order-card">
             <div class="card-header">
               <div class="order-meta">
-                <span class="order-id">訂單編號：#{{ order.merchantTradeNo || order.id }}</span>
+                <span class="order-id">訂單編號：#{{ order.merchantTradeNo }}</span>
               </div>
 
               <div class="order-time-info">
@@ -204,7 +204,7 @@ const deliveryDayMap = {
 // 預計到貨日
 const getEstimatedArrival = (order) => {
   const createdAt = order.createdAt
-  if (!createdAt) return '計算中...'
+  if (!createdAt) return '計算中'
 
   const date = new Date(createdAt)
   if (Number.isNaN(date.getTime())) return '待確認'
