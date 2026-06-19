@@ -46,7 +46,6 @@ const Storage = {
   },
 }
 
-// 定義專用 key，避免硬編碼
 export const CART_KEY = 'shopping_cart'
 export const REMEMBER_USERNAME_KEY = 'ecs_rem_username' // 記住帳號
 export const USER_KEY = 'username'
