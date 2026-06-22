@@ -4,17 +4,17 @@ import { hideLoading, showLoading } from '@/utils/loadingService'
 import { toast } from '@/utils/message'
 import { useUserStore } from '@/store/userStore'
 
-// --- 建立 axios 實例 ---
+// 建立 axios 實例
 const apiService = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 600000,
   withCredentials: true,
 })
 
-// --- 請求攔截器 ---
+// 請求攔截器
 apiService.interceptors.request.use(
   (config) => {
-    showLoading() // 啟動 Loading
+    showLoading()
     try {
       return config
     } catch (err) {
@@ -29,14 +29,13 @@ apiService.interceptors.request.use(
   },
 )
 
-// --- 回應攔截器 ---
+// 回應攔截器
 apiService.interceptors.response.use(
   (response) => {
     hideLoading()
 
     const res = response.data
 
-    // 檢查代碼是否為成功
     if (String(res.code) !== '0000') {
       toast.error(res.msg || '發生錯誤')
       return Promise.reject(res)
@@ -51,7 +50,6 @@ apiService.interceptors.response.use(
     if (error.response?.status === 401) {
       const userStore = useUserStore()
 
-      // 只有當「已登入」且「非登入頁」發生 401 時才執行強制登出清理
       if (userStore.isLoggedIn && router.currentRoute.value.path !== '/login') {
         userStore.logout()
       }

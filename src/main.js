@@ -27,12 +27,10 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 
-// 執行Store初始化
 const userStore = useUserStore()
 userStore.initUser() //初始化登入狀態
-userStore.setupTabSync() // 啟動跨分頁同步監聽
+userStore.setupTabSync() // 跨分頁同步監聽
 
-// 啟動應用
 const start = async () => {
   try {
     document.title = import.meta.env.VITE_APP_TITLE
@@ -60,5 +58,4 @@ const start = async () => {
     }
   }
 }
-// 啟動應用
 start()

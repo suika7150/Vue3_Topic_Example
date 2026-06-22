@@ -1,6 +1,4 @@
-/**
- * 狀態碼定義 (對應後端 ResultCode.java)
- */
+// 狀態碼定義 (對應後端 ResultCode.java)
 export const ResultCode = {
   SUCCESS: '0000',
   FAIL: '9999',
@@ -30,9 +28,7 @@ export const ResultCode = {
   OTP_INVALID: '0115',
 }
 
-/**
- * 取得狀態碼對應的預設中文訊息
- */
+// 取得狀態碼對應的預設中文訊息
 export const ResultMsg = {
   [ResultCode.SUCCESS]: '成功',
   [ResultCode.USER_NOT_FOUND]: '此帳號不存在',
@@ -48,11 +44,7 @@ export const ResultMsg = {
   [ResultCode.OTP_INVALID]: '驗證碼錯誤，請重新輸入',
 }
 
-/**
- * 模擬 Java 的 fromCode 功能 (非必須，但在 JS 中可以用來做查找)
- * @param {string} code
- * @returns {string} 對應的訊息
- */
+// 模擬 Java 的 fromCode 功能
 export const getMsgByCode = (code) => {
   if (!code) return '連線異常，請稍後再試'
   return ResultMsg[code] || `發生未知錯誤 (${code})`

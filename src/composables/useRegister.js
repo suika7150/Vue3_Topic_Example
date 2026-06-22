@@ -100,7 +100,6 @@ export function useRegister() {
         }
       }, 1000)
     } catch (error) {
-      // 處理「信箱已存在」或其他錯誤
       const code = error.code
       const message = getMsgByCode(code)
 
