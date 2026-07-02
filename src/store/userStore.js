@@ -29,12 +29,6 @@ export const useUserStore = defineStore('userStore', {
   },
 
   actions: {
-    /**
-     * 登入
-     * @param {Object} userData 包含 username 等資訊
-     * @param {Object} loginConfig 包含 token, role, rememberMe, rememberUsername
-     */
-
     async login(userData, { token, role, rememberMe, rememberUsername }) {
       if (rememberUsername) {
         Storage.set(REMEMBER_USERNAME_KEY, userData.username)
@@ -57,10 +51,7 @@ export const useUserStore = defineStore('userStore', {
       await this.fetchUserInfo() // 登入後立即抓取使用者資料
     },
 
-    /**
-     * 獲取最新使用者資料 (抓取 fullName 用)
-     */
-
+    // 獲取最新使用者資料 (抓取 fullName 用)
     async fetchUserInfo() {
       const currentUsername = this.user.username
       if (!currentUsername || !this.user.isLogin) return
@@ -72,7 +63,6 @@ export const useUserStore = defineStore('userStore', {
 
         if (currentUser) {
           this.user.fullName = currentUser.fullName
-          // 雖然存進去，但因為 persist paths 沒勾選，重整後也會消失
           Storage.set(FULL_NAME_KEY, currentUser.fullName)
         }
       } catch (error) {
@@ -80,9 +70,7 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    /**
-     * 登出
-     */
+    // 登出
     async logout() {
       if (isLoggingOut) return
       isLoggingOut = true
@@ -108,9 +96,7 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    /**
-     * 初始化使用者 (主要用於 F5 重新整理時)
-     */
+    // 初始化使用者 (主要用於 F5 重新整理時)
     async initUser() {
       try {
         const res = await api.user()
@@ -149,9 +135,7 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    /**
-     * 跨視窗狀態同步狀態
-     */
+    // 跨視窗狀態同步狀態
     syncStatus(newValue) {
       try {
         const parsed = JSON.parse(newValue)
@@ -168,7 +152,7 @@ export const useUserStore = defineStore('userStore', {
             // 強制重整頁面，Cookie 與所有狀態重新讀取
             // window.location.reload();
 
-            // 做法 B：重新執行初始化 API，確保後端認可這個分頁的身份
+            // 重新執行初始化 API，確保後端認可這個分頁的身份
             this.initUser().then(() => {
               if (router.currentRoute.value.path === '/login') {
                 router.push('/')
@@ -181,9 +165,7 @@ export const useUserStore = defineStore('userStore', {
       }
     },
 
-    /**
-     * 跨視窗狀態同步監聽
-     */
+    // 跨視窗狀態同步監聽
     setupTabSync() {
       window.addEventListener('storage', (event) => {
         // 監聽 Pinia 持久化的 key
@@ -204,9 +186,7 @@ export const useUserStore = defineStore('userStore', {
       })
     },
 
-    /**
-     * 處理被動登出 (由其他分頁觸發)
-     */
+    // 處理被動登出 (由其他分頁觸發)
     handlePassiveLogout() {
       // 重置狀態
       this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
