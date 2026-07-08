@@ -256,7 +256,6 @@ export function useRegister() {
       } else if (code === ResultCode.EMAIL_IS_EXIST) {
         backendErrors.value.email = message // Email 重複，紅字噴在 Email 欄
       } else {
-        // 其他錯誤（如驗證碼錯誤、系統繁忙）用彈窗
         toast.error(message)
       }
     } finally {

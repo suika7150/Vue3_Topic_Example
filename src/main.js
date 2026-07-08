@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import ElementPlus from 'element-plus'
 import { Icon } from '@iconify/vue'
+import { VueRecaptchaPlugin } from 'vue-recaptcha/head'
 
 // 樣式、配置
 import 'element-plus/dist/index.css'
@@ -44,6 +45,9 @@ const start = async () => {
     app.use(FormatPlugin)
     app.use(router)
     app.use(ElementPlus)
+    app.use(VueRecaptchaPlugin, {
+      v2SiteKey: import.meta.env.VITE_RECAPTCHA_SITE_KEY,
+    })
 
     // 元件註冊
     setupFontAwesome(app)
