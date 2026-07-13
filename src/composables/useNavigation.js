@@ -11,6 +11,11 @@ export function useNavigation() {
       router.push({ name: target, params, query })
     }
   }
+
+  const goBack = () => {
+    router.go(-1)
+  }
+
   //首頁
   const goHome = () => goTo('home')
 
@@ -33,6 +38,7 @@ export function useNavigation() {
 
   return {
     goTo,
+    goBack,
     goHome,
     goLogin,
     goProductDetail,
