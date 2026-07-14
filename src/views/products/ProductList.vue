@@ -175,7 +175,7 @@ const showProductDetail = (product) => {
 
 const fetchProducts = async () => {
   isLoading.value = true
-
+  products.value = []
   try {
     const res = await api.getProducts({
       keyword: keyword.value || undefined,
@@ -184,12 +184,9 @@ const fetchProducts = async () => {
     if (res?.code === '0000') {
       products.value = res.result
       reset()
-    } else {
-      products.value = []
     }
   } catch (err) {
     console.error(err)
-    products.value = []
   } finally {
     isLoading.value = false
   }
