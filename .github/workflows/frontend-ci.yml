@@ -1,0 +1,63 @@
+name: ECS Shop Frontend CI
+
+on:
+  push:
+    branches: ['dev_Lucas']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+    # 使用 GitHub 提供的最新版 Ubuntu 虛擬機
+    runs-on: ubuntu-latest
+
+    steps:
+      # 複製 Git 程式碼到虛擬機中
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 安裝 Node.js 環境
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. 建立前端打包用的環境變數檔（從 GitHub Secrets 讀取）
+      # 這會動態生成 .env.production 供 Vite 打包時注入
+      - name: Create .env.sit file
+        env:
+          RECAPTCHA_KEY: ${{ secrets.VITE_RECAPTCHA_SITE_KEY }}
+        run: |
+          echo "VITE_APP_TITLE=測試環境（SIT）" > .env.sit
+          echo "VITE_RECAPTCHA_SITE_KEY=$RECAPTCHA_KEY" >> .env.sit
+
+      # 安裝依賴並執行 Vite 打包測試
+      - name: Install and Build Test
+        run: |
+          npm ci
+          npm run build:sit
+
+      # =================  Docker =================
+
+      # 登入到 Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 設定 Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 執行 Docker 打包並推送
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/ecs-frontend:${{ github.sha }}
+            ${{ github.ref == 'refs/heads/main' && format('{0}/ecs-frontend:latest', secrets.DOCKERHUB_USERNAME) || format('{0}/ecs-frontend:dev', secrets.DOCKERHUB_USERNAME) }}
