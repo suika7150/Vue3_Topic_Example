@@ -15,13 +15,13 @@ export const toast = {
       center: true,
       duration: 2000,
       showClose: true, // 讓使用者可以手動點掉
-      //grouping: true,  炫泡重點：瘋狂點擊時訊息會疊加
+      //grouping: true,  炫泡重點，瘋狂點擊時訊息會疊加
       offset: 60,
       customClass: 'glow-toast-success',
     })
   },
   error(msg) {
-    ElMessage.closeAll() // 先清掉之前的訊息，避免重複堆疊
+    ElMessage.closeAll()
     ElMessage({
       message: msg,
       type: 'error',
@@ -34,7 +34,7 @@ export const toast = {
     })
   },
   warning(msg) {
-    ElMessage.closeAll() // 先清掉之前的訊息，避免重複堆疊
+    ElMessage.closeAll()
     ElMessage({
       message: msg,
       type: 'warning',
@@ -46,7 +46,7 @@ export const toast = {
     })
   },
   info(msg) {
-    ElMessage.closeAll() // 先清掉之前的訊息，避免重複堆疊
+    ElMessage.closeAll()
     ElMessage({
       message: msg,
       type: 'info',
