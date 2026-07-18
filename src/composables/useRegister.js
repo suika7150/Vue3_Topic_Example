@@ -248,6 +248,12 @@ export function useRegister() {
       goLogin()
     } catch (error) {
       const code = error.code
+
+      if (!code) {
+        toast.error('資料尚未填寫完整，請檢查欄位')
+        return
+      }
+
       const message = getMsgByCode(code)
 
       // 根據 code 分流顯示錯誤
