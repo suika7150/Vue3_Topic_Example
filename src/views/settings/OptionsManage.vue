@@ -132,11 +132,23 @@ const loadOptions = async () => {
   try {
     const res = await api.getOptions()
     if (res.code === '0000') {
-      tableData.value = res.result
+      tableData.value = res.result || []
       categories.value = [...new Set(tableData.value.map((p) => p.listName))]
+    } else {
+      tableData.value = []
+      categories.value = []
     }
   } catch (err) {
-    ElMessage.error('載入商品失敗')
+    console.error('載入選項資料失敗:', err)
+    tableData.value = []
+    categories.value = []
+
+    if (err.response && err.response.status === 401) {
+      ElMessage.warning('登入憑證已過期，請重新登入')
+      goTo('/login')
+    } else {
+      ElMessage.error('載入商品失敗，請稍後再試')
+    }
   }
 }
 
