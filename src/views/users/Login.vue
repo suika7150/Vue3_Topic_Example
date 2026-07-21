@@ -175,7 +175,7 @@ const handleLogin = async () => {
 
   // 防呆檢查是否勾選「我不是機器人」
   if (!recaptchaToken.value) {
-    toast.warning('請先勾選「我不是機器人」進行驗證！')
+    toast.warning('請先勾選「我不是機器人」進行驗證')
     return
   }
 
