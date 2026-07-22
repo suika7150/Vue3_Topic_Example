@@ -19,14 +19,8 @@ const api = {
   // 驗證登入信箱驗證碼
   verifyLoginCode: (data) => apiService.post(API_ROUTES.VERIFY_LOGIN_CODE, data),
 
-  // 取得當前使用者資料，(App 初始化或頁面重整時，確認 Cookie 是否有效)
-  getCurrentAuth: () => apiService.get(API_ROUTES.USER),
-
   // 取得當前使用者資料
   user: () => apiService.get(API_ROUTES.USER),
-
-  // 查詢用戶資料
-  findUser: () => apiService.get(API_ROUTES.FINDUSER),
 
   // 更新使用者資料
   updateProfile: (data) => apiService.put(API_ROUTES.PROFILE, data),

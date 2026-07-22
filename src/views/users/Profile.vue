@@ -78,10 +78,9 @@ const form = ref({
 
 onMounted(async () => {
   try {
-    const res = await api.findUser()
+    const res = await api.user()
     if (res && res.result) {
       form.value = { ...form.value, ...res.result }
-      console.log('findUser res:', res)
     }
   } catch (error) {
     ElMessage.error('獲取個人資料失敗，請重新登入')

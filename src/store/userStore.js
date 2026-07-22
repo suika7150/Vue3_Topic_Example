@@ -58,8 +58,7 @@ export const useUserStore = defineStore('userStore', {
 
       try {
         const res = await api.user()
-        const userList = res.result || []
-        const currentUser = userList.find((u) => u.username === currentUsername)
+        const currentUser = res.result
 
         if (currentUser) {
           this.user.fullName = currentUser.fullName
@@ -108,7 +107,7 @@ export const useUserStore = defineStore('userStore', {
             this.user.username = Storage.get(USER_KEY)
           }
 
-          const currentUser = res.result.find?.((u) => u.username === this.user.username)
+          const currentUser = res.result
           if (currentUser) {
             this.user.fullName = currentUser.fullName
             this.role = currentUser.role || Storage.get(USER_ROLE_KEY) || 'USER'
@@ -149,9 +148,6 @@ export const useUserStore = defineStore('userStore', {
 
           // 如果從未登入變已登入
           if (!wasLoggedIn && this.user.isLogin) {
-            // 強制重整頁面，Cookie 與所有狀態重新讀取
-            // window.location.reload();
-
             // 重新執行初始化 API，確保後端認可這個分頁的身份
             this.initUser().then(() => {
               if (router.currentRoute.value.path === '/login') {

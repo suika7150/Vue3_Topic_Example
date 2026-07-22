@@ -4,7 +4,6 @@ export const API_ROUTES = {
   VERIFY_EMAIL_CODE: '/api/verify-email-code', // 驗證信箱驗證碼
   LOGIN: '/api/login', // 登入
   USER: '/api/user',
-  FINDUSER: '/api/finduser', // 找回密碼
   PROFILE: '/api/profile', // 取得使用者資料
   LOGOUT: '/api/logout', // 登出
   VERIFY_LOGIN_CODE: '/api/login/verify-email-code', // 驗證登入信箱驗證碼
