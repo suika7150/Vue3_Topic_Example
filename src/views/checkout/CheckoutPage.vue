@@ -370,7 +370,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '@/services/api'
@@ -410,9 +410,8 @@ watch(
     // 如果購物車變空了
     // 且目前還在結帳步驟中
     if (newCart.length === 0 && currentStep.value < 2) {
-      setTimeout(() => {
-        router.push('/')
-      }, 1500)
+      toast.info('購物車已無商品，已為您導向首頁')
+      goTo('home')
     }
   },
   { deep: true },
@@ -602,16 +601,14 @@ const submitOrder = async () => {
     const response = await api.createOrder(orderData)
     const { ecpayParams, merchantTradeNo } = response.result
 
-    console.log('ECPAY PARAMS =', ecpayParams)
+    cartStore.clearCart()
+    Storage.remove(CART_KEY)
 
     if (paymentMethod.value === 'CREDIT_CARD' && ecpayParams) {
       toast.info('正在導向支付頁面...')
       processEcpayPayment(ecpayParams)
     } else {
       // 如果是貨到付款或轉帳，直接清空並完成訂單
-      cartStore.clearCart()
-      Storage.remove(CART_KEY)
-
       toast.success('訂單建立成功！')
       goCheckoutSuccess(merchantTradeNo)
     }
@@ -623,18 +620,14 @@ const submitOrder = async () => {
   }
 }
 
-// 刪除 & 取消
+// 刪除項目
 const removeItem = (id) => {
   modalStore.open({
     title: '提示',
     message: '確定要刪除此項商品嗎?',
     onConfirm: () => {
-      cartStore.removeProduct(id) // 呼叫 store 刪除商品
-      // Storage.set(CART_KEY, cartStore.cart)  同步 LocalStorage
+      cartStore.removeProduct(id)
       toast.success('商品已移除')
-      if (cartItems.value.length === 0) {
-        goTo('overview')
-      }
     },
   })
 }
@@ -730,38 +723,20 @@ const applyCoupon = async () => {
   }
 }
 
-// const formatCardNumber = (value) => {
-//   // 格式化信用卡號：1234 5678 9012 3456
-//   const formatted = value.replace(/\s/g, '').replace(/[^0-9]/gi, '')
-//   const matches = formatted.match(/\d{4,16}/g)
-//   const match = (matches && matches[0]) || ''
-//   const parts = []
-
-//   for (let i = 0, len = match.length; i < len; i += 4) {
-//     parts.push(match.substring(i, i + 4))
-//   }
-
-//   // 如果有格式化後的號碼，就更新表單的值
-//   if (parts.length) {
-//     creditCardForm.value.cardNumber = parts.join(' ')
-//   } else {
-//     creditCardForm.value.cardNumber = formatted
-//   }
-// }
-
-// const formatExpiryDate = (value) => {
-//   // 格式化有效期限：MM/YY
-//   const formatted = value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2')
-//   creditCardForm.value.expiryDate = formatted
-// }
-
-// 生命週期
-onMounted(() => {
-  // 如果購物車是空的，就回到商品總覽
-  if (!cartItems.value || cartItems.value.length === 0) {
-    goTo('overview')
-    return
+// 處理瀏覽器 上一頁 / 下一頁 && 檢查購物車狀態
+const handlePageShow = (event) => {
+  if (event.persisted && cartItems.value.length === 0) {
+    toast.info('購物車已無商品，已為您導向訂單頁面')
+    goTo('orderList')
   }
+}
+
+onMounted(() => {
+  window.addEventListener('pageshow', handlePageShow)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('pageshow', handlePageShow)
 })
 </script>
 
