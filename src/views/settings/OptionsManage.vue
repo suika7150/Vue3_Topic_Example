@@ -33,7 +33,7 @@
     <el-table :data="filteredProducts" style="width: 100%">
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="listName" label="分類名稱" width="180" />
-      <el-table-column prop="key" label="選項名稱" />
+      <el-table-column prop="name" label="選項名稱" />
       <el-table-column prop="value" label="選項值" />
       <el-table-column prop="sortOrder" label="排序" sortable />
       <el-table-column prop="isActive" label="啟用狀態">
@@ -88,10 +88,7 @@ const addOption = () => {
 }
 
 const editOption = (option) => {
-  Object.assign(optionForm, { ...option, name: option.key })
-  showAddOptionForm.value = true
-  mode.value = 'edit'
-  selectedCategory.value = option.listName
+  Object.assign(optionForm, { ...option })
 }
 
 const handlesubmit = () => {
