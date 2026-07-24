@@ -562,9 +562,9 @@ const total = computed(() => {
   return Math.max(0, totalAmount) // 確保總額不為負數
 })
 
-// 結帳
+// 確認訂單防止重複提交
 const submitOrder = async () => {
-  if (submitting.value) return // 防止重複提交
+  if (submitting.value) return
   submitting.value = true
 
   try {
@@ -615,7 +615,6 @@ const submitOrder = async () => {
   } catch (error) {
     console.debug('訂單建立失敗:', error)
     toast.error('訂單建立失敗，請稍後再試')
-  } finally {
     submitting.value = false
   }
 }
