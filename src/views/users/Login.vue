@@ -136,7 +136,10 @@ onMounted(() => {
 
 // 登入驗證
 const handleLogin = async () => {
-  if (!loginForm.value) return
+  recaptchaToken.value = ''
+  if (!loginForm.value) {
+    return
+  }
 
   // 每次登入前先清空舊的後端錯誤
   backendErrors.value.username = ''
@@ -145,7 +148,7 @@ const handleLogin = async () => {
   // 執行表單驗證
   try {
     await loginForm.value.validate()
-  } catch (error) {
+  } catch {
     return // 驗證沒過就停止
   }
 
@@ -176,9 +179,6 @@ const handleLogin = async () => {
     loginStep.value = 'otp'
   } catch (error) {
     const code = error.code
-
-    console.debug('[認證] 登入失敗細節:', error)
-
     const message = getMsgByCode(code)
     if (code === ResultCode.FAIL) {
       toast.error('目前無法連線至伺服器，請檢查網路狀態')
@@ -194,7 +194,6 @@ const handleLogin = async () => {
     }
   }
 }
-
 // 驗證登入
 const handleVerifyLoginCode = async () => {
   if (!loginForm.value) return
