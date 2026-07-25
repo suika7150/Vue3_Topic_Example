@@ -5,7 +5,7 @@ on:
     branches: ['dev_Lucas']
   pull_request:
     branches: ['main']
-
+  workflow_dispatch:
 jobs:
   build:
     # 使用 GitHub 提供的最新版 Ubuntu 虛擬機
