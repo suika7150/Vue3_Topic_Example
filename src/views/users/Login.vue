@@ -160,7 +160,8 @@ const handleLogin = async () => {
       return
     }
     recaptchaToken.value = token
-  } catch {
+  } catch (error) {
+    console.error('reCAPTCHA error:', error)
     toast.error('驗證異常，請重新整理網頁')
     return
   }
