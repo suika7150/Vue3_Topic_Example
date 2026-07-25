@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN npm run build:sit
 
 # 建立生產環境的 Nginx 伺服器
 FROM nginx:stable-alpine AS production-stage
