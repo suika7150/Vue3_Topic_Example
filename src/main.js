@@ -46,7 +46,7 @@ const start = async () => {
     app.use(router)
     app.use(ElementPlus)
     app.use(VueRecaptchaPlugin, {
-      v2SiteKey: import.meta.env.VITE_RECAPTCHA_SITE_KEY,
+      v3SiteKey: import.meta.env.VITE_RECAPTCHA_SITE_KEY,
     })
 
     // 元件註冊

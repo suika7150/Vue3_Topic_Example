@@ -30,17 +30,6 @@
               />
             </el-form-item>
 
-            <!-- reCAPTCHA「我不是機器人」方塊 -->
-            <div class="recaptcha-wrapper">
-              <RecaptchaCheckbox
-                :key="recaptchaRenderKey"
-                v-model="recaptchaToken"
-                @success="onRecaptchaVerify"
-                @expired="onRecaptchaExpire"
-                @error="onRecaptchaError"
-              />
-            </div>
-
             <div class="form-options">
               <el-checkbox v-model="form.rememberUsername">記住帳號</el-checkbox>
               <el-checkbox v-model="form.rememberMe">保持登入</el-checkbox>
@@ -94,7 +83,7 @@ import { useUserStore } from '@/store/userStore'
 import Storage, { REMEMBER_USERNAME_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
 import { ResultCode, getMsgByCode } from '@/utils/resultCode'
-import { Checkbox as RecaptchaCheckbox, useRecaptchaProvider } from 'vue-recaptcha/head'
+import { useChallengeV3, useRecaptchaProvider } from 'vue-recaptcha/head'
 
 useRecaptchaProvider()
 const { goTo, goHome } = useNavigation()
@@ -102,7 +91,7 @@ const route = useRoute()
 const userStore = useUserStore()
 const loginForm = ref()
 const loginStep = ref('credentials')
-const recaptchaRenderKey = ref(0)
+const { execute } = useChallengeV3()
 const recaptchaToken = ref('')
 
 const form = ref({
@@ -145,39 +134,9 @@ onMounted(() => {
   }
 })
 
-// 重置 reCAPTCHA
-const resetRecaptcha = () => {
-  recaptchaToken.value = ''
-  recaptchaRenderKey.value++
-}
-
-// reCAPTCHA 驗證成功
-const onRecaptchaVerify = (token) => {
-  console.debug('[reCAPTCHA] 取得憑證:', token)
-  recaptchaToken.value = token
-}
-
-// reCAPTCHA 憑證過期
-const onRecaptchaExpire = () => {
-  console.debug('[reCAPTCHA] 憑證已過期')
-  recaptchaToken.value = ''
-}
-
-// reCAPTCHA 載入或驗證失敗
-const onRecaptchaError = () => {
-  console.error('[reCAPTCHA] 載入或驗證失敗')
-  recaptchaToken.value = ''
-}
-
 // 登入驗證
 const handleLogin = async () => {
   if (!loginForm.value) return
-
-  // 防呆檢查是否勾選「我不是機器人」
-  if (!recaptchaToken.value) {
-    toast.warning('請先勾選「我不是機器人」進行驗證')
-    return
-  }
 
   // 每次登入前先清空舊的後端錯誤
   backendErrors.value.username = ''
@@ -190,7 +149,19 @@ const handleLogin = async () => {
     return // 驗證沒過就停止
   }
 
-  // 發送給後端的資料
+  // recaptcha v3
+  try {
+    const token = await execute('login')
+    if (!token) {
+      toast.error('機器人驗證載入失敗，請重試')
+      return
+    }
+    recaptchaToken.value = token
+  } catch {
+    toast.error('驗證異常，請重新整理網頁')
+    return
+  }
+
   const loginData = {
     username: form.value.username,
     password: form.value.password,
@@ -199,7 +170,6 @@ const handleLogin = async () => {
     isLogin: true,
   }
 
-  // 發送請求與處理結果
   try {
     await api.login(loginData)
     toast.success('登入驗證碼已寄出，請至信箱查看')
@@ -218,7 +188,7 @@ const handleLogin = async () => {
       backendErrors.value.password = message
     } else if (code === ResultCode.VALIDATION_ERROR) {
       toast.error(message || '機器人驗證失敗')
-      resetRecaptcha() // 圖形驗證清空
+      recaptchaToken.value = ''
     } else {
       toast.error(message || '登入失敗')
     }
@@ -323,13 +293,6 @@ const handleRegister = () => {
   font-weight: bold;
   margin-bottom: 30px;
   color: #333;
-}
-
-/* recaptcha 機器人驗證 */
-.recaptcha-wrapper {
-  margin: 20px 0;
-  display: flex;
-  justify-content: center;
 }
 
 /* 信箱驗證碼區 */

@@ -30,8 +30,8 @@ coverage
 *.tsbuildinfo
 
 # env
-.env.local
-.env.*.local
+.env
+.env.*
 
 # 忽略備份和原始文件
 *.bak
