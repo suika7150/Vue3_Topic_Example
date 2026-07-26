@@ -252,7 +252,7 @@
 </template>
 
 <script setup>
-import { useRegister } from '@/composables/useRegister'
+import { useRegister } from '@/views/users/composables/useRegister'
 import { Check, Close } from '@element-plus/icons-vue'
 
 const {

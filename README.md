@@ -20,6 +20,7 @@ npm install
 
 ```sh
 npm run dev
+npm run dev:sit
 ```
 
 ### Compile and Minify for Production

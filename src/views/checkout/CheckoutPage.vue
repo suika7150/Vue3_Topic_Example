@@ -242,7 +242,7 @@
                         class="narrow-item"
                       />
                     </el-form-item>
-                    <el-form-item label="公司抬頭" prop="companyTitle">
+                    <el-form-item label="公司名稱" prop="companyTitle">
                       <el-input
                         v-model="shippingForm.companyTitle"
                         placeholder="請輸入公司完整名稱"
@@ -253,35 +253,39 @@
                 </div>
               </div>
             </el-form>
-            <h2 class="step-title">付款方式</h2>
-            <el-radio-group v-model="paymentMethod">
-              <el-radio label="CREDIT_CARD" class="option-card">
-                <div class="option-content">
-                  <div>
-                    <div class="option-label">信用卡付款</div>
-                    <div class="option-hint">支援 Visa、Mastercard、JCB</div>
-                  </div>
-                </div>
-              </el-radio>
+            <div class="payment-section mt-8">
+              <h2 class="step-title">付款方式</h2>
+              <div class="invoice-box">
+                <el-radio-group v-model="paymentMethod">
+                  <el-radio label="CREDIT_CARD" class="option-card">
+                    <div class="option-content">
+                      <div>
+                        <div class="option-label">信用卡付款</div>
+                        <div class="option-hint">支援 Visa、Mastercard、JCB</div>
+                      </div>
+                    </div>
+                  </el-radio>
 
-              <el-radio label="ATM" class="option-card">
-                <div class="option-content">
-                  <div>
-                    <div class="option-label">銀行轉帳</div>
-                    <div class="option-hint">轉帳後請上傳證明</div>
-                  </div>
-                </div>
-              </el-radio>
+                  <el-radio label="ATM" class="option-card">
+                    <div class="option-content">
+                      <div>
+                        <div class="option-label">銀行轉帳</div>
+                        <div class="option-hint">轉帳後請上傳證明</div>
+                      </div>
+                    </div>
+                  </el-radio>
 
-              <el-radio label="COD" class="option-card">
-                <div class="option-content">
-                  <div>
-                    <div class="option-label">貨到付款</div>
-                    <div class="option-hint">需加收 NT$30</div>
-                  </div>
-                </div>
-              </el-radio>
-            </el-radio-group>
+                  <el-radio label="COD" class="option-card">
+                    <div class="option-content">
+                      <div>
+                        <div class="option-label">貨到付款</div>
+                        <div class="option-hint">需加收 NT$30</div>
+                      </div>
+                    </div>
+                  </el-radio>
+                </el-radio-group>
+              </div>
+            </div>
           </div>
         </div>
 

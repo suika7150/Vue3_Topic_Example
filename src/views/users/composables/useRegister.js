@@ -40,7 +40,6 @@ export function useRegister() {
     username: false,
     email: false,
     password: false,
-    confirmPassword: false,
     fullName: false,
     phone: false,
   })
