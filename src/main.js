@@ -9,6 +9,7 @@ import { VueRecaptchaPlugin } from 'vue-recaptcha/head'
 import 'element-plus/dist/index.css'
 import 'vue-cropper/dist/index.css'
 import './assets/main.css'
+import './assets/tailwind.css'
 
 // 專案內元件、插件
 import App from './App.vue'
