@@ -45,7 +45,7 @@ const routes = [
   {
     path: '/shoppingguide',
     name: 'shoppingGuide',
-    component: () => import('@/views/ShoppingGuide.vue'),
+    component: () => import('@/views/ShoppingGuide/ShoppingGuide.vue'),
     meta: { title: '購物指南' },
   },
   {

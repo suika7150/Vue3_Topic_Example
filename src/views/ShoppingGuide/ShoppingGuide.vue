@@ -41,39 +41,4 @@
 import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
 </script>
 
-<style scoped>
-.page-container {
-  max-width: 1440px;
-  width: 80%;
-  margin: 50px auto;
-}
-.card-header {
-  text-align: center;
-}
-.box-card {
-  border-radius: 12px;
-  border: 1px solid #ebeef5;
-  width: 100%;
-}
-.steps-box {
-  width: 100%;
-  margin: 40px 0;
-}
-.section h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #409eff;
-}
-.info-list {
-  margin-left: 20px;
-  line-height: 2;
-  color: #606266;
-}
-@media (max-width: 1024px) {
-  .page-container {
-    width: 100%;
-    margin: 0 0;
-  }
-}
-</style>
+<style scoped src="./ShoppingGuide.css"></style>
