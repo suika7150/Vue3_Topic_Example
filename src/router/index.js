@@ -34,7 +34,7 @@ const routes = [
     path: '/news',
     name: 'news',
     component: () => import('@/views/News.vue'),
-    meta: { title: '最新情報' },
+    meta: { title: '最新消息' },
   },
   {
     path: '/setting',

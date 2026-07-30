@@ -23,7 +23,7 @@ export const NAVIGATION_SCHEMA = [
   {
     type: 'button',
     key: 'news',
-    label: '最新情報',
+    label: '最新消息',
     route: { name: 'news' },
     roles: ['USER', 'GUEST', 'ADMIN'],
     usage: ['sidebar'],
@@ -140,8 +140,8 @@ export const NAVIGATION_SCHEMA = [
 
   {
     type: 'button',
-    label: '最新活動',
-    route: { name: 'latestNews' },
+    label: '最新消息',
+    route: { name: 'news' },
     roles: ['USER', 'GUEST', 'ADMIN'],
     usage: ['topbar'],
   },
