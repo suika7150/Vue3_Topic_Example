@@ -63,7 +63,14 @@
 
         <div class="form-item-row">
           <el-form-item label="上傳圖片" prop="imageBase64">
-            <input type="file" accept="image/*" @change="handleFileChange" ref="fileInputRef" />
+            <el-button type="primary" @click="fileInput"> 選擇圖片檔案 </el-button>
+            <input
+              type="file"
+              accept="image/*"
+              @change="handleFileChange"
+              ref="fileInputRef"
+              style="display: none"
+            />
           </el-form-item>
         </div>
 
@@ -132,6 +139,10 @@ const {
 } = useProductForm()
 
 const successDialogVisible = ref(false)
+
+function fileInput() {
+  fileInputRef.value?.click()
+}
 
 function resetForm() {
   resetFormFields()
