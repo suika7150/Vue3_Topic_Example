@@ -15,6 +15,7 @@ export function useProductForm() {
     status: '',
     description: '',
     imageBase64: '',
+    imageType: '',
   })
 
   const rules = {
@@ -47,6 +48,7 @@ export function useProductForm() {
     reader.readAsDataURL(blob)
     reader.onloadend = () => {
       form.imageBase64 = reader.result
+      form.imageType = blob.type
       imagePreview.value = reader.result
       ElMessage.success('圖片裁切完成')
     }
@@ -54,6 +56,7 @@ export function useProductForm() {
 
   const removeImage = () => {
     form.imageBase64 = ''
+    form.imageType = ''
     imagePreview.value = null
     if (fileInputRef.value) fileInputRef.value.value = ''
   }
@@ -67,6 +70,7 @@ export function useProductForm() {
       status: '',
       description: '',
       imageBase64: '',
+      imageType: '',
     })
     imagePreview.value = null
     if (fileInputRef.value) fileInputRef.value.value = ''

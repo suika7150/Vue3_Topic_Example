@@ -6,13 +6,13 @@
 
     <div class="main-content-wrapper">
       <el-form :model="form" :rules="rules" ref="formRef" class="form-leftside">
-        <div class="list-item">
+        <div class="form-item-row">
           <el-form-item label="商品名稱" prop="name">
             <el-input v-model="form.name" placeholder="請輸入商品名稱" />
           </el-form-item>
         </div>
 
-        <div class="list-item">
+        <div class="form-item-row">
           <el-form-item label="類別" prop="category">
             <el-select v-model="form.category" placeholder="請選擇類別">
               <el-option
@@ -25,19 +25,19 @@
           </el-form-item>
         </div>
 
-        <div class="list-item">
-          <el-form-item label="銷售價格" prop="price">
+        <div class="form-item-row">
+          <el-form-item label="價格" prop="price">
             <el-input-number v-model="form.price" :min="0" :step="100" />
           </el-form-item>
         </div>
 
-        <div class="list-item">
+        <div class="form-item-row">
           <el-form-item label="庫存數量" prop="stock">
             <el-input-number v-model="form.stock" :min="0" :step="1" placeholder="請輸入庫存數量" />
           </el-form-item>
         </div>
 
-        <div class="list-item">
+        <div class="form-item-row">
           <el-form-item label="商品狀態" prop="status">
             <el-select v-model="form.status" placeholder="請選擇狀態">
               <el-option
@@ -50,8 +50,8 @@
           </el-form-item>
         </div>
 
-        <div class="list-item">
-          <el-form-item label="詳細描述">
+        <div class="form-item-row">
+          <el-form-item label="商品描述">
             <el-input
               v-model="form.description"
               type="textarea"
@@ -63,7 +63,14 @@
 
         <div class="list-item noborder">
           <el-form-item label="上傳圖片">
-            <input type="file" accept="image/*" @change="handleFileChange" ref="fileInputRef" />
+            <el-button type="primary" @click="fileInput"> 選擇圖片檔案 </el-button>
+            <input
+              type="file"
+              accept="image/*"
+              @change="handleFileChange"
+              ref="fileInputRef"
+              style="display: none"
+            />
           </el-form-item>
         </div>
 
@@ -126,7 +133,10 @@ const {
   resetFormFields,
 } = useProductForm()
 
-// 表單操作邏輯
+function fileInput() {
+  fileInputRef.value?.click()
+}
+
 function resetForm() {
   resetFormFields()
 }
@@ -215,8 +225,8 @@ async function submitForm() {
 }
 
 /* 清單項目 */
-.list-item {
-  padding: 12px 0;
+.form-item-row {
+  padding: 20px 0;
 }
 
 /* 輸入框 (名稱、類別、狀態、描述) */
