@@ -94,7 +94,7 @@ import api from '@/services/api'
 import Breadcrumb from '@/components/navigation/Breadcrumb.vue'
 import { useCartStore } from '@/store/cartStore'
 import { useNavigation } from '@/composables/useNavigation'
-// import { ShoppingCart } from '@element-plus/icons-vue'
+import { logger } from '@/utils/logger'
 
 const route = useRoute()
 const router = useRouter()
@@ -106,11 +106,9 @@ const isLoading = ref(true)
 const buyQty = ref(1)
 const activeTab = ref('desc') //預設顯示商品詳情
 
-/**
- * 根據路由參數中的 ID 獲取商品詳情
- */
+// 根據路由參數中的 id 獲取商品詳情
 const fetchProductDetail = async () => {
-  const productId = route.params.id // 從路由中獲取商品 ID
+  const productId = route.params.id
   if (!productId) {
     ElMessage.error('缺少商品 ID')
     isLoading.value = false
@@ -126,8 +124,8 @@ const fetchProductDetail = async () => {
       product.value = null
       ElMessage.warning(`找不到 ID 為 ${productId} 的商品。`)
     }
-  } catch (err) {
-    console.debug('載入商品詳情失敗:', err)
+  } catch (error) {
+    logger.debug('載入商品詳情失敗:', error)
     ElMessage.error('載入商品詳情失敗，請稍後再試。')
     product.value = null
   } finally {
@@ -135,13 +133,13 @@ const fetchProductDetail = async () => {
   }
 }
 
-/* 將商品加入購物車 */
+// 將商品加入購物車
 const addToCart = (productToAdd) => {
   //檢查是否已經有該商品
   const existingItem = cartStore.cart.find((item) => item.id === productToAdd.id)
 
   if (existingItem) {
-    // 如果存在，加上使用者目前選擇的購買數量
+    // 如果商品已存在，加上使用者目前選擇的購買數量
     existingItem.quantity += buyQty.value
     ElMessage.success(`${productToAdd.name} 數量已更新為 ${existingItem.quantity}`)
   } else {
@@ -154,15 +152,12 @@ const addToCart = (productToAdd) => {
   cartStore.drawerVisible = true // 開啟購物車抽屜
 }
 
-/**
- * 立即結帳：加入目前選擇的數量並跳轉
- */
+// 立即結帳：加入目前選擇的數量並跳轉
 const buyNow = (productToBuy) => {
   // 檢查商品資料是否存在
   if (!product.value) return
 
   // 呼叫 Store 把東西塞進購物車
-  // 這裡直接用 product.value，不要從 HTML 傳 item 進來
   cartStore.addProduct({
     ...product.value,
     quantity: buyQty.value,
@@ -171,9 +166,7 @@ const buyNow = (productToBuy) => {
   goCheckout(2)
 }
 
-/**
- * 圖片載入失敗時的處理
- */
+// 圖片載入失敗時的處理
 const handleImageError = (e) => {
   e.target.src = 'https://via.placeholder.com/600x400?text=無法載入'
 }

@@ -83,6 +83,7 @@ import { useUserStore } from '@/store/userStore'
 import Storage, { REMEMBER_USERNAME_KEY } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
 import { ResultCode, getMsgByCode } from '@/utils/resultCode'
+import { logger } from '@/utils/logger'
 import { useChallengeV3, useRecaptchaProvider } from 'vue-recaptcha/head'
 
 useRecaptchaProvider()
@@ -149,7 +150,7 @@ const handleLogin = async () => {
   try {
     await loginForm.value.validate()
   } catch {
-    return // 驗證沒過就停止
+    return
   }
 
   // recaptcha v3
@@ -161,7 +162,7 @@ const handleLogin = async () => {
     }
     recaptchaToken.value = token
   } catch (error) {
-    console.error('reCAPTCHA error:', error)
+    logger.error('reCAPTCHA error:', error)
     toast.error('驗證異常，請重新整理網頁')
     return
   }
@@ -195,6 +196,7 @@ const handleLogin = async () => {
     }
   }
 }
+
 // 驗證登入
 const handleVerifyLoginCode = async () => {
   if (!loginForm.value) return

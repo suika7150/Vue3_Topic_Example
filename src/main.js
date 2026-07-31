@@ -20,6 +20,7 @@ import setupFontAwesome from './plugins/fontawesome'
 // 工具
 import { formatSecondsToHHMMSS } from './utils/format'
 import { getAndCacheOptions } from './utils/optionService'
+import { logger } from '@/utils/logger'
 import { useUserStore } from '@/store/userStore'
 
 // 初始化、Pinia
@@ -57,9 +58,7 @@ const start = async () => {
     // 掛載實例
     app.mount('#app')
   } catch (error) {
-    if (import.meta.env.DEV) {
-      console.debug('[啟動攔截]:', error)
-    }
+    logger.error('初始化失敗:', error)
   }
 }
 start()

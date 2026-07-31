@@ -1,4 +1,4 @@
-/** 測試綠界金流專用 */
+<!-- 綠界測試專用 -->
 <template>
   <form v-if="paymentData" ref="ecpayForm" :action="ecpayUrl" method="POST" style="display: none">
     <input v-for="(val, key) in paymentData" :key="key" :name="key" :value="val" />
@@ -8,6 +8,7 @@
 <script setup>
 import { ref, nextTick } from 'vue'
 import api from '@/services/api'
+import { logger } from '@/utils/logger'
 
 const props = defineProps({
   paymentId: { type: String, required: true },
@@ -40,7 +41,7 @@ const processPayment = async () => {
     await nextTick()
     ecpayForm.value.submit()
   } catch (error) {
-    console.debug('金流啟動失敗', error)
+    logger.error('金流啟動失敗', error)
   }
 }
 

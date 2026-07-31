@@ -140,6 +140,7 @@ import { useProductPagination } from '@/composables/useProductPagination'
 import { useProductSearch } from '@/composables/useProductSearch'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
+import { logger } from '@/utils/logger'
 import { DEFAULT_PRODUCT_IMAGE } from '@/constants/productConstants'
 import { toast } from '@/utils/message'
 import { Loading, Star, StarFilled, ShoppingCart, ZoomIn } from '@element-plus/icons-vue'
@@ -185,8 +186,8 @@ const fetchProducts = async () => {
       products.value = res.result
       reset()
     }
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    logger.error('載入全站商品總覽列表失敗', error)
   } finally {
     isLoading.value = false
   }

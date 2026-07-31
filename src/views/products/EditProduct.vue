@@ -116,6 +116,7 @@ import { useRoute } from 'vue-router'
 import { PRODUCT_CATEGORIES, PRODUCT_STATUS_OPTIONS } from '@/constants/productConstants'
 import { useProductForm } from '@/composables/useProductForm'
 import ImageCropper from '@/components/ImageCropper.vue'
+import { logger } from '@/utils/logger'
 
 const route = useRoute()
 const { goTo } = useNavigation()
@@ -145,11 +146,7 @@ function cancelEdit() {
   goTo('productManage')
 }
 
-/**
- * 編輯模式載入商品資料
- * @description 將商品資料載入到表單中
- *
- */
+// 編輯載入商品資料
 onMounted(async () => {
   if (productId.value) {
     try {
@@ -159,16 +156,13 @@ onMounted(async () => {
         imagePreview.value = res.result.imageBase64
       }
     } catch (error) {
-      console.debug('載入失敗:', error)
+      logger.debug('編輯載入商品資料失敗:', error)
       ElMessage.error('載入商品資料失敗')
     }
   }
 })
 
-/**
- * 表單提交
- * @description 當表單驗證通過時，執行更新操作
- */
+// 表單提交
 async function submitForm() {
   const valid = await formRef.value.validate()
   if (!valid) return

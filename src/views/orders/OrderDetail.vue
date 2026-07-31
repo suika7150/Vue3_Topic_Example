@@ -99,6 +99,7 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { API_ROUTES } from '@/services/apiRoutes'
 import api from '@/services/api'
+import { logger } from '@/utils/logger'
 
 const route = useRoute()
 const orderItems = ref([])
@@ -167,8 +168,8 @@ onMounted(async () => {
       orderDetail.value = res.result
       orderItems.value = res.result.items || []
     }
-  } catch (err) {
-    console.debug('API 呼叫失敗，請檢查 API 定義與後端連線:', err)
+  } catch (error) {
+    logger.debug('API 呼叫失敗:', error)
   }
 })
 

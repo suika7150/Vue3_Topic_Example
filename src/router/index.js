@@ -4,6 +4,7 @@ import { useUserStore } from '@/store/userStore'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { showLoading, hideLoading } from '@/utils/loadingService'
+import { logger } from '@/utils/logger'
 import { ROLES } from '@/constants/userConstants'
 
 const routes = [
@@ -237,7 +238,7 @@ router.beforeEach(async (to, from, next) => {
       // 同步使用者資料
       await Promise.all([userStore.fetchUserInfo(), cartStore.fetchCartList()])
     } catch (error) {
-      console.error('初始化資料失敗:', error)
+      logger.debug('初始化資料失敗:', error)
     } finally {
       hideLoading()
     }

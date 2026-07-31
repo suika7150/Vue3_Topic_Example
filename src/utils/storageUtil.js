@@ -1,4 +1,4 @@
-/** localStorage 集中管理  */
+// localStorage 集中管理
 const Storage = {
   set(key, value) {
     localStorage.setItem(key, JSON.stringify(value))

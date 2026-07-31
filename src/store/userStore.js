@@ -11,6 +11,7 @@ import Storage, {
 } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
 import { ROLES } from '@/constants/userConstants'
+import { logger } from '@/utils/logger'
 
 let isLoggingOut = false
 
@@ -99,7 +100,7 @@ export const useUserStore = defineStore('userStore', {
 
         // 只有手動登出且不在登入頁時才提示
         if (router.currentRoute.value.path !== '/login') {
-          toast.warning('您已登出，請重新登入。')
+          toast.warning('您已登出，請重新登入')
         }
 
         isLoggingOut = false
@@ -131,7 +132,7 @@ export const useUserStore = defineStore('userStore', {
           }
         }
       } catch (error) {
-        console.warn('嘗試自動同步身分失敗:', error.msg)
+        logger.debug('嘗試自動同步身分失敗:', error)
       }
     },
 
@@ -169,8 +170,8 @@ export const useUserStore = defineStore('userStore', {
             })
           }
         }
-      } catch (e) {
-        console.debug('同步失敗', e)
+      } catch (error) {
+        logger.debug('同步失敗', error)
       }
     },
 

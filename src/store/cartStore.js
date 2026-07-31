@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
+import { logger } from '@/utils/logger'
 
 export const useCartStore = defineStore('cartStore', {
   state: () => ({
@@ -32,7 +33,7 @@ export const useCartStore = defineStore('cartStore', {
       return this.cart
     },
 
-    // 控制抽屜顯示
+    // 控制購物車抽屜顯示
     setDrawerVisible(visible) {
       this.drawerVisible = visible
     },
@@ -89,8 +90,8 @@ if (typeof window !== 'undefined') {
         const cartStore = useCartStore()
         const newCart = event.newValue ? JSON.parse(event.newValue) : []
         cartStore.syncCart(newCart)
-      } catch (e) {
-        console.debug('跨分頁購物車同步失敗:', e)
+      } catch (error) {
+        logger.debug('跨分頁購物車同步失敗:', error)
       }
     }
   })

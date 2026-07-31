@@ -387,6 +387,7 @@ import { useNavigation } from '@/composables/useNavigation'
 import { useCartStore } from '@/store/cartStore'
 import { useModalStore } from '@/store/modalStore'
 import Storage, { CART_KEY } from '@/utils/storageUtil'
+import { logger } from '@/utils/logger'
 
 const cartStore = useCartStore()
 
@@ -613,11 +614,11 @@ const submitOrder = async () => {
       processEcpayPayment(ecpayParams)
     } else {
       // 如果是貨到付款或轉帳，直接清空並完成訂單
-      toast.success('訂單建立成功！')
+      toast.success('訂單建立成功')
       goCheckoutSuccess(merchantTradeNo)
     }
   } catch (error) {
-    console.debug('訂單建立失敗:', error)
+    logger.debug('訂單建立失敗:', error)
     toast.error('訂單建立失敗，請稍後再試')
     submitting.value = false
   }

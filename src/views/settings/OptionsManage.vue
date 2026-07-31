@@ -60,6 +60,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Open, Close } from '@element-plus/icons-vue'
 import { useNavigation } from '@/composables/useNavigation'
 import OptionsForm from './OptionsForm.vue'
+import { logger } from '@/utils/logger'
 const { goTo } = useNavigation()
 
 const tableData = ref([])
@@ -116,9 +117,9 @@ const deleteOption = async (optionId) => {
 
       loadOptions()
     }
-  } catch (err) {
-    if (err !== 'cancel') {
-      console.debug('刪除商品失敗:', err)
+  } catch (error) {
+    if (error !== 'cancel') {
+      logger.debug('刪除商品失敗:', error)
       ElMessage.error('刪除商品失敗，請稍後再試。')
     }
   }
@@ -135,8 +136,8 @@ const loadOptions = async () => {
       tableData.value = []
       categories.value = []
     }
-  } catch (err) {
-    console.error('載入選項資料失敗:', err)
+  } catch (error) {
+    logger.error('載入選項資料失敗:', error)
     tableData.value = []
     categories.value = []
 

@@ -134,6 +134,7 @@ import api from '@/services/api'
 import { formatDate } from '@/utils/format'
 import { Ship, Calendar, Picture } from '@element-plus/icons-vue'
 import format from '@/plugins/format'
+import { logger } from '@/utils/logger'
 
 const { goHome, goProducts, goOrderDetail } = useNavigation()
 
@@ -173,7 +174,7 @@ const fetchOrders = async (tabName = 'all') => {
       if (backendStatus) {
         params.status = backendStatus
       } else {
-        console.debug(`[訂單] 找不到「${tabName}」`)
+        logger.debug(`找不到對應的分頁狀態設定: ${tabName}`)
       }
     }
 
@@ -183,7 +184,7 @@ const fetchOrders = async (tabName = 'all') => {
       orders.value = response.result || []
     }
   } catch (error) {
-    console.debug('獲取列表失敗:', error)
+    logger.debug('獲取訂單列表資料失敗:', error)
   } finally {
     loading.value = false
   }

@@ -1,5 +1,6 @@
 import api from '../services/api'
 import Storage, { OPTIONS_KEY } from './storageUtil'
+import { logger } from '@/utils/logger'
 
 const CACHE_EXPIRY_MS = 3600 * 1000 // 緩存 1 小時
 
@@ -21,7 +22,6 @@ export async function getAndCacheOptions() {
     const response = await api.getOptions()
     const newData = response.result
 
-    // 將新資料儲存到緩存
     Storage.set(
       OPTIONS_KEY,
       JSON.stringify({
@@ -30,8 +30,8 @@ export async function getAndCacheOptions() {
       }),
     )
     return newData
-  } catch (err) {
-    console.debug('載入選項資料失敗:', err)
+  } catch (error) {
+    logger.debug('載入選項資料失敗:', error)
     return {} // 失敗時返回空物件
   }
 }
