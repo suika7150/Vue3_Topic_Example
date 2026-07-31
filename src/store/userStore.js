@@ -108,6 +108,12 @@ export const useUserStore = defineStore('userStore', {
 
     // 初始化使用者 (主要用於 F5 重新整理時)
     async initUser() {
+      // 重整後如果訪客狀態或無使用者帳號，則直接攔截並返回，避免發送無效 API
+      if (this.role === ROLES.GUEST || !this.user.username) {
+        this.user.isLogin = false
+        this.role = ROLES.GUEST
+        return
+      }
       try {
         const res = await api.user()
         if (res && res.result) {
@@ -125,11 +131,7 @@ export const useUserStore = defineStore('userStore', {
           }
         }
       } catch (error) {
-        console.warn('[權限] 嘗試自動同步身分失敗:', error.response?.status || error.message)
-
-        if (error.response?.status === 401) {
-          // this.logout();
-        }
+        console.warn('嘗試自動同步身分失敗:', error.msg)
       }
     },
 
