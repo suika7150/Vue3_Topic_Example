@@ -44,11 +44,12 @@ import { CaretBottom } from '@element-plus/icons-vue'
 import { getNavMenu } from '@/services/navigationService'
 import { useNavigation } from '@/composables/useNavigation'
 import { useUserStore } from '@/store/userStore'
+import { ROLES } from '@/constants/userConstants'
 
 const { goTo } = useNavigation()
 const userStore = useUserStore()
 
-const userRole = computed(() => userStore.role || 'GUEST')
+const userRole = computed(() => userStore.role || ROLES.GUEST)
 
 const filteredMenu = computed(() =>
   getNavMenu(userRole.value, {

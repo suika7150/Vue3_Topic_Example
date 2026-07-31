@@ -10,6 +10,7 @@ import Storage, {
   FULL_NAME_KEY,
 } from '@/utils/storageUtil'
 import { toast } from '@/utils/message'
+import { ROLES } from '@/constants/userConstants'
 
 let isLoggingOut = false
 
@@ -21,11 +22,14 @@ export const useUserStore = defineStore('userStore', {
       isLogin: false, // 是否已登入
       rememberMe: false, // 是否勾選了保持登入
     },
-    role: 'GUEST',
+    role: ROLES.GUEST,
   }),
+
   getters: {
     userRole: (state) => state.role,
     isLoggedIn: (state) => state.user.isLogin,
+    isAdmin: (state) => state.role === ROLES.ADMIN,
+    isNormalUser: (state) => state.role === ROLES.USER,
   },
 
   actions: {
@@ -46,12 +50,13 @@ export const useUserStore = defineStore('userStore', {
         isLogin: true,
         rememberMe: rememberMe,
       }
-      Storage.set(USER_ROLE_KEY, role)
-      this.role = role
+      const userRole = role || ROLES.USER
+      Storage.set(USER_ROLE_KEY, userRole)
+      this.role = userRole
       await this.fetchUserInfo() // 登入後立即抓取使用者資料
     },
 
-    // 獲取最新使用者資料 (抓取 fullName 用)
+    // 獲取最新使用者資料
     async fetchUserInfo() {
       const currentUsername = this.user.username
       if (!currentUsername || !this.user.isLogin) return
@@ -63,6 +68,11 @@ export const useUserStore = defineStore('userStore', {
         if (currentUser) {
           this.user.fullName = currentUser.fullName
           Storage.set(FULL_NAME_KEY, currentUser.fullName)
+
+          if (currentUser.role) {
+            this.role = currentUser.role
+            Storage.set(USER_ROLE_KEY, currentUser.role)
+          }
         }
       } catch (error) {
         throw error
@@ -83,8 +93,9 @@ export const useUserStore = defineStore('userStore', {
 
         // 重置 Pinia 狀態
         this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
-        this.role = 'GUEST'
-        Storage.set(USER_ROLE_KEY, 'GUEST')
+        // 登出後身分強制恢復為訪客
+        this.role = ROLES.GUEST
+        Storage.set(USER_ROLE_KEY, ROLES.GUEST)
 
         // 只有手動登出且不在登入頁時才提示
         if (router.currentRoute.value.path !== '/login') {
@@ -110,7 +121,7 @@ export const useUserStore = defineStore('userStore', {
           const currentUser = res.result
           if (currentUser) {
             this.user.fullName = currentUser.fullName
-            this.role = currentUser.role || Storage.get(USER_ROLE_KEY) || 'USER'
+            this.role = currentUser.role || Storage.get(USER_ROLE_KEY) || ROLES.USER
           }
         }
       } catch (error) {
@@ -186,7 +197,7 @@ export const useUserStore = defineStore('userStore', {
     handlePassiveLogout() {
       // 重置狀態
       this.user = { username: '', fullName: '', isLogin: false, rememberMe: false }
-      this.role = 'GUEST'
+      this.role = ROLES.GUEST
 
       // 清除相關 Storage (除了記住帳號以外的)
       const keys = [USER_KEY, FULL_NAME_KEY, USER_ROLE_KEY, REMEMBER_ME_KEY]

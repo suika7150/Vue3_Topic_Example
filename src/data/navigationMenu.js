@@ -18,6 +18,10 @@ import {
   Sell,
   MagicStick,
 } from '@element-plus/icons-vue'
+import { ROLES } from '@/constants/userConstants'
+
+const ALL_ROLES = [ROLES.GUEST, ROLES.USER, ROLES.ADMIN]
+const LOGGED_IN_ROLES = [ROLES.USER, ROLES.ADMIN]
 
 export const NAVIGATION_SCHEMA = [
   {
@@ -25,7 +29,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'news',
     label: '最新消息',
     route: { name: 'news' },
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar'],
   },
   {
@@ -33,7 +37,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'about',
     label: '關於我們',
     route: { name: 'about' },
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar'],
   },
   {
@@ -41,7 +45,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'home',
     label: '回首頁',
     route: { name: 'home' },
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar'],
   },
   {
@@ -49,7 +53,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'shoppingGuide',
     label: '購買須知',
     route: { name: 'shoppingGuide' },
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar'],
   },
   {
@@ -57,7 +61,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'qa',
     label: '常見問題 Q&A',
     route: { name: 'qa' },
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar'],
   },
   {
@@ -65,11 +69,11 @@ export const NAVIGATION_SCHEMA = [
     key: 'productMenu',
     label: '商品選單',
     icon: Sell,
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar'],
     subs: [
-      { label: '商品總覽', route: { name: 'overview' } },
-      { label: '商品管理', route: { name: 'productManage' } },
+      { label: '商品總覽', route: { name: 'overview' }, roles: ALL_ROLES },
+      { label: '商品管理', route: { name: 'productManage' }, roles: LOGGED_IN_ROLES },
     ],
   },
   {
@@ -77,7 +81,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'doubleeleven',
     label: '雙11週年盛典',
     icon: Odometer,
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar', 'topbar'],
     subs: [
       { label: '年度特選回饋', route: { name: 'rewards' } },
@@ -89,7 +93,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'event',
     label: '活動專區',
     icon: Calendar,
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar', 'topbar'],
     subs: [
       { label: '本週特惠', route: { name: 'flashSale' } },
@@ -101,7 +105,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'crossover',
     label: '聯名專區',
     icon: Connection,
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar', 'topbar'],
     subs: [
       { label: '動漫聯名款', route: { name: 'crossover', params: { type: 'anime' } } },
@@ -115,7 +119,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'brands',
     label: '品牌專區',
     icon: GoodsFilled,
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar', 'topbar'],
     subs: [
       { label: '3C 數位', route: { name: 'brand', params: { type: 'electronics' } } },
@@ -130,7 +134,7 @@ export const NAVIGATION_SCHEMA = [
     key: 'seasonal',
     label: '季節限定',
     icon: Van,
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['sidebar', 'topbar'],
     subs: [
       { label: '季節精選', route: { name: 'seasonalFeatured' } },
@@ -142,14 +146,14 @@ export const NAVIGATION_SCHEMA = [
     type: 'button',
     label: '最新消息',
     route: { name: 'news' },
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['topbar'],
   },
   {
     type: 'button',
     label: '購買須知',
     route: { name: 'shoppingGuide' },
-    roles: ['USER', 'GUEST', 'ADMIN'],
+    roles: ALL_ROLES,
     usage: ['topbar'],
   },
 ]

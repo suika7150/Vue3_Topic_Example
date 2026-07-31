@@ -26,12 +26,17 @@
             </div>
           </template>
 
-          <el-menu-item v-for="sub in item.subs" :key="sub.label" :index="getSubIndex(sub)">
-            <el-icon v-if="sub.icon">
-              <component :is="sub.icon" />
-            </el-icon>
-            {{ sub.label }}
-          </el-menu-item>
+          <template v-for="sub in item.subs" :key="sub.label">
+            <el-menu-item
+              v-if="!sub.roles || sub.roles.includes(userRole)"
+              :index="getSubIndex(sub)"
+            >
+              <el-icon v-if="sub.icon">
+                <component :is="sub.icon" />
+              </el-icon>
+              {{ sub.label }}
+            </el-menu-item>
+          </template>
         </el-sub-menu>
       </template>
     </el-menu>
@@ -45,19 +50,18 @@ import { getNavMenu } from '@/services/navigationService'
 import { useUserStore } from '@/store/userStore'
 import { useSidebarStore } from '@/store/sidebarStore'
 import { useCartStore } from '@/store/cartStore'
+import { ROLES } from '@/constants/userConstants'
 
 const router = useRouter()
 const userStore = useUserStore()
 const sidebarStore = useSidebarStore()
 const cartStore = useCartStore()
 
-const userRole = computed(() => userStore.role || 'GUEST')
+const userRole = computed(() => userStore.role || ROLES.GUEST)
 
 const menuData = computed(() => {
   const role = userRole.value
-
   const result = getNavMenu(role, { includeSystem: true, usage: 'sidebar' })
-
   return result
 })
 

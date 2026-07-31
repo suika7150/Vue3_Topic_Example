@@ -4,6 +4,7 @@ import { useUserStore } from '@/store/userStore'
 import { useCartStore } from '@/store/cartStore'
 import Storage, { TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
 import { showLoading, hideLoading } from '@/utils/loadingService'
+import { ROLES } from '@/constants/userConstants'
 
 const routes = [
   {
@@ -58,7 +59,7 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: () => import('@/views/users/Profile.vue'),
-    meta: { title: '個人資料', requiresAuth: true, role: ['USER'] },
+    meta: { title: '個人資料', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/products',
@@ -70,7 +71,7 @@ const routes = [
     path: '/products/add',
     name: 'addProduct',
     component: () => import('@/views/products/AddProduct.vue'),
-    meta: { title: '新增商品' },
+    meta: { title: '新增商品', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/products/manage',
@@ -79,14 +80,14 @@ const routes = [
     meta: {
       title: '商品管理',
       requiresAuth: true,
-      role: ['ADMIN', 'USER'],
+      role: [ROLES.USER, ROLES.ADMIN],
     },
   },
   {
     path: '/products/edit/:id',
     name: 'editProduct',
     component: () => import('@/views/products/EditProduct.vue'),
-    meta: { title: '商品編輯' },
+    meta: { title: '商品編輯', role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/product/:id',
@@ -98,7 +99,7 @@ const routes = [
     path: '/settings/options',
     name: 'optionsManage',
     component: () => import('@/views/settings/OptionsManage.vue'),
-    meta: { title: '選項管理', requiresAuth: true, role: ['ADMIN', 'USER'] },
+    meta: { title: '選項管理', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/doubleeleven/rewards',
@@ -158,7 +159,7 @@ const routes = [
     path: '/checkout',
     name: 'checkout',
     component: () => import('@/views/checkout/CheckoutPage.vue'),
-    meta: { title: '結帳', requiresAuth: true, role: ['USER', 'ADMIN'] },
+    meta: { title: '結帳', requiresAuth: true, role: [ROLES.USER] },
     beforeEnter: (to, from, next) => {
       // 檢查「購物車是否有東西」
       const cartStore = useCartStore()
@@ -181,13 +182,13 @@ const routes = [
     path: '/orders/list',
     name: 'orderList',
     component: () => import('@/views/orders/OrderList.vue'),
-    meta: { title: '我的訂單', requiresAuth: true, role: ['USER', 'ADMIN'] },
+    meta: { title: '我的訂單', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/orders/detail/:orderId',
     name: 'orderDetail',
     component: () => import('@/views/orders/OrderDetail.vue'),
-    meta: { title: '訂單詳情', requiresAuth: true, role: ['USER', 'ADMIN'] },
+    meta: { title: '訂單詳情', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/accessDenied',
@@ -242,8 +243,8 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  // 如果 Store 裡有，就用 Store 的；沒有才去抓 Storage 的保底
-  const role = userStore.userRole || Storage.get(USER_ROLE_KEY) || Storage.sessionGet(USER_ROLE_KEY)
+  // 如果沒有角色，預設是 GUEST
+  const role = userStore.userRole || Storage.get(USER_ROLE_KEY) || ROLES.GUEST
 
   // 檢查是否需要登入權限
   if (to.meta.requiresAuth && !isLoggedIn) {
@@ -255,7 +256,7 @@ router.beforeEach(async (to, from, next) => {
     })
   }
 
-  // 如果已登入，檢查角色權限
+  // 驗證當前角色是否在允許的角色清單中
   if (to.meta.requiresAuth && !to.meta?.role?.includes(role)) {
     hideLoading()
     return next('/accessDenied')
