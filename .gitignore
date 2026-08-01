@@ -1,4 +1,4 @@
-# Logs
+# 日誌與偵錯檔案
 logs
 *.log
 npm-debug.log*
@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# 套件與編譯產出
 node_modules
 .DS_Store
 dist
@@ -14,10 +15,11 @@ dist-ssr
 coverage
 *.local
 
+# 自動化測試產出
 /cypress/videos/
 /cypress/screenshots/
 
-# Editor directories and files
+# 編輯器與 IDE 設定檔
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -27,11 +29,13 @@ coverage
 *.sln
 *.sw?
 
+# TypeScript 編譯暫存
 *.tsbuildinfo
 
-# env
+# 環境變數檔案
 .env
 .env.*
+.env*.local
 
 # 忽略備份和原始文件
 *.bak
