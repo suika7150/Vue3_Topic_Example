@@ -1,5 +1,5 @@
 {
-  "name": "vueproject",
+  "name": "ecs-shop-frontend",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
     "build:sit": "vite build --mode sit",
     "build:uat": "vite build --mode uat",
     "build:prod": "vite build --mode prod",
-    "build hotspot": "vite build --mode hotspot",
+    "build:hotspot": "vite build --mode hotspot",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"
