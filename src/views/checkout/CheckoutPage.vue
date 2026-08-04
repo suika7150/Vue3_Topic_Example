@@ -415,7 +415,7 @@ watch(
     // 如果購物車變空了
     // 且目前還在結帳步驟中
     if (newCart.length === 0 && currentStep.value < 2) {
-      toast.info('購物車已無商品，已為您導向首頁')
+      toast.info('購物車已無商品，導向首頁')
       goTo('home')
     }
   },
@@ -698,21 +698,20 @@ const processEcpayPayment = (params) => {
 }
 
 const applyCoupon = async () => {
-  const code = couponCode.value.trim().toUpperCase()
+  const inputCode = couponCode.value.trim().toUpperCase()
 
-  if (!code) {
+  if (!inputCode) {
     toast.warning('請輸入優惠券代碼')
     return
   }
 
   try {
     applyingCoupon.value = true
-    const response = await api.validateCoupon(code)
+    const response = await api.validateCoupon(inputCode)
 
     const data = response.result
 
     // 測試用
-    // 假設後端回傳格式為 { valid: true, discountAmount: 100, message: '成功' }
     if (data && data.valid) {
       discount.value = data.discountAmount //更新折扣金額
       toast.success(response.msg || '優惠券套用成功！')

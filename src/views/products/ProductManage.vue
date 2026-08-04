@@ -135,7 +135,7 @@ const deleteProduct = async (productId) => {
       cancelButtonText: '取消',
       type: 'warning',
     })
-    const res = await api.deleteProduct(productId)
+    const res = await api.deleteProducts(productId)
     if (res.code === '0000') {
       ElMessage.success('刪除成功')
       products.value = products.value.filter((p) => p.id !== productId)

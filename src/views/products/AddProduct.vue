@@ -152,7 +152,7 @@ const successButtons = [
   {
     text: '返回列表',
     type: 'default',
-    onClick: () => goTo('overview'),
+    onClick: () => goTo('productManage'),
   },
   {
     text: '繼續新增',
@@ -166,7 +166,7 @@ function submitForm() {
     if (!valid) return
 
     try {
-      await api.addProduct(form)
+      await api.createProduct(form)
       ElMessage.success('商品新增成功！')
       successDialogVisible.value = true
     } catch (error) {

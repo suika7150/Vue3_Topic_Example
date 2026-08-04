@@ -94,14 +94,14 @@
   </div>
 </template>
 <script setup>
-import { ref, computed } from 'vue'
-import { onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { API_ROUTES } from '@/services/apiRoutes'
 import api from '@/services/api'
+import { useNavigation } from '@/composables/useNavigation'
 import { logger } from '@/utils/logger'
 
 const route = useRoute()
+const { goTo } = useNavigation()
 const orderItems = ref([])
 const orderDetail = ref({})
 
@@ -116,6 +116,7 @@ const getStatusText = (status) => {
   return map[status] || status
 }
 
+// 狀態 Tag 標籤類型
 const getStatusTag = (status) => {
   const map = {
     PENDING_PAYMENT: 'warning',
@@ -160,21 +161,21 @@ const getPaymentMethodText = (method) => {
 }
 
 onMounted(async () => {
-  const id = route.params.orderId
+  const orderId = route.params.orderId
 
   try {
-    const res = await api.getOrderDetail(id)
+    const res = await api.getOrderDetail(orderId)
     if (res && res.code === '0000') {
       orderDetail.value = res.result
       orderItems.value = res.result.items || []
     }
   } catch (error) {
-    logger.debug('API 呼叫失敗:', error)
+    logger.debug('獲取訂單失敗:', error)
   }
 })
 
 const goOrderList = () => {
-  window.history.back()
+  goTo('orderList')
 }
 </script>
 
@@ -213,7 +214,7 @@ const goOrderList = () => {
   margin-bottom: 50px;
 }
 
-/* 左右佈局 */
+/* 左右區塊 */
 .main-content-layout {
   display: grid;
   grid-template-columns: 1.8fr 1fr;

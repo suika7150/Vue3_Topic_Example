@@ -88,7 +88,7 @@ const routes = [
     path: '/products/edit/:id',
     name: 'editProduct',
     component: () => import('@/views/products/EditProduct.vue'),
-    meta: { title: '商品編輯', role: [ROLES.USER, ROLES.ADMIN] },
+    meta: { title: '商品編輯', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/product/:id',
@@ -100,7 +100,7 @@ const routes = [
     path: '/settings/options',
     name: 'optionsManage',
     component: () => import('@/views/settings/OptionsManage.vue'),
-    meta: { title: '選項管理', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
+    meta: { title: '選項管理', requiresAuth: true, role: [ROLES.ADMIN] },
   },
   {
     path: '/doubleeleven/rewards',

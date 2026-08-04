@@ -150,7 +150,7 @@ function cancelEdit() {
 onMounted(async () => {
   if (productId.value) {
     try {
-      const res = await api.getProductById(productId.value)
+      const res = await api.getProductDetail(productId.value)
       if (res.code === '0000') {
         Object.assign(form, res.result)
         imagePreview.value = res.result.imageBase64

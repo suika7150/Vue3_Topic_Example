@@ -1,9 +1,8 @@
-/* 使用 apiService.js 建立 axios 實例 */
 import { API_ROUTES } from './apiRoutes'
 import apiService from './apiService'
 
 const api = {
-  /* ===== 使用者相關 API ===== */
+  /* ===== 使用者與認證相關 API ===== */
   // 註冊
   register: (data) => apiService.post(API_ROUTES.REGISTER, data),
 
@@ -31,7 +30,7 @@ const api = {
   /* ===== 商品相關 API ===== */
 
   // 新增商品
-  addProduct: (data) => apiService.post(API_ROUTES.PRODUCT_ADD, data),
+  createProduct: (data) => apiService.post(API_ROUTES.PRODUCT_CREATE, data),
 
   // 取得產品列表 & 搜尋產品
   getProducts: (params) => apiService.get(API_ROUTES.PRODUCT_LIST, { params }),
@@ -40,7 +39,7 @@ const api = {
   getProductInfo: (id) => apiService.get(API_ROUTES.PRODUCT_GET(id)),
 
   // 取得商品詳細資料(後台管理)
-  getProductById: (id) => apiService.get(API_ROUTES.PRODUCT_DETAIL(id)),
+  getProductDetail: (id) => apiService.get(API_ROUTES.PRODUCT_DETAIL(id)),
 
   // 更新商品資料
   updateProduct: (id, data) => apiService.put(API_ROUTES.PRODUCT_UPDATE(id), data),
@@ -49,33 +48,15 @@ const api = {
   getManageProducts: () => apiService.get(API_ROUTES.PRODUCT_MANAGE_LIST),
 
   // 刪除商品
-  deleteProducts: (id) => apiService.put(API_ROUTES.PRODUCT_DELETE(id)),
+  deleteProducts: (id) => apiService.delete(API_ROUTES.PRODUCT_DELETE(id)),
 
   // 篩選商品
   getCategories: () => apiService.get(API_ROUTES.CATEGORY_LIST),
 
-  /* ===== 選項相關 API ===== */
-
-  // 取得選項列表
-  getOptions: () => apiService.get(API_ROUTES.OPTIONS_LIST),
-
-  // 新增選項
-  addOption: (data) => apiService.post(API_ROUTES.OPTIONS_ADD, data),
-
-  // 更新選項
-  updateOption: (id, data) => apiService.put(API_ROUTES.OPTIONS_UPDATE(id), data),
-
-  // 刪除選項
-  deleteOption: (id) => apiService.delete(API_ROUTES.OPTIONS_DELETE(id)),
-
-  // 取得選項列表
-  getOptionsByListName: (listName) =>
-    apiService.get(API_ROUTES.OPTIONS_BY_LISTNAME(), { params: { listName: listName } }),
-
   /* ===== 優惠碼相關 API ===== */
 
   // 驗證優惠券
-  validateCoupon: (code) => apiService.get(API_ROUTES.COUPON_VALIDATE(code)),
+  validateCoupon: (couponCode) => apiService.get(API_ROUTES.COUPON_VALIDATE(couponCode)),
 
   /* ===== 訂單相關 API ===== */
 
@@ -86,13 +67,28 @@ const api = {
   getOrderList: (params) => apiService.get(API_ROUTES.ORDER_LIST, { params }),
 
   // 取得訂單詳情
-  getOrderDetail: (id) => apiService.get(API_ROUTES.ORDER_DETAIL(id)),
+  getOrderDetail: (orderId) => apiService.get(API_ROUTES.ORDER_DETAIL(orderId)),
 
   /* ===== 金流相關 API ===== */
   // 取得綠界支付需要的加密參數
   getEcpayParams: (paymentId) =>
     // POST 請求如果沒有要傳 Body，可以傳空物件 {} 或 null
     apiService.post(API_ROUTES.PAYMENT_GET_PARAMS(paymentId), {}),
+
+  /* ===== 選項相關 API ===== */
+
+  // 取得選項列表
+  getOptions: (listname) =>
+    apiService.get(API_ROUTES.OPTIONS_LIST, { params: { listName: listname } }),
+
+  // 新增選項
+  addOption: (data) => apiService.post(API_ROUTES.OPTIONS_ADD, data),
+
+  // 更新選項
+  updateOption: (id, data) => apiService.put(API_ROUTES.OPTIONS_UPDATE(id), data),
+
+  // 刪除選項
+  deleteOption: (id) => apiService.delete(API_ROUTES.OPTIONS_DELETE(id)),
 }
 
 export default api
