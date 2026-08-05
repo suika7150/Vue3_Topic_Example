@@ -121,9 +121,9 @@ const routes = [
     meta: { title: '本週特惠' },
   },
   {
-    path: '/event/luckywheel',
-    name: 'luckyWheel',
-    component: () => import('@/views/event/LuckyWheel.vue'),
+    path: '/event/luckyslot',
+    name: 'luckySlot',
+    component: () => import('@/views/event/LuckySlot/LuckySlot.vue'),
     meta: { title: '活動專區' },
   },
   {

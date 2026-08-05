@@ -41,4 +41,6 @@
 import { ShoppingBag, Pointer, Warning } from '@element-plus/icons-vue'
 </script>
 
-<style scoped src="./ShoppingGuide.css"></style>
+<style scoped>
+@import '@/views/ShoppingGuide/ShoppingGuide.css';
+</style>

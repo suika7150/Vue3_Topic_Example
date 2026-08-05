@@ -97,7 +97,7 @@ export const NAVIGATION_SCHEMA = [
     usage: ['sidebar', 'topbar'],
     subs: [
       { label: '本週特惠', route: { name: 'flashSale' } },
-      { label: '幸運輪盤', route: { name: 'luckyWheel' } },
+      { label: '幸運拉霸機', route: { name: 'luckySlot' } },
     ],
   },
   {
