@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    component: () => import('@/views/users/Register.vue'),
+    component: () => import('@/views/users/Register/Register.vue'),
     meta: { title: '註冊' },
   },
   {
