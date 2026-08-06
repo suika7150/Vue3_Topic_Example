@@ -1,13 +1,21 @@
-<!-- 帳號:Admin12 // 密碼:A12345 -->
 <template>
-  <div class="login-container">
-    <div class="login-wrapper">
+  <div class="login-page">
+    <div class="login-card">
+      <!-- 左側廣告牆 -->
       <LoginAd />
 
-      <div class="login-form-section">
-        <h2 class="title">會員登入</h2>
+      <!-- 右側表單區 -->
+      <div class="login-card__form-section">
+        <h2 class="login-card__title">會員登入</h2>
 
-        <el-form :model="form" :rules="rules" ref="loginForm" label-position="top">
+        <!-- 帳密登入 -->
+        <el-form
+          :model="form"
+          :rules="rules"
+          ref="loginForm"
+          label-position="top"
+          class="login-form"
+        >
           <template v-if="loginStep === 'credentials'">
             <el-form-item label="帳號" prop="username" :error="backendErrors.username">
               <el-input
@@ -30,23 +38,28 @@
               />
             </el-form-item>
 
-            <div class="form-options">
+            <div class="login-form__options">
               <el-checkbox v-model="form.rememberUsername">記住帳號</el-checkbox>
               <el-checkbox v-model="form.rememberMe">保持登入</el-checkbox>
             </div>
 
-            <el-button class="login-btn" @click="handleLogin"> 登入 </el-button>
+            <div class="login-form__action">
+              <el-button class="app-btn app-btn--primary app-btn--block" @click="handleLogin">
+                登入
+              </el-button>
+            </div>
 
-            <div class="login-links">
+            <div class="login-form__links">
               <el-link type="info" underline="never" @click="handleForgotPassword"
                 >忘記密碼？</el-link
               >
-              <el-link type="primary" underline="never" @click="handleRegister">註冊新帳號</el-link>
+              <el-link type="primary" underline="never" @click="handleRegister">註冊帳號</el-link>
             </div>
           </template>
 
+          <!-- 信箱 OTP 驗證 -->
           <template v-else>
-            <p class="otp-tip">登入驗證碼已寄送至您的註冊信箱</p>
+            <p class="login-form__otp-tip">登入驗證碼已寄送至您的註冊信箱</p>
 
             <el-form-item label="信箱驗證碼" prop="emailCode" :error="backendErrors.emailCode">
               <el-input
@@ -59,9 +72,15 @@
               />
             </el-form-item>
 
-            <el-button class="login-btn" @click="handleVerifyLoginCode">確認驗證</el-button>
+            <div class="login-form__action">
+              <el-button
+                class="app-btn app-btn--primary app-btn--block"
+                @click="handleVerifyLoginCode"
+                >確認驗證
+              </el-button>
+            </div>
 
-            <div class="login-links">
+            <div class="login-form__links login-form__links--center">
               <el-link type="info" underline="never" @click="backToCredentials">
                 返回重新登入
               </el-link>
@@ -197,7 +216,7 @@ const handleLogin = async () => {
   }
 }
 
-// 驗證登入
+// 驗證 OTP
 const handleVerifyLoginCode = async () => {
   if (!loginForm.value) return
 
@@ -263,106 +282,5 @@ const handleRegister = () => {
 </script>
 
 <style scoped>
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 40px 20px;
-}
-
-.login-wrapper {
-  display: flex;
-  width: 100%;
-  max-width: 900px;
-  min-height: 500px;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eee;
-}
-
-/* 右側帳密區 */
-.login-form-section {
-  width: 400px;
-  padding: 50px 40px;
-  background: white;
-}
-
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 30px;
-  color: #333;
-}
-
-/* 信箱驗證碼區 */
-.otp-tip {
-  margin-bottom: 20px;
-  color: #666;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* --- 底線輸入框樣式 --- */
-:deep(.el-input__wrapper) {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  border-bottom: 1px solid #dcdfe6;
-  border-radius: 0;
-  padding-left: 12px;
-  padding-right: 12px;
-  transition: border-color 0.3s ease;
-}
-
-:deep(.el-input__wrapper.is-focus) :deep(.el-input__wrapper:hover) {
-  border-bottom: 1px solid #000;
-}
-.el-input :deep(.el-input__inner) {
-  height: 50px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #000;
-  padding-top: 8px;
-}
-.form-options {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-/* 登入按鈕 */
-.login-btn {
-  width: 100%;
-  height: 48px;
-  font-size: 16px;
-  background-color: #000;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  transition: opacity 0.3s;
-}
-
-.login-btn:hover {
-  opacity: 0.8;
-}
-
-.login-links {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-}
-
-@media (max-width: 1024px) {
-  .login-form-section {
-    width: 100%;
-  }
-}
-
-:deep(.el-form-item__label) {
-  padding-bottom: 4px;
-  font-weight: 500;
-}
+@import '@/views/users/Login/Login.scss';
 </style>
