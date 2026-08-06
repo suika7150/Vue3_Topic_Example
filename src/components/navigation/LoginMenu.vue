@@ -145,6 +145,8 @@ const openCartDrawer = () => {
   align-items: center;
   margin-left: auto;
   gap: 2px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* 共用按鈕 */
@@ -161,6 +163,7 @@ const openCartDrawer = () => {
   padding: 8px 12px;
   font-size: 18px;
   transition: background-color 0.3s;
+  flex-shrink: 0;
 }
 
 /* 購物車按鈕圓圈 */
@@ -269,5 +272,25 @@ const openCartDrawer = () => {
   transition: none; /* 不要拿掉，強制取消動畫 */
   top: 10px;
   left: 15px;
+}
+
+@media (max-width: 768px) {
+  .user-menu {
+    gap: 0px;
+  }
+
+  .user-menu-btn {
+    padding: 6px 6px;
+  }
+
+  .info {
+    display: none;
+  }
+
+  .btn-text,
+  .logout {
+    font-size: 12px;
+    padding: 4px 6px;
+  }
 }
 </style>

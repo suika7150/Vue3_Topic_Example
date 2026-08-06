@@ -1,0 +1,166 @@
+/* 頁面外層容器 */
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* 主卡片區塊 */
+.profile-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  background: white;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    background: linear-gradient(135deg, #1bbfce 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* 表單區塊 */
+.profile-form {
+  :deep(.el-form-item) {
+    margin-bottom: 25px;
+  }
+
+  /* 覆蓋 Element Plus 預設樣式 */
+  :deep(.el-form-item__label) {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+    margin-bottom: 4px;
+    padding: 0;
+    line-height: 1;
+  }
+
+  /* 輸入框風格 */
+  :deep(.el-input__wrapper) {
+    background-color: transparent;
+    box-shadow: none;
+    border-bottom: 1px solid #dcdfe6;
+    border-radius: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    transition: border-color 0.3s ease;
+
+    &.is-focus,
+    &:hover {
+      border-bottom: 1px solid #000;
+    }
+  }
+
+  /* 覆蓋 Element Plus 預設樣式 */
+  :deep(.el-input__inner) {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+
+    &::placeholder {
+      font-size: 15px;
+      color: #a8abb2;
+    }
+  }
+
+  /* 帳號唯讀區塊 */
+  &__readonly-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: #606266;
+    font-weight: 500;
+    border: 1px solid #eee;
+    width: 100%;
+  }
+
+  &__action {
+    margin-top: 40px;
+  }
+}
+
+/* 更新按鈕樣式 */
+.app-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+
+  &--primary {
+    background-color: #000000;
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      background-color: #333333;
+      opacity: 0.9;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+  }
+
+  &--block {
+    width: 100%;
+  }
+
+  /* 點擊時變灰色的 Loading / Disabled 狀態 */
+  &:disabled,
+  &--disabled {
+    background-color: #999999 !important;
+    color: #ffffff !important;
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  /* 按鈕 Loading 狀態 */
+  &__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+/* RWD */
+@media (max-width: 1024px) {
+  .profile-page {
+    padding: 20px 16px;
+  }
+
+  .profile-card {
+    padding: 20px;
+
+    &__title {
+      font-size: 24px;
+    }
+  }
+}
