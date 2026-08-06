@@ -59,7 +59,7 @@ const routes = [
   {
     path: '/profile',
     name: 'profile',
-    component: () => import('@/views/users/Profile.vue'),
+    component: () => import('@/views/users/Profile/Profile.vue'),
     meta: { title: '個人資料', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
