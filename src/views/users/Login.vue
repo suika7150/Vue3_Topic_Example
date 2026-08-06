@@ -114,15 +114,15 @@ const backendErrors = ref({
 const rules = {
   username: [
     { required: true, message: '請輸入帳號或Email', trigger: 'blur' },
-    { min: 3, message: '帳號至少需要3個字符', trigger: 'blur' },
+    { min: 6, message: '帳號至少需要 6 個字', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '請輸入密碼', trigger: 'blur' },
-    { min: 6, message: '密碼至少需要6個字符', trigger: 'blur' },
+    { min: 6, message: '密碼至少需要 6 個字', trigger: 'blur' },
   ],
   emailCode: [
-    { required: true, message: '請輸入6位驗證碼', trigger: 'blur' },
-    { len: 6, message: '驗證碼長度應為 6 位', trigger: 'blur' },
+    { required: true, message: '請輸入 6 位數驗證碼', trigger: 'blur' },
+    { len: 6, message: '驗證碼長度應為 6 位數', trigger: 'blur' },
   ],
 }
 

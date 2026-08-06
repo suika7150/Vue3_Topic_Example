@@ -249,11 +249,10 @@
   line-height: 1;
 }
 
-/** 統一將所有錯誤訊息顯示在輸入框下方，並靠左對齊 */
 :deep(.el-form-item__error) {
-  position: absolute; /* 改為絕對定位，不撐開父容器高度 */
-  top: 45px; /* 統一放在輸入框下方 */
-  left: 2px; /* 靠左對齊並稍微縮排 */
+  position: absolute;
+  top: 45px;
+  left: 2px;
   margin: 0;
   line-height: 1.4;
   text-align: left;
