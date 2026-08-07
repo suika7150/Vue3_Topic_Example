@@ -1,0 +1,162 @@
+<template>
+  <div
+    class="side-ad"
+    :class="[position, { 'ad-float': isScrolling }]"
+    v-if="isVisible"
+    :style="adStyles"
+  >
+    <button class="close-btn" @click="isVisible = false" title="關閉廣告"></button>
+    <a :href="link" target="_self" class="ad-link">
+      <img :src="image" :alt="title" />
+    </a>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
+
+const props = defineProps({
+  position: { type: String, default: 'left' },
+  image: { type: String, default: '' },
+  link: { type: String, default: '#' },
+  title: { type: String, default: '活動廣告' },
+  shift: { type: Number, default: 0 },
+})
+
+const isVisible = ref(true)
+const isScrolling = ref(false)
+const scrollDirection = ref(0)
+let lastScrollY = window.scrollY
+let scrollTimer = null
+
+const adStyles = computed(() => {
+  const yOffset = isScrolling.value ? scrollDirection.value * 100 : 0
+
+  return {
+    // 同時處理水平推擠與垂直捲動
+    // 左右位置根據 position 和 shift 動態計算
+    left: props.position === 'left' ? `${20 + props.shift}px` : 'unset',
+    right: props.position === 'right' ? '20px' : 'unset',
+    transform: `translateY(${yOffset}px)`,
+    // 確保 transition 包含 left 屬性，這樣推開時才有動畫
+    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    zIndex: 9999,
+  }
+})
+
+const handleScroll = () => {
+  isScrolling.value = true
+  const currentScrollY = window.scrollY
+
+  if (currentScrollY > lastScrollY) {
+    scrollDirection.value = 1 // 向下滾動
+  } else {
+    scrollDirection.value = -1 // 向上滾動
+  }
+
+  lastScrollY = currentScrollY
+
+  clearTimeout(scrollTimer)
+  scrollTimer = setTimeout(() => {
+    isScrolling.value = false
+    scrollDirection.value = 0
+  }, 250) // 歸位速度
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+</script>
+
+<style scoped>
+.side-ad {
+  position: fixed;
+  top: 250px;
+  width: 12vw;
+  height: 25vw;
+  max-width: 180px;
+  min-width: 100px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
+  background: #eee;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* .left {
+  left: 20px;
+}
+
+.right {
+  right: 20px;
+} */
+
+.ad-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.side-ad img {
+  display: block;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.close-btn {
+  position: absolute;
+  cursor: pointer;
+  border: none;
+  top: 10px;
+  right: 10px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 101;
+}
+
+.close-btn::before,
+.close-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 2px;
+  background-color: white;
+  border-radius: 1px;
+}
+
+.close-btn::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close-btn::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 1024px) {
+  .side-ad {
+    height: 200px;
+    border-radius: 12px;
+    top: 40%;
+  }
+  .close-btn {
+    right: 4px;
+    top: 5px;
+  }
+}
+</style>

@@ -1,0 +1,286 @@
+<template>
+  <div class="login-page">
+    <div class="login-card">
+      <!-- 左側廣告牆 -->
+      <LoginBanner />
+
+      <!-- 右側表單區 -->
+      <div class="login-card__form-section">
+        <h2 class="login-card__title">會員登入</h2>
+
+        <!-- 帳密登入 -->
+        <el-form
+          :model="form"
+          :rules="rules"
+          ref="loginForm"
+          label-position="top"
+          class="login-form"
+        >
+          <template v-if="loginStep === 'credentials'">
+            <el-form-item label="帳號" prop="username" :error="backendErrors.username">
+              <el-input
+                v-model="form.username"
+                placeholder="請輸入帳號或Email"
+                clearable
+                @input="backendErrors.username = ''"
+              />
+            </el-form-item>
+
+            <el-form-item label="密碼" prop="password" :error="backendErrors.password">
+              <el-input
+                v-model="form.password"
+                type="password"
+                show-password
+                placeholder="請輸入密碼"
+                clearable
+                @keyup.enter="handleLogin"
+                @input="backendErrors.password = ''"
+              />
+            </el-form-item>
+
+            <div class="login-form__options">
+              <el-checkbox v-model="form.rememberUsername">記住帳號</el-checkbox>
+              <el-checkbox v-model="form.rememberMe">保持登入</el-checkbox>
+            </div>
+
+            <div class="login-form__action">
+              <el-button class="app-btn app-btn--primary app-btn--block" @click="handleLogin">
+                登入
+              </el-button>
+            </div>
+
+            <div class="login-form__links">
+              <el-link type="info" underline="never" @click="handleForgotPassword"
+                >忘記密碼？</el-link
+              >
+              <el-link type="primary" underline="never" @click="handleRegister">註冊帳號</el-link>
+            </div>
+          </template>
+
+          <!-- 信箱 OTP 驗證 -->
+          <template v-else>
+            <p class="login-form__otp-tip">登入驗證碼已寄送至您的註冊信箱</p>
+
+            <el-form-item label="信箱驗證碼" prop="emailCode" :error="backendErrors.emailCode">
+              <el-input
+                v-model="form.emailCode"
+                placeholder="請輸入6位驗證碼"
+                maxlength="6"
+                clearable
+                @keyup.enter="handleVerifyLoginCode"
+                @input="backendErrors.emailCode = ''"
+              />
+            </el-form-item>
+
+            <div class="login-form__action">
+              <el-button
+                class="app-btn app-btn--primary app-btn--block"
+                @click="handleVerifyLoginCode"
+                >確認驗證
+              </el-button>
+            </div>
+
+            <div class="login-form__links login-form__links--center">
+              <el-link type="info" underline="never" @click="backToCredentials">
+                返回重新登入
+              </el-link>
+            </div>
+          </template>
+        </el-form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import api from '@/services/api'
+import { useRoute } from 'vue-router'
+import { useNavigation } from '@/composables/useNavigation'
+import LoginBanner from '@/domains/auth/components/LoginBanner.vue'
+import { useUserStore } from '@/stores/userStore'
+import Storage, { REMEMBER_USERNAME_KEY } from '@/utils/storageUtil'
+import { toast } from '@/utils/toastUtil'
+import { ResultCode, getMsgByCode } from '@/utils/resultCodeUtil'
+import { logger } from '@/utils/loggerUtil'
+import { useChallengeV3, useRecaptchaProvider } from 'vue-recaptcha/head'
+
+useRecaptchaProvider()
+const { goTo, goHome } = useNavigation()
+const route = useRoute()
+const userStore = useUserStore()
+const loginForm = ref()
+const loginStep = ref('credentials')
+const { execute } = useChallengeV3()
+const recaptchaToken = ref('')
+
+const form = ref({
+  username: '',
+  password: '',
+  emailCode: '',
+  rememberMe: false,
+  rememberUsername: false,
+})
+
+//儲存後端錯誤的變數
+const backendErrors = ref({
+  username: '',
+  password: '',
+  emailCode: '',
+})
+
+// 驗證規則
+const rules = {
+  username: [
+    { required: true, message: '請輸入帳號或Email', trigger: 'blur' },
+    { min: 6, message: '帳號至少需要 6 個字', trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: '請輸入密碼', trigger: 'blur' },
+    { min: 6, message: '密碼至少需要 6 個字', trigger: 'blur' },
+  ],
+  emailCode: [
+    { required: true, message: '請輸入 6 位數驗證碼', trigger: 'blur' },
+    { len: 6, message: '驗證碼長度應為 6 位數', trigger: 'blur' },
+  ],
+}
+
+onMounted(() => {
+  //載入記住的帳號，讀取token
+  const rememberUsername = Storage.get(REMEMBER_USERNAME_KEY)
+  if (rememberUsername) {
+    form.value.username = rememberUsername
+    form.value.rememberUsername = true
+  }
+})
+
+// 登入驗證
+const handleLogin = async () => {
+  recaptchaToken.value = ''
+  if (!loginForm.value) {
+    return
+  }
+
+  // 每次登入前先清空舊的後端錯誤
+  backendErrors.value.username = ''
+  backendErrors.value.password = ''
+
+  // 執行表單驗證
+  try {
+    await loginForm.value.validate()
+  } catch {
+    return
+  }
+
+  // recaptcha v3
+  try {
+    const token = await execute('login')
+    if (!token) {
+      toast.error('機器人驗證載入失敗，請重試')
+      return
+    }
+    recaptchaToken.value = token
+  } catch (error) {
+    logger.error('reCAPTCHA error:', error)
+    toast.error('驗證異常，請重新整理網頁')
+    return
+  }
+
+  const loginData = {
+    username: form.value.username,
+    password: form.value.password,
+    rememberMe: form.value.rememberMe,
+    recaptchaToken: recaptchaToken.value,
+    isLogin: true,
+  }
+
+  try {
+    await api.login(loginData)
+    toast.success('登入驗證碼已寄出，請至信箱查看')
+    loginStep.value = 'otp'
+  } catch (error) {
+    const code = error.code
+    const message = getMsgByCode(code)
+    if (code === ResultCode.FAIL) {
+      toast.error('目前無法連線至伺服器，請檢查網路狀態')
+    } else if (code === ResultCode.USER_NOT_FOUND || code === ResultCode.USER_IS_NOT_EXIST) {
+      backendErrors.value.username = message
+    } else if (code === ResultCode.PASSWORD_NOT_MATCH) {
+      backendErrors.value.password = message
+    } else if (code === ResultCode.VALIDATION_ERROR) {
+      toast.error(message || '機器人驗證失敗')
+      recaptchaToken.value = ''
+    } else {
+      toast.error(message || '登入失敗')
+    }
+  }
+}
+
+// 驗證 OTP
+const handleVerifyLoginCode = async () => {
+  if (!loginForm.value) return
+
+  backendErrors.value.emailCode = ''
+
+  try {
+    await loginForm.value.validateField('emailCode')
+  } catch (error) {
+    return
+  }
+
+  try {
+    const res = await api.verifyLoginCode({
+      username: form.value.username,
+      code: form.value.emailCode,
+      rememberMe: form.value.rememberMe,
+    })
+
+    await userStore.login(res.result, {
+      role: res.result.role,
+      rememberUsername: form.value.rememberUsername,
+      rememberMe: form.value.rememberMe,
+    })
+
+    toast.success('登入成功')
+
+    const targetPath = route.query.redirect || '/'
+    goTo(targetPath)
+  } catch (error) {
+    const code = error.code
+    const message = getMsgByCode(code)
+
+    if (
+      code === ResultCode.OTP_NOT_FOUND ||
+      code === ResultCode.OTP_EXPIRED ||
+      code === ResultCode.OTP_ALREADY_USED ||
+      code === ResultCode.OTP_INVALID
+    ) {
+      backendErrors.value.emailCode = message
+    } else {
+      toast.error(message || '驗證失敗')
+    }
+  }
+}
+
+// 返回重新登入時清掉驗證碼和錯誤
+const backToCredentials = () => {
+  loginStep.value = 'credentials'
+  form.value.emailCode = ''
+  backendErrors.value.emailCode = ''
+}
+
+//尚未開發
+const handleForgotPassword = () => {
+  toast.info('忘記密碼功能開發中...')
+  goHome()
+  // router.push('/forgot-password')
+}
+
+const handleRegister = () => {
+  goTo('register')
+}
+</script>
+
+<style scoped>
+@import '@/domains/auth/views/Login/Login.scss';
+</style>

@@ -1,16 +1,16 @@
 <script setup>
 import { computed } from 'vue'
-import SideAdBanner from './components/ad/SideAdBanner.vue'
-import CartDrawer from '@/components/cart/CartDrawer.vue'
-import { useCartStore } from '@/store/cartStore'
-import BottomFooter from './components/navigation/BottomFooter.vue'
-import TopBar from './components/navigation/TopBar.vue'
-import TopBarAdBanner from './components/navigation/TopBarAdBanner.vue'
-import BackToTop from './components/navigation/BackToTop.vue'
-import { useUserStore } from '@/store/userStore'
-import { useSidebarStore } from './store/sidebarStore'
-import ModalProvider from './components/ModalProvider.vue'
-import SidebarMenu from '@/components/navigation/SidebarMenu.vue'
+import FloatBanner from './domains/marketing/components/FloatBanner.vue'
+import CartDrawer from '@/domains/checkout/components/CartDrawer.vue'
+import { useCartStore } from '@/stores/cartStore.js'
+import AppFooter from './layouts/components/AppFooter.vue'
+import AppHeader from './layouts/components/AppHeader.vue'
+import AnnouncementBar from './layouts/components/AnnouncementBar.vue'
+import FloatActionGroup from './layouts/components/FloatActionGroup.vue'
+import { useUserStore } from '@/stores/userStore.js'
+import { useSidebarStore } from './stores/sidebarStore.js'
+import ModalProvider from '@/components/providers/ModalProvider.vue'
+import NavDrawerMenu from '@/layouts/components/NavDrawerMenu.vue'
 
 const sidebarStore = useSidebarStore()
 const userStore = useUserStore()
@@ -45,19 +45,19 @@ const handleSidebarNavigate = () => {
       <template #header>
         <span class="sidebar-header-title">導航選單</span>
       </template>
-      <SidebarMenu :is-login="isLogin" @navigate="handleSidebarNavigate" />
+      <NavDrawerMenu :is-login="isLogin" @navigate="handleSidebarNavigate" />
     </el-drawer>
 
     <CartDrawer v-model:drawerVisible="cartStore.drawerVisible" />
 
     <div class="topbar-ad-banner">
-      <TopBarAdBanner />
+      <AnnouncementBar />
     </div>
 
-    <TopBar bannerOn />
+    <AppHeader bannerOn />
 
     <div class="sidebar-layout">
-      <SideAdBanner
+      <FloatBanner
         position="left"
         :shift="adShift"
         image="/banner/side-ad-banner.png"
@@ -69,9 +69,9 @@ const handleSidebarNavigate = () => {
         <router-view />
       </div>
     </div>
-    <BackToTop class="backtotop" />
+    <FloatActionGroup class="FloatActionGroup" />
     <footer class="footer">
-      <BottomFooter />
+      <AppFooter />
     </footer>
   </div>
 </template>
@@ -138,7 +138,7 @@ const handleSidebarNavigate = () => {
   padding-top: 0;
 }
 
-.backtotop {
+.FloatActionGroup {
   z-index: 200;
 }
 

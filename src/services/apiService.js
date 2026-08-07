@@ -1,8 +1,8 @@
 import axios from 'axios'
 import router from '@/router'
-import { hideLoading, showLoading } from '@/utils/loadingService'
-import { toast } from '@/utils/message'
-import { useUserStore } from '@/store/userStore'
+import { hideLoading, showLoading } from '@/utils/loadingUtil'
+import { toast } from '@/utils/toastUtil'
+import { useUserStore } from '@/stores/userStore'
 
 // 建立 axios 實例
 const apiService = axios.create({

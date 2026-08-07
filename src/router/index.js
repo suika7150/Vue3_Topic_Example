@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/store/userStore'
-import { useCartStore } from '@/store/cartStore'
+import { useUserStore } from '@/stores/userStore'
+import { useCartStore } from '@/stores/cartStore'
 import Storage, { TOKEN_KEY, USER_ROLE_KEY } from '@/utils/storageUtil'
-import { showLoading, hideLoading } from '@/utils/loadingService'
-import { logger } from '@/utils/logger'
-import { ROLES } from '@/constants/userConstants'
+import { showLoading, hideLoading } from '@/utils/loadingUtil'
+import { logger } from '@/utils/loggerUtil'
+import { ROLES } from '@/domains/auth/constants/userConstants'
 
 const routes = [
   {
@@ -17,19 +17,19 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/users/Login/Login.vue'),
+    component: () => import('@/domains/auth/views/Login/Login.vue'),
     meta: { title: '登入' },
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import('@/views/users/Register/Register.vue'),
+    component: () => import('@/domains/auth/views/Register/Register.vue'),
     meta: { title: '註冊' },
   },
   {
     path: '/about',
     name: 'about',
-    component: () => import('@/views/About.vue'),
+    component: () => import('@/views/About/About.vue'),
     meta: { title: '關於我們' },
   },
   {
@@ -59,25 +59,25 @@ const routes = [
   {
     path: '/profile',
     name: 'profile',
-    component: () => import('@/views/users/Profile/Profile.vue'),
+    component: () => import('@/domains/auth/views/Profile/Profile.vue'),
     meta: { title: '個人資料', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/products',
     name: 'overview',
-    component: () => import('@/views/products/ProductList.vue'),
+    component: () => import('@/domains/product/views/ProductList.vue'),
     meta: { title: '商品總覽' },
   },
   {
     path: '/products/add',
     name: 'addProduct',
-    component: () => import('@/views/products/AddProduct.vue'),
+    component: () => import('@/domains/product/views/AddProduct.vue'),
     meta: { title: '新增商品', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/products/manage',
     name: 'productManage',
-    component: () => import('@/views/products/ProductManage.vue'),
+    component: () => import('@/domains/product/views/ProductManage.vue'),
     meta: {
       title: '商品管理',
       requiresAuth: true,
@@ -87,67 +87,67 @@ const routes = [
   {
     path: '/products/edit/:id',
     name: 'editProduct',
-    component: () => import('@/views/products/EditProduct.vue'),
+    component: () => import('@/domains/product/views/EditProduct.vue'),
     meta: { title: '商品編輯', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/product/:id',
     name: 'productDetail',
-    component: () => import('@/views/products/ProductDetail.vue'),
+    component: () => import('@/domains/product/views/ProductDetail.vue'),
     meta: { title: '商品詳情' },
   },
   {
     path: '/settings/options',
     name: 'optionsManage',
-    component: () => import('@/views/settings/OptionsManage.vue'),
+    component: () => import('@/domains/system/views/OptionsManage.vue'),
     meta: { title: '選項管理', requiresAuth: true, role: [ROLES.ADMIN] },
   },
   {
     path: '/doubleeleven/rewards',
     name: 'rewards',
-    component: () => import('@/views/doubleeleven/Rewards.vue'),
+    component: () => import('@/domains/marketing/views/Rewards.vue'),
     meta: { title: '年度特選回饋' },
   },
   {
     path: '/doubleeleven/gifts',
     name: 'gifts',
-    component: () => import('@/views/doubleeleven/Gifts.vue'),
+    component: () => import('@/domains/marketing/views/Gifts.vue'),
     meta: { title: '滿額加碼驚喜' },
   },
   {
     path: '/event/flashsale',
     name: 'flashSale',
-    component: () => import('@/views/event/FlashSale.vue'),
+    component: () => import('@/domains/marketing/views/FlashSale.vue'),
     meta: { title: '本週特惠' },
   },
   {
     path: '/event/luckyslot',
     name: 'luckySlot',
-    component: () => import('@/views/event/LuckySlot/LuckySlot.vue'),
+    component: () => import('@/domains/marketing/views/LuckySlot/LuckySlot.vue'),
     meta: { title: '活動專區' },
   },
   {
     path: '/crossover/:type',
     name: 'crossover',
-    component: () => import('@/views/crossover/CrossoverView.vue'),
+    component: () => import('@/domains/marketing/views/CrossoverView.vue'),
     meta: { title: '聯名專區', requiresAuth: false },
   },
   {
     path: '/brand/:type',
     name: 'brand',
-    component: () => import('@/views/brands/BrandsView.vue'),
+    component: () => import('@/domains/brand/views/BrandsView.vue'),
     meta: { title: '品牌專區', requiresAuth: false },
   },
   {
     path: '/seasonal/featured',
     name: 'seasonalFeatured',
-    component: () => import('@/views/seasonal/SeasonFeatured.vue'),
+    component: () => import('@/domains/marketing/views/SeasonFeatured.vue'),
     meta: { title: '季節限定' },
   },
   {
     path: '/seasonal/travel',
     name: 'travelPicks',
-    component: () => import('@/views/seasonal/TravelPicks.vue'),
+    component: () => import('@/domains/marketing/views/TravelPicks.vue'),
     meta: { title: '旅遊推薦' },
   },
   {
@@ -159,7 +159,7 @@ const routes = [
   {
     path: '/checkout',
     name: 'checkout',
-    component: () => import('@/views/checkout/CheckoutPage.vue'),
+    component: () => import('@/domains/checkout/views/CheckoutPage.vue'),
     meta: { title: '結帳', requiresAuth: true, role: [ROLES.USER] },
     beforeEnter: (to, from, next) => {
       // 檢查「購物車是否有東西」
@@ -176,30 +176,30 @@ const routes = [
   {
     path: '/checkout/success/:orderId',
     name: 'checkoutSuccess',
-    component: () => import('@/views/checkout/CheckoutSuccess.vue'),
+    component: () => import('@/domains/checkout/views/CheckoutSuccess.vue'),
     meta: { title: '結帳成功' },
   },
   {
     path: '/orders/list',
     name: 'orderList',
-    component: () => import('@/views/orders/OrderList.vue'),
+    component: () => import('@/domains/order/views/OrderList.vue'),
     meta: { title: '我的訂單', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/orders/detail/:orderId',
     name: 'orderDetail',
-    component: () => import('@/views/orders/OrderDetail.vue'),
+    component: () => import('@/domains/order/views/OrderDetail.vue'),
     meta: { title: '訂單詳情', requiresAuth: true, role: [ROLES.USER, ROLES.ADMIN] },
   },
   {
     path: '/accessDenied',
     name: 'accessDenied',
-    component: () => import('@/views/users/AccessDenied.vue'),
+    component: () => import('@/domains/auth/views/AccessDenied.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
-    component: () => import('@/views/error/NotFound.vue'),
+    component: () => import('@/views/NotFound.vue'),
     meta: { title: '404 - 找不到頁面' },
   },
 ]

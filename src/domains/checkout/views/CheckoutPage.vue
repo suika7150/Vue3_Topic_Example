@@ -1,0 +1,1250 @@
+<template>
+  <div class="checkout-page">
+    <div class="container">
+      <div class="step-container">
+        <div class="modern-steps">
+          <div
+            v-for="(step, index) in ['確認商品', '填寫資料', '完成訂單']"
+            :key="index"
+            class="step-wrapper"
+          >
+            <div
+              :class="[
+                'step-item',
+                {
+                  active: currentStep === index,
+                  completed: currentStep > index,
+                },
+              ]"
+            >
+              <div class="step-icon">
+                <el-icon v-if="currentStep > index"><Check /></el-icon>
+                <span v-else>{{ index + 1 }}</span>
+              </div>
+              <span class="step-text">{{ step }}</span>
+            </div>
+
+            <div v-if="index < 2" :class="['step-line', { active: currentStep > index }]"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-grid">
+        <div class="main-content">
+          <div v-if="currentStep === 0" class="checkout-step">
+            <h2 class="step-title">商品清單</h2>
+            <div class="space-y-4">
+              <div v-for="item in cartItems" :key="item.id" class="item-card">
+                <img :src="item.imageBase64" :alt="item.name" class="item-image" />
+                <div class="item-details">
+                  <h3 class="item-name">{{ item.name }}</h3>
+                  <p class="item-description">{{ item.description }}</p>
+                </div>
+                <div class="item-quantity-control">
+                  <span class="quantity-label">數量 :</span>
+                  <el-input-number
+                    v-model="item.quantity"
+                    :min="1"
+                    @change="(val) => updateStorage(val, item.id)"
+                  />
+                </div>
+                <div class="item-price-info">
+                  <div class="item-total-price">
+                    NT$ {{ (item.price * item.quantity).toLocaleString() }}
+                  </div>
+                  <div class="item-unit-price">單價: NT$ {{ item.price.toLocaleString() }}</div>
+                </div>
+                <el-button type="danger" @click="removeItem(item.id)" class="delete-btn">
+                  <el-icon><Delete /></el-icon>
+                  <span>刪除</span>
+                </el-button>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="currentStep === 1" class="checkout-step">
+            <h2 class="step-title">配送資訊</h2>
+            <el-form
+              :model="shippingForm"
+              :rules="shippingRules"
+              ref="shippingFormRef"
+              class="minimalist-form"
+              label-width="100px"
+            >
+              <el-form-item label="收件人" prop="name" class="narrow-item">
+                <el-input v-model="shippingForm.name" placeholder="請輸入收件人姓名" />
+              </el-form-item>
+
+              <el-form-item label="聯絡電話" prop="phone" class="narrow-item">
+                <el-input v-model="shippingForm.phone" placeholder="請輸入聯絡電話" />
+              </el-form-item>
+
+              <el-form-item label="配送方式">
+                <el-radio-group v-model="shippingForm.shippingMethod">
+                  <el-radio
+                    v-for="opt in shippingOptions"
+                    :key="opt.value"
+                    :label="opt.value"
+                    class="option-card"
+                  >
+                    <div class="option-content">
+                      <div>
+                        <span class="option-label">{{ opt.label }}</span>
+                        <span class="option-hint">{{ opt.desc }}</span>
+                      </div>
+                      <span class="option-price">
+                        {{ opt.price === 0 ? '免費' : `NT$ ${opt.price}` }}
+                      </span>
+                    </div>
+                  </el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <div class="shipping-detail-box">
+                <template v-if="shippingForm.shippingMethod === 'HOME_DELIVERY'">
+                  <el-form-item label="配送地址" required>
+                    <div class="address-fields">
+                      <div class="address-selects">
+                        <el-select
+                          v-model="shippingForm.city"
+                          placeholder="請選擇縣市"
+                          class="flex-1"
+                        >
+                          <el-option
+                            v-for="city in cities"
+                            :key="city.value"
+                            :label="city.label"
+                            :value="city.value"
+                          />
+                        </el-select>
+
+                        <el-select
+                          v-model="shippingForm.district"
+                          placeholder="請選擇區域"
+                          class="flex-1"
+                          :disabled="!shippingForm.city"
+                        >
+                          <el-option
+                            v-for="district in districts"
+                            :key="district.zip"
+                            :label="district.label"
+                            :value="district.value"
+                          />
+                        </el-select>
+                      </div>
+
+                      <el-input
+                        v-model="shippingForm.address"
+                        placeholder="請輸詳細地址"
+                        type="textarea"
+                        :rows="1"
+                        class="mt-2"
+                      />
+                    </div>
+                  </el-form-item>
+                </template>
+
+                <template
+                  v-else-if="['CVS_711', 'CVS_FAMILY'].includes(shippingForm.shippingMethod)"
+                >
+                  <el-form-item label="超商門市">
+                    <el-button type="primary" plain @click="openCvsMap"
+                      >開啟電子地圖選取門市</el-button
+                    >
+                    <div v-if="shippingForm.cvsStore" class="mt-2 text-blue-500">
+                      已選門市：{{ shippingForm.cvsStore.storeName }}
+                    </div>
+                  </el-form-item>
+                </template>
+
+                <template v-else-if="shippingForm.shippingMethod === 'STORE_PICKUP'">
+                  <el-form-item label="取貨門市">
+                    <el-select
+                      v-model="shippingForm.pickupStoreId"
+                      placeholder="請選擇取貨地點"
+                      class="pickup-select"
+                    >
+                      <el-option label="台北總店" value="001" />
+                      <el-option label="台中分店" value="002" />
+                    </el-select>
+                  </el-form-item>
+                </template>
+              </div>
+
+              <el-form-item label="備註">
+                <el-input
+                  v-model="shippingForm.notes"
+                  type="textarea"
+                  :rows="1"
+                  placeholder="有任何特殊需求請在此註明"
+                />
+              </el-form-item>
+              <div class="invoice-section mt-8">
+                <h2 class="step-title">發票資訊</h2>
+                <div class="invoice-box">
+                  <el-radio-group v-model="shippingForm.invoiceType" class="modern-selector-group">
+                    <el-radio label="DIGITAL" class="option-card">
+                      <div class="option-content">
+                        <span class="option-label">雲端發票 (個人)</span>
+                      </div>
+                    </el-radio>
+                    <el-radio label="COMPANY" class="option-card">
+                      <div class="option-content">
+                        <span class="option-label">公司用 (三聯式)</span>
+                      </div>
+                    </el-radio>
+                  </el-radio-group>
+
+                  <div v-if="shippingForm.invoiceType === 'DIGITAL'" class="carrier-options mt-4">
+                    <el-select
+                      v-model="shippingForm.invoiceCarrier"
+                      placeholder="請選擇載具類型"
+                      style="width: 100%; max-width: 400px"
+                    >
+                      <el-option label="會員載具 (中獎自動通知)" value="MEMBER" />
+                      <el-option label="手機條碼載具" value="PHONE" />
+                      <el-option label="自然人憑證" value="CERT" />
+                    </el-select>
+
+                    <div class="mt-4">
+                      <el-form-item
+                        v-if="shippingForm.invoiceCarrier === 'PHONE'"
+                        prop="phoneCarrier"
+                        label="載具條碼"
+                      >
+                        <el-input
+                          v-model="shippingForm.phoneCarrier"
+                          placeholder="/ABC1234 (需含斜線)"
+                          class="narrow-item"
+                        />
+                      </el-form-item>
+
+                      <el-form-item
+                        v-if="shippingForm.invoiceCarrier === 'CERT'"
+                        prop="certCarrier"
+                        label="憑證編號"
+                      >
+                        <el-input
+                          v-model="shippingForm.certCarrier"
+                          placeholder="兩碼大寫英文+14碼數字"
+                          class="narrow-item"
+                        />
+                      </el-form-item>
+                    </div>
+                  </div>
+
+                  <div v-if="shippingForm.invoiceType === 'COMPANY'" class="company-fields mt-4">
+                    <el-form-item label="統一編號" prop="companyTaxId">
+                      <el-input
+                        v-model="shippingForm.companyTaxId"
+                        placeholder="請輸入 8 碼統一編號"
+                        maxlength="8"
+                        class="narrow-item"
+                      />
+                    </el-form-item>
+                    <el-form-item label="公司名稱" prop="companyTitle">
+                      <el-input
+                        v-model="shippingForm.companyTitle"
+                        placeholder="請輸入公司完整名稱"
+                        class="narrow-item"
+                      />
+                    </el-form-item>
+                  </div>
+                </div>
+              </div>
+            </el-form>
+            <div class="payment-section mt-8">
+              <h2 class="step-title">付款方式</h2>
+              <div class="invoice-box">
+                <el-radio-group v-model="paymentMethod">
+                  <el-radio label="CREDIT_CARD" class="option-card">
+                    <div class="option-content">
+                      <div>
+                        <div class="option-label">信用卡付款</div>
+                        <div class="option-hint">支援 Visa、Mastercard、JCB</div>
+                      </div>
+                    </div>
+                  </el-radio>
+
+                  <el-radio label="ATM" class="option-card">
+                    <div class="option-content">
+                      <div>
+                        <div class="option-label">銀行轉帳</div>
+                        <div class="option-hint">轉帳後請上傳證明</div>
+                      </div>
+                    </div>
+                  </el-radio>
+
+                  <el-radio label="COD" class="option-card">
+                    <div class="option-content">
+                      <div>
+                        <div class="option-label">貨到付款</div>
+                        <div class="option-hint">需加收 NT$30</div>
+                      </div>
+                    </div>
+                  </el-radio>
+                </el-radio-group>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar">
+          <div class="order-summary-card">
+            <h3 class="summary-title">訂單明細</h3>
+
+            <div class="summary-details">
+              <div class="summary-line">
+                <span>商品小計</span>
+                <span>NT$ {{ subtotal.toLocaleString() }}</span>
+              </div>
+
+              <div
+                v-if="discount > 0"
+                class="summary-line"
+                style="color: #34c759; font-weight: 500"
+              >
+                <span>優惠券折扣</span>
+                <span>- NT$ {{ discount.toLocaleString() }}</span>
+              </div>
+
+              <div class="summary-line">
+                <span>運費</span>
+                <span v-if="shippingFee === 0" style="color: #34c759; font-weight: 500">免運</span>
+                <span v-else>NT$ {{ shippingFee.toLocaleString() }}</span>
+              </div>
+
+              <div
+                v-if="subtotal < FREE_SHIPPING_THRESHOLD"
+                class="coupon-hint"
+                style="font-size: 12px; margin-top: 4px"
+              >
+                再買 NT$ {{ (FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString() }} 即可享免運！
+              </div>
+
+              <div v-if="paymentMethod === 'COD'" class="summary-line">
+                <span>貨到付款手續費</span>
+                <span>NT$ 30</span>
+              </div>
+
+              <div class="summary-total-line">
+                <div class="summary-total-label">總計</div>
+                <div class="summary-total-price">NT$ {{ total.toLocaleString() }}</div>
+              </div>
+            </div>
+
+            <div class="tax-info">* 價格已含稅</div>
+
+            <div class="coupon-section">
+              <el-input v-model="couponCode" placeholder="輸入優惠券代碼" size="small">
+                <template #append>
+                  <el-button @click="applyCoupon" :loading="applyingCoupon"> 使用 </el-button>
+                </template>
+              </el-input>
+              <div class="coupon-hint">
+                測試代碼：<code @click="couponCode = 'DOUBLE11'" class="code-tag">DOUBLE11</code>
+              </div>
+            </div>
+
+            <div class="summary-item-list">
+              <h4 class="summary-item-list-title">購買項目</h4>
+              <div v-for="item in cartItems" :key="item.id" class="summary-item-line">
+                <span>{{ item.name }} × {{ item.quantity }}</span>
+                <span>NT$ {{ (item.price * item.quantity).toLocaleString() }}</span>
+              </div>
+            </div>
+
+            <div class="navigation-buttons">
+              <el-button v-if="currentStep > 0" @click="previousStep"> 上一步 </el-button>
+
+              <el-button v-if="currentStep < 2" type="primary" @click="nextStep">
+                下一步
+              </el-button>
+
+              <el-button v-else type="success" @click="submitOrder" :loading="submitting">
+                確認訂單
+              </el-button>
+            </div>
+          </div>
+        </div>
+        <ProductCrossSell />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import api from '@/services/api'
+import { storeToRefs } from 'pinia'
+import { Check, Delete } from '@element-plus/icons-vue'
+import taiwanData from '@/assets/data/AllData.json'
+import { toast } from '@/utils/toastUtil'
+import ProductCrossSell from '@/domains/product/components/ProductCrossSell.vue'
+import { useNavigation } from '@/composables/useNavigation'
+import { useCartStore } from '@/stores/cartStore'
+import { useModalStore } from '@/stores/modalStore'
+import Storage, { CART_KEY } from '@/utils/storageUtil'
+import { logger } from '@/utils/loggerUtil'
+
+const cartStore = useCartStore()
+
+const { goTo, goCheckoutSuccess } = useNavigation()
+const { cart } = storeToRefs(cartStore) // 同步購物車
+const modalStore = useModalStore()
+const router = useRouter()
+const route = useRoute()
+
+const currentStep = ref(0) // 當前步驟
+const submitting = ref(false) // 訂單提交狀態
+
+const applyingCoupon = ref(false) // 優惠券套用中狀態
+const couponCode = ref('') // 優惠券代碼
+const discount = ref(0) // 優惠金額，預設為 0
+
+const FREE_SHIPPING_THRESHOLD = 1000 // 滿額免運門檻
+
+const cartItems = computed(() => cartStore.cart)
+
+// 監聽購物車內容變動
+watch(
+  cart,
+  (newCart) => {
+    // 如果購物車變空了
+    // 且目前還在結帳步驟中
+    if (newCart.length === 0 && currentStep.value < 2) {
+      toast.info('購物車已無商品，導向首頁')
+      goTo('home')
+    }
+  },
+  { deep: true },
+)
+
+const updateStorage = (val, itemId) => {
+  cartStore.updateQuantity(itemId, val) // 更新 store 中的數據
+  const item = cartItems.value.find((i) => i.id === itemId) // 從購物車中找出該商品以獲取名稱
+  toast.success(`${item.name} 數量已更新為 ${val}`)
+}
+
+// 配送表單
+const shippingForm = ref({
+  name: '',
+  phone: '',
+  shippingMethod: 'HOME_DELIVERY', // 預設宅配
+  invoiceType: 'DIGITAL', // DIGITAL, PAPER, COMPANY
+  invoiceCarrier: 'MEMBER', // MEMBER (會員), PHONE (手機), CERT (自然人)
+  phoneCarrier: '', // 手機載具條碼 (需以 / 開頭)
+  certCarrier: '', // 自然人憑證
+  companyTaxId: '', // 統一編號
+  companyTitle: '', // 公司抬頭
+
+  //基本資料
+  city: '',
+  district: '',
+  address: '',
+
+  // 超商專用
+  cvsStore: null, // 儲存選擇的門市資訊
+  //自取專用
+  pickupStoreId: '',
+  notes: '',
+})
+
+const shippingOptions = [
+  { label: '宅配到府', value: 'HOME_DELIVERY', price: 80, desc: '黑貓宅急便，約 1-3 個工作天送達' },
+  { label: '7-11 取貨', value: 'CVS_711', price: 60, desc: '寄出後約 2-3 天到指定門市' },
+  { label: '全家取貨', value: 'CVS_FAMILY', price: 60, desc: '寄出後約 2-3 天到指定門市' },
+  { label: '到店自取', value: 'STORE_PICKUP', price: 0, desc: '實體門市取貨 免運費' },
+]
+
+const shippingFormRef = ref()
+
+// 付款方式
+const paymentMethod = ref('CREDIT_CARD')
+
+// 信用卡表單
+const creditCardForm = ref({
+  cardNumber: '',
+  expiryDate: '',
+  cvv: '',
+  cardholderName: '',
+})
+
+const creditCardFormRef = ref()
+
+// 表單驗證規則
+const shippingRules = {
+  name: [{ required: true, message: '請輸入收件人姓名', trigger: 'blur' }],
+  phone: [{ required: true, message: '請輸入聯絡電話', trigger: 'blur' }],
+  address: [{ required: true, message: '請輸入配送地址', trigger: 'blur' }],
+  shippingMethod: [{ required: true, message: '請選擇配送方式', trigger: 'change' }],
+
+  // 發票資訊
+  companyTaxId: [
+    { required: true, message: '請輸入統一編號', trigger: 'blur' },
+    { pattern: /^\d{8}$/, message: '請輸入正確的 8 碼統一編號', trigger: 'blur' },
+  ],
+  companyTitle: [{ required: true, message: '請輸入公司抬頭', trigger: 'blur' }],
+  phoneCarrier: [
+    { required: true, message: '請輸入手機載具', trigger: 'blur' },
+    { pattern: /^\/[0-9A-Z+.]{7}$/, message: '格式應為 / 加上 7 碼大寫英數', trigger: 'blur' },
+  ],
+}
+
+const creditCardRules = {
+  cardNumber: [{ required: true, message: '請輸入信用卡號', trigger: 'blur' }],
+  expiryDate: [{ required: true, message: '請輸入有效期限', trigger: 'blur' }],
+  cvv: [{ required: true, message: '請輸入安全碼', trigger: 'blur' }],
+  cardholderName: [{ required: true, message: '請輸入持卡人姓名', trigger: 'blur' }],
+}
+
+// 取得台灣縣市資料 (JSON 資料在 assets/data/AllData.json)
+const cities = computed(() => {
+  return taiwanData.map((item) => ({ label: item.CityName, value: item.CityName }))
+})
+
+// 根據目前選中的縣市，動態計算該縣市的區域清單
+const districts = computed(() => {
+  if (!shippingForm.value.city) return []
+
+  // 找出目前選中的縣市資料
+  const selectedCity = taiwanData.find((item) => item.CityName === shippingForm.value.city)
+
+  // 回傳該縣市的區域清單
+  return selectedCity
+    ? selectedCity.AreaList.map((area) => ({
+        label: area.AreaName,
+        value: area.AreaName,
+        zip: area.ZipCode,
+      }))
+    : []
+})
+
+// 縣市切換時，自動重設區域，避免錯誤組合
+watch(
+  () => shippingForm.value.city,
+  () => {
+    shippingForm.value.district = ''
+  },
+)
+
+// 商品小計
+const subtotal = computed(() => {
+  return cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
+})
+
+// 運費
+const shippingFee = computed(() => {
+  // 如果總計達到免運門檻，則運費為 0
+  if (subtotal.value >= FREE_SHIPPING_THRESHOLD) {
+    return 0
+  }
+  // 根據選擇的配送方式計算運費
+  switch (shippingForm.value.shippingMethod) {
+    case 'CVS_711':
+    case 'CVS_FAMILY':
+      return 60
+    case 'HOME_DELIVERY':
+      return 80
+    case 'STORE_PICKUP':
+      return 0
+    default:
+      return shippingForm.value.shippingMethod === 'express' ? 100 : 60
+  }
+})
+
+// 總計
+const total = computed(() => {
+  // 計算基礎總額：小計 + 運費 - 優惠折扣
+  let totalAmount = subtotal.value + shippingFee.value - discount.value
+
+  // 判斷是否需要外加貨到付款手續費
+  if (paymentMethod.value === 'COD') {
+    totalAmount += 30 // 貨到付款手續費
+  }
+  return Math.max(0, totalAmount) // 確保總額不為負數
+})
+
+// 確認訂單防止重複提交
+const submitOrder = async () => {
+  if (submitting.value) return
+  submitting.value = true
+
+  try {
+    // 根據選擇的配送方式組裝地址
+    let finalAddress = ''
+    const method = shippingForm.value.shippingMethod
+    if (shippingForm.value.shippingMethod === 'HOME_DELIVERY') {
+      finalAddress = `${shippingForm.value.city}${shippingForm.value.district}${shippingForm.value.address}`
+    } else if (['CVS_711', 'CVS_FAMILY'].includes(method)) {
+      finalAddress = `[超商取貨] ${shippingForm.value.cvsStore?.storeName} - ${shippingForm.value.cvsStore?.storeAddress}`
+    } else {
+      finalAddress = `[門市自取] 門市地址: ${shippingForm.value.pickupStoreId}`
+    }
+    // 建立訂單資料
+    const orderData = {
+      name: shippingForm.value.name,
+      phone: shippingForm.value.phone,
+      address: finalAddress, // 地址
+      shippingMethod: shippingForm.value.shippingMethod,
+      shippingFee: shippingFee.value, // 運費
+      discount: discount.value, // 折扣金額
+      couponCode: couponCode.value, // 優惠券代碼
+      notes: shippingForm.value.notes,
+      paymentMethod: paymentMethod.value,
+      total: total.value,
+      // 傳遞購物車項目
+      items: cartItems.value.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+    }
+
+    // 呼叫後端建立訂單
+    const response = await api.createOrder(orderData)
+    const { ecpayParams, merchantTradeNo } = response.result
+
+    cartStore.clearCart()
+    Storage.remove(CART_KEY)
+
+    if (paymentMethod.value === 'CREDIT_CARD' && ecpayParams) {
+      toast.info('正在導向支付頁面...')
+      processEcpayPayment(ecpayParams)
+    } else {
+      // 如果是貨到付款或轉帳，直接清空並完成訂單
+      toast.success('訂單建立成功')
+      goCheckoutSuccess(merchantTradeNo)
+    }
+  } catch (error) {
+    logger.debug('訂單建立失敗:', error)
+    toast.error('訂單建立失敗，請稍後再試')
+    submitting.value = false
+  }
+}
+
+// 刪除項目
+const removeItem = (id) => {
+  modalStore.open({
+    title: '提示',
+    message: '確定要刪除此項商品嗎?',
+    onConfirm: () => {
+      cartStore.removeProduct(id)
+      toast.success('商品已移除')
+    },
+  })
+}
+// 點擊後回到頁面頂端
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth', // 平滑滾動效果
+  })
+}
+
+const nextStep = async () => {
+  if (currentStep.value === 1) {
+    // 驗證配送表單
+    const valid = await shippingFormRef.value.validate().catch(() => false)
+    if (!valid) return
+  }
+
+  if (currentStep.value === 2 && paymentMethod.value === 'CREDIT_CARD') {
+    // 驗證信用卡表單
+    const valid = await creditCardFormRef.value.validate().catch(() => false)
+    if (!valid) return
+  }
+
+  currentStep.value++
+  scrollToTop() // 置頂
+}
+
+const previousStep = () => {
+  currentStep.value--
+  scrollToTop() // 置頂
+}
+
+const processEcpayPayment = (params) => {
+  const ecpayFields = [
+    'MerchantID',
+    'MerchantTradeNo',
+    'MerchantTradeDate',
+    'PaymentType',
+    'TotalAmount',
+    'TradeDesc',
+    'ItemName',
+    'ReturnURL',
+    'ChoosePayment',
+    'EncryptType',
+    'ClientBackURL',
+    'CheckMacValue',
+  ]
+
+  const form = document.createElement('form')
+  form.method = 'POST'
+  form.action = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5'
+
+  ecpayFields.forEach((key) => {
+    const input = document.createElement('input')
+    input.type = 'hidden'
+    input.name = key
+    input.value = params[key]
+    form.appendChild(input)
+  })
+
+  document.body.appendChild(form)
+  form.submit()
+}
+
+const applyCoupon = async () => {
+  const inputCode = couponCode.value.trim().toUpperCase()
+
+  if (!inputCode) {
+    toast.warning('請輸入優惠券代碼')
+    return
+  }
+
+  try {
+    applyingCoupon.value = true
+    const response = await api.validateCoupon(inputCode)
+
+    const data = response.result
+
+    // 測試用
+    if (data && data.valid) {
+      discount.value = data.discountAmount //更新折扣金額
+      toast.success(response.msg || '優惠券套用成功！')
+    } else {
+      discount.value = 0 // 清空折扣金額
+      toast.error(response.msg || '優惠券無效或已過期')
+    }
+  } catch (error) {
+    toast.error('優惠券驗證失敗', error)
+  } finally {
+    applyingCoupon.value = false
+  }
+}
+
+// 處理瀏覽器 上一頁 / 下一頁 && 檢查購物車狀態
+const handlePageShow = (event) => {
+  if (event.persisted && cartItems.value.length === 0) {
+    toast.info('購物車已無商品，已為您導向訂單頁面')
+    goTo('orderList')
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('pageshow', handlePageShow)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('pageshow', handlePageShow)
+})
+</script>
+
+<style scoped>
+.checkout-page {
+  padding: 32px 16px;
+}
+
+.container {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.main-content {
+  grid-column: 1 / 3;
+}
+
+/* 進度條外框 */
+.modern-steps {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 12px 30px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.04),
+    0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.step-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.step-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.step-wrapper:last-child {
+  flex: none;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 0px;
+  border-radius: 30px;
+  transition: all 0.4s ease;
+}
+
+/* 進度條文字 */
+.step-text {
+  margin-left: 5px;
+  font-size: 14px;
+  color: #86868b;
+  white-space: nowrap;
+}
+
+/* 進度條圓圈 */
+.step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #3a3a3c, #1c1c1e);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* 進度條圓圈進行中狀態 */
+.step-item.active .step-icon {
+  background: #000000;
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* 已完成狀態 */
+.step-item.completed .step-icon {
+  background: #34c759;
+  color: #fff;
+}
+
+.step-item.active .step-text {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+
+/* 連接線 */
+.step-line {
+  position: relative;
+  flex-grow: 1;
+  width: auto;
+  min-width: 80px;
+  height: 2px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background: #e5e5e7;
+  overflow: hidden;
+  transform: translateY(0px);
+}
+
+.step-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: #34c759;
+  transform: translateX(-100%);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.step-line.active::after {
+  transform: translateX(0);
+}
+
+.step-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* 共用卡片 */
+.option-card {
+  display: flex;
+  align-items: center;
+  padding: 50px 50px;
+  min-height: 100px;
+  border: 2px solid #e5e5e7;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background-color: #fff;
+  width: 100%;
+}
+
+.option-card:hover {
+  background-color: #f5f5f7;
+}
+
+/* 卡片選中狀態 */
+:deep(.el-radio.is-checked.option-card) {
+  border-color: #0071e3;
+  background-color: #f5faff;
+}
+
+/* 隱藏原生 radio */
+:deep(.el-radio__input) {
+  display: none;
+}
+
+/* 卡片內容 */
+.option-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* 自取選單 */
+.pickup-select {
+  width: 30%;
+}
+
+/* 發票資訊 */
+.invoice-box {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px dashed #dcdfe6;
+}
+
+/* 發票資訊 */
+.carrier-options,
+.company-fields {
+  animation: fadeIn 0.3s ease;
+}
+
+/* 發票資訊 */
+.modern-selector-group {
+  margin-bottom: 16px;
+}
+
+.option-hint {
+  font-size: 13px;
+  color: #86868b;
+  line-height: 2;
+}
+
+.option-price {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+}
+
+.checkout-step {
+  padding: 32px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 訂單明細 */
+.item-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+/* 訂單明細圖片 */
+.item-image {
+  width: 100px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.item-details {
+  margin-left: 16px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.item-name {
+  font-weight: 500;
+}
+
+.item-description {
+  color: #6b7280;
+}
+
+.item-quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.quantity-label {
+  color: #6b7280;
+}
+/* +-按鈕 */
+:deep(.el-input-number) {
+  width: 120px;
+  height: 30px;
+}
+
+/* 訂單明細價格 */
+.item-price-info {
+  min-width: 120px;
+}
+
+.item-total-price {
+  font-size: 25px;
+  font-weight: 600;
+  color: #f97316;
+}
+
+.item-unit-price {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* 刪除按鈕 */
+.delete-btn {
+  --el-button-bg-color: #fff1f0;
+  --el-button-text-color: #ff4d4f;
+  --el-button-border-color: #ffccc7;
+
+  --el-button-hover-bg-color: #ff4d4f;
+  --el-button-hover-text-color: #ffffff;
+  --el-button-hover-border-color: #ff4d4f;
+
+  justify-self: end;
+  border-radius: 10px;
+  padding: 8px 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.2);
+}
+
+:deep(.el-button--danger) {
+  background-color: var(--el-button-bg-color);
+  color: var(--el-button-text-color);
+  border-color: var(--el-button-border-color);
+}
+
+.minimalist-form :deep(.el-input__wrapper) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid #dcdfe6;
+  border-radius: 0;
+  padding: 0 4px;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+/* 統一限制表單項目的寬度 */
+.minimalist-form :deep(.narrow-item) {
+  max-width: 400px;
+}
+
+/* .minimalist-form :deep(.wide-item) {
+  max-width: 700px;
+} */
+
+.minimalist-form :deep(.el-textarea__inner) {
+  max-width: 500px;
+}
+
+.minimalist-form :deep(.el-input__wrapper:hover) {
+  border-bottom-color: #a8abb2;
+}
+
+.minimalist-form :deep(.el-input__wrapper.is-focus) {
+  border-bottom: 2px solid #0071e3 !important;
+}
+
+.minimalist-form :deep(.el-select .el-input__wrapper) {
+  padding-right: 0;
+}
+
+.minimalist-form :deep(.el-textarea__inner) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none;
+  border-bottom: 1px solid #dcdfe6;
+  border-radius: 0;
+  padding: 8px 4px;
+  resize: none;
+}
+
+.minimalist-form :deep(.el-textarea__inner:focus) {
+  border-bottom: 2px solid #0071e3;
+}
+
+.minimalist-form :deep(.el-form-item__label) {
+  font-weight: 500;
+  color: #86868b;
+  padding-bottom: 4px;
+}
+
+/* 錯誤提示的底線顏色 */
+.minimalist-form :deep(.el-form-item.is-error .el-input__wrapper) {
+  border-bottom-color: #f56c6c !important;
+}
+
+/* 付款選項 */
+.modern-selector-group,
+.el-radio-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* 配送地址 */
+.address-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 30%;
+}
+
+.address-selects {
+  display: flex;
+  gap: 8px;
+}
+
+:deep(.el-radio.payment-option-card) {
+  margin-right: 0;
+}
+
+/* 上一步 & 下一步 & 確認訂單 按鈕*/
+.navigation-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+  gap: 12px;
+}
+
+.order-summary-card {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+}
+
+.summary-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.summary-details {
+  margin-bottom: 16px;
+}
+
+.summary-details > * + * {
+  margin-top: 8px;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.summary-total-line {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.tax-info {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.coupon-section {
+  width: 100%;
+  max-width: 280px;
+  margin-bottom: 16px;
+}
+
+.coupon-section :deep(.el-iput__inner) {
+  text-align: center;
+}
+
+.coupon-section :deep(.el-input__inner::placeholder) {
+  text-align: center;
+}
+
+.summary-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.summary-item-list-title {
+  font-weight: 600;
+  font-size: 18px;
+  color: #1d1d1f;
+  margin-bottom: 4px;
+}
+
+.summary-item-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+/* 推薦 */
+:deep(.recommend-column) {
+  position: sticky;
+  top: 20px;
+}
+</style>

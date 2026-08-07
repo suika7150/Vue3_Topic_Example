@@ -13,15 +13,13 @@ import './assets/main.css'
 // 專案內元件、插件
 import App from './App.vue'
 import router from './router'
-import AlertBox from './components/ui/AlertBox.vue'
-import FormatPlugin from './plugins/format'
-import setupFontAwesome from './plugins/fontawesome'
+import AppDialog from './components/ui/AppDialog.vue'
+import setupFontAwesome from './plugins/fontAwesome'
 
 // 工具
-import { formatSecondsToHHMMSS } from './utils/format'
-import { getAndCacheOptions } from './utils/optionService'
-import { logger } from '@/utils/logger'
-import { useUserStore } from '@/store/userStore'
+import { getAndCacheOptions } from '@/services/optionService'
+import { logger } from '@/utils/loggerUtil'
+import { useUserStore } from '@/stores/userStore'
 
 // 初始化、Pinia
 const app = createApp(App)
@@ -42,8 +40,6 @@ const start = async () => {
     app.provide('allOptions', res)
 
     // 全域方法
-    app.config.globalProperties.$formatSecondsToHHMMSS = formatSecondsToHHMMSS
-    app.use(FormatPlugin)
     app.use(router)
     app.use(ElementPlus)
     app.use(VueRecaptchaPlugin, {
@@ -52,7 +48,7 @@ const start = async () => {
 
     // 元件註冊
     setupFontAwesome(app)
-    app.component('AlertBox', AlertBox)
+    app.component('AppDialog', AppDialog)
     app.component('Icon', Icon)
 
     // 掛載實例

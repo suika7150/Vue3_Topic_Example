@@ -1,6 +1,6 @@
 <template>
   <div class="home-container">
-    <AdModal />
+    <PromoModal />
 
     <!-- 圖片輪播 -->
     <div class="carousel-section">
@@ -19,10 +19,10 @@
   </div>
 </template>
 <script setup>
-import BrandList from '@/components/brand/BrandList.vue'
-import HeroCarousel from '@/components/showcase/HeroCarousel.vue'
-import ProductList from '@/views/products/ProductList.vue'
-import AdModal from '@/components/ad/AdModal.vue'
+import BrandList from '@/domains/brand/components/BrandList.vue'
+import HeroCarousel from '@/components/common/HeroCarousel.vue'
+import ProductList from '@/domains/product/views/ProductList.vue'
+import PromoModal from '@/domains/marketing/components/PromoModal.vue'
 
 const homeBanners = [
   {
