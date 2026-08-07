@@ -1,0 +1,225 @@
+/* 頁面外層容器 */
+.about-page {
+  background-color: #0f172a;
+  color: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Hero 區塊與互動 Canvas */
+.about-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+
+  /* 背景 Canvas 動畫粒子層 */
+  &__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* 標題與提示文字內容區 */
+  &__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  /* Hero 主標題 */
+  &__title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 0%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Hero 副標題描述 */
+  &__desc {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    max-width: 600px;
+  }
+
+  /* 底部向下滾動提示容器 */
+  &__hint {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 0.875rem;
+  }
+
+  /* 滾動提示箭頭動畫 */
+  &__arrow {
+    font-size: 1.2rem;
+    animation: bounce 2s infinite;
+  }
+}
+
+/* 箭頭上下彈跳 */
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+/* 內容區塊 */
+.about-section {
+  padding: 120px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  /* 大標題 */
+  &__heading {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+  }
+
+  /* 說明文字 */
+  &__subtext {
+    color: #94a3b8;
+  }
+}
+
+/* 展示列表與卡片 */
+.about-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+
+  &__item {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 60px;
+    align-items: center;
+
+    &--reverse {
+      grid-template-columns: 0.8fr 1.2fr;
+
+      .about-showcase__image-wrapper {
+        order: 2;
+      }
+    }
+  }
+
+  &__image-wrapper {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #1e293b;
+
+    /* 圖片上的漸層遮罩 */
+    .about-showcase__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.8), transparent);
+      z-index: 1;
+    }
+
+    /* 圖片放大特效 */
+    &:hover {
+      .about-showcase__img {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  /* 展示圖片 */
+  &__img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* 文字資訊區塊 */
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* 卡片標題 */
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.3;
+  }
+
+  /* 卡片內文 */
+  &__desc {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+}
+
+/* 滾動動畫效果 */
+.about-reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition:
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RWD */
+@media (max-width: 900px) {
+  .about-showcase {
+    &__item {
+      grid-template-columns: 1fr;
+      gap: 32px;
+
+      &--reverse {
+        .about-showcase__image-wrapper {
+          order: 0;
+        }
+      }
+    }
+
+    &__img {
+      height: 260px;
+    }
+  }
+}
