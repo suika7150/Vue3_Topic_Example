@@ -14,7 +14,7 @@ import './assets/main.css'
 import App from './App.vue'
 import router from './router'
 import AppDialog from './components/ui/AppDialog.vue'
-import setupFontAwesome from './plugins/fontAwesome'
+import setupFontAwesome from '@/plugins/fontAwesome'
 
 // 工具
 import { getAndCacheOptions } from '@/services/optionService'
