@@ -161,5 +161,5 @@ const handleUpdate = async () => {
 </script>
 
 <style scoped>
-@import '@/views/users/Profile/Profile.scss';
+@import '@/domains/auth/views/Profile/Profile.scss';
 </style>
